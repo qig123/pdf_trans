@@ -1,6 +1,6 @@
 # Chapter 11: Functional Languages
 
-## 11 Functional Languages
+11 Functional Languages
 
 Previous chapters of this text have focused largely on imperative program- ming languages. In the current chapter and the next we emphasize functional and logic languages instead. While imperative languages are far more widely used, “industrial-strength” implementations exist for both functional and logic languages, and both models have commercially important applications. Lisp has traditionally been popular for the manipulation of symbolic data, particu- larly in the ﬁeld of artiﬁcial intelligence. OCaml is heavily used in the ﬁnancial services industry. In recent years functional languages—statically typed ones in particular—have become increasingly popular for scientiﬁc applications as well. Logic languages are widely used for formal speciﬁcations and theorem proving and, less widely, for many other applications. Of course, functional and logic languages have a great deal in common with their imperative cousins. Naming and scoping issues arise under every model. So do types, expressions, and the control-ﬂow concepts of selection and recursion. All languages must be scanned, parsed, and analyzed semantically. In addition, functional languages make heavy use of subroutines—more so even than most von Neumann languages—and the notions of concurrency and nondeterminacy are as common in functional and logic languages as they are in the imperative case. As noted in Chapter 1, the boundaries between language categories tend to be rather fuzzy. One can write in a largely functional style in many imperative lan- guages, and many functional languages include imperative features (assignment and iteration). The most common logic language—Prolog—provides certain im- perative features as well. Finally, it is easy to build a logic programming system in most functional programming languages. Because of the overlap between imperative and functional concepts, we have had occasion several times in previous chapters to consider issues of particu- lar importance to functional programming languages. Most such languages de- pend heavily on polymorphism (the implicit parametric kind—Sections 7.1.2, 7.3, and 7.2.4). Most make heavy use of lists (Section 8.6). Several, historically, were dynamically scoped (Sections 3.3.6 and C 3.4.2). All employ recursion (Sec- tion 6.6) for repetitive execution, with the result that program behavior and per-
 
@@ -34,9 +34,7 @@ Many programmers—probably most—who have written signiﬁcant amounts of soft
 
 ## 11.3 A Bit of Scheme
 
-Scheme was originally developed by Guy Steele and Gerald Sussman in the late 1970s, and has evolved through several revisions. The description here follows the 1998 R5RS (ﬁfth revised standard), and should also be compliant with the
-
-2013 R7RS. Most Scheme implementations employ an interpreter that runs a “read-eval- print” loop. The interpreter repeatedly reads an expression from standard input (generally typed by the user), evaluates that expression, and prints the resulting value. If the user types EXAMPLE 11.1
+Scheme was originally developed by Guy Steele and Gerald Sussman in the late 1970s, and has evolved through several revisions. The description here follows the 1998 R5RS (ﬁfth revised standard), and should also be compliant with the 2013 R7RS. Most Scheme implementations employ an interpreter that runs a “read-eval- print” loop. The interpreter repeatedly reads an expression from standard input (generally typed by the user), evaluates that expression, and prints the resulting value. If the user types EXAMPLE 11.1
 
 The read-eval-print loop (+ 3 4)
 
@@ -272,32 +270,35 @@ If we change the input string to 010010, the interpreter will print
 ![Figure 11.1 Scheme program...](images/page_582_vector_387.png)
 *Figure 11.1 Scheme program to simulate the actions of a DFA. Given a machine description and an input symbol i, function move searches for a transition labeled i from the start state to some new state s. It then returns a new machine with the same transition function and ﬁnal states, but with s as its “start” state. The main function, simulate, encapsulates a tail-recursive helper function that accumulates an inverted list of moves, returning when it has consumed all input symbols. The wrapper then checks to see if the helper ended in a ﬁnal state; it returns the (properly ordered) series of moves, with accept or reject at the end. The functions cadr and caddr are deﬁned as (lambda (x) (car (cdr x))) and (lambda (x) (car (cdr (cdr x)))), respectively. Scheme provides a large collection of such abbreviations.*
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 1. What mathematical formalism underlies functional programming?
 
-## 1. What mathematical formalism underlies functional programming?
+  2.
+  List several distinguishing characteristics of functional programming lan-
+  guages.
 
-## 2. List several distinguishing characteristics of functional programming lan- guages.
-
-## 3. Brieﬂy describe the behavior of the Lisp/Scheme read-eval-print loop.
-
-## 4. What is a ﬁrst-class value?
+  3.
+  Brieﬂy describe the behavior of the Lisp/Scheme read-eval-print loop.
+  4.
+  What is a ﬁrst-class value?
 
 ![Figure 11.2 DFA to...](images/page_583_vector_241.png)
 *Figure 11.2 DFA to accept all strings of zeros and ones containing an even number of each. At the bottom of the ﬁgure is a representation of the machine as a Scheme data structure, using the conventions of Figure 11.1.*
 
-## 5. Explain the difference between let, let*, and letrec in Scheme.
+  5.
+  Explain the difference between let, let*, and letrec in Scheme.
+  6.
+  Explain the difference between eq?, eqv?, and equal?.
 
-## 6. Explain the difference between eq?, eqv?, and equal?.
+  7.
+  Describe three ways in which Scheme programs can depart from a purely
+  functional programming model.
+  8.
+  What is an association list?
+  9.
+  What does it mean for a language to be homoiconic?
 
-## 7. Describe three ways in which Scheme programs can depart from a purely functional programming model.
-
-## 8. What is an association list?
-
-## 9. What does it mean for a language to be homoiconic?
-
-## 10. What is an S-expression?
-
-## 11. Outline the behavior of eval and apply.
+* What is an S-expression?
+* Outline the behavior of eval and apply.
 
 ## 11.4 A Bit of OCaml
 
@@ -749,21 +750,20 @@ If we change the input string to abaaba, the interpreter will print
 
 * : state list * decision = ([0; 2; 3; 1; 3; 2; 0], Accept)
   ■
-3CHECK YOUR UNDERSTANDING
 
-## 12. Why does OCaml provide separate arithmetic operators for integer and ﬂoating-point values?
+3CHECK YOUR UNDERSTANDING 12. Why does OCaml provide separate arithmetic operators for integer and ﬂoating-point values?
 
-## 13. Explain the difference between physical and structural equality of values in OCaml.
+* Explain the difference between physical and structural equality of values in
+  OCaml.
 
-## 14. How do lists in OCaml differ from those of Lisp and Scheme?
+* How do lists in OCaml differ from those of Lisp and Scheme?
+* Identify the values that OCaml treats as mutable.
 
-## 15. Identify the values that OCaml treats as mutable.
-
-## 16. List three contexts in which OCaml performs pattern matching.
-
-## 17. Explain the difference between tuples and records in OCaml. How does an OCaml record differ from a record (structure) in languages like C or Pascal?
-
-## 18. What are OCaml variants? What features do they subsume from imperative languages such as C and Pascal?
+* List three contexts in which OCaml performs pattern matching.
+* Explain the difference between tuples and records in OCaml. How does an
+  OCaml record differ from a record (structure) in languages like C or Pascal?
+* What are OCaml variants? What features do they subsume from imperative
+  languages such as C and Pascal?
 
 ![Figure 11.3 OCaml program...](images/page_599_vector_471.png)
 *Figure 11.3 OCaml program to simulate the actions of a DFA. Given a machine description and an input symbol i, function move searches for a transition labeled i from the start state to some new state s. If the search fails, find raises exception Not_found, which propagates out of move; otherwise move returns a new machine with the same transition function and ﬁnal states, but with s as its “start” state. Note that the code is polymorphic in the type of the input symbols. The main function, simulate, encapsulates a tail-recursive helper function that accumulates an inverted list of moves, returning when it has consumed all input symbols. The encapsulating function then checks to see if the helper ended in a ﬁnal state; it returns the (properly ordered) series of moves, together with an Accept or Reject indication. The built-in option constructor (Example 7.6) is used to distinguish between a real state (Some s) and an error state (None).*
@@ -1152,27 +1152,21 @@ DESIGN & IMPLEMENTATION
 
 was able to eliminate 99 to 100 percent of all copy operations in standard numeric benchmarks [Can92]. Scholz reports performance for SAC competitive with that of carefully optimized modern Fortran programs [Sch03]. Signiﬁcant strides in both the theory and practice of functional programming have been made in recent years. Wadler [Wad98b] argued in the late 1990s that the principal remaining obstacles to the widespread adoption of functional lan- guages were social and commercial, not technical: most programmers have been trained in an imperative style; software libraries and development environments for functional programming are not yet as mature as those of their imperative cousins. Experience over the past decade appears to have borne out this charac- terization: with the development of better tools and a growing body of practical experience, functional languages have begun to see much wider use. Functional features have also begun to appear in such mainstream imperative languages as C#, Python, and Ruby.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 19. What is the difference between normal-order and applicative-order evaluation? What is lazy evaluation?
 
-## 19. What is the difference between normal-order and applicative-order evaluation? What is lazy evaluation?
+* What is the difference between a function and a special form in Scheme?
+* What does it mean for a function to be strict?
+* What is memoization?
 
-## 20. What is the difference between a function and a special form in Scheme?
+* How can one accommodate I/O in a purely functional programming model?
+* What is a higher-order function (also known as a functional form)? Give three
+  examples.
+* What is currying? What purpose does it serve in practical programs?
 
-## 21. What does it mean for a function to be strict?
+* What is the trivial update problem in functional programming?
+* Summarize the arguments for and against side-effect-free programming.
 
-## 22. What is memoization?
-
-## 23. How can one accommodate I/O in a purely functional programming model?
-
-## 24. What is a higher-order function (also known as a functional form)? Give three examples.
-
-## 25. What is currying? What purpose does it serve in practical programs?
-
-## 26. What is the trivial update problem in functional programming?
-
-## 27. Summarize the arguments for and against side-effect-free programming.
-
-## 28. Why do functional languages make such heavy use of lists?
+* Why do functional languages make such heavy use of lists?
 
 ## 11.9 Summary and Concluding Remarks
 

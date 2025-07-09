@@ -1,6 +1,6 @@
 # Chapter 15: Building a Runnable Program
 
-## 15 Building a Runnable Program
+15 Building a Runnable Program
 
 As noted in Section 1.6, the various phases of compilation are commonly grouped into a front end responsible for the analysis of source code, a back end responsible for the synthesis of target code, and often a “middle end” responsible for language- and machine-independent code improvement. Chapters 2 and 4 discussed the work of the front end, culminating in the construction of a syntax tree. The current chapter turns to the work of the back end, and speciﬁcally to code generation, assembly, and linking. We will continue with code improvement in Chapter 17. In Chapters 6 through 10, we often discussed the code that a compiler would generate to implement various language features. Now we will look at how the compiler produces that code from a syntax tree, and how it combines the out- put of multiple compilations to produce a runnable program. We begin in Sec- tion 15.1 with a more detailed overview of the work of program synthesis than was possible in Chapter 1. We focus in particular on one of several plausible ways of dividing that work into phases. In Section 15.2 we then consider the many possible forms of intermediate code passed between these phases. On the com- panion site we provide a bit more detail on two concrete examples—the GIMPLE and RTL formats used by the GNU compilers. We will consider two additional intermediate forms in Chapter 16: Java bytecode and the Common Intermedi- ate Language (CIL) used by Microsoft and other implementors of the Common Language Infrastructure. In Section 15.3 we discuss the generation of assembly code from an abstract syntax tree, using attribute grammars as a formal framework. In Section 15.4 we discuss the internal organization of binary object ﬁles and the layout of programs in memory. Section 15.5 describes assembly. Section 15.6 considers linking.
 
@@ -68,9 +68,7 @@ DESIGN & IMPLEMENTATION
 ![Figure 15.4 Stack-based versus...](images/page_817_vector_336.png)
 *Figure 15.4 Stack-based versus three-address IF. Shown are two versions of code to compute the area of a triangle using Heron’s formula. At left is a stylized version of Java bytecode or CLI Common Intermediate Language. At right is corresponding pseudo-assembler for a machine with three-address instructions. The bytecode requires a larger number of instructions, but occupies less space.*
 
-the push operation and two to specify the sqrt routine). This gives us a total of
-
-23 instructions in 25 bytes. By contrast, three-address code for the same formula keeps a, b, c, and s in registers, and requires only 13 instructions. Unfortunately, in typical notation each instruction but the last will be four bytes in length (the last will be eight), and our 13 instructions will occupy 56 bytes. ■
+the push operation and two to specify the sqrt routine). This gives us a total of 23 instructions in 25 bytes. By contrast, three-address code for the same formula keeps a, b, c, and s in registers, and requires only 13 instructions. Unfortunately, in typical notation each instruction but the last will be four bytes in length (the last will be eight), and our 13 instructions will occupy 56 bytes. ■
 
 ## 15.3 Code Generation
 
@@ -118,33 +116,36 @@ GCD program target code generated during symbol table traversal, prior to attrib
 
 techniques to improve it in Chapter 17. In the remaining sections of the current chapter we will consider assembly and linking. ■
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 1. What is a code generator generator? Why might it be useful? 2. What is a basic block? A control ﬂow graph?
 
-## 1. What is a code generator generator? Why might it be useful?
+  3.
+  What are virtual registers? What purpose do they serve?
+  4.
+  What is the difference between local and global code improvement?
 
-## 2. What is a basic block? A control ﬂow graph?
+  5.
+  What is register spilling?
+  6.
+  Explain what is meant by the “level” of an intermediate form (IF). What are
+  the comparative advantages and disadvantages of high-, medium-, and low-
+  level IFs?
 
-## 3. What are virtual registers? What purpose do they serve?
+  7.
+  What is the IF most commonly used in Ada compilers?
+  8.
+  Name two advantages of a stack-based IF. Name one disadvantage.
 
-## 4. What is the difference between local and global code improvement?
+  9.
+  Explain the rationale for basing a family of compilers (several languages, sev-
+  eral target machines) on a single IF.
 
-## 5. What is register spilling?
+* Why might a compiler employ more than one IF?
+* Outline some of the major design alternatives for back-end compiler organi-
+  zation and structure.
+* What is sometimes called the “middle end” of a compiler?
 
-## 6. Explain what is meant by the “level” of an intermediate form (IF). What are the comparative advantages and disadvantages of high-, medium-, and low- level IFs?
-
-## 7. What is the IF most commonly used in Ada compilers?
-
-## 8. Name two advantages of a stack-based IF. Name one disadvantage.
-
-## 9. Explain the rationale for basing a family of compilers (several languages, sev- eral target machines) on a single IF.
-
-## 10. Why might a compiler employ more than one IF?
-
-## 11. Outline some of the major design alternatives for back-end compiler organi- zation and structure.
-
-## 12. What is sometimes called the “middle end” of a compiler?
-
-## 13. Why is management of a limited set of physical registers usually deferred until late in the compilation process?
+* Why is management of a limited set of physical registers usually deferred until
+  late in the compilation process?
 
 ## 15.4 Address Space Organization
 
@@ -168,9 +169,8 @@ Linux address space layout x86 appears in Figure 15.8. Relative placements and a
 
 Some compilers translate source ﬁles directly into object ﬁles acceptable to the linker. More commonly, they generate assembly language that must subsequently be processed by an assembler to create an object ﬁle. In our examples we have consistently employed a symbolic (textual) notation for code. Within a compiler, the representation would not be textual, but it would still be symbolic, most likely consisting of records and linked lists. To translate this symbolic representation into executable code, we must
 
-## 1. Replace opcodes and operands with their machine language encodings.
-
-## 2. Replace uses of symbolic names with actual addresses.
+* Replace opcodes and operands with their machine language encodings.
+* Replace uses of symbolic names with actual addresses.
 
 These are the principal tasks of an assembler. In the early days of computing, most programmers wrote in assembly lan- guage. To simplify the more tedious and repetitive aspects of assembly program- ming, assemblers often provided extensive macro expansion facilities. With the ubiquity of modern high-level languages, such programmer-centric features have largely disappeared. Almost all assembly language programs today are written by compilers. When passing assembly language directly from the compiler to the assembler, it EXAMPLE 15.10
 
@@ -272,27 +272,22 @@ IN MORE DEPTH
 
 In the early 1990s, most operating system vendors adopted dynamic linking in or- der to save space in memory and on disk. We consider this option in more detail on the companion site. Each dynamically linked library resides in its own code and data segments. Every program instance that uses a given library has a pri- vate copy of the library’s data segment, but shares a single system-wide read-only copy of the library’s code segment. These segments may be linked to the remain- der of the code when the program is loaded into memory, or they may be linked incrementally on demand, during execution. In addition to saving space, dy- namic linking allows a programmer or system administrator to install backward- compatible updates to a library without rebuilding all existing executable object ﬁles: the next time it runs, each program will obtain the new version of the library automatically.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 14. What are the distinguishing characteristics of a relocatable object ﬁle? An ex- ecutable object ﬁle? 15. Why do operating systems typically zero-ﬁll pages used for uninitialized data?
 
-## 14. What are the distinguishing characteristics of a relocatable object ﬁle? An ex- ecutable object ﬁle?
+* List four tasks commonly performed by an assembler.
+* Summarize the comparative advantages of assembly language and object code
+  as the output of a compiler.
+* Give three examples of pseudoinstructions and three examples of directives that
+  an assembler might be likely to provide.
+* Why might an assembler perform its own ﬁnal pass of instruction scheduling?
 
-## 15. Why do operating systems typically zero-ﬁll pages used for uninitialized data?
+* Explain the distinction between absolute and relocatable words in an object
+  ﬁle. Why is the notion of “relocatability” more complicated than it used to
+  be?
+* What is the difference between linking and loading?
 
-## 16. List four tasks commonly performed by an assembler.
-
-## 17. Summarize the comparative advantages of assembly language and object code as the output of a compiler.
-
-## 18. Give three examples of pseudoinstructions and three examples of directives that an assembler might be likely to provide.
-
-## 19. Why might an assembler perform its own ﬁnal pass of instruction scheduling?
-
-## 20. Explain the distinction between absolute and relocatable words in an object ﬁle. Why is the notion of “relocatability” more complicated than it used to be?
-
-## 21. What is the difference between linking and loading?
-
-## 22. What are the principal tasks of a linker?
-
-## 23. How can a linker enforce type checking across compilation units?
+* What are the principal tasks of a linker?
+* How can a linker enforce type checking across compilation units?
 
 ## 15.8 Summary and Concluding Remarks
 

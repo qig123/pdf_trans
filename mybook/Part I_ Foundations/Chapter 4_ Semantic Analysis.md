@@ -1,6 +1,6 @@
 # Chapter 4: Semantic Analysis
 
-## 4 Semantic Analysis
+4 Semantic Analysis
 
 In Chapter 2 we considered the topic of programming language syntax. In the current chapter we turn to the topic of semantics. Informally, syntax con- cerns the form of a valid program, while semantics concerns its meaning. Meaning is important for at least two reasons: it allows us to enforce rules (e.g., type con- sistency) that go beyond mere form, and it provides the information we need in order to generate an equivalent output program. It is conventional to say that the syntax of a language is precisely that portion of the language deﬁnition that can be described conveniently by a context-free grammar, while the semantics is that portion of the deﬁnition that cannot. This convention is useful in practice, though it does not always agree with intuition. When we require, for example, that the number of arguments contained in a call to a subroutine match the number of formal parameters in the subroutine deﬁni- tion, it is tempting to say that this requirement is a matter of syntax. After all, we can count arguments without knowing what they mean. Unfortunately, we can- not count them with context-free rules. Similarly, while it is possible to write a context-free grammar in which every function must contain at least one return statement, the required complexity makes this strategy very unattractive. In gen- eral, any rule that requires the compiler to compare things that are separated by long distances, or to count things that are not properly nested, ends up being a matter of semantics. Semantic rules are further divided into static and dynamic semantics, though again the line between the two is somewhat fuzzy. The compiler enforces static semantic rules at compile time. It generates code to enforce dynamic semantic rules at run time (or to call library routines that do so). Certain errors, such as division by zero, or attempting to index into an array with an out-of-bounds sub- script, cannot in general be caught at compile time, since they may occur only for certain input values, or certain behaviors of arbitrarily complex code. In special cases, a compiler may be able to tell that a certain error will always or never occur, regardless of run-time input. In these cases, the compiler can generate an error message at compile time, or refrain from generating code to perform the check at run time, as appropriate. Basic results from computability theory, however, tell us that no algorithm can make these predictions correctly for arbitrary programs:
 
@@ -126,7 +126,7 @@ expr_tail -
 
 -
 
-## 3 expr_tail
+3 expr_tail
 
 ϵ
 
@@ -152,15 +152,13 @@ expr_tail
 
 expr_tail -
 
-## 4 const
+4 const
 
 5 2
 
 -
 
-2 2
-
-## 3 const expr_tail
+2 2 3 const expr_tail
 
 ϵ
 
@@ -215,28 +213,30 @@ DESIGN & IMPLEMENTATION
 
 binary operator, respectively, and pointers to the supplied operand(s). Figures 4.7 and 4.8 show stages in the decoration of parse trees for (1 + 3) * 2, using the grammars of Figures 4.5 and 4.6, respectively. Note that the ﬁnal syntax tree is the same in each case. ■
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 1. What determines whether a language rule is a matter of syntax or of static semantics? 2. Why is it impossible to detect certain program errors at compile time, even though they can be detected at run time?
 
-## 1. What determines whether a language rule is a matter of syntax or of static semantics?
+  3.
+  What is an attribute grammar?
+  4.
+  What are programming assertions? What is their purpose?
+  5.
+  What is the difference between synthesized and inherited attributes?
 
-## 2. Why is it impossible to detect certain program errors at compile time, even though they can be detected at run time?
+  6.
+  Give two examples of information that is typically passed through inherited
+  attributes.
 
-## 3. What is an attribute grammar?
-
-## 4. What are programming assertions? What is their purpose?
-
-## 5. What is the difference between synthesized and inherited attributes?
-
-## 6. Give two examples of information that is typically passed through inherited attributes.
-
-## 7. What is attribute ﬂow?
-
-## 8. What is a one-pass compiler?
+  7.
+  What is attribute ﬂow?
+  8.
+  What is a one-pass compiler?
 
 ![Figure 4.6 Top-down (L-attributed)...](images/page_228_vector_431.png)
 *Figure 4.6 Top-down (L-attributed) attribute grammar to construct a syntax tree. Here the st attribute, like the ptr attribute (and unlike the st attribute of Figure 4.3), is a pointer to a syntax tree node.*
 
-## 9. What does it mean for an attribute grammar to be S-attributed? L-attributed? Noncircular? What is the signiﬁcance of these grammar classes?
+  9.
+  What does it mean for an attribute grammar to be S-attributed? L-attributed?
+  Noncircular? What is the signiﬁcance of these grammar classes?
 
 ## 4.4 Action Routines
 
@@ -369,24 +369,22 @@ Decorating a tree with the AG of Example 4.17 Figure 4.12. The pattern of attrib
 
 tice, however, particularly in a multipass compiler, it makes sense to buffer the messages, so they can be interleaved with messages produced by other phases of the compiler, and printed in program order at the end of compilation. One could convert our attribute grammar into executable code using an au- tomatic attribute evaluator generator. Alternatively, one could create an ad hoc evaluator in the form of mutually recursive subroutines (Exercise 4.20). In the lat- ter case attribute ﬂow would be explicit in the calling sequence of the routines. We could then choose if desired to keep the symbol table in global variables, rather than passing it from node to node through attributes. Most compilers employ the ad hoc approach.
 
-3CHECK YOUR UNDERSTANDING
-
-## 10. What is the difference between a semantic function and an action routine?
-
-## 11. Why can’t action routines be placed at arbitrary locations within the right- hand side of productions in an LR CFG?
-
-## 12. What patterns of attribute ﬂow can be captured easily with action routines?
+3CHECK YOUR UNDERSTANDING 10. What is the difference between a semantic function and an action routine? 11. Why can’t action routines be placed at arbitrary locations within the right- hand side of productions in an LR CFG? 12. What patterns of attribute ﬂow can be captured easily with action routines?
 
 * Some compilers perform all semantic checks and intermediate code genera-
   tion in action routines. Others use action routines to build a syntax tree and
   then perform semantic checks and intermediate code generation in separate
   traversals of the syntax tree. Discuss the tradeoffs between these two strate-
   gies.
-## 14. What sort of information do action routines typically keep in global variables, rather than in attributes?
 
-## 15. Describe the similarities and differences between context-free grammars and tree grammars.
+* What sort of information do action routines typically keep in global variables,
+  rather than in attributes?
 
-## 16. How can a semantic analyzer avoid the generation of cascading error mes- sages?
+* Describe the similarities and differences between context-free grammars and
+  tree grammars.
+
+* How can a semantic analyzer avoid the generation of cascading error mes-
+  sages?
 
 ## 4.7 Summary and Concluding Remarks
 

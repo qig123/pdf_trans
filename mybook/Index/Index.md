@@ -12,7 +12,7 @@ enumeration types, 308 erroneous program, 33, 427, 663 exception handling, 441, 
 
 endian-ness, 344
 
-## 731 ActiveX, 530 actual parameter. See parameters, actual ad hoc polymorphism, 336. See also
+731 ActiveX, 530 actual parameter. See parameters, actual ad hoc polymorphism, 336. See also
 
 A
 
@@ -122,9 +122,9 @@ dynamic arrays, 367 precedence, 227 scope rules, 125, 142 Appel, Andrew W., 41, 
 
 796; C 63, C 141, C 150 of HPF array, 640 Allen, Frances E., 368 Allen, Randy, C 332, C 355
 
-## 68000 emulator, 829, 854 Rosetta binary translator, 829, 831,
+68000 emulator, 829, 854 Rosetta binary translator, 829, 831,
 
-## 832 XCode, 25 AppleScript, 700, 702, 724ff applet, in Java, 734ff applicative-order evaluation, 282ff, 291,
+832 XCode, 25 AppleScript, 700, 702, 724ff applet, in Java, 734ff applicative-order evaluation, 282ff, 291,
 
 alloca (stack allocation) routine, C 191 Alpern, Bowen, C 355 Alpha architecture, 830, 833; C 105 alpha conversion, C 215 alphabet of a formal language, 103;
 
@@ -170,7 +170,7 @@ and bit sets, 376 and Postscript, 783 in Prolog, 607, 612 and Unicode, 305, 306;
 
 (ACM), 41. See also Turing Award association list, 545; C 31ff
 
-## 839 assembler, 6, 15, 24, 780, 792ff, 806
+839 assembler, 6, 15, 24, 780, 792ff, 806
 
 and closures, 156 dynamic scoping and, 144, 742 associative arrays, 359, 377, 715 associativity, 188, 286, 287
 
@@ -202,7 +202,7 @@ C 13 ﬁnite, 55, 94, 103, 746, 749; C 13ff.
 
 See also ﬁnite automaton OCaml example, 565ff Scheme example, 548ff push-down, 44, 103; C 18ff Turing machine, 536 available expression, C 317, C 351 awk, 7, 700, 714ff, 866
 
-## 679 atomic variable, 662 attribute, 33, 180, 185
+679 atomic variable, 662 attribute, 33, 180, 185
 
 in C++, 68 in C#, 842ff evaluation, 187ff inherited, 188ff, 254ff; C 46ff space management, 200ff; C 45ff
 
@@ -268,7 +268,7 @@ bison, 75. See also yacc Black, Andrew, 348 Blizzard, 295 block (syntactic unit)
 
 deﬁnition, 125, 252 and exception handling, 441ff nested, 134ff, 170, 172, 739, 768 in Ruby, 250, 722 in Smalltalk, C 205ff block copy operation, 356 blocking (of arrays/loops), C 337 blocking (of process/thread), 628, 636,
 
-## 753 binary integers, as a data format, C 63 binary rewriting, 810, 822, 833ff
+753 binary integers, as a data format, C 63 binary rewriting, 810, 822, 833ff
 
 in garbage collection, 397 in relaxed memory model, 660, 816 in RTL, C 276 synchronization mechanism, 653,
 
@@ -320,11 +320,11 @@ C 241ff built-in commands in the shell, 707 built-in objects. See predeﬁned ob
 
 in Ada 83, C 245ff in Ada 95, 675 with conditional critical regions,
 
-## 675 in Erlang, C 247, C 249ff in Java, 677 and message passing, C 243 with monitors, 670 with semaphores, 668 with transactional memory, 680 bounds
+675 in Erlang, C 247, C 249ff in Java, 677 and message passing, C 243 with monitors, 670 with semaphores, 668 with transactional memory, 680 bounds
 
 synchronization, busy-wait bypassing, in relaxed memory model,
 
-## 660 Byron, Countess Ada Augusta, 446 Byte Code Engineering Library (Apache
+660 Byron, Countess Ada Augusta, 446 Byte Code Engineering Library (Apache
 
 318; C 147 dynamic shape arrays, 365ff enumeration types, 308 for loop, 267 forward references, C 27 free routine, 124, 388 function return value, 439 grammar, 29 history, C 37 I/O, C 150, C 154ff, C 161 implementation, 20
 
@@ -340,7 +340,7 @@ increment/decrement operators, 226,
 
 friends, 488 function objects, 158, 514 futures, 685 generics. See C++, templates I/O, C 156ff implementation, 20, 513
 
-## 235 initialization, 238 initializers. See C, aggregates inline subroutines, 419ff as an intermediate form, 20, 803 iterator emulation, 274 macros, 163, 175
+235 initialization, 238 initializers. See C, aggregates inline subroutines, 419ff as an intermediate form, 20, 803 iterator emulation, 274 macros, 163, 175
 
 typedef, 353 undeﬁned behavior, 33 unions (variant records), 357; C 160 variables as values, 230 void (trivial) type, 303
 
@@ -386,7 +386,7 @@ nested, 490 coercion, 322 comments, nested, 55 compiler, as preprocessor, 21 con
 
 initialization copy constructor, 15, 499 declarations, 134
 
-## 478 return value optimization, 500 run-time type identifcation, 853 scope resolution, 128 scope rules, 132, 193 streams, C 156ff strings, 376 structures, 351ff, 353
+478 return value optimization, 500 run-time type identifcation, 853 scope resolution, 128 scope rules, 132, 193 streams, C 156ff strings, 376 structures, 351ff, 353
 
 memory layout, 357 subroutine calling sequence, 418;
 
@@ -418,7 +418,7 @@ vector class, 367 virtual methods, 508, 853 visibility of class members, 476, 49
 
 626, 826 LINQ, 625, 843 memory model, 662 method binding, 507 mix-in inheritance, 516 multibyte characters, 47 namespaces, 137, 138, 142; C 40ff
 
-## 526 C#, 7, 861. See also Common Language
+526 C#, 7, 861. See also Common Language
 
 Infrastructure; .NET accessors, 459, 477 arithmetic overﬂow, 243, 318 arrays, 370
 
@@ -472,7 +472,11 @@ C 85, C 98 static chain, 415 for virtual method, 510 Cambridge Polish notation, 
 
 fragile base class problem, 512 methods, modifying, 479ff protected, 488 public, 479 child. See class, derived concrete, 509 declaration, 476
 
-## 540. See also preﬁx notation Cambridge University, 327, 550 Caml, 862. See also OCaml Cann, David, 582 canonical derivation. See derivation of
+* See also preﬁx notation
+  Cambridge University, 327, 550
+  Caml, 862. See also OCaml
+  Cann, David, 582
+  canonical derivation. See derivation of
 
 C 235ff, C 244 Chapel, 698 character sets. See also Unicode
 
@@ -538,7 +542,7 @@ C 337ff COM (Microsoft Component Object
 
 Model), 530, 698 use of attributes, 843 combination loops, 266ff combinator, ﬁxed-point, 590; C 219,
 
-## 621 CLR (Common Language Runtime),
+621 CLR (Common Language Runtime),
 
 810; C 287. See also Common Language Infrastructure Clu, 862
 
@@ -606,13 +610,13 @@ loop macro, 266 macros, 164 multilevel returns (catch and
 
 throw), 248, 249, 291, 443 nested subroutines, 127 objects. See CLOS parameter passing, 435ff programming environment, 9, 25ff,
 
-## 684 history, 6 IFs (intermediate forms), 780ff;
+684 history, 6 IFs (intermediate forms), 780ff;
 
 CISC complex type. See type, complex component system, binary, 530
 
 C 273ff incremental, 198, 209, 215 interaction with computer
 
-## 41 rational type, 305
+41 rational type, 305
 
 interface query operation, 838 component type of array, 359 composite type. See type, composite compound statement, 252 Computer Science Curricula 2013, xxvi,
 
@@ -664,6 +668,7 @@ systems, C 129, C 135 control abstraction, 115, 221, 223, 411ff,
   vs data abstraction, 411
   in Smalltalk, C 206ff
   control ﬂow, 221, 223ff. See also
+
 653, 664, 683 shared memory, 652ff tasks, 635 Concurrent Haskell, 681, 685, 697, 864 Concurrent Pascal, 669, 673 condition codes, 834; C 62, C 72, C 102,
 
 475, 495ff. See also initialization choosing, 495 copy constructor, 430, 499 move constructor, 430, 501 overloaded, 475 container class, 268, 323ff, 333, 484, 530;
@@ -702,9 +707,7 @@ Datalog, 621 DCOM (Microsoft Distributed
 
 Conway, Melvin E., 469 Cook, Robert P., 144; C 27
 
-Component Object Model),
-
-## 530 De Vere, Lorraine, 113 dead code. See instructions, useless dead value, C 301 deadlock, 673ff, 679, 695; C 112, C 241 debugger, 15, 24, 144, 845ff; C 27
+Component Object Model), 530 De Vere, Lorraine, 113 dead code. See instructions, useless dead value, C 301 deadlock, 673ff, 679, 695; C 112, C 241 debugger, 15, 24, 144, 845ff; C 27
 
 LeBlanc-Cook symbol table, C 27ff Cooper, Keith D., 41, 215, 806; C 106,
 
@@ -808,7 +811,7 @@ and method binding, dynamic dynamic optimization, 810, 823, 831,
 
 addressing mode, displacement display, 417, 468; C 163ff, C 191
 
-## 854 dynamic programming, C 14 dynamic scoping. See scope, dynamic dynamic semantics. See semantics,
+854 dynamic programming, C 14 dynamic scoping. See scope, dynamic dynamic semantics. See semantics,
 
 automaton, push-down; ﬁnite automaton, deterministic Deterministic Parallel Java (DPJ), 697 Deutsch, L. Peter, 410, 530, 854 development environment. See
 
@@ -928,7 +931,7 @@ as alternative to goto, 249 at elaboration time, 126 and built-in errors, 33, 44
 
 C 274 short-circuit, 243ff, 254ff, 285, 287,
 
-## 288 vs statement, 224, 229, 233 expression-oriented language, 233 extension language, 16, 700, 701, 724ff
+288 vs statement, 224, 229, 233 expression-oriented language, 233 extension language, 16, 700, 701, 724ff
 
 binary, C 149 as composite type, 311 direct, C 151 indexed, C 151 internal, C 156 memory-mapped, 792 persistent, 401; C 149ff random-access, C 151 sequential, C 150 temporary, 401; C 150 text, 401; C 149, C 151ff
 
@@ -952,7 +955,7 @@ F
 
 F#, 326, 550, 863. See also ML; OCaml
 
-## 613 existential quantiﬁer, 615; C 226ff exit, from loop, 265 expanded objects, 498, 501, 502, 504. See
+613 existential quantiﬁer, 615; C 226ff exit, from loop, 265 expanded objects, 498, 501, 502, 504. See
 
 async and let!, 468 list comprehensions, 400 and .NET, C 286 Facebook, Inc., 348 fact, in Prolog, 593, 612 failure, of computation in Icon, 305;
 
@@ -1014,13 +1017,13 @@ C 225, C 316ff, C 321 ﬁxed-format language, 48 ﬁxed-point combinator, C 219f
 
 self-representation
 
-## 522 Fortress, 698 forward chaining in logic programming,
+522 Fortress, 698 forward chaining in logic programming,
 
 (homoiconography), 608 Fortran, 12, 15, 863
 
 aggregates, 238, 304, 538 arrays, 321, 359ff, 362ff, 368, 405;
 
-## 598 forward declaration, C 38 forward reference, 131, 193; C 27 forward substitution (code
+598 forward declaration, C 38 forward reference, 131, 193; C 27 forward substitution (code
 
 accuracy, 243, 264, 307, 317 bias, C 68 as a data format, C 63 double-precision, C 63, C 68 exponent, C 67 extended, C 68 fractional part, C 69 gradual underﬂow, C 68 history, 399 IEEE standard, 239, 243, 307; C 68,
 
@@ -1122,7 +1125,7 @@ in Ada select statement, C 246 on entry of protected object in Ada
 
 C 245 GUI. See graphical user interface Guile (Scheme dialect), 701, 771 Gurtovoy, Aleksey, 349 Gutmans, Andi, 866 Guttag, John, 177, 295, 349, 468 Guyer, Samuel Z., C 354
 
-## 448 alternatives, 247ff, 285 nonlocal, 247 gpc (GNU Pascal compiler), 782 gprof, 848 gradual typing, 348 gradual underﬂow in ﬂoating-point
+448 alternatives, 247ff, 285 nonlocal, 247 gpc (GNU Pascal compiler), 782 gprof, 848 gradual typing, 348 gradual underﬂow in ﬂoating-point
 
 garbage collection; priority queue; storage allocation and management fragmentation, 122 free list, 122 in functional programming, 538 heavyweight process, 635 Hejlsberg, Anders, 861 helping, in nonblocking concurrent
 
@@ -1154,7 +1157,7 @@ multiprocessors, 633
 
 C 105 IBM CP/CMS, 811 Ichbiah, Jean, 859 Icon, 7, 864
 
-## 683 higher-order function. See function,
+683 higher-order function. See function,
 
 Horn clause, 592; C 228 Horowitz, Ellis, 41 hot path, 824, 825, 831 HotSpot JVM, 409, 812, 825ff HP 3000 architecture, 830 HPF. See High Performance Fortran HTML (hypertext markup language),
 
@@ -1190,7 +1193,7 @@ IA-32 EL binary translator, 831 IA-64 (Itanium) architecture, 633, 830,
 
 831, 834; C 99, C 104 atomic instructions, 655 memory model, 662 predication, C 74
 
-## 117 counterintuitive, 646 language design and, xxvff, 3, 8
+117 counterintuitive, 646 language design and, xxvff, 3, 8
 
 mechanisms, 125ff, 166, 471 of scripting, 700ff of separate compilation, C 41
 
@@ -1242,7 +1245,7 @@ See also lazy evaluation inﬁx notation, 148, 211, 225ff, 240
 
 734, 754, 764 tree traversal, 33 vs virtual machines, 810 interprocedural code improvement. See
 
-## 616 instruction scheduling, 419, 780, 795,
+616 instruction scheduling, 419, 780, 795,
 
 in ML, 226, 422 in Prolog, 595, 607 in R, 226, 718 in Smalltalk, 226 information hiding, 135
 
@@ -1340,7 +1343,7 @@ C 287ff constant pool, 813ff and languages other than Java, 813,
 
 for goto, 246 nonlocal, 247 as parameter, 248, 433, 448; C 181ff LALR parsing. See parsers and parsing,
 
-## 820 operand stack, 814ff, 817ff storage management, 813 type safety, 820 JavaBeans, 530, 698
+820 operand stack, 814ff, 817ff storage management, 813 type safety, 820 JavaBeans, 530, 698
 
 257ff just-in-time compilation. See compilers
 
@@ -1358,13 +1361,13 @@ Kalsow, Bill, 865 Kasami, T., 69 Kay, Alan, 523, 868 Kemeny, John, 861 Kennedy, 
 
 arrays and hashes, 755 ﬁrst-class subroutines, 739 interactive form example, 734ff numeric types, 752 objects, 757ff, 760ff properties, 755, 760 prototype objects, 529, 757, 760ff regular expressions, 743 scope rules, 739 security, 737 standardization, 703 unlimited extent, 739 variables as references or values, 752,
 
-## 861 Kessels, J. L. W., 675 keys and locks. See locks and keys keywords, 45, 47, 63. See also speciﬁc
+861 Kessels, J. L. W., 675 keys and locks. See locks and keys keywords, 45, 47, 63. See also speciﬁc
 
 keywords and languages contextual, 46, 64 predeﬁned names and, 64, 175 Kinnersley, Bill, 859 Kleene, Stephen C., 43, 113, 536
 
 432, 538, 541, 621, 626; C 205 Lamport, Leslie B., 654, 698 Lampson, Butler W., 669, 863, 865 Landin, Peter, 178 language, 45. See also speciﬁc languages
 
-## 757 and XSLT, C 262 Jazayeri, Mehdi, 215 JCL, 700 Jefferson, David R., C 193 Jensen, Jørn, C 180
+757 and XSLT, C 262 Jazayeri, Mehdi, 215 JCL, 700 Jefferson, David R., C 193 Jensen, Jørn, C 180
 
 Alonzo Church and, 537 Kleene closure, 44, 58ff, 103 plus metasymbol, 49 star metasymbol, 43, 46ff Klein, Gerwin, 215 Knuth, Donald E., 10, 112, 215 Kontothanassis, Leonidas I., 693 Korn, David G., 705, 771 Kowalski, Robert, 591, 621, 867 Kozyrakis, Christos, 698 Král, J., 407
 
@@ -1374,11 +1377,11 @@ Jensen’s device, C 180ff Jensen, Kathleen, 866 JML (Java Modeling Language),
 
 ambiguous, C 22 dataﬂow, 11 declarative, 11, 613, 617, 620; C 267 design, 7ff
 
-## 844 job control in shell languages,
+844 job control in shell languages,
 
 binding time and, 116 extension, 16, 724ff families, 11ff formal, 103; C 14 free vs ﬁxed format, 47 functional, 11, 535ff
 
-## 707 Johnson, Stephen C., 112 Johnson, Walter L., 112 Johnstone, Mark S., 410
+707 Johnson, Stephen C., 112 Johnson, Walter L., 112 Johnstone, Mark S., 410
 
 ksh, 705 Kurtz, Barry L., 215 Kurtz, Thomas, 861
 
@@ -1420,7 +1423,7 @@ LeBlanc-Cook symbol table, C 27ff Ledgard, Henry F., 215 left corner of LR produ
 
 as composite type, 311 dotted notation, 399 and functional programming, 535,
 
-## 538 improper, 399, 597 in ML, 555 notation, 399 programs as (Scheme), 547ff in Prolog, 596ff proper, 399, 543 in Scheme, 543ff literal constant. See constant, literal
+538 improper, 399, 597 in ML, 555 notation, 399 programs as (Scheme), 547ff in Prolog, 596ff proper, 399, 543 in Scheme, 543ff literal constant. See constant, literal
 
 Unix address space layout, 792 dynamic linking, C 280 magic numbers, 712 Liskov, Barbara H., 137, 177, 295, 468,
 
@@ -1510,7 +1513,7 @@ polymorphism, subtype; methods and method binding, virtual closures, 157ff, 491,
 
 and Haskell, 864 lazy evaluation, 282, 570 list comprehensions, 400 parameter passing, 433 side effects, lack of, 571 Misra, Jayadev, 695 MIT. See Massachusetts Institute of
 
-## 477 redeﬁning, 479, 507 static, 506 virtual, 508
+477 redeﬁning, 479, 507 static, 506 virtual, 508
 
 programming, 509ff memoization, 283, 570, 582, 589 memory, C 61. See also alignment;
 
@@ -1548,11 +1551,11 @@ arrays, 360 case of letters, 47 ﬁrst-class subroutines, 156 forward references
 
 555 records, 313, 353, 557; C 139ff recursive types, 7, 379, 381, 399 scope rules, 134, 412 strings, 376, 556 tuples, 236, 439, 557, 578 type checking, 183, 184, 313, 328ff type system, 326ff uniﬁcation, 327, 330, 331, 349 unit (trivial) type, 303 variables as references, 231 variant types, 379, 558; C 139ff mobile code, 835ff
 
-## 323 scope rules, 132 separate compilation, 165; C 36 synchronization, 673 threads, 644 TRY... FINALLY, 447 type checking, 313 type extension (objects), 141, 491,
+323 scope rules, 132 separate compilation, 165; C 36 synchronization, 673 threads, 644 TRY... FINALLY, 447 type checking, 313 type extension (objects), 141, 491,
 
 Language), C 287. See also Common Language Infrastructure, Common Intermediate Language Muchnick, Steven S., 806; C 106, C 355ff multicore processor, 624, 625, 632; C 60,
 
-## 521 module, 135ff, 486ff
+521 module, 135ff, 486ff
 
 and classes, 139ff closed scope, 138 exports, 136 generic. See generic subroutine or
 
@@ -1576,7 +1579,7 @@ architecture, 631ff cache coherence, 632, 633ff, 654, 691;
 
 address (universal reference) type,
 
-## 323 case of letters, 47 coroutines, 451 ﬁrst-class subroutines, 156 function return value, 439, 538 modules, 137ff, 486 numeric types, 305
+323 case of letters, 47 coroutines, 451 ﬁrst-class subroutines, 156 function return value, 439, 538 modules, 137ff, 486 numeric types, 305
 
 bounded buffer example, 670 condition variables, 670 vs conditional critical region, 677 Java, 678, 679 message-passing model, C 254 nested calls, 673
 
@@ -1608,7 +1611,7 @@ synchronization in monitor, 671, 673 walking locks, 678, 692 mutual recursion, 1
 
 C 310 Norwegian Computing Center, 177, 472,
 
-## 868 notation. See also regular expressions;
+868 notation. See also regular expressions;
 
 languages, 739ff .NET, 530, 783, 810, 861, 863. See also
 
@@ -1622,7 +1625,7 @@ N
 
 name equivalence of types, 313ff, 799
 
-## 684 Windows Presentation Foundation
+684 Windows Presentation Foundation
 
 strict vs loose, 315 name mangling, 800, 806 named (keyword) parameters, 435ff names, 3, 115. See also binding; binding
 
@@ -1714,9 +1717,9 @@ Library, 839
 
 bash, 705 CMU Common Lisp compiler,
 
-## 827 Eclipse, 25 gcc, 782
+827 Eclipse, 25 gcc, 782
 
-## 839 OCaml, 12, 326, 550ff, 862, 863. See also
+839 OCaml, 12, 326, 550ff, 862, 863. See also
 
 mathematical identities, 242ff ordinal type. See type, discrete ordinal value, of an enumeration
 
@@ -1812,7 +1815,7 @@ expressions in awk, 714ff greedy, 748, 769 in Icon, 274, 295; C 107ff minimal, 7
 
 arithmetic overﬂow, 243 case of letters, 107 case statement, 259 coercion, 321 comments, 105, 107 compilers, 21 conformant array parameters, 365 declaration syntax, C 54 dereference (^) operator, 382 dynamic semantic checks, 410; C 147 early success, 22 enumeration types, 307 and Euclid, 863 forward references, C 27 function return value, 439, 538 GNU compiler (gpc), 782 goto statement, 247, 448 I/O, C 149, C 156 if statement, 80, 105, 110, 253; C 6 implementation, 8, 21, 783 limited extent of local objects, C 191 mod operator, 345 packed types, 464 parameter passing, 424ff pointers, 378ff precedence levels, 228 repeat loop, 275 scope rules, 131 semicolons, C 6 set types, 311, 325, 345, 376 short-circuit evaluation, lack of, 244,
 
-## 757 motto, 716 multiway assignment, 236 nested subroutines, 739, 768 numeric types, 753 objects, 720, 754, 757ff pattern matching, 559 and PHP, 866 regular expressions, 48, 717, 743,
+757 motto, 716 multiway assignment, 236 nested subroutines, 739, 768 numeric types, 753 objects, 720, 754, 757ff pattern matching, 559 and PHP, 866 regular expressions, 48, 717, 743,
 
 C 151 and Postscript, 706, 783 PE (Portable Executable) assemblies,
 
@@ -1854,7 +1857,7 @@ Space) languages, 698 pH (language), 537, 546, 582, 683, 697,
 
 subroutine or module implicit, 327, 329, 332, 535 in Scheme, 541 subtype, 302, 505. See also methods
 
-## 864 phase of compilation, 26ff, 37, 776ff,
+864 phase of compilation, 26ff, 37, 776ff,
 
 780; C 299ff. See also scanning; parsing; semantic analysis; code improvement; code generation φ (phi) function, in SSA form, C 313ff PHP, 12, 700, 731ff, 866
 
@@ -1862,7 +1865,7 @@ and method binding, dynamic type systems and, 302ff port, of a message-passing p
 
 C 235 portability, 8
 
-## 155 Plauger, Phillip J., 295 plug-in module, for embedded scripting,
+155 Plauger, Phillip J., 295 plug-in module, for embedded scripting,
 
 arrays and hashes, 755 exception handling, 441 interactive form examples, 732ff modules (namespaces), 137 nested subroutines, lack of, 739 numeric types, 752 objects, 757ff, 760ff references, 467 regular expressions, 743 remote machine monitoring
 
@@ -1880,7 +1883,7 @@ example, 731ff scope rules, 702, 739 self-posting, 732ff server-side web scripti
 
 pthread standard, 453 regular expressions, 743ff select routine, C 118 shell, 703, 705 Post, Emil, 536 post-test loop, 275 postcondition of subroutine, 183 postﬁx notation, 211ff, 225, 287 Postscript, 24, 211, 226, 706ff, 782, 783,
 
-## 757 and XSLT, C 262 phrase-level recovery from syntax errors,
+757 and XSLT, C 262 phrase-level recovery from syntax errors,
 
 102, 113; C 2ff, C 10ff PIC (position-independent code), C 279,
 
@@ -1960,7 +1963,7 @@ public base class, 479 public member of class, 476 Pugh, William, 698 pumping le
 
 try... finally, 447 tuples, 439, 755 type checking, 183, 300, 332, 703,
 
-## 751 unlimited extent, 739 variables as references, 498, 752, 757 visibility of class members, 490 Python Software Foundation, 720
+751 unlimited extent, 739 variables as references, 498, 752, 757 visibility of class members, 490 Python Software Foundation, 720
 
 push-down PVM (parallel virtual machine), 698 Python, 7, 8, 12, 700, 720ff, 867
 
@@ -1998,11 +2001,11 @@ holes, 353ff in ML, 557 nested, 352 symbol table management, C 26 syntax and ope
 
 recursion algorithmically inferior programs,
 
-## 280 continuation-passing style, 279 and functional programming, 535,
+280 continuation-passing style, 279 and functional programming, 535,
 
 references, 430 Rabin, Michael O., 113
 
-## 538 iteration and, 277ff mutual, 131
+538 iteration and, 277ff mutual, 131
 
 Alonzo Church and, 537 race condition, 626, 639, 640, 650ff, 653,
 
@@ -2104,7 +2107,7 @@ memory S-expression, 547; C 274 SAC (Single Assignment C), 537, 582,
 
 throw), 248, 249, 443 multiway assignment, 236, 704 nested blocks, 739, 768 nested subroutines, lack of, 739 numeric types, 719, 753 objects, 141, 472, 522, 704, 722, 757ff,
 
-## 868 safety vs performance, 182, 241, 285;
+868 safety vs performance, 182, 241, 285;
 
 C 325 Saltz, Joel, C 354 sandboxing, 737, 833ff, 853, 854 Sandon, Lydia, 771 Sather, 469 satisﬁability, C 234 Scala, 867
 
@@ -2152,9 +2155,7 @@ own (static) variables, 127, 136 of undeclared variable in scripting
 
 language, 739ff scope resolution operator, 128, 477, 489;
 
-(homoiconography), 125, 547ff,
-
-608 special forms, 283, 292, 541, 569 symbols, 541 type checking, 703, 751 type predicate functions, 541 unlimited extent, 739 variables as references, 752 Scherer, William N. III, v Schiffman, Allan M., 530, 854 Schneider, Fred B., 697 Scholz, Sven-Bodo, 583, 868 Schorr, Herbert, 394, 410 Schwartz, Jacob T., 409; C 355 scientiﬁc notation and ﬂoating-point
+(homoiconography), 125, 547ff, 608 special forms, 283, 292, 541, 569 symbols, 541 type checking, 703, 751 type predicate functions, 541 unlimited extent, 739 variables as references, 752 Scherer, William N. III, v Schiffman, Allan M., 530, 854 Schneider, Fred B., 697 Scholz, Sven-Bodo, 583, 868 Schorr, Herbert, 394, 410 Schwartz, Jacob T., 409; C 355 scientiﬁc notation and ﬂoating-point
 
 C 197 scope stack of symbol table, C 27ff scoped memory in Java, 390 Scott, Dana S., 113, 215
 
@@ -2190,13 +2191,13 @@ in Perl, 718ff in Python, 720ff in Ruby, 722ff garbage collection, 124, 378 gene
 
 HTML header extraction example,
 
-## 713 one-line scripts, 713 pattern space, 713 regular expressions, 48, 743 standardization, 703 seek operation, for ﬁles, C 151 segmented memory, 378 segments, 791
+713 one-line scripts, 713 pattern space, 713 regular expressions, 48, 743 standardization, 703 seek operation, for ﬁles, C 151 segmented memory, 378 segments, 791
 
 dynamic. See also semantic check;
 
 type clash and lazy evaluation, 569 missing label in case statement,
 
-## 259 null pointer dereference, 244, 400 unhandled exception, 443 static, 102
+259 null pointer dereference, 244, 400 unhandled exception, 443 static, 102
 
 segment switching in assembler, 795 Seibel, Peter, 862 select routine (POSIX), C 118 selection, 223, 253ff
 
@@ -2226,7 +2227,7 @@ routine semantic analysis, 32ff, 179ff. See also
 
 attribute grammar assertions, 182ff invariants, 183, 290, 295 pre- and postconditions, 183 symbol table and, 32 semantic check, 18, 179. See also
 
-## 338 use before declaration, 131 semantic function, 185ff. See also
+338 use before declaration, 131 semantic function, 185ff. See also
 
 attribute grammar notation, 186ff semantic hook, C 47 semantic stack, C 53 semantics, 3, 44. See also attribute
 
@@ -2244,7 +2245,7 @@ denotational, 214, 215, 250, 300, 301,
 
 language), C 258ff
 
-## 351 dynamic, 32, 143, 179. See also
+351 dynamic, 32, 143, 179. See also
 
 sh, 700, 705
 
@@ -2292,7 +2293,7 @@ and assignment operators, 235 and compilation, 582 and concurrency, 685 deﬁnit
 
 in concurrent program, 656 of objects in messages, 837 of transactions, 680 server-side web scripting, 727ff
 
-## 581 and I/O, 571 of instruction, C 347 and lazy evaluation, 283, 569ff; C 182 and macros, 163 and nondeterminacy, 286; C 114 and ordering, 241ff, 252ff, 571
+581 and I/O, 571 of instruction, C 347 and lazy evaluation, 283, 569ff; C 182 and macros, 163 and nondeterminacy, 286; C 114 and ordering, 241ff, 252ff, 571
 
 C 63, C 68 Sipser, Michael, 113 Sisal, 11, 537, 546, 582ff, 683, 868
 
@@ -2334,7 +2335,7 @@ bookkeeping information, 120 with dynamic shape arrays, 366 return value, 439 te
 
 (S-DSM), 295, 636, 698 software pipelining, C 333ff Solomon, Marvin H., 295 SPARC architecture, 633, 806; C 99ff,
 
-## 437 stack pointer, 121, 412 stack smashing, 385 stack-based allocation and layout, 120ff,
+437 stack pointer, 121, 412 stack smashing, 385 stack-based allocation and layout, 120ff,
 
 C 105 addressing modes, C 72 atomic instructions, 655 condition codes, C 73 endian-ness, C 64 fence instructions, 661 memory model, 662 register windows, 419; C 177ff special forms in Scheme, 283, 292, 541,
 
@@ -2346,7 +2347,10 @@ C 105 addressing modes, C 72 atomic instructions, 655 condition codes, C 73 endi
 
 code caching, 823 code improvement, 184
 
-## 811. See also Forth; bytecode; Postscript optimization, 812 stall of processor pipeline. See pipeline
+* See also Forth; bytecode;
+  Postscript
+  optimization, 812
+  stall of processor pipeline. See pipeline
 
 523; C 148ff, C 204ff
 
@@ -2390,7 +2394,12 @@ C 108 Sun Microsystems, Inc., 530, 736, 812,
 
 C 324 goto alternatives, 247ff, 285 structures, 351ff. See also records
 
-## 864. See also Oracle Corporation Sundell, Håkan, 696 superassignment in R, 740 superclass. See class, base superscalar processor, 625; C 78ff,
+* See also Oracle
+  Corporation
+  Sundell, Håkan, 696
+  superassignment in R, 740
+  superclass. See class, base
+  superscalar processor, 625; C 78ff,
 
 C 274, C 312ff, C 355 static typing. See type checking, static stdio library, in C/C++, 436; C 154,
 
@@ -2402,7 +2411,7 @@ for dynamic linkage, C 281 in RPC, 843; C 249 stylesheet languages, C 259 subcla
 
 C 355ff Suraski, Zeev, 866 Sussman, Gerald Jay, 178, 539, 590, 868 Sweeney, Peter F., 530 Swift, 869
 
-## 410 stop-the-world phenomenon in garbage
+410 stop-the-world phenomenon in garbage
 
 collection, 396 storage allocation and management,
 
@@ -2420,7 +2429,7 @@ in C++, C 156ff in functional programming, 571ff,
 
 subroutines frame pointer, 120, 121, 412 generic. See generic subroutine or
 
-## 586 and Unix tools, 744 strength reduction, C 302, C 325 strict language, 569
+586 and Unix tools, 744 strength reduction, C 302, C 325 strict language, 569
 
 module impact on code generation and
 
@@ -2486,11 +2495,11 @@ combinations example, C 305ff construction of, 180ff, 193ff, 198 decoration (ann
 
 synchronized method of a Java class,
 
-## 676 syntactic sugar, 148; C 157
+676 syntactic sugar, 148; C 157
 
 C 119ff. See also generic subroutine or module variadic, 348
 
-## 380 vs parse tree, 77 in Perl, 827
+380 vs parse tree, 77 in Perl, 827
 
 array access in Ruby, 755 array subscripts, 360, 385 deﬁnition, 148
 
@@ -2524,7 +2533,7 @@ top-down topological sort, 618; C 330 Torczon, Linda, 41, 215, 806; C 106,
 
 Fran Allen; John Backus; O.-J. Dahl; Edsger Dijkstra; Tony Hoare; Kenneth Iverson; Alan Kay; Donald Knuth; Leslie Lamport; Butler Lampson; Barbara Liskov; John McCarthy; Robin Milner; Kristen Nygaard; Michael Rabin; Dennis Ritchie; Dana Scott; Ken Thompson; Alan Turing; Niklaus Wirth Turing, Alan, 536ff
 
-## 863 Thompson shell, 705 thread, 635. See also concurrency;
+863 Thompson shell, 705 thread, 635. See also concurrency;
 
 C 354 trace scheduling, 184, 831 tracing garbage collection, 393ff
 
@@ -2582,7 +2591,7 @@ and equality testing in Java and C#,
 
 also Unicode UDP Internet protocol, C 237, C 242 Ullman, Jeffrey D., 112 undeclared variables, scope of in
 
-## 234 in Scheme, 541 in Smalltalk, 513 type class, in Haskell, 348, 554 type compatibility, 298, 312, 320ff, 756ff type conformance, 348 type consistency, in ML, 328 type constraint, 310
+234 in Scheme, 541 in Smalltalk, 513 type class, in Haskell, 348, 554 type compatibility, 298, 312, 320ff, 756ff type conformance, 348 type consistency, in ML, 328 type constraint, 310
 
 ﬂoating-point arbitrary precision (bignums), 753 decimal, 307; C 86 ﬁxed-point, 305 multi-length, 309 rational, 305, 753 in Scheme, 544 in scripting languages, 752 unsigned, 305 opaque, 138 ordinal. See type, discrete packed, 354, 464 predeﬁned, 300 primitive, 300 recursive, 131, 311, 349, 377ff scalar, 307 self-descriptive, 323 simple, 307 subrange, 309ff, 324ff universal reference, 323ff unnamed, 316 type cast, 316ff, 431
 
@@ -2604,7 +2613,7 @@ name, 313ff, 799 structural, 313ff, 406, 560, 799 type erasure, C 126ff type ext
 
 also class type hierarchy analysis, 529 type inference, 298, 312, 324ff, 621,
 
-## 867 University of Arizona, 864, 869 University of California at Berkeley,
+867 University of Arizona, 864, 869 University of California at Berkeley,
 
 756ff, 865 in ML, 326 for static method dispatch, 530 for subranges, 324ff type predicate functions in Scheme, 541 type propagation, 529 type pun. See type cast, nonconverting type system, 298ff. See also
 
@@ -2612,7 +2621,7 @@ dynamic, 319, 511ff nonconverting, 312, 318ff static. See type conversion type c
 
 C 105 University of California at Los Angeles,
 
-## 537 University of Edinburgh, 591, 621, 867 University of Hertfordshire, 868 University of Illinois at
+537 University of Edinburgh, 591, 621, 867 University of Hertfordshire, 868 University of Illinois at
 
 coercion; type equivalence; type compatibility; type inference with attribute grammar, 201ff dynamic, 143, 300ff
 
@@ -2632,7 +2641,7 @@ reference model of variables; scope; value model of variables in CFG, 49 interpo
 
 811; C 85 virtual method table, 509ff virtual methods. See methods and
 
-## 744 magic numbers, 712, 820 prof and gprof, 848 ptrace, 846 SunOS, 806 text ﬁles, C 151 unlimited extent. See extent, of object unnamed type. See type, unnamed Unruh, Erwin, 349 unsigned integer
+744 magic numbers, 712, 820 prof and gprof, 848 ptrace, 846 SunOS, 806 text ﬁles, C 151 unlimited extent. See extent, of object unnamed type. See type, unnamed Unruh, Erwin, 349 unsigned integer
 
 method binding, virtual virtual registers, 776; C 93, C 299,
 
@@ -2640,7 +2649,7 @@ languages, 706ff, 748ff in logic programming, 592, 593,
 
 C 307ff. See also register allocation and available expressions, C 317ff and live variable analysis, C 321 and value numbering, C 307, C 312ff visibility of members in object-oriented
 
-## 595 semantic analysis and, 33 undeclared, scope of in scripting
+595 semantic analysis and, 33 undeclared, scope of in scripting
 
 languages, 739ff variadic templates, 348 variance, of vector, C 93ff variant records (unions), 238, 319, 351,
 
@@ -2746,7 +2755,7 @@ computing, 637 and the growth of scripting, 533, 700,
 
 C 64 two-address instructions, C 71 vector instructions, 695; C 84 x86-64 architecture, 633, 834; C 99 Xamarin, Inc., 821; C 286
 
-## 764 security, 737 World Wide Web Consortium, 727, 734,
+764 security, 737 World Wide Web Consortium, 727, 734,
 
 Z
 

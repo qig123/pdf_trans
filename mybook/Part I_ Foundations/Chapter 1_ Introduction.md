@@ -1,22 +1,12 @@
 # Chapter 1: Introduction
 
-## 1 Introduction
+1 Introduction
 
 The ﬁrst electronic computers were monstrous contraptions, ﬁlling several rooms, consuming as much electricity as a good-size factory, and costing millions of 1940s dollars (but with much less computing power than even the sim- plest modern cell phone). The programmers who used these machines believed that the computer’s time was more valuable than theirs. They programmed in machine language. Machine language is the sequence of bits that directly controls a processor, causing it to add, compare, move data from one place to another, and so forth at appropriate times. Specifying programs at this level of detail is an enormously tedious task. The following program calculates the greatest common EXAMPLE 1.1
 
 GCD program in x86 machine language divisor (GCD) of two integers, using Euclid’s algorithm. It is written in machine language, expressed here as hexadecimal (base 16) numbers, for the x86 instruc- tion set.
 
-55 89 e5 53
-
-## 83 ec 04 83 e4 f0 e8 31 00 00 00 89 c3 e8 2a 00 00 00 39 c3 74 10 8d b6 00 00 00 00
-
-## 39 c3 7e 13
-
-## 29 c3 39 c3
-
-## 75 f6 89 1c
-
-## 24 e8 6e 00 00 00 8b 5d fc c9 c3 29 d8 eb eb 90 ■
+55 89 e5 53 83 ec 04 83 e4 f0 e8 31 00 00 00 89 c3 e8 2a 00 00 00 39 c3 74 10 8d b6 00 00 00 00 39 c3 7e 13 29 c3 39 c3 75 f6 89 1c 24 e8 6e 00 00 00 8b 5d fc c9 c3 29 d8 eb eb 90 ■
 
 As people began to write larger programs, it quickly became apparent that a less error-prone notation was required. Assembly languages were invented to al- low operations to be expressed with mnemonic abbreviations. Our GCD program EXAMPLE 1.2
 
@@ -140,27 +130,25 @@ manipulate structured data can thus be found in almost any sophisticated pro- gr
 
 Finally, this book should help prepare you for further study in language de- sign or implementation, should you be so inclined. It will also equip you to un- derstand the interactions of languages with operating systems and architectures, should those areas draw your interest.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 1. What is the difference between machine language and assembly language? 2. In what way(s) are high-level languages an improvement on assembly lan- guage? Are there circumstances in which it still make sense to program in assembler? 3. Why are there so many programming languages?
 
-## 1. What is the difference between machine language and assembly language?
+  4.
+  What makes a programming language successful?
+  5.
+  Name three languages in each of the following categories: von Neumann,
+  functional, object-oriented. Name two logic languages. Name two widely
+  used concurrent languages.
 
-## 2. In what way(s) are high-level languages an improvement on assembly lan- guage? Are there circumstances in which it still make sense to program in assembler?
+  6.
+  What distinguishes declarative languages from imperative languages?
+  7.
+  What organization spearheaded the development of Ada?
 
-## 3. Why are there so many programming languages?
-
-## 4. What makes a programming language successful?
-
-## 5. Name three languages in each of the following categories: von Neumann, functional, object-oriented. Name two logic languages. Name two widely used concurrent languages.
-
-## 6. What distinguishes declarative languages from imperative languages?
-
-## 7. What organization spearheaded the development of Ada?
-
-## 8. What is generally considered the ﬁrst high-level programming language?
-
-## 9. What was the ﬁrst functional language?
-
-## 10. Why aren’t concurrent languages listed as a separate family in Figure 1.1?
+  8.
+  What is generally considered the ﬁrst high-level programming language?
+  9.
+  What was the ﬁrst functional language?
+* Why aren’t concurrent languages listed as a separate family in Figure 1.1?
 
 ## 1.4 Compilation and Interpretation
 
@@ -336,33 +324,33 @@ Compilers and interpreters do not exist in isolation. Programmers are assisted i
 
 Modern environments provide more integrated tools. When an invalid address error occurs in an integrated development environment (IDE), a new window is likely to appear on the user’s screen, with the line of source code at which the error occurred highlighted. Breakpoints and tracing can then be set in this win- dow without explicitly invoking a debugger. Changes to the source can be made without explicitly invoking an editor. If the user asks to rerun the program af- ter making changes, a new version may be built without explicitly invoking the compiler or conﬁguration manager. The editor for an IDE may incorporate knowledge of language syntax, provid- ing templates for all the standard control structures, and checking syntax as it is typed in. Internally, the IDE is likely to maintain not only a program’s source and object code, but also a partially compiled internal representation. When the source is edited, the internal representation will be updated automatically—often incrementally (without reparsing large portions of the source). In some cases, structural changes to the program may be implemented ﬁrst in the internal rep- resentation, and then automatically reﬂected in the source. IDEs are fundamental to Smalltalk—it is nearly impossible to separate the lan- guage from its graphical environment—and have been routinely used for Com- mon Lisp since the 1980s. With the ubiquity of graphical interfaces, integrated environments have largely displaced command-line tools for many languages and systems. Popular open-source IDEs include Eclipse and NetBeans. Commercial systems include the Visual Studio environment from Microsoft and the XCode environment from Apple. Much of the appearance of integration can also be achieved within sophisticated editors such as emacs.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 11. Explain the distinction between interpretation and compilation. What are the comparative advantages and disadvantages of the two approaches?
 
-## 11. Explain the distinction between interpretation and compilation. What are the comparative advantages and disadvantages of the two approaches?
+* Is Java compiled or interpreted (or both)? How do you know?
+* What is the difference between a compiler and a preprocessor?
 
-## 12. Is Java compiled or interpreted (or both)? How do you know?
-
-## 13. What is the difference between a compiler and a preprocessor?
-
-## 14. What was the intermediate form employed by the original AT&T C++ com- piler?
+* What was the intermediate form employed by the original AT&T C++ com-
+  piler?
 
 DESIGN & IMPLEMENTATION
 
 1.4 Powerful development environments Sophisticated development environments can be a two-edged sword. The quality of the Common Lisp environment has arguably contributed to its widespread acceptance. On the other hand, the particularity of the graphi- cal environment for Smalltalk (with its insistence on speciﬁc fonts, window styles, etc.) made it difﬁcult to port the language to systems accessed through a textual interface, or to graphical systems with a different “look and feel.”
 
-## 15. What is P-code?
+* What is P-code?
 
-## 16. What is bootstrapping?
+* What is bootstrapping?
+* What is a just-in-time compiler?
 
-## 17. What is a just-in-time compiler?
+* Name two languages in which a program can write new pieces of itself “on
+  the ﬂy.”
 
-## 18. Name two languages in which a program can write new pieces of itself “on the ﬂy.”
-
-## 19. Brieﬂy describe three “unconventional” compilers—compilers whose pur- pose is not to prepare a high-level program for execution on a general- purpose processor.
-
-## 20. List six kinds of tools that commonly support the work of a compiler within a larger programming environment.
-
-## 21. Explain how an integrated development environment (IDE) differs from a collection of command-line tools.
+* Brieﬂy describe three “unconventional” compilers—compilers whose pur-
+  pose is not to prepare a high-level program for execution on a general-
+  purpose processor.
+* List six kinds of tools that commonly support the work of a compiler within
+  a larger programming environment.
+* Explain how an integrated development environment (IDE) differs from a
+  collection of command-line tools.
 
 ## 1.6 An Overview of Compilation
 
@@ -432,9 +420,7 @@ GCD program parse tree tree for our GCD program (based on a full grammar not sho
 
 9 Theorists also study context-sensitive grammars, in which the allowable expansions of a construct (the applicable rules) depend on the context in which the construct appears (i.e., on constructs to the left and right). Context sensitivity is important for natural languages like English, but it is almost never used in programming language design.
 
-argument-expression-list_opt
-
-## 1 ident(getint)
+argument-expression-list_opt 1 ident(getint)
 
 ) ( postfix-expression
 
@@ -472,9 +458,7 @@ init-declarator-list_opt
 
 ) (
 
-argument-expression-list_opt
-
-## 1 ident(getint)
+argument-expression-list_opt 1 ident(getint)
 
 init-declarator-list
 
@@ -553,9 +537,10 @@ int
 ![Figure 1.5 Parse tree...](images/page_64_vector_72.png)
 *Figure 1.5 Parse tree for the GCD program. The symbol ϵ represents the empty string. Dotted lines indicate a chain of one-for-one replacements, elided to save space; the adjacent number indicates the number of omitted nodes. While the details of the tree aren’t important to the current chapter, the sheer amount of detail is: it comes from having to ﬁt the (much simpler) source code into the hierarchical structure of a context-free grammar.*
 
-* 
+  -
   multiplicative-expression
   additive-expression
+
 argument-expression-list_opt
 
 ident(j) ident(i) 5 4
@@ -604,9 +589,10 @@ expression_opt
 
 } { block-item-list_opt
 
-* 
+  -
   multiplicative-expression
   additive-expression
+
 compound-statement
 
 selection-statement
@@ -635,9 +621,7 @@ relational-expression
 
 relational-expression
 
-ident(i)
-
-## 8 ident(j) 7
+ident(i) 8 ident(j) 7
 
 shift-expression
 
@@ -677,9 +661,7 @@ When it cannot enforce rules statically, a compiler will often produce code to p
 
 GCD program abstract syntax tree rules, the semantic analyzer typically transforms the parse tree into an abstract syntax tree (otherwise known as an AST, or simply a syntax tree) by removing most of the “artiﬁcial” nodes in the tree’s interior. The semantic analyzer also annotates the remaining nodes with useful information, such as pointers from identiﬁers to their symbol table entries. The annotations attached to a particular node are known as its attributes. A syntax tree for our GCD program is shown in Figure 1.6. ■ Many interpreters use an annotated syntax tree to represent the running pro- gram: “execution” then amounts to tree traversal. In our GCD program, an inter- EXAMPLE 1.25
 
-Interpreting the syntax tree preter would start at the root of Figure 1.6 and visit, in order, the statements on the main spine of the tree. At the ﬁrst “:=” node, the interpreter would notice that the right child is a call: it would therefore call the getint routine (found in slot
-
-3 of the symbol table) and assign the result into i (found in slot 5 of the symbol table). At the second “:=” node the interpreter would similarly assign the result of getint into j. At the while node it would repeatedly evaluate the left (“̸=”) child and, if the result was true, recursively walk the tree under the right (if) child. Finally, once the while node’s left child evaluated to false, the interpreter would move on to the ﬁnal call node, and output its result. ■ In many compilers, the annotated syntax tree constitutes the intermediate form that is passed from the front end to the back end. In other compilers, se- mantic analysis ends with a traversal of the tree (typically single pass) that gener- ates some other intermediate form. One common such form consists of a control ﬂow graph whose nodes resemble fragments of assembly language for a simple
+Interpreting the syntax tree preter would start at the root of Figure 1.6 and visit, in order, the statements on the main spine of the tree. At the ﬁrst “:=” node, the interpreter would notice that the right child is a call: it would therefore call the getint routine (found in slot 3 of the symbol table) and assign the result into i (found in slot 5 of the symbol table). At the second “:=” node the interpreter would similarly assign the result of getint into j. At the while node it would repeatedly evaluate the left (“̸=”) child and, if the result was true, recursively walk the tree under the right (if) child. Finally, once the while node’s left child evaluated to false, the interpreter would move on to the ﬁnal call node, and output its result. ■ In many compilers, the annotated syntax tree constitutes the intermediate form that is passed from the front end to the back end. In other compilers, se- mantic analysis ends with a traversal of the tree (typically single pass) that gener- ates some other intermediate form. One common such form consists of a control ﬂow graph whose nodes resemble fragments of assembly language for a simple
 
 10 As we shall see in Section 6.1.3, Java and C# actually do enforce initialization at compile time, but only by adopting a conservative set of rules for “deﬁnite assignment,” outlawing programs for which correctness is difﬁcult or impossible to verify at compile time.
 
@@ -707,23 +689,20 @@ Code improvement is often referred to as optimization, though it seldom makes an
 
 GCD program optimization shown in Example 1.2. Comparing the two programs, we can see that the im- proved version is quite a lot shorter. Conspicuously absent are most of the loads and stores. The machine-independent code improver is able to verify that i and j can be kept in registers throughout the execution of the main loop. (This would not have been the case if, for example, the loop contained a call to a subrou- tine that might reuse those registers, or that might try to modify i or j.) The machine-speciﬁc code improver is then able to assign i and j to actual regis- ters of the target machine. For modern microprocessors, with complex internal behavior, compilers can usually generate better code than can human assembly language programmers. ■
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 22. List the principal phases of compilation, and describe the work performed by each. 23. List the phases that are also executed as part of interpretation.
 
-## 22. List the principal phases of compilation, and describe the work performed by each.
+* Describe the form in which a program is passed from the scanner to the
+  parser; from the parser to the semantic analyzer; from the semantic analyzer
+  to the intermediate code generator.
+* What distinguishes the front end of a compiler from the back end?
 
-## 23. List the phases that are also executed as part of interpretation.
+* What is the difference between a phase and a pass of compilation? Underwhat
+  circumstances does it make sense for a compiler to have multiple passes?
+* What is the purpose of the compiler’s symbol table?
+* What is the difference between static and dynamic semantics?
 
-## 24. Describe the form in which a program is passed from the scanner to the parser; from the parser to the semantic analyzer; from the semantic analyzer to the intermediate code generator.
-
-## 25. What distinguishes the front end of a compiler from the back end?
-
-## 26. What is the difference between a phase and a pass of compilation? Underwhat circumstances does it make sense for a compiler to have multiple passes?
-
-## 27. What is the purpose of the compiler’s symbol table?
-
-## 28. What is the difference between static and dynamic semantics?
-
-## 29. On modern machines, do assembly language programmers still tend to write better code than a good compiler can? Why or why not?
+* On modern machines, do assembly language programmers still tend to write
+  better code than a good compiler can? Why or why not?
 
 ## 1.7 Summary and Concluding Remarks
 

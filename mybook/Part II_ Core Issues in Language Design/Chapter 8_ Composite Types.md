@@ -1,6 +1,6 @@
 # Chapter 8: Composite Types
 
-## 8 Composite Types
+8 Composite Types
 
 Chapter 7 introduced the notion of types as a way to organize the many values and objects manipulated by computer programs. It also introduced ter- minology for both built-in and composite types. As we noted in Section 7.1.4, composite types are formed by joining together one or more simpler types using a type constructor. From a denotational perspective, the constructors can be mod- eled as operations on sets, with each set representing one of the simpler types. In the current chapter we will survey the most important type constructors: records, arrays, strings, sets, pointers, lists, and ﬁles. In the section on records we will also consider both variants (unions) and tuples. In the section on point- ers, we will take a more detailed look at the value and reference models of vari- ables introduced in Section 6.1.2, and the heap management issues introduced in Section 3.2. The section on ﬁles (mostly on the companion site) will include a discussion of input and output mechanisms.
 
@@ -132,23 +132,26 @@ IN MORE DEPTH
 
 We discuss unions and variant records in more detail on the companion site. Topics we consider include syntax, safety, and memory layout issues. Safety is a particular concern: where nonconverting type casts allow a programmer to cir- cumvent the language’s type system explicitly, a naive realization of unions makes it easy to do so by accident. Ada imposes limits on the use of unions and variant records that allow the compiler to verify, statically, that all programs are type-safe. We also note that inheritance in object-oriented languages provides an attractive alternative to type-safe variant records in most cases. This observation largely accounts for the omission of unions and variant records from most more recent languages.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 1. What are struct tags in C? How are they related to type names? How did they change in C++?
 
-## 1. What are struct tags in C? How are they related to type names? How did they change in C++?
-
-## 2. How do the records of ML differ from those of most other languages?
-
-## 3. Discuss the signiﬁcance of “holes” in records. Why do they arise? What prob- lems do they cause?
+  2.
+  How do the records of ML differ from those of most other languages?
+  3.
+  Discuss the signiﬁcance of “holes” in records. Why do they arise? What prob-
+  lems do they cause?
 
 1 By contrast, the other example mentioned under Nonconverting Type Casts in Section 7.2.1— examination of the internal structure of a ﬂoating-point number—does indeed reinterpret bits. Unions can also be used in this case (Exercise C 8.24), but here a nonconverting cast is a better indication of intent.
 
-## 4. Why is it easier to implement assignment than comparison for records?
+  4.
+  Why is it easier to implement assignment than comparison for records?
 
-## 5. What is packing? What are its advantages and disadvantages?
-
-## 6. Why might a compiler reorder the ﬁelds of a record? What problems might this cause?
-
-## 7. Brieﬂy describe two purposes for unions/variant records.
+  5.
+  What is packing? What are its advantages and disadvantages?
+  6.
+  Why might a compiler reorder the ﬁelds of a record? What problems might
+  this cause?
+  7.
+  Brieﬂy describe two purposes for unions/variant records.
 
 ## 8.2 Arrays
 
@@ -415,33 +418,24 @@ i × S V 1 −L V 1 × S V 1 +M’s offset as a ﬁeld
 
 +(3 −L M 1 ) × S M 1 +j × S M 2 −L M 2 × S M 2 +fp + offset of V in frame
 
-Here the calculations on the left must be performed at run time; the calculations on the right can be performed at compile time. (The notation for bounds and size places the name of the variable in a superscript and the dimension in a subscript: LM
-
-## 2 is the lower bound of the second dimension of M.) ■ Address calculation for arrays that use row pointers is comparatively straight- EXAMPLE 8.28
+Here the calculations on the left must be performed at run time; the calculations on the right can be performed at compile time. (The notation for bounds and size places the name of the variable in a superscript and the dimension in a subscript: LM 2 is the lower bound of the second dimension of M.) ■ Address calculation for arrays that use row pointers is comparatively straight- EXAMPLE 8.28
 
 Indexing a row-pointer array forward. Using our three-dimensional array A as an example, the expression A[i, j, k] is equivalent, in C notation, to (*(*A[i])[j])[k]. If the intermediate pointer loads both hit in the cache, the code to evaluate this expression is likely to be comparable in cost to that of the contiguous allocation case (Example 8.26). If the intermediate loads miss in the cache, it will be substantially slower. On a 1970s CISC machine, the balance would probably have tipped the other way: multiplies would have been slower, and memory accesses faster. In any event (contiguous or row-pointer allocation, old or new machine), important code improvements will often be possible when several array references use the same subscript expression, or when array references are embedded in loops. ■
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 8. What is an array slice? For what purposes are slices useful? 9. Is there any signiﬁcant difference between a two-dimensional array and an array of one-dimensional arrays? 10. What is the shape of an array?
 
-## 8. What is an array slice? For what purposes are slices useful?
+* What is a dope vector? What purpose does it serve?
+* Under what circumstances can an array declared within a subroutine be al-
+  located in the stack? Under what circumstances must it be allocated in the
+  heap?
 
-## 9. Is there any signiﬁcant difference between a two-dimensional array and an array of one-dimensional arrays?
+* What is a conformant array?
+* Discuss the comparative advantages of contiguous and row-pointer layout for
+  arrays.
+* Explain the difference between row-major and column-major layout for con-
+  tiguously allocated arrays. Why does a programmer need to know which lay-
 
-## 10. What is the shape of an array?
-
-## 11. What is a dope vector? What purpose does it serve?
-
-## 12. Under what circumstances can an array declared within a subroutine be al- located in the stack? Under what circumstances must it be allocated in the heap?
-
-## 13. What is a conformant array?
-
-## 14. Discuss the comparative advantages of contiguous and row-pointer layout for arrays.
-
-## 15. Explain the difference between row-major and column-major layout for con- tiguously allocated arrays. Why does a programmer need to know which lay-
-
-out the compiler uses? Why do most language designers consider row-major layout to be better?
-
-## 16. How much of the work of computing the address of an element of an array can be performed at compile time? How much must be performed at run time?
+out the compiler uses? Why do most language designers consider row-major layout to be better? 16. How much of the work of computing the address of an element of an array can be performed at compile time? How much must be performed at run time?
 
 ## 8.3 Strings
 
@@ -653,15 +647,19 @@ Array names and pointers in C int n; int *a; /* pointer to integer */ int b[10];
 
 Now all of the following are valid:
 
-## 1. a = b; /* make a point to the initial element of b */
-
-## 2. n = a[3];
-
-## 3. n = *(a+3); /* equivalent to previous line */
-
-## 4. n = b[3];
-
-## 5. n = *(b+3); /* equivalent to previous line */
+  1.
+  a = b;
+  /* make a point to the initial element of b */
+  2.
+  n = a[3];
+  3.
+  n = *(a+3);
+  /* equivalent to previous line */
+  4.
+  n = b[3];
+  5.
+  n = *(b+3);
+  /* equivalent to previous line */
 
 In most contexts, an unsubscripted array name in C is automatically converted to a pointer to the array’s ﬁrst element (the one with index zero), as shown here in line 1. (Line 5 embodies the same conversion.) Lines 3 and 5 illustrate pointer arithmetic: Given a pointer to an element of an array, the addition of an integer k produces a pointer to the element k positions later in the array (earlier if k is
 
@@ -728,23 +726,17 @@ we have sizeof(a)= sizeof(b)= 4, sizeof(*a)= sizeof(*b[0])= 8, and sizeof(*b)= 8
 
 void f(int len) { int A[len]; /* sizeof(A) == len * sizeof(int) */ ■
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 17. Name three languages that provide particularly extensive support for charac- ter strings. 18. Why might a language permit operations on strings that it does not provide for arrays? 19. What are the strengths and weaknesses of the bit-vector representation for sets? How else might sets be implemented? 20. Discuss the tradeoffs between pointers and the recursive types that arise nat- urally in a language with a reference model of variables.
 
-## 17. Name three languages that provide particularly extensive support for charac- ter strings.
+* Summarize the ways in which one dereferences a pointer in various program-
+  ming languages.
+* What is the difference between a pointer and an address? Between a pointer
+  and a reference?
+* Discuss the advantages and disadvantages of the interoperability of pointers
+  and arrays in C.
 
-## 18. Why might a language permit operations on strings that it does not provide for arrays?
-
-## 19. What are the strengths and weaknesses of the bit-vector representation for sets? How else might sets be implemented?
-
-## 20. Discuss the tradeoffs between pointers and the recursive types that arise nat- urally in a language with a reference model of variables.
-
-## 21. Summarize the ways in which one dereferences a pointer in various program- ming languages.
-
-## 22. What is the difference between a pointer and an address? Between a pointer and a reference?
-
-## 23. Discuss the advantages and disadvantages of the interoperability of pointers and arrays in C.
-
-## 24. Under what circumstances must the bounds of a C array be speciﬁed in its declaration?
+* Under what circumstances must the bounds of a C array be speciﬁed in its
+  declaration?
 
 ## 8.5.2 Dangling References
 
@@ -809,7 +801,8 @@ As we have seen, reference counting deﬁnes an object to be useful if there exi
 
 Mark-and-Sweep The classic mechanism to identify useless blocks, under this more accurate deﬁnition, is known as mark-and-sweep. It proceeds in three main steps, executed by the garbage collector when the amount of free space remaining in the heap falls below some minimum threshold:
 
-## 1. The collector walks through the heap, tentatively marking every block as “use- less.”
+* The collector walks through the heap, tentatively marking every block as “use-
+  less.”
 
 DESIGN & IMPLEMENTATION
 
@@ -820,7 +813,8 @@ DESIGN & IMPLEMENTATION
   ful.” (When it encounters a block that is already marked as “useful,” the col-
   lector knows it has reached the block over some previous path, and returns
   without recursing.)
-## 3. The collector again walks through the heap, moving every block that is still marked “useless” to the free list.
+* The collector again walks through the heap, moving every block that is still
+  marked “useless” to the free list.
 
 Several potential problems with this algorithm are immediately apparent. First, both the initial and ﬁnal walks through the heap require that the collec- tor be able to tell where every “in-use” block begins and ends. In a language with variable-size heap blocks, every block must begin with an indication of its size, and of whether it is currently free. Second, the collector must be able in Step 2 to ﬁnd the pointers contained within each block. The standard solution is to place a pointer to a type descriptor near the beginning of each block.
 
@@ -851,25 +845,25 @@ Conservative Collection Language implementors have traditionally assumed that au
 
 8 Unfortunately, the word “barrier”is heavily overloaded. Garbage collection barriers are unrelated to the synchronization barriers of Section 13.3.1, the memory barriers of Section 13.3.3, or the RTL barriers of Section C 15.2.1.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 25. What are dangling references? How are they created, and why are they a prob- lem?
 
-## 25. What are dangling references? How are they created, and why are they a prob- lem?
+* What is garbage? How is it created, and why is it a problem? Discuss the
+  comparative advantages of reference counts and tracing collection as a means
+  of solving the problem.
+* What are smart pointers? What purpose do they serve?
 
-## 26. What is garbage? How is it created, and why is it a problem? Discuss the comparative advantages of reference counts and tracing collection as a means of solving the problem.
+* Summarize the differences among mark-and-sweep, stop-and-copy, and gen-
+  erational garbage collection.
+* What is pointer reversal? What problem does it address?
+* What is “conservative” garbage collection? How does it work?
 
-## 27. What are smart pointers? What purpose do they serve?
+* Do dangling references and garbage ever arise in the same programming lan-
+  guage? Why or why not?
 
-## 28. Summarize the differences among mark-and-sweep, stop-and-copy, and gen- erational garbage collection.
-
-## 29. What is pointer reversal? What problem does it address?
-
-## 30. What is “conservative” garbage collection? How does it work?
-
-## 31. Do dangling references and garbage ever arise in the same programming lan- guage? Why or why not?
-
-## 32. Why was automatic garbage collection so slow to be adopted by imperative programming languages?
-
-## 33. What are the advantages and disadvantages of allowing pointers to refer to objects that do not lie in the heap?
+* Why was automatic garbage collection so slow to be adopted by imperative
+  programming languages?
+* What are the advantages and disadvantages of allowing pointers to refer to
+  objects that do not lie in the heap?
 
 ## 8.6 Lists
 
@@ -923,17 +917,13 @@ IN MORE DEPTH
 
 form, but may be converted to and from internal types during read and write operations. As examples, we consider the text I/O facilities of Fortran, Ada, C, and C++.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 34. Why are lists so heavily used in functional programming languages? 35. What are list comprehensions? What languages support them?
 
-## 34. Why are lists so heavily used in functional programming languages?
-
-## 35. What are list comprehensions? What languages support them?
-
-## 36. Compare and contrast the support for lists in ML- and Lisp-family languages.
-
-## 37. Explain the distinction between interactive and ﬁle-based I/O; between tem- porary and persistent ﬁles.
-
-## 38. What are some of the tradeoffs between supporting I/O in the language proper versus supporting it in libraries?
+* Compare and contrast the support for lists in ML- and Lisp-family languages.
+* Explain the distinction between interactive and ﬁle-based I/O; between tem-
+  porary and persistent ﬁles.
+* What are some of the tradeoffs between supporting I/O in the language
+  proper versus supporting it in libraries?
 
 ## 8.8 Summary and Concluding Remarks
 

@@ -1,6 +1,6 @@
 # Chapter 3: Names, Scopes, and Bindings
 
-## 3 Names, Scopes, and Bindings
+3 Names, Scopes, and Bindings
 
 Early languages such as Fortran, Algol, and Lisp were termed “high level” because their syntax and semantics were signiﬁcantly more abstract—farther from the hardware—than those of the assembly languages they were intended to supplant. Abstraction made it possible to write programs that would run well on a wide variety of machines. It also made programs signiﬁcantly easier for hu- man beings to understand. While machine independence remains important, it is primarily ease of programming that continues to drive the design of modern languages. This chapter is the ﬁrst of six to address core issues in language de- sign. (The others are Chapters 6 through 10.) Much of the current discussion will revolve around the notion of names. A name is a mnemonic character string used to represent something else. Names in most languages are identiﬁers (alphanumeric tokens), though certain other symbols, such as + or :=, can also be names. Names allow us to refer to variables, constants, operations, types, and so on using symbolic identiﬁers rather than low-level concepts like addresses. Names are also essential in the context of a second meaning of the word abstraction. In this second meaning, abstraction is a process by which the programmer associates a name with a potentially compli- cated program fragment, which can then be thought of in terms of its purpose or function, rather than in terms of how that function is achieved. By hiding irrel- evant details, abstraction reduces conceptual complexity, making it possible for the programmer to focus on a manageable subset of the program text at any par- ticular time. Subroutines are control abstractions: they allow the programmer to hide arbitrarily complicated code behind a simple interface. Classes are data ab- stractions: they allow the programmer to hide data representation details behind a (comparatively) simple set of operations. We will look at severalmajor issues related to names. Section 3.1 introduces the notion of binding time, which refers not only to the binding of a name to the thing it represents, but also in general to the notion of resolving any design decision in a language implementation. Section 3.2 outlines the various mechanisms used to allocate and deallocate storage space for objects, and distinguishes between
 
@@ -32,9 +32,10 @@ Creation and destruction of objects Creation and destruction of bindings Deactiv
 
 The period of time between the creation and the destruction of a name-to- object binding is called the binding’s lifetime. Similarly, the time between the creation and destruction of an object is the object’s lifetime. These lifetimes need not necessarily coincide. In particular, an object may retain its value and the po- tential to be accessed even when a given name can no longer be used to access it. When a variable is passed to a subroutine by reference, for example (as it typically is in Fortran or with ‘&’ parameters in C++), the binding between the parame- ter name and the variable that was passed has a lifetime shorter than that of the variable itself. It is also possible, though generally a sign of a program bug, for a name-to-object binding to have a lifetime longer than that of the object. This can happen, for example, if an object created via the C++ new operator is passed as a & parameter and then deallocated (delete-ed) before the subroutine returns. A binding to an object that is no longer live is called a dangling reference. Dangling references will be discussed further in Sections 3.6 and 8.5.2. Object lifetimes generally correspond to one of three principal storage alloca- tion mechanisms, used to manage the object’s space:
 
-## 2. Stack objects are allocated and deallocated in last-in, ﬁrst-out order, usually in conjunction with subroutine calls and returns.
-
-## 3. Heap objects may be allocated and deallocated at arbitrary times. They require a more general (and expensive) storage management algorithm.
+* Stack objects are allocated and deallocated in last-in, ﬁrst-out order, usually in
+  conjunction with subroutine calls and returns.
+* Heap objects may be allocated and deallocated at arbitrary times. They require
+  a more general (and expensive) storage management algorithm.
 
 ## 3.2.1 Static Allocation
 
@@ -76,29 +77,24 @@ request. In either case, if the chosen block is signiﬁcantly larger than requi
 
 Allocation of heap-based objects is always triggered by some speciﬁc operation in a program: instantiating an object, appending to the end of a list, assigning a long value into a previously short string, and so on. Deallocation is also explicit in some languages (e.g., C, C++, and Rust). As we shall see in Section 8.5, however, many languages specify that objects are to be deallocated implicitly when it is no longer possible to reach them from any program variable. The run-time library for such a language must then provide a garbage collection mechanism to identify and reclaim unreachable objects. Most functional and scripting languages require garbage collection, as do many more recent imperative languages, including Java and C#. The traditional arguments in favor of explicit deallocation are implementa- tion simplicity and execution speed. Even naive implementations of automatic garbage collection add signiﬁcant complexity to the implementation of a lan- guage with a rich type system, and even the most sophisticated garbage collector can consume nontrivial amounts of time in certain programs. If the programmer can correctly identify the end of an object’s lifetime, without too much run-time bookkeeping, the result is likely to be faster execution. The argument in favor of automatic garbage collection, however, is compel- ling: manual deallocation errors are among the most common and costly bugs in real-world programs. If an object is deallocated too soon, the program may follow a dangling reference, accessing memory now used by another object. If an object is not deallocated at the end of its lifetime, then the program may “leak memory,” eventually running out of heap space. Deallocation errors are notoriously difﬁ- cult to identify and ﬁx. Over time, many language designers and programmers have come to consider automatic garbage collection an essential language feature. Garbage-collection algorithms have improved, reducing their run-time overhead; language implementations have become more complex in general, reducing the marginal complexity of automatic collection; and leading-edge applications have become larger and more complex, making the beneﬁts of automatic collection ever more compelling.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 1. What is binding time? 2. Explain the distinction between decisions that are bound statically and those that are bound dynamically. 3. What is the advantage of binding things as early as possible? What is the advantage of delaying bindings? 4. Explain the distinction between the lifetime of a name-to-object binding and its visibility.
 
-## 1. What is binding time?
+  5.
+  What determines whether an object is allocated statically, on the stack, or in
+  the heap?
+  6.
+  List the objects and information commonly found in a stack frame.
 
-## 2. Explain the distinction between decisions that are bound statically and those that are bound dynamically.
+  7.
+  What is a frame pointer? What is it used for?
+  8.
+  What is a calling sequence?
 
-## 3. What is the advantage of binding things as early as possible? What is the advantage of delaying bindings?
+  9.
+  What are internal and external fragmentation?
+* What is garbage collection?
 
-## 4. Explain the distinction between the lifetime of a name-to-object binding and its visibility.
-
-## 5. What determines whether an object is allocated statically, on the stack, or in the heap?
-
-## 6. List the objects and information commonly found in a stack frame.
-
-## 7. What is a frame pointer? What is it used for?
-
-## 8. What is a calling sequence?
-
-## 9. What are internal and external fragmentation?
-
-## 10. What is garbage collection?
-
-## 11. What is a dangling reference?
+* What is a dangling reference?
 
 ## 3.3 Scope Rules
 
@@ -133,7 +129,7 @@ Access to Nonlocal Objects
 
 We have already seen (Section 3.2.2) that the compiler can arrange for a frame pointer register to point to the frame of the currently executing subroutine at run
 
-## 4 This code is not contrived; it was extracted from an implementation (originally in Pascal) of the FMQ error repair algorithm described in Section C 2.3.5.
+4 This code is not contrived; it was extracted from an implementation (originally in Pascal) of the FMQ error repair algorithm described in Section C 2.3.5.
 
 ![Figure 3.4 Example of...](images/page_162_vector_393.png)
 *Figure 3.4 Example of nested subroutines, shown in pseudocode. Vertical bars indicate the scope of each name, for a language in which declarations are visible throughout their subroutine. Note the hole in the scope of the outer X.*
@@ -155,15 +151,22 @@ would avoid the questions in the preceding paragraph, but it does not, because d
 
 A “gotcha” in declare-before-use cal modiﬁed the requirement to say that names must be declared before they are used. There are special mechanisms to accommodate recursive types and sub- routines, but in general, a forward reference (an attempt to use a name before its declaration) is a static semantic error. At the same time, however, Pascal retained the notion that the scope of a declaration is the entire surrounding block. Taken together, whole-block scope and declare-before-use rules can interact in surpris- ing ways:
 
-## 1. const N = 10; 2. ...
-
-## 3. procedure foo;
-
-## 4. const
-
-## 5. M = N; (* static semantic error! *) 6. ...
-
-## 7. N = 20; (* local constant declaration; hides the outer N *)
+  1.
+  const N = 10;
+  2.
+  ...
+  3.
+  procedure foo;
+  4.
+  const
+  5.
+  M = N;
+  (* static semantic error! *)
+  6.
+  ...
+  7.
+  N = 20;
+  (* local constant declaration; hides the outer N *)
 
 Pascal says that the second declaration of N covers all of foo, so the semantic analyzer should complain on line 5 that N is being used before its declaration. The error has the potential to be highly confusing, particularly if the programmer meant to use the outer N:
 
@@ -292,25 +295,20 @@ b = temp;
 
 Keeping the declaration of temp lexically adjacent to the code that uses it makes the program easier to read, and eliminates any possibility that this code will in- terfere with another variable named temp. ■ No run-time work is needed to allocate or deallocate space for variables de- clared in nested blocks; their space can be included in the total space for local variables allocated in the subroutine prologue and deallocated in the epilogue. Exercise 3.9 considers how to minimize the total space required.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 12. What do we mean by the scope of a name-to-object binding?
 
-## 12. What do we mean by the scope of a name-to-object binding?
+* Describe the difference between static and dynamic scoping.
+* What is elaboration?
 
-## 13. Describe the difference between static and dynamic scoping.
+* What is a referencing environment?
+* Explain the closest nested scope rule.
+* What is the purpose of a scope resolution operator?
 
-## 14. What is elaboration?
-
-## 15. What is a referencing environment?
-
-## 16. Explain the closest nested scope rule.
-
-## 17. What is the purpose of a scope resolution operator?
-
-## 18. What is a static chain? What is it used for?
-
-## 19. What are forward references? Why are they prohibited or restricted in many programming languages?
-
-## 20. Explain the difference between a declaration and a deﬁnition. Why is the dis- tinction important?
+* What is a static chain? What is it used for?
+* What are forward references? Why are they prohibited or restricted in many
+  programming languages?
+* Explain the difference between a declaration and a deﬁnition. Why is the dis-
+  tinction important?
 
 ## 3.3.4 Modules
 
@@ -598,33 +596,29 @@ Printing objects of multiple types put stream, and suppose that we wish to be ab
 
 Finally, suppose we have a language in which many types support a to string operation that will generate a character-string representation of an object of that type. We might then be able to write a polymorphic print routine that accepts an argument of any type for which to string is deﬁned. The to string operation might itself be polymorphic, built in, or simply overloaded; in any of these cases, print could call it and output the result. ■ In short, overloading allows the programmerto give the same name to multiple objects, and to disambiguate (resolve) them based on context—for subroutines, on the number or types of arguments. Coercion allows the compiler to perform an automatic type conversion to make an argument conform to the expected type of some existing routine. Polymorphism allows a single routine to accept argu- ments of multiple types, provided that it attempts to use them only in ways that their types support.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 21. Explain the importance of information hiding.
 
-## 21. Explain the importance of information hiding.
+* What is an opaque export?
+* Why might it be useful to distinguish between the header and the body of a
+  module?
+* What does it mean for a scope to be closed?
 
-## 22. What is an opaque export?
+* Explain the distinction between “modules as managers” and “modules as
+  types.”
 
-## 23. Why might it be useful to distinguish between the header and the body of a module?
+* How do classes differ from modules?
+* Why might it be useful to have modules and classes in the same language?
 
-## 24. What does it mean for a scope to be closed?
+* Why does the use of dynamic scoping imply the need for run-time type check-
+  ing?
 
-## 25. Explain the distinction between “modules as managers” and “modules as types.”
+* Explain the purpose of a compiler’s symbol table.
+* What are aliases? Why are they considered a problem in language design and
+  implementation?
+* Explain the value of the restrict qualiﬁer in C.
 
-## 26. How do classes differ from modules?
-
-## 27. Why might it be useful to have modules and classes in the same language?
-
-## 28. Why does the use of dynamic scoping imply the need for run-time type check- ing?
-
-## 29. Explain the purpose of a compiler’s symbol table.
-
-## 30. What are aliases? Why are they considered a problem in language design and implementation?
-
-## 31. Explain the value of the restrict qualiﬁer in C.
-
-## 32. What is overloading? How does it differ from coercion and polymorphism?
-
-## 33. What are type classes in Haskell? What purpose do they serve?
+* What is overloading? How does it differ from coercion and polymorphism?
+* What are type classes in Haskell? What purpose do they serve?
 
 ## 3.6 The Binding of Referencing Environments
 
@@ -658,7 +652,7 @@ outlive the execution of the scope in which that routine was declared. Consider 
 
 Returning a ﬁrst-class subroutine in Scheme the following example in Scheme:
 
-* 
+  1.
   (define plus-x
   2.
   (lambda (x)
@@ -671,6 +665,7 @@ Returning a ﬁrst-class subroutine in Scheme the following example in Scheme:
   6.
   (f 3))
   ; returns 5
+
 Here the let construct on line 5 declares a new function, f, which is the result of calling plus-x with argument 2. Function plus-x is deﬁned at line 1. It returns the (unnamed) function declared at line 3. But that function refers to parameter x of plus-x. When f is called at line 6, its referencing environment will include the x in plus-x, despite the fact that plus-x has already returned (see Figure 3.15). Somehow we must ensure that x remains available. ■ If local objects were destroyed (and their space reclaimed) at the end of each scope’s execution, then the referencing environment captured in a long-lived clo- sure might become full of dangling references. To avoid this problem, most func- tional languages specify that local objects have unlimited extent: their lifetimes continue indeﬁnitely. Their space can be reclaimed only when the garbage col- lection system is able to prove that they will never be used again. Local objects (other than own/static variables) in most imperative languages have limited ex- tent: they are destroyed at the end of their scope’s execution. (C# and Smalltalk are exceptions to the rule, as are most scripting languages.) Space for local ob- jects with limited extent can be allocated on a stack. Space for local objects with unlimited extent must generally be allocated on a heap. Given the desire to maintain stack-based allocation for the local variables of subroutines, imperative languages with ﬁrst-class subroutines must generally adopt alternative mechanisms to avoid the dangling reference problem for clo- sures. C and (pre-Fortran 90) Fortran, of course, do not have nested subrou- tines. Modula-2 allows references to be created only to outermost subroutines (outermost routines are ﬁrst-class values; nested routines are third-class values). Modula-3 allows nested subroutines to be passed as parameters, but only outer-
 
 DESIGN & IMPLEMENTATION
@@ -891,25 +886,18 @@ DESIGN & IMPLEMENTATION
 
 in standard C we cannot avoid the extra side effects by assigning the parameters into temporary variables: a C macro that “returns” a value must be an expression, and declarations are one of many language constructs that cannot appear inside (see also Exercise 3.23). ■ Modern languages and compilers have, for the most part, abandoned macros as an anachronism. Named constants are type-safe and easy to implement, and in-line subroutines (to be discussed in Section 9.2.4) provide almost all the per- formance of parameterized macros without their limitations. A few languages (notably Scheme and Common Lisp) take an alternative approach, and integrate macros into the language in a safe and consistent way. So-called hygienic macros implicitly encapsulate their arguments, avoiding unexpected interactions with as- sociativity and precedence. They rename variables when necessary to avoid the capture problem, and they can be used in any expression context. Unlike subrou- tines, however, they are expanded during semantic analysis, making them gen- erally unsuitable for unbounded recursion. Their appeal is that, like all macros, they take unevaluated arguments, which they evaluate lazily on demand. Among other things, this means that they preserve the multiple side effect “gotcha” of our MAX example. Delayed evaluation was a bug in this context, but can sometimes be a feature. We will return to it in Sections 6.1.5 (short-circuit Boolean eval- uation), 9.3.2 (call-by-name parameters), and 11.5 (normal-order evaluation in functional programming languages).
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 34. Describe the difference between deep and shallow binding of referencing en- vironments. 35. Why are binding rules particularly important for languages with dynamic scoping? 36. What are ﬁrst-class subroutines? What languages support them? 37. What is a subroutine closure? What is it used for? How is it implemented?
 
-## 34. Describe the difference between deep and shallow binding of referencing en- vironments.
+* What is an object closure? How is it related to a subroutine closure?
+* Describe how the delegates of C# extend and unify both subroutine and object
+  closures.
+* Explain the distinction between limited and unlimited extent of objects in a
+  local scope.
+* What is a lambda expression? How does the support for lambda expressions in
+  functional languages compare to that of C# or Ruby? To that of C++ or Java?
 
-## 35. Why are binding rules particularly important for languages with dynamic scoping?
-
-## 36. What are ﬁrst-class subroutines? What languages support them?
-
-## 37. What is a subroutine closure? What is it used for? How is it implemented?
-
-## 38. What is an object closure? How is it related to a subroutine closure?
-
-## 39. Describe how the delegates of C# extend and unify both subroutine and object closures.
-
-## 40. Explain the distinction between limited and unlimited extent of objects in a local scope.
-
-## 41. What is a lambda expression? How does the support for lambda expressions in functional languages compare to that of C# or Ruby? To that of C++ or Java?
-
-## 42. What are macros? What was the motivation for including them in C? What problems may they cause?
+* What are macros? What was the motivation for including them in C? What
+  problems may they cause?
 
 ## 3.8 Separate Compilation
 
@@ -941,29 +929,34 @@ The number of built-in functions (math, type queries, etc.) The variable declara
 
 ## 3.5 Consider the following pseudocode:
 
-## 1. procedure main()
+  1.
+  procedure main()
+  2.
+  a : integer := 1
+  3.
+  b : integer := 2
 
-## 2. a : integer := 1
+  4.
+  procedure middle()
+  5.
+  b : integer := a
 
-## 3. b : integer := 2
+  8.
+  a : integer := 3
 
-## 4. procedure middle()
-
-## 5. b : integer := a
-
-## 8. a : integer := 3
-
-* 
+  9.
   –– body of middle
-## 10. inner()
+  10.
+  inner()
+  11.
+  print a, b
 
-## 11. print a, b
-
-* 
+  12.
   –– body of main
-## 13. middle()
-
-## 14. print a, b
+  13.
+  middle()
+  14.
+  print a, b
 
 Suppose this was code for a language with the declaration-order rules of C (but with nested subroutines)—that is, names must be declared before use, and the scope of a name extends from its declaration through the end of the block. At each print statement, indicate which declarations of a and b are in the referencing environment. What does the program print (or will the compiler identify static semantic errors)? Repeat the exercise for the declaration-order rules of C# (names must be declared before use, but the scope of a name is the entire block in which it is declared) and of Modula-3 (names can be declared in any order, and their scope is the entire block in which they are declared).
 

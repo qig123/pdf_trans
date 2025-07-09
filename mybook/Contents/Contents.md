@@ -6,7 +6,7 @@ Foreword xxiii
 
 Preface xxv I FOUNDATIONS 3
 
-## 1 Introduction 5
+1 Introduction 5
 
 ## 1.1 The Art of Language Design 7
 
@@ -36,7 +36,7 @@ Preface xxv I FOUNDATIONS 3
 
 ## 1.10 Bibliographic Notes 40
 
-## 2 Programming Language Syntax 43
+2 Programming Language Syntax 43
 
 ## 2.1 Specifying Syntax: Regular Expressions and Context-Free Grammars 44
 
@@ -86,7 +86,7 @@ Preface xxv I FOUNDATIONS 3
 
 ## 2.8 Bibliographic Notes 112
 
-## 3 Names, Scopes, and Bindings 115
+3 Names, Scopes, and Bindings 115
 
 ## 3.1 The Notion of Binding Time 116
 
@@ -154,7 +154,7 @@ Preface xxv I FOUNDATIONS 3
 
 ## 3.12 Bibliographic Notes 177
 
-## 4 Semantic Analysis 179
+4 Semantic Analysis 179
 
 ## 4.1 The Role of the Semantic Analyzer 180
 
@@ -180,7 +180,7 @@ Preface xxv I FOUNDATIONS 3
 
 ## 4.10 Bibliographic Notes 215
 
-## 5 Target Machine Architecture C 60 . 217
+5 Target Machine Architecture C 60 . 217
 
 ## 5.1 The Memory Hierarchy C 61
 
@@ -220,7 +220,7 @@ Preface xxv I FOUNDATIONS 3
 
 ## 5.9 Bibliographic Notes C 105 II CORE ISSUES IN LANGUAGE DESIGN 221
 
-## 6 Control Flow 223
+6 Control Flow 223
 
 ## 6.1 Expression Evaluation 224
 
@@ -274,7 +274,7 @@ Preface xxv I FOUNDATIONS 3
 
 ## 6.11 Bibliographic Notes 294
 
-## 7 Type Systems 297
+7 Type Systems 297
 
 ## 7.1 Overview 298
 
@@ -312,7 +312,7 @@ Preface xxv I FOUNDATIONS 3
 
 ## 7.8 Bibliographic Notes 348
 
-## 8 Composite Types 351
+8 Composite Types 351
 
 ## 8.1.1 Syntax and Operations 352
 
@@ -358,7 +358,7 @@ Preface xxv I FOUNDATIONS 3
 
 ## 8.11 Bibliographic Notes 410
 
-## 9 Subroutines and Control Abstraction 411
+9 Subroutines and Control Abstraction 411
 
 ## 9.1 Review of Stack Layout 412
 
@@ -412,7 +412,7 @@ Preface xxv I FOUNDATIONS 3
 
 ## 9.10 Bibliographic Notes 468
 
-## 10 Data Abstraction and Object Orientation 471
+10 Data Abstraction and Object Orientation 471
 
 ## 10.1 Object-Oriented Programming 473
 
@@ -474,11 +474,9 @@ Preface xxv I FOUNDATIONS 3
 
 ## 10.10 Explorations 528
 
-## 10.11 Bibliographic Notes
+## 10.11 Bibliographic Notes 529 III ALTERNATIVE PROGRAMMING MODELS 533
 
-## 529 III ALTERNATIVE PROGRAMMING MODELS 533
-
-## 11 Functional Languages 535
+11 Functional Languages 535
 
 ## 11.1 Historical Origins 536
 
@@ -538,7 +536,7 @@ Preface xxv I FOUNDATIONS 3
 
 ## 11.12 Bibliographic Notes 590
 
-## 12 Logic Languages 591
+12 Logic Languages 591
 
 ## 12.1 Logic Programming Concepts 592
 
@@ -582,7 +580,7 @@ Preface xxv I FOUNDATIONS 3
 
 ## 12.8 Bibliographic Notes 620
 
-## 13 Concurrency 623
+13 Concurrency 623
 
 ## 13.1 Background and Motivation 624
 
@@ -640,7 +638,7 @@ Preface xxv I FOUNDATIONS 3
 
 ## 13.9 Bibliographic Notes 697
 
-## 14 Scripting Languages 699
+14 Scripting Languages 699
 
 ## 14.1 What Is a Scripting Language? 700
 
@@ -684,11 +682,9 @@ Preface xxv I FOUNDATIONS 3
 
 ## 14.7 Explorations 769
 
-## 14.8 Bibliographic Notes
+## 14.8 Bibliographic Notes 771 IV A CLOSER LOOK AT IMPLEMENTATION 773
 
-## 771 IV A CLOSER LOOK AT IMPLEMENTATION 773
-
-## 15 Building a Runnable Program 775
+15 Building a Runnable Program 775
 
 ## 15.1 Back-End Compiler Structure 775
 
@@ -736,7 +732,7 @@ Preface xxv I FOUNDATIONS 3
 
 ## 15.11 Bibliographic Notes 806
 
-## 16 Run-Time Program Management 807
+16 Run-Time Program Management 807
 
 ## 16.1 Virtual Machines 810
 
@@ -770,7 +766,7 @@ Preface xxv I FOUNDATIONS 3
 
 ## 16.7 Bibliographic Notes 854
 
-## 17 Code Improvement C 297 . 857
+17 Code Improvement C 297 . 857
 
 ## 17.1 Phases of Code Improvement C 299
 

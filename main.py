@@ -15,11 +15,17 @@ def clean_filename(name):
     name = name.strip(' .')
     return (name[:100] if len(name) > 100 else name) or "untitled"
 
+# ==================== ↓↓↓ 这里是修改的部分 ↓↓↓ ====================
+
 # REGEX for matching numbered heading formats. Now this is our PRIMARY heading detector.
+# --- 修改说明 ---
+# 旧版的问题: r'^\s*((\d+(\.\d+)*\.?)|...)' 会错误地匹配 "1. item", "2. item" 这样的列表。
+# 新版的核心改动: 使用 \d+\.\d+ 来要求至少有两级数字（如 "3.1"），从而避免与简单列表冲突。
+# [\d\.]* 允许匹配更深的层级如 "3.1.2"。
 TITLE_REGEX = re.compile(
     # Matches patterns like "3.1", "3.2.1", "A.1", etc. followed by text.
-    # It requires the line to start with this pattern and be relatively short.
-    r'^\s*((\d+(\.\d+)*\.?)|([A-Z]\.[\d\.]*))\s+[A-Za-z].*'
+    # It now specifically AVOIDS matching simple lists like "1. text".
+    r'^\s*((\d+\.\d+[\d\.]*)|([A-Z]\.[\d\.]*))\s+[A-Za-z].*'
 )
 
 # REGEX for un-numbered, but likely headings (like "Introduction", "Conclusion")
@@ -64,49 +70,33 @@ def get_markdown_from_block(block):
     根据文本块的内容模式推断其Markdown格式。
     新版: 通过正则预分割，解决内嵌标题不换行的问题。
     """
+    # ... (此函数无需变动)
     if block['type'] != 0 or not block.get('lines'):
         return ""
 
-    # 1. 将整个块的所有行和span组合成一个带格式的字符串
-    # 注意：我们暂时不处理加粗/斜体，因为这会干扰正则匹配。先获取纯文本。
     full_text = "\n".join("".join(s['text'] for s in l['spans']) for l in block['lines'])
     if not full_text.strip():
         return ""
 
-    # 2. 预处理：使用正则表达式查找标题模式，并插入一个特殊的分隔符
-    # 我们查找的模式是一个换行符，后面跟着我们的标题正则
-    # \n(?=...) 是一个正向先行断言，它匹配一个换行符，条件是后面跟着我们的标题模式，但它不消耗标题本身
-    # 我们在换行符后面插入我们的特殊分隔符
     split_marker = "<\r\n_SPLIT_HERE_\r\n>"
-    # 查找标题模式（前面必须是换行符或字符串开头）
-    # re.sub的回调函数lambda m: ... 让我们能动态地在匹配项前插入分隔符
     processed_text = re.sub(
-        r'(?m)(^|(?<=\n))(\s*((\d+(\.\d+)*\.?)|([A-Z]\.[\d\.]*))\s+[A-Za-z].*)',
+        r'(?m)(^|(?<=\n))(\s*((\d+\.\d+[\d\.]*)|([A-Z]\.[\d\.]*))\s+[A-Za-z].*)',
         lambda m: f"{split_marker}{m.group(2)}",
         full_text
     )
     
-    # 3. 根据分隔符将文本分割成子块
     sub_blocks_text = processed_text.split(split_marker)
 
-    # 4. 逐个处理子块
     output_parts = []
     for sub_text in sub_blocks_text:
         sub_text = sub_text.strip()
         if not sub_text:
             continue
 
-        # --- 现在对每个干净的子块应用我们之前的简单规则 ---
-        
-        # 规则A: 判断这个子块是不是标题
         if (TITLE_REGEX.match(sub_text) and len(sub_text) < 200) or KEYWORD_HEADING_REGEX.match(sub_text):
-            # 是标题，给它H2格式。注意：这里我们失去了内部的加粗信息，但解决了换行。
-            # 这是一个权衡。为了保留加粗，需要更复杂的span级别的处理。
-            # 但根据你的要求“只要能换行就行”，这是最直接的。
             output_parts.append(f"## {sub_text.replace(chr(10), ' ')}\n\n")
             continue
 
-        # 规则B: 判断是不是代码块（对整个原始块判断）
         is_monospace_block = all(
             ("mono" in span['font'].lower() or "courier" in span['font'].lower())
             for line in block['lines'] for span in line['spans'] if 'font' in span
@@ -115,18 +105,22 @@ def get_markdown_from_block(block):
             output_parts.append(f"```\n{sub_text}\n```\n\n")
             continue
 
-        # 规则C: 判断是不是列表
         list_match = re.match(r'^\s*([•*-]|\d+\.|[a-zA-Z]\))\s+', sub_text)
         if list_match:
             lines = sub_text.split('\n')
-            first_line = lines[0][list_match.end():].strip()
-            rest_of_lines = "\n".join(["  " + l.strip() for l in lines[1:]])
-            output_parts.append(f"* {first_line}\n{rest_of_lines}\n")
+            # 将所有行都作为列表项处理，以支持多行列表项
+            output_lines = []
+            for i, line in enumerate(lines):
+                # 检查每一行是否是新的列表项
+                if re.match(r'^\s*([•*-]|\d+\.|[a-zA-Z]\))\s+', line):
+                    # 是新的列表项，使用 *
+                    output_lines.append(re.sub(r'^\s*([•*-]|\d+\.|[a-zA-Z]\))\s+', '* ', line))
+                else:
+                    # 不是新的列表项，作为上一项的延续，进行缩进
+                    output_lines.append("  " + line.strip())
+            output_parts.append("\n".join(output_lines) + "\n\n")
             continue
             
-        # 规则D: 默认作为段落
-        # 在这里，我们需要重新从原始block中找到这段文本对应的spans，以恢复格式
-        # 为了简单起见，我们先按无格式处理，这已经解决了核心问题
         output_parts.append(sub_text.replace('\n', ' ') + "\n\n")
 
     return "".join(output_parts)

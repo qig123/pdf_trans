@@ -32,9 +32,7 @@ L. Cox, Sandhya Dwarkadas, Pete Keleher, Honghui Lu, Ramakrish- nan Rajamony, We
 
 [AG05] David Abrahams and Aleksey Gurtovoy. C++ Tem- plate Metaprogramming: Concepts, Tools, and Techniques from Boost and Beyond. Addison-Wesley, Boston, MA, 2005.
 
-[Ame96b] American National Standards Institute, New York, NY. Programming Language—Common Lisp,
-
-## 1996. ANSI X3.226:1994. Available at lispworks.com/ documentation/common-lisp.html.
+[Ame96b] American National Standards Institute, New York, NY. Programming Language—Common Lisp, 1996. ANSI X3.226:1994. Available at lispworks.com/ documentation/common-lisp.html.
 
 [AG06] Ken Arnold and James Gosling. The Java Program- ming Language. Addison-Wesley Professional, fourth edi- tion, 2006.
 
@@ -42,9 +40,7 @@ L. Cox, Sandhya Dwarkadas, Pete Keleher, Honghui Lu, Ramakrish- nan Rajamony, We
 
 [AO93] Gregory R. Andrews and Ronald A. Olsson. The SR Programming Language: Concurrency in Practice. Ben- jamin/Cummings, Redwood City, CA, 1993.
 
-[App97] Andrew W. Appel. Modern Compiler Implementa- tion. Cambridge University Press, Cambridge, England,
-
-## 1997. Text available in ML, Java, and C versions. C version specialized by Maia Ginsburg; Java version (second edi- tion, 2002) specialized by Jens Palsberg.
+[App97] Andrew W. Appel. Modern Compiler Implementa- tion. Cambridge University Press, Cambridge, England, 1997. Text available in ML, Java, and C versions. C version specialized by Maia Ginsburg; Java version (second edi- tion, 2002) specialized by Jens Palsberg.
 
 [Bac78] John W. Backus. Can programming be liberated from the von Neumann style? A functional style and its algebra of programs. Communications of the ACM, 21(8):613–641, August 1978. The 1977 Turing Award lec- ture.
 
@@ -226,9 +222,7 @@ Studies in Data Processing #8. Academic Press, New York, NY, 1972.
 
 [Dij75] Edsger W. Dijkstra. Guarded commands, nondeter- minacy, and formal derivation of programs. Communica- tions of the ACM, 18(8):453–457, August 1975.
 
-[Eag12] Michael J. Eager. Introduction to the DWARF de- bugging format. The Pragmatic Programmers, April
-
-## 2012. Available as dwarfstd.org/doc/Debugging%20using% 20DWARF-2012.pdf .
+[Eag12] Michael J. Eager. Introduction to the DWARF de- bugging format. The Pragmatic Programmers, April 2012. Available as dwarfstd.org/doc/Debugging%20using% 20DWARF-2012.pdf .
 
 [Dij76] Edsger W. Dijkstra. A Discipline of Programming. Prentice-Hall, Englewood Cliffs, NJ, 1976.
 
@@ -248,17 +242,13 @@ Studies in Data Processing #8. Academic Press, New York, NY, 1972.
 
 ecma-international.org/publications/standards/Ecma-367. htm.
 
-[ECM11] ECMA International, Geneva, Switzerland. ECMAScript Language Speciﬁcation, 5.1 edition, June
-
-## 2011. ECMA-262, ISO/IEC 16262:2011. Available as ecma-international.org/publications/ﬁles/ECMA-ST/ Ecma-262.pdf .
+[ECM11] ECMA International, Geneva, Switzerland. ECMAScript Language Speciﬁcation, 5.1 edition, June 2011. ECMA-262, ISO/IEC 16262:2011. Available as ecma-international.org/publications/ﬁles/ECMA-ST/ Ecma-262.pdf .
 
 [Fin96] Raphael A. Finkel. Advanced Programming Language Design. Addison-Wesley, Menlo Park, CA, 1996.
 
 [FL80] Charles N. Fischer and Richard J. LeBlanc, Jr. Imple- mentation of runtime diagnostics in Pascal. IEEE Trans- actions on Software Engineering, SE–6(4):313–319, July 1980.
 
-[ECM13] ECMA International, Geneva, Switzerland. The JSON Data Interchange Format, October 2013. ECMA-
-
-## 404. Available as ecma-international.org/publications/ ﬁles/ECMA-ST/ECMA-404.pdf .
+[ECM13] ECMA International, Geneva, Switzerland. The JSON Data Interchange Format, October 2013. ECMA- 404. Available as ecma-international.org/publications/ ﬁles/ECMA-ST/ECMA-404.pdf .
 
 [Fle76] Arthur C. Fleck. On the impossibility of con- tent exchange through the by-name parameter transmis- sion technique. ACM SIGPLAN Notices, 11(11):38–41, November 1976.
 
@@ -442,9 +432,7 @@ Programming Language. Cambridge University Press, Cambridge, England, 1991.
 
 [JL96] Richard Jones and Rafael Lins. Garbage Collection: Algorithms for Automatic Dynamic Memory Management. John Wiley and Sons, New York, NY, 1996.
 
-[Int12a] International Organization for Standardiza- tion, Geneva, Switzerland. Information Technology— Common Language Infrastructure (CLI), February 2012. ISO/IEC 23271:2012. Also ECMA-335, 6th Edition, June
-
-## 2012. Available at ecma-international.org/publications/ standards/Ecma-335.htm.
+[Int12a] International Organization for Standardiza- tion, Geneva, Switzerland. Information Technology— Common Language Infrastructure (CLI), February 2012. ISO/IEC 23271:2012. Also ECMA-335, 6th Edition, June 2012. Available at ecma-international.org/publications/ standards/Ecma-335.htm.
 
 [JM94] Joxan Jaffar and Michael J. Maher. Constraint logic programming: A survey. Journal of Logic Programming, 20:503–581, May–July 1994.
 
@@ -474,9 +462,7 @@ Programming Language. Cambridge University Press, Cambridge, England, 1991.
 
 ## H. Abelson, R. K. Dybvig, C. T. Haynes, G. J. Rozas, N. I. Adams IV, D. P. Friedman, E. Kohlbecker, G. L. Steele, Jr., D. H. Bartley, R. Halstead, D. Oxley, G. J. Sussman,
 
-## G. Brooks, C. Hanson, K. M. Pitman, and M. Wand. Revised 5 report on the algorithmic language Scheme. Higher-Order and Symbolic Computation, 11(1):7–105,
-
-## 1998. Edited by Kelsey, Clinger, and Rees. Available at schemers.org/Documents/Standards/R5RS/.
+G. Brooks, C. Hanson, K. M. Pitman, and M. Wand. Revised 5 report on the algorithmic language Scheme. Higher-Order and Symbolic Computation, 11(1):7–105, 1998. Edited by Kelsey, Clinger, and Rees. Available at schemers.org/Documents/Standards/R5RS/.
 
 [JBW+87] David Jefferson, Brian Beckman, Fred Wieland, Leo Blume, Mike DiLoreto, Phil Hontalas, Pierre Laroche, Kathy Sturdevant, Jack Tupman, Van Warren, John Wedel, Herb Younger, and Steve Bellenot. Distributed simulation and the Time Warp operating system. In Proceedings of the Eleventh ACM Symposium on Operating Systems Prin- ciples, pages 77–93, Austin, TX, November 1987.
 
@@ -490,11 +476,11 @@ Programming Language. Cambridge University Press, Cambridge, England, 1991.
 
 [KWS97] Leonidas I. Kontothanassis, Robert Wisniewski, and Michael L. Scott. Scheduler-conscious synchroniza- tion. ACM Transactions on Computer Systems, 15(1):3–40, February 1997.
 
-## 2004. Available as conferences.idealliance.org/extreme/ html/2004/Kepser01/EML2004Kepser01.html.
+  2004.
+  Available as conferences.idealliance.org/extreme/
+  html/2004/Kepser01/EML2004Kepser01.html.
 
-[Ker81] Brian W. Kernighan. Why Pascal is not my favorite programming language. Technical Report 100, Comput- ing Science, AT&T Bell Laboratories, Murray Hill, NJ,
-
-## 1981. Reprinted as pages 170–186 of Feuer and Gehani [FG84].
+[Ker81] Brian W. Kernighan. Why Pascal is not my favorite programming language. Technical Report 100, Comput- ing Science, AT&T Bell Laboratories, Murray Hill, NJ, 1981. Reprinted as pages 170–186 of Feuer and Gehani [FG84].
 
 [Lam78] Leslie Lamport. Time, clocks, and the ordering of events in a distributed system. Communications of the ACM, 21(7):558–565, July 1978.
 
@@ -518,9 +504,7 @@ Programming Language. Cambridge University Press, Cambridge, England, 1991.
 
 [Knu65] Donald E. Knuth. On the translation of languages from left to right. Information and Control, 8(6):607–639, December 1965.
 
-[Knu68] Donald E. Knuth. Semantics of context-free lan- guages. Mathematical Systems Theory, 2(2):127–145, June
-
-## 1968. Correction appears in Volume 5, pages 95–96.
+[Knu68] Donald E. Knuth. Semantics of context-free lan- guages. Mathematical Systems Theory, 2(2):127–145, June 1968. Correction appears in Volume 5, pages 95–96.
 
 [Lee06] Edward A. Lee. The problem with threads. Com- puter, 39(5):33–42, May 2006.
 
@@ -602,9 +586,7 @@ softwarepreservation.org/projects/LISP/book/LISP% 201.5%20Programmers%20Manual.p
 
 [Mey92b] Bertrand Meyer. Eiffel: The Language. Prentice- Hall, Englewood Cliffs, NJ, 1992.
 
-[MAE+65] John McCarthy, Paul W. Abrahams, Daniel J. Edwards, Timothy P. Hart, and Michael I. Levin. LISP 1.5 Programmer’s Manual. MIT Press, Cam- bridge, MA, second edition,
-
-## 1965. Available as
+[MAE+65] John McCarthy, Paul W. Abrahams, Daniel J. Edwards, Timothy P. Hart, and Michael I. Levin. LISP 1.5 Programmer’s Manual. MIT Press, Cam- bridge, MA, second edition, 1965. Available as
 
 [MF08] Jacob Matthews and Robert Bruce Findler. An oper- ational semantics for Scheme. Journal of Functional Pro- gramming, 18(1):47–86, 2008.
 
@@ -662,9 +644,7 @@ K. Samelson, B. Vauquois, J. H. Wegstein, A. van Wijn- gaarden, and M. Woodger. 
 
 [Nec97] George C. Necula. Proof-carrying code. In Con- ference Record of the Twenty-Fourth ACM Symposium on Principles of Programming Languages, pages 106–119, Paris, France, January 1997.
 
-[Pey01] Simon Peyton Jones. Tackling the Awkward Squad: Monadic input/output, concurrency, exceptions, and foreign-language calls in Haskell. In Tony Hoare, Manfred Broy, and Ralf Steinbruggen, editors, Engineering Theories of Software Construction, pages 47–96. IOS Press, 2001. Originally presented at the Marktoberdorf Summer School,
-
-## 2000. Revised and corrected version available as research. microsoft.com/~simonpj/papers/marktoberdorf/mark.pdf .
+[Pey01] Simon Peyton Jones. Tackling the Awkward Squad: Monadic input/output, concurrency, exceptions, and foreign-language calls in Haskell. In Tony Hoare, Manfred Broy, and Ralf Steinbruggen, editors, Engineering Theories of Software Construction, pages 47–96. IOS Press, 2001. Originally presented at the Marktoberdorf Summer School, 2000. Revised and corrected version available as research. microsoft.com/~simonpj/papers/marktoberdorf/mark.pdf .
 
 [Nel65] Theodor Holm Nelson. Complex information pro- cessing: A ﬁle structure for the complex, the changing, and the indeterminate. In Proceedings of the Twentieth ACM National Conference, pages 84–100, Cleveland, OH, August 1965.
 
@@ -692,9 +672,7 @@ K. Samelson, B. Vauquois, J. H. Wegstein, A. van Wijn- gaarden, and M. Woodger. 
 
 [Par72] David L. Parnas. On the criteria to be used in de- composing systems into modules. Communications of the ACM, 15(12):1053–1058, December 1972.
 
-[Rep84] Thomas Reps. Generating Language-Based Environ- ments. MIT Press, Cambridge, MA, 1984. Winner of the
-
-## 1983 ACM Doctoral Dissertation Award.
+[Rep84] Thomas Reps. Generating Language-Based Environ- ments. MIT Press, Cambridge, MA, 1984. Winner of the 1983 ACM Doctoral Dissertation Award.
 
 [Pat85] David A. Patterson. Reduced instruction set com- puters. Communications of the ACM, 28(1):8–21, January 1985.
 
@@ -906,9 +884,7 @@ C. H. A. Koster, M. Sintzoff, C. H. Lindsey, L. G. L T. Meertens, and R. G. Fisk
 
 [WMWM87] Janet H. Walker, David A. Moon, Daniel L. Weinreb, and Mike McMahon. The Symbolics Genera programming environment. IEEE Software, 4(6):36–45, November 1987.
 
-[Wir80] Niklaus Wirth. The module: A system structur- ing facility in high-level programming languages. In Jef- frey M. Tobias, editor, Language Design and Programming Methodology, volume 79 of Lecture Notes in Computer Sci- ence, pages 1–24. Springer-Verlag, Berlin, West Germany,
-
-## 1980. Proceedings of a symposium held at Sydney, Aus- tralia, September 1979.
+[Wir80] Niklaus Wirth. The module: A system structur- ing facility in high-level programming languages. In Jef- frey M. Tobias, editor, Language Design and Programming Methodology, volume 79 of Lecture Notes in Computer Sci- ence, pages 1–24. Springer-Verlag, Berlin, West Germany, 1980. Proceedings of a symposium held at Sydney, Aus- tralia, September 1979.
 
 [Wol96] Michael Wolfe. High Performance Compilers for Par- allel Computing. Addison-Wesley, Redwood City, CA, 1996.
 

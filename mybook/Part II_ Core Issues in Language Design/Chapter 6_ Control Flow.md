@@ -1,11 +1,12 @@
 # Chapter 6: Control Flow
 
-## 6 Control Flow
+6 Control Flow
 
 Having considered the mechanisms that a compiler uses to enforce se- mantic rules (Chapter 4) and the characteristics of the target machines for which compilers must generate code (Chapter 5), we now return to core issues in lan- guage design. Speciﬁcally, we turn in this chapter to the issue of control ﬂow or ordering in program execution. Ordering is fundamental to most models of com- puting. It determines what should be done ﬁrst, what second, and so forth, to accomplish some desired task. We can organize the language mechanisms used to specify ordering into several categories:
 
-## 1. Sequencing: Statements are to be executed (or expressions evaluated) in a cer- tain speciﬁed order—usually the order in which they appear in the program text.
-
+* Sequencing: Statements are to be executed (or expressions evaluated) in a cer-
+  tain speciﬁed order—usually the order in which they appear in the program
+  text.
 * Selection: Depending on some run-time condition, a choice is to be made
   among two or more statements or expressions. The most common selection
   constructs are if and case (switch) statements. Selection is also sometimes
@@ -23,14 +24,11 @@ Having considered the mechanisms that a compiler uses to enforce se- mantic rule
 * Concurrency: Two or more program fragments are to be executed/evaluated
   “at the same time,” either in parallel on separate processors, or interleaved on
   a single processor in a way that achieves the same effect.
-## 7. Exception handling and speculation: A program fragment is executed optimisti- cally, on the assumption that some expected condition will be true. If that con-
+* Exception handling and speculation: A program fragment is executed optimisti-
+  cally, on the assumption that some expected condition will be true. If that con-
 
-dition turns out to be false, execution branches to a handler that executes in place of the remainder of the protected fragment (in the case of exception han- dling), or in place of the entire protected fragment (in the case of speculation). For speculation, the language implementation must be able to undo, or “roll back,” any visible effects of the protected code.
+dition turns out to be false, execution branches to a handler that executes in place of the remainder of the protected fragment (in the case of exception han- dling), or in place of the entire protected fragment (in the case of speculation). For speculation, the language implementation must be able to undo, or “roll back,” any visible effects of the protected code. 8. Nondeterminacy: The ordering or choice among statements or expressions is deliberately left unspeciﬁed, implying that any alternative will lead to correct results. Some languages require the choice to be random, or fair, in some for- mal sense of the word.
 
-* Nondeterminacy: The ordering or choice among statements or expressions is
-  deliberately left unspeciﬁed, implying that any alternative will lead to correct
-  results. Some languages require the choice to be random, or fair, in some for-
-  mal sense of the word.
 Though the syntactic and semantic details vary from language to language, these categories cover all of the control-ﬂow constructs and mechanisms found in most programming languages. A programmer who thinks in terms of these categories, rather than the syntax of some particular language, will ﬁnd it easy to learn new languages, evaluate the tradeoffs among languages, and design and reason about algorithms in a language-independent way. Subroutines are the subject of Chapter 9. Concurrency is the subject of Chap- ter 13. Exception handling and speculation are discussed in those chapters as well, in Sections 9.4 and 13.4.4. The bulk of the current chapter (Sections 6.3 through 6.7) is devoted to the ﬁve remaining categories. We begin in Section 6.1 by considering the evaluation of expressions—the building blocks on which all higher-level ordering is based. We consider the syntactic form of expressions, the precedence and associativity of operators, the order of evaluation of operands, and the semantics of the assignment statement. We focus in particular on the distinction between variables that hold a value and variables that hold a reference to a value; this distinction will play an important role many times in future chap- ters. In Section 6.2 we consider the difference between structured and unstructured (goto-based) control ﬂow. The relative importance of different categories of control ﬂow varies signif- icantly among the different classes of programming languages. Sequencing is central to imperative (von Neumann and object-oriented) languages, but plays a relatively minor role in functional languages, which emphasize the evaluation of expressions, de-emphasizing or eliminating statements (e.g., assignments) that affect program output in any way other than through the return of a value. Sim- ilarly, functional languages make heavy use of recursion, while imperative lan- guages tend to emphasize iteration. Logic languages tend to de-emphasize or hide the issue of control ﬂow entirely: The programmer simply speciﬁes a set of infer- ence rules; the language implementation must ﬁnd an order in which to apply those rules that will allow it to deduce values that satisfy some desired property.
 
 ## 6.1 Expression Evaluation
@@ -336,36 +334,40 @@ a, b, c = foo(d, e, f);
 
 This notation eliminates the asymmetry (nonorthogonality) of functions in most programming languages, which allow an arbitrary number of arguments, but only a single return. ■
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 1. Name eight major categories of control-ﬂow mechanisms. 2. What distinguishes operators from other sorts of functions?
 
-## 1. Name eight major categories of control-ﬂow mechanisms.
+  3.
+  Explain the difference between preﬁx, inﬁx, and postﬁx notation. What is
+  Cambridge Polish notation? Name two programming languages that use post-
+  ﬁx notation.
+  4.
+  Why don’t issues of associativity and precedence arise in Postscript or Forth?
 
-## 2. What distinguishes operators from other sorts of functions?
+  5.
+  What does it mean for an expression to be referentially transparent?
+  6.
+  What is the difference between a value model of variables and a reference
+  model of variables? Why is the distinction important?
+  7.
+  What is an l-value? An r-value?
 
-## 3. Explain the difference between preﬁx, inﬁx, and postﬁx notation. What is Cambridge Polish notation? Name two programming languages that use post- ﬁx notation.
-
-## 4. Why don’t issues of associativity and precedence arise in Postscript or Forth?
-
-## 5. What does it mean for an expression to be referentially transparent?
-
-## 6. What is the difference between a value model of variables and a reference model of variables? Why is the distinction important?
-
-## 7. What is an l-value? An r-value?
-
-## 8. Why is the distinction between mutable and immutable values important in the implementation of a language with a reference model of variables?
-
-## 9. Deﬁne orthogonality in the context of programming language design.
-
-## 10. What is the difference between a statement and an expression? What does it mean for a language to be expression-oriented?
-
-## 11. What are the advantages of updating a variable with an assignment operator, rather than with a regular assignment in which the variable appears on both the left- and right-hand sides?
+  8.
+  Why is the distinction between mutable and immutable values important in
+  the implementation of a language with a reference model of variables?
+  9.
+  Deﬁne orthogonality in the context of programming language design.
+* What is the difference between a statement and an expression? What does it
+  mean for a language to be expression-oriented?
+* What are the advantages of updating a variable with an assignment operator,
+  rather than with a regular assignment in which the variable appears on both
+  the left- and right-hand sides?
 
 ## 6.1.3 Initialization
 
 Because they already provide a construct (the assignment statement) to set the value of a variable, imperative languages do not always provide a means of spec- ifying an initial value for a variable in its declaration. There are several reasons, however, why such initial values may be useful:
 
-## 1. As suggested in Figure 3.3, a static variable that is local to a subroutine needs an initial value in order to be useful.
-
+* As suggested in Figure 3.3, a static variable that is local to a subroutine needs
+  an initial value in order to be useful.
 * For any statically allocated variable, an initial value that is speciﬁed in the dec-
   laration can be preallocated in global memory by the compiler, avoiding the
   cost of assigning an initial value at run time.
@@ -373,6 +375,7 @@ Because they already provide a construct (the assignment statement) to set the v
   gramming errors. One of the easiest ways to prevent such errors (or at least
   ensure that erroneous behavior is repeatable) is to give every variable a value
   when it is ﬁrst declared.
+
 Most languages allow variables of built-in types to be initialized in their dec- larations. A more complete and orthogonal approach to initialization requires a notation for aggregates: built-up structured values of user-deﬁned composite types. Aggregates can be found in several languages, including C, C++, Ada, For- tran 90, and ML; we will discuss them further in Section 7.1.3. It should be emphasized that initialization saves time only for variables that are statically allocated. Variables allocated in the stack or heap at run time must be initialized at run time.5 It is also worth noting that the problem of using an uninitialized variable occurs not only after elaboration, but also as a result of any operation that destroys a variable’s value without providing a new one. Two of the most common such operations are explicit deallocation of an object referenced through a pointer and modiﬁcation of the tag of a variant record. We will consider these operations further in Sections 8.5 and C 8.1.3, respectively. If a variable is not given an initial value explicitly in its declaration, the lan- guage may specify a default value. In C, for example, statically allocated variables for which the programmer does not provide an initial value are guaranteed to be represented in memory as if they had been initialized to zero. For most types on most machines, this is a string of zero bits, allowing the language implementation to exploit the fact that most operating systems (for security reasons) ﬁll newly allocated memory with zeros. Zero-initialization applies recursively to the sub- components of variables of user-deﬁned composite types. Java and C# provide a similar guarantee for the ﬁelds of all class-typed objects, not just those that are statically allocated. Most scripting languages provide a default initial value for all variables, of all types, regardless of scope or lifetime.
 
 5 For variables that are accessed indirectly (e.g., in languages that employ a reference model of variables), a compiler can often reduce the cost of initializing a stack or heap variable by placing the initial value in static memory, and only creating the pointer to it at elaboration time.
@@ -418,11 +421,10 @@ we know from associativity that f(b) will be subtracted from a before perform- i
 
 f(a, g(b), h(c))
 
-## 1. Side effects: If f(b) may modify d, then the value of a - f(b) - c * d will EXAMPLE 6.29
+* Side effects: If f(b) may modify d, then the value of a - f(b) - c * d will
+  EXAMPLE 6.29
 
-A value that depends on ordering depend on whether the ﬁrst subtraction or the multiplication is performed ﬁrst. Similarly, if g(b) may modify a and/or c, then the values passed to f(a, g(b), h(c)) will depend on the order in which the arguments are eval- uated. ■
-
-## 2. Code improvement: The order of evaluation of subexpressions has an impact on both register allocation and instruction scheduling. In the expression a * b EXAMPLE 6.30
+A value that depends on ordering depend on whether the ﬁrst subtraction or the multiplication is performed ﬁrst. Similarly, if g(b) may modify a and/or c, then the values passed to f(a, g(b), h(c)) will depend on the order in which the arguments are eval- uated. ■ 2. Code improvement: The order of evaluation of subexpressions has an impact on both register allocation and instruction scheduling. In the expression a * b EXAMPLE 6.30
 
 An optimization that depends on ordering + f(c), it is probably desirable to call f before evaluating a * b, because the product, if calculated ﬁrst, would need to be saved during the call to f, and f might want to use all the registers in which it might easily be saved. In a similar vein, consider the sequence
 
@@ -480,9 +482,9 @@ problem is that numbers in a computer are of limited precision. Suppose a, b, EX
 
 Overﬂow and arithmetic “identities” and c are all integers between two billion and three billion. With 32-bit arith- metic, the expression b - c + d can be evaluated safely left-to-right (232 is a little less than 4.3 billion). If the compiler attempts to reorganize this expression as b + d - c, however (e.g., in order to delay its use of c), then arithmetic overﬂow will occur. Despite our intuition from math, this reorganization is unsafe. ■ Many languages, including Pascal and most of its descendants, provide dy- namic semantic checks to detect arithmetic overﬂow. In some implementations these checks can be disabled to eliminate their run-time overhead. In C and C++, the effect of arithmetic overﬂow is implementation-dependent. In Java, it is well deﬁned: the language deﬁnition speciﬁes the size of all numeric types, and re- quires two’s complement integer and IEEE ﬂoating-point arithmetic. In C#, the programmer can explicitly request the presence or absence of checks by tagging an expression or statement with the checked or unchecked keyword. In a com- pletely different vein, Scheme, Common Lisp, and several scripting languages place no a priori limit on the size of integers; space is allocated to hold extra-large values on demand. Even in the absence of overﬂow, the limited precision of ﬂoating-point arith- metic can cause different arrangements of the “same” expression to produce sig- niﬁcantly different results, invisibly. Single-precision IEEE ﬂoating-point num- EXAMPLE 6.33
 
-Reordering and numerical stability bers devote one bit to the sign, eight bits to the exponent (power of two), and
+Reordering and numerical stability bers devote one bit to the sign, eight bits to the exponent (power of two), and 23 bits to the mantissa. Under this representation, a + b is guaranteed to result in a loss of information if | log2(a/b)| > 23. Thus if b = -c, then a + b + c may appear to be zero, instead of a, if the magnitude of a is small, while the magnitudes of b and c are large. In a similar vein, a number like 0.1 cannot be represented precisely, because its binary representation is a “repeating decimal”:
 
-23 bits to the mantissa. Under this representation, a + b is guaranteed to result in a loss of information if | log2(a/b)| > 23. Thus if b = -c, then a + b + c may appear to be zero, instead of a, if the magnitude of a is small, while the magnitudes of b and c are large. In a similar vein, a number like 0.1 cannot be represented precisely, because its binary representation is a “repeating decimal”: 0.0001001001.... For certain values of x, (0.1 + x) * 10.0 and 1.0 + (x * 10.0) can differ by as much as 25%, even when 0.1 and x are of the same mag- nitude. ■
+## 0.0001001001.... For certain values of x, (0.1 + x) * 10.0 and 1.0 + (x * 10.0) can differ by as much as 25%, even when 0.1 and x are of the same mag- nitude. ■
 
 ## 6.1.5 Short-Circuit Evaluation
 
@@ -537,21 +539,18 @@ if d = 0.0 or else n/d < threshold then ...
 
 (Ada uses /= for “not equal.”) In C, the bit-wise & and | operators can be used as non-short-circuiting alternatives to && and || when their arguments are logical (zero or one) values. ■ If we think of and and or as binary operators, short circuiting can be consid- ered an example of delayed or lazy evaluation: the operands are “passed” uneval- uated. Internally, the operator evaluates the ﬁrst operand in any case, the second only when needed. In a language like Algol 68, which allows arbitrary control ﬂow constructs to be used inside expressions, conditional evaluation can be speciﬁed explicitly with if... then ... else; see Exercise 6.13. When used to determine the ﬂow of control in a selection or iteration con- struct, short-circuit Boolean expressions do not really have to calculate a Boolean value; they simply have to ensure that control takes the proper path in any given situation. We will look more closely at the generation of code for short-circuit expressions in Section 6.4.1.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 12. Given the ability to assign a value into a variable, why is it useful to be able to specify an initial value?
 
-## 12. Given the ability to assign a value into a variable, why is it useful to be able to specify an initial value?
+* What are aggregates? Why are they useful?
+* Explain the notion of deﬁnite assignment in Java and C#.
 
-## 13. What are aggregates? Why are they useful?
+* Why is it generally expensive to catch all uses of uninitialized variables at run
+  time?
 
-## 14. Explain the notion of deﬁnite assignment in Java and C#.
-
-## 15. Why is it generally expensive to catch all uses of uninitialized variables at run time?
-
-## 16. Why is it impossible to catch all uses of uninitialized variables at compile time?
-
-## 17. Why do most languages leave unspeciﬁed the order in which the arguments of an operator or function are evaluated?
-
-## 18. What is short-circuit Boolean evaluation? Why is it useful?
+* Why is it impossible to catch all uses of uninitialized variables at compile time?
+* Why do most languages leave unspeciﬁed the order in which the arguments
+  of an operator or function are evaluated?
+* What is short-circuit Boolean evaluation? Why is it useful?
 
 ## 6.2 Structured and Unstructured Flow
 
@@ -566,9 +565,7 @@ if (A .lt. B) goto 10
 10
 ```
 
-The 10 on the bottom line is a statement label. Goto statements also featured prominently in other early imperative languages. ■ Beginning in the late 1960s, largely in response to an article by Edsger Dijk- stra [Dij68b],6 language designers hotly debated the merits and evils of gotos. It seems fair to say the detractors won. Ada and C# allow gotos only in limited contexts. Modula (1, 2, and 3), Clu, Eiffel, Java, and most of the scripting lan- guages do not allow them at all. Fortran 90 and C++ allow them primarily for compatibility with their predecessor languages. (Java reserves the token goto as a keyword, to make it easier for a Java compiler to produce good error messages when a programmer uses a C++ goto by mistake.) The abandonment of gotos was part of a larger “revolution” in software en- gineering known as structured programming. Structured programming was the “hot trend” of the 1970s, in much the same way that object-oriented program- ming was the trend of the 1990s. Structured programming emphasizes top-down design (i.e., progressive reﬁnement), modularization of code, structured types (records, sets, pointers, multidimensional arrays), descriptive variable and con- stant names, and extensive commenting conventions. The developers of struc- tured programming were able to demonstrate that within a subroutine, almost any well-designed imperative algorithm can be elegantly expressed with only se- quencing, selection, and iteration. Instead of labels, structured languages rely on the boundaries of lexically nested constructs as the targets of branching control. Many of the structured control-ﬂow constructs familiar to modern program- mers were pioneered by Algol 60. These include the if... then ... else con- struct and both enumeration (for) and logically (while) controlled loops. The modern case (switch) statement was introduced by Wirth and Hoare in Al- gol W [WH66] as an alternative to the more unstructured computed goto and switch constructs of Fortran and Algol 60, respectively. (The switch statement of C bears a closer resemblance to the Algol W case statement than to the Algol
-
-## 60 switch.)
+The 10 on the bottom line is a statement label. Goto statements also featured prominently in other early imperative languages. ■ Beginning in the late 1960s, largely in response to an article by Edsger Dijk- stra [Dij68b],6 language designers hotly debated the merits and evils of gotos. It seems fair to say the detractors won. Ada and C# allow gotos only in limited contexts. Modula (1, 2, and 3), Clu, Eiffel, Java, and most of the scripting lan- guages do not allow them at all. Fortran 90 and C++ allow them primarily for compatibility with their predecessor languages. (Java reserves the token goto as a keyword, to make it easier for a Java compiler to produce good error messages when a programmer uses a C++ goto by mistake.) The abandonment of gotos was part of a larger “revolution” in software en- gineering known as structured programming. Structured programming was the “hot trend” of the 1970s, in much the same way that object-oriented program- ming was the trend of the 1990s. Structured programming emphasizes top-down design (i.e., progressive reﬁnement), modularization of code, structured types (records, sets, pointers, multidimensional arrays), descriptive variable and con- stant names, and extensive commenting conventions. The developers of struc- tured programming were able to demonstrate that within a subroutine, almost any well-designed imperative algorithm can be elegantly expressed with only se- quencing, selection, and iteration. Instead of labels, structured languages rely on the boundaries of lexically nested constructs as the targets of branching control. Many of the structured control-ﬂow constructs familiar to modern program- mers were pioneered by Algol 60. These include the if... then ... else con- struct and both enumeration (for) and logically (while) controlled loops. The modern case (switch) statement was introduced by Wirth and Hoare in Al- gol W [WH66] as an alternative to the more unstructured computed goto and switch constructs of Fortran and Algol 60, respectively. (The switch statement of C bears a closer resemblance to the Algol W case statement than to the Algol 60 switch.)
 
 6 Edsger W. Dijkstra (1930–2002) developed much of the logical foundation of our modern un- derstanding of concurrency. He was also responsible, among many other contributions, for the semaphores of Section 13.3.5 and for much of the practical development of structured program- ming. He received the ACM Turing Award in 1972.
 
@@ -718,9 +715,7 @@ Selection in Algol 60 if... then ... else notation introduced in Algol 60:
 
 if condition then statement else if condition then statement else if condition then statement ... else statement ■
 
-As we saw in Section 2.3.2, languages differ in the details of the syntax. In Algol
-
-60 and Pascal both the then clause and the else clause were deﬁned to contain a single statement (this could of course be a begin... end compound statement). To avoid grammatical ambiguity, Algol 60 required that the statement after the then begin with something other than if (begin is ﬁne). Pascal eliminated this restriction in favor of a “disambiguating rule” that associated an else with the closest unmatched then. Algol 68, Fortran 77, and more modern languages avoid the ambiguity by allowing a statement list to follow either then or else, with a terminating keyword at the end of the construct. To keep terminators from piling up at the end of nested if statements, most EXAMPLE 6.47
+As we saw in Section 2.3.2, languages differ in the details of the syntax. In Algol 60 and Pascal both the then clause and the else clause were deﬁned to contain a single statement (this could of course be a begin... end compound statement). To avoid grammatical ambiguity, Algol 60 required that the statement after the then begin with something other than if (begin is ﬁne). Pascal eliminated this restriction in favor of a “disambiguating rule” that associated an else with the closest unmatched then. Algol 68, Fortran 77, and more modern languages avoid the ambiguity by allowing a statement list to follow either then or else, with a terminating keyword at the end of the construct. To keep terminators from piling up at the end of nested if statements, most EXAMPLE 6.47
 
 elsif/elif languages with terminators provide a special elsif or elif keyword. In Ruby, one writes
 
@@ -843,25 +838,23 @@ letter_case = lower; switch (c) { ... case 'A' : letter_case = upper; /* FALL TH
 
 Most of the time, however, the need to insert a break at the end of each arm— and the compiler’s willingness to accept arms without breaks, silently—is a recipe for unexpected and difﬁcult-to-diagnose bugs. C# retains the familiar C syntax, including multiple consecutive labels, but requires every nonempty arm to end with a break, goto, continue, or return.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 19. List the principal uses of goto, and the structured alternatives to each.
 
-## 19. List the principal uses of goto, and the structured alternatives to each.
+* Explain the distinction between exceptions and multilevel returns.
+* What are continuations? What other language features do they subsume?
 
-## 20. Explain the distinction between exceptions and multilevel returns.
+* Why is sequencing a comparatively unimportant form of control ﬂow in Lisp?
+* Explain why it may sometimes be useful for a function to have side effects.
+* Describe the jump code implementation of short-circuit Boolean evaluation.
 
-## 21. What are continuations? What other language features do they subsume?
+* Why do imperative languages commonly provide a case or switch statement
+  in addition to if... then ... else?
+* Describe three different search strategies that might be employed in the im-
+  plementation of a case statement, and the circumstances in which each
+  would be desirable.
 
-## 22. Why is sequencing a comparatively unimportant form of control ﬂow in Lisp?
-
-## 23. Explain why it may sometimes be useful for a function to have side effects.
-
-## 24. Describe the jump code implementation of short-circuit Boolean evaluation.
-
-## 25. Why do imperative languages commonly provide a case or switch statement in addition to if... then ... else?
-
-## 26. Describe three different search strategies that might be employed in the im- plementation of a case statement, and the circumstances in which each would be desirable.
-
-## 27. Explain the use of break to terminate the arms of a C switch statement, and the behavior that arises if a break is accidentally omitted.
+* Explain the use of break to terminate the arms of a C switch statement, and
+  the behavior that arises if a break is accidentally omitted.
 
 ## 6.5 Iteration
 
@@ -929,13 +922,13 @@ execute three iterations or four? It depends on whether 1.0 / 3.0 is rounded up 
 
 The choice between requiring and (merely) enabling enumeration manifests itself in several speciﬁc questions:
 
-## 1. Can control enter or leave the loop in any way other than through the enumer- ation mechanism?
-
-## 2. What happens if the loop body modiﬁes variables that were used to compute the end-of-loop bound?
-
-## 3. What happens if the loop body modiﬁes the index variable itself?
-
-## 4. Can the program read the index variable after the loop has completed, and if so, what will its value be?
+* Can control enter or leave the loop in any way other than through the enumer-
+  ation mechanism?
+* What happens if the loop body modiﬁes variables that were used to compute
+  the end-of-loop bound?
+* What happens if the loop body modiﬁes the index variable itself?
+* Can the program read the index variable after the loop has completed, and if
+  so, what will its value be?
 
 Questions (1) and (2) are relatively easy to resolve. Most languages allow a break/exit statement to leave a for loop early. Fortran IV allowed a goto to jump into a loop, but this was generally regarded as a language ﬂaw; Fortran 77 and most other languages prohibit such jumps. Similarly, most languages (but not C; see Section 6.5.2) specify that the bound is computed only once, before the ﬁrst iteration, and kept in a temporary location. Subsequent changes to variables used to compute the bound have no effect on how many times the loop iterates. Questions (3) and (4) are more difﬁcult. Suppose we write (in no particular EXAMPLE 6.62
 
@@ -1081,9 +1074,7 @@ We could then sum the ﬁrst 50 odd numbers as follows:
 
 Here the body of the loop, (set! sum (+ sum i)), is an assignment. The =⇒ symbol (not a part of Scheme) is used here to mean “evaluates to.” ■ Smalltalk, which we consider in Section C 10.7.1, supports a similar idiom: EXAMPLE 6.71
 
-Iteration with blocks in Smalltalk sum <- 0.
-
-## 1 to: 100 by: 2 do: [:i | sum <- sum + i]
+Iteration with blocks in Smalltalk sum <- 0. 1 to: 100 by: 2 do: [:i | sum <- sum + i]
 
 Like a lambda expression in Scheme, a square-bracketed block in Smalltalk creates a ﬁrst-class function, which we then pass as argument to the to: by: do: iterator. The iterator calls the function repeatedly, passing successive values of the index variable i as argument. ■ Iterators in Ruby are also similar, with functional semantics but syntax remi- niscent of Python or C#. Our uptoby iterator in Ruby could be written as follows: EXAMPLE 6.72
 
@@ -1205,29 +1196,26 @@ Exiting a nested loop in Perl outer: while (<>) { # iterate over lines of input 
 
 Java extends the C/C++ break statement in a similar fashion, with optional labels on loops.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 28. Describe three subtleties in the implementation of enumeration-controlled loops. 29. Why do most languagesnot allow the bounds or increment of an enumeration- controlled loop to be ﬂoating-point numbers?
 
-## 28. Describe three subtleties in the implementation of enumeration-controlled loops.
+* Why do many languages require the step size of an enumeration-controlled
+  loop to be a compile-time constant?
+* Describe the “iteration count” loop implementation. What problem(s) does
+  it solve?
+* What are the advantages of making an index variable local to the loop it con-
+  trols?
 
-## 29. Why do most languagesnot allow the bounds or increment of an enumeration- controlled loop to be ﬂoating-point numbers?
+* Does C have enumeration-controlled loops? Explain.
+* What is a collection (a container instance)?
+* Explain the difference between true iterators and iterator objects.
 
-## 30. Why do many languages require the step size of an enumeration-controlled loop to be a compile-time constant?
+* Cite two advantages of iterator objects over the use of programming conven-
+  tions in a language like C.
 
-## 31. Describe the “iteration count” loop implementation. What problem(s) does it solve?
-
-## 32. What are the advantages of making an index variable local to the loop it con- trols?
-
-## 33. Does C have enumeration-controlled loops? Explain.
-
-## 34. What is a collection (a container instance)?
-
-## 35. Explain the difference between true iterators and iterator objects.
-
-## 36. Cite two advantages of iterator objects over the use of programming conven- tions in a language like C.
-
-## 37. Describe the approach to iteration typically employed in languages with ﬁrst- class functions.
-
-## 38. Give an example in which a mid-test loop results in more elegant code than does a pretest or post-test loop.
+* Describe the approach to iteration typically employed in languages with ﬁrst-
+  class functions.
+* Give an example in which a mid-test loop results in more elegant code than
+  does a pretest or post-test loop.
 
 ## 6.6 Recursion
 
@@ -1382,7 +1370,7 @@ The list will occupy only as much space as we have actually explored. More elab-
 
 Our ﬁnal category of control ﬂow is nondeterminacy. A nondeterministic con- struct is one in which the choice between alternatives (i.e., between control paths)
 
-## 10 More precisely, delay is a special form, rather than a function. Its argument is passed to it un- evaluated.
+10 More precisely, delay is a special form, rather than a function. Its argument is passed to it un- evaluated.
 
 is deliberately unspeciﬁed. We have already seen examples of nondeterminacy in the evaluation of expressions (Section 6.1.4): in most languages, operator or subroutine arguments may be evaluated in any order. Some languages, notably Algol 68 and various concurrent languages, provide more extensive nondetermin- istic mechanisms, which cover statements as well.
 
@@ -1390,19 +1378,13 @@ IN MORE DEPTH
 
 Further discussion of nondeterminism can be found on the companion site. Ab- sent a nondeterministic construct, the author of a code fragment in which order does not matter must choose some arbitrary (artiﬁcial) order. Such a choice can make it more difﬁcult to construct a formal correctness proof. Some language designers have also argued that it is inelegant. The most compelling uses for non- determinacy arise in concurrent programs, where imposing an arbitrary choice on the order in which a thread interacts with its peers may cause the system as a whole to deadlock. For such programs one may need to ensure that the choice among nondeterministic alternatives is fair in some formal sense.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 39. What is a tail-recursive function? Why is tail recursion important? 40. Explain the difference between applicative- and normal-order evaluation of expressions. Under what circumstances is each desirable? 41. What is lazy evaluation? What are promises? What is memoization?
 
-## 39. What is a tail-recursive function? Why is tail recursion important?
+* Give two reasons why lazy evaluation may be desirable.
+* Name a language in which parameters are always evaluated lazily.
 
-## 40. Explain the difference between applicative- and normal-order evaluation of expressions. Under what circumstances is each desirable?
-
-## 41. What is lazy evaluation? What are promises? What is memoization?
-
-## 42. Give two reasons why lazy evaluation may be desirable.
-
-## 43. Name a language in which parameters are always evaluated lazily.
-
-## 44. Give two reasons why a programmer might sometimes want control ﬂow to be nondeterministic.
+* Give two reasons why a programmer might sometimes want control ﬂow to
+  be nondeterministic.
 
 ## 6.8 Summary and Concluding Remarks
 

@@ -1,23 +1,16 @@
 # Chapter 7: Type Systems
 
-## 7 Type Systems
+7 Type Systems
 
 Most programming languages include a notion of type for expressions and/or objects.1 Types serve several important purposes:
 
-## 1. Types provide implicit context for many operations, so that the programmer does not have to specify that context explicitly. In C, for instance, the expres- EXAMPLE 7.1
+* Types provide implicit context for many operations, so that the programmer
+  does not have to specify that context explicitly. In C, for instance, the expres-
+  EXAMPLE 7.1
 
-Operations that leverage type information sion a + b will use integer addition if a and b are of integer (int) type; it will use ﬂoating-point addition if a and b are of ﬂoating-point (double or float) type. Similarly, the operation new p in Pascal, where p is a pointer, will allocate a block of storage from the heap that is the right size to hold an object of the type pointed to by p; the programmer does not have to specify (or even know) this size. In C++, Java, and C#, the operation new my_type() not only allocates (and returns a pointer to) a block of storage sized for an ob- ject of type my_type; it also automatically calls any user-deﬁned initialization (constructor) function that has been associated with that type. ■
+Operations that leverage type information sion a + b will use integer addition if a and b are of integer (int) type; it will use ﬂoating-point addition if a and b are of ﬂoating-point (double or float) type. Similarly, the operation new p in Pascal, where p is a pointer, will allocate a block of storage from the heap that is the right size to hold an object of the type pointed to by p; the programmer does not have to specify (or even know) this size. In C++, Java, and C#, the operation new my_type() not only allocates (and returns a pointer to) a block of storage sized for an ob- ject of type my_type; it also automatically calls any user-deﬁned initialization (constructor) function that has been associated with that type. ■ 2. Types limit the set of operations that may be performed in a semantically valid EXAMPLE 7.2
 
-## 2. Types limit the set of operations that may be performed in a semantically valid EXAMPLE 7.2
-
-Errors captured by type information program. They prevent the programmer from adding a character and a record, for example, or from taking the arctangent of a set, or passing a ﬁle as a param- eter to a subroutine that expects an integer. While no type system can promise to catch every nonsensical operation that a programmer might put into a pro- gram by mistake, good type systems catch enough mistakes to be highly valu- able in practice. ■
-
-* If types are speciﬁed explicitly in the source program (as they are in many
-  but not all languages), they can often make the program easier to read and
-  understand. In effect, they serve as stylized documentation, whose correctness
-  is checked by the compiler. (On the ﬂip side, the need for this documentation
-  can sometimes make the program harder to write.)
-## 4. If types are known at compile time (either because the programmer speciﬁes them explicitly or because the compiler is able to infer them), they can be used
+Errors captured by type information program. They prevent the programmer from adding a character and a record, for example, or from taking the arctangent of a set, or passing a ﬁle as a param- eter to a subroutine that expects an integer. While no type system can promise to catch every nonsensical operation that a programmer might put into a pro- gram by mistake, good type systems catch enough mistakes to be highly valu- able in practice. ■ 3. If types are speciﬁed explicitly in the source program (as they are in many but not all languages), they can often make the program easier to read and understand. In effect, they serve as stylized documentation, whose correctness is checked by the compiler. (On the ﬂip side, the need for this documentation can sometimes make the program harder to write.) 4. If types are known at compile time (either because the programmer speciﬁes them explicitly or because the compiler is able to infer them), they can be used
 
 1 Recall that unless otherwise noted we are using the term “object” informally to refer to anything that might have a name. Object-oriented languages, which we will study in Chapter 10, assign a narrower, more formal, meaning to the term.
 
@@ -151,21 +144,8 @@ decimal types that use a base-10 encoding to avoid round-off anomalies in ﬁnan
 
 DESIGN & IMPLEMENTATION
 
-7.3 Multilingual character sets The ISO 10646 international standard deﬁnes a Universal Character Set (UCS) intended to include all characters of all known human languages. (It also sets aside a “private use area” for such artiﬁcial [constructed] languages as Klingon, Tengwar, and Cirth [Tolkien Elvish]. Allocation of this private space is coordi- nated by a volunteer organization known as the ConScript Unicode Registry.) All natural languages currently employ codes in the 16-bit Basic Multilingual Plane (BMP): 0x0000 through 0xfffd. Unicode is an expanded version of ISO 10646, maintained by an interna- tional consortium of software manufacturers. In addition to mapping tables, it covers such topics as rendering algorithms, directionality of text, and sorting and comparison conventions. While recent languages have moved toward 16- or 32-bit internal char- acter representations, these cannot be used for external storage—text ﬁles— without causing severe problems with backward compatibility. To accommo- date Unicode without breaking existing tools, Ken Thompson in 1992 pro- posed a multibyte “expanding” code known as UTF-8 (UCS/Unicode Trans- formation Format, 8-bit), and codiﬁed as a formal annex (appendix) to ISO
+7.3 Multilingual character sets The ISO 10646 international standard deﬁnes a Universal Character Set (UCS) intended to include all characters of all known human languages. (It also sets aside a “private use area” for such artiﬁcial [constructed] languages as Klingon, Tengwar, and Cirth [Tolkien Elvish]. Allocation of this private space is coordi- nated by a volunteer organization known as the ConScript Unicode Registry.) All natural languages currently employ codes in the 16-bit Basic Multilingual Plane (BMP): 0x0000 through 0xfffd. Unicode is an expanded version of ISO 10646, maintained by an interna- tional consortium of software manufacturers. In addition to mapping tables, it covers such topics as rendering algorithms, directionality of text, and sorting and comparison conventions. While recent languages have moved toward 16- or 32-bit internal char- acter representations, these cannot be used for external storage—text ﬁles— without causing severe problems with backward compatibility. To accommo- date Unicode without breaking existing tools, Ken Thompson in 1992 pro- posed a multibyte “expanding” code known as UTF-8 (UCS/Unicode Trans- formation Format, 8-bit), and codiﬁed as a formal annex (appendix) to ISO 10646. UTF-8 characters occupy a maximum of 6 bytes—3 if they lie in the BMP, and only 1 if they are ordinary ASCII. The trick is to observe that ASCII is a 7-bit code; in any legacy text ﬁle the most signiﬁcant bit of every byte is 0. In UTF-8 a most signiﬁcant bit of 1 indicates a multibyte character. Two-byte codes begin with the bits 110. Three-byte codes begin with 1110. Second and subsequent bytes of multibyte characters always begin with 10. On some systems one also ﬁnds ﬁles encoded in one of ten variants of the older 8-bit ISO 8859 standard, but these are inconsistently rendered across platforms. On the web, non-ASCII characters are typically encoded with nu- meric character references, which bracket a Unicode value, written in decimal or hex, with an ampersand and a semicolon. The copyright symbol (©), for example, is &#169;. Many characters also have symbolic entity names (e.g., &copy;), but not all browsers support these.
 
-* UTF-8 characters occupy a maximum of 6 bytes—3 if they lie in the
-  BMP, and only 1 if they are ordinary ASCII. The trick is to observe that ASCII
-  is a 7-bit code; in any legacy text ﬁle the most signiﬁcant bit of every byte is 0.
-  In UTF-8 a most signiﬁcant bit of 1 indicates a multibyte character. Two-byte
-  codes begin with the bits 110. Three-byte codes begin with 1110. Second and
-  subsequent bytes of multibyte characters always begin with 10.
-  On some systems one also ﬁnds ﬁles encoded in one of ten variants of the
-  older 8-bit ISO 8859 standard, but these are inconsistently rendered across
-  platforms. On the web, non-ASCII characters are typically encoded with nu-
-  meric character references, which bracket a Unicode value, written in decimal
-  or hex, with an ampersand and a semicolon. The copyright symbol (©), for
-  example, is &#169;. Many characters also have symbolic entity names (e.g.,
-  &copy;), but not all browsers support these.
 complex types together constitute the scalar types. Scalar types are also some- times called simple types.
 
 Enumeration Types
@@ -232,9 +212,7 @@ DESIGN & IMPLEMENTATION
 
 7.5 Multiple sizes of integers The space savings possible with (small-valued) subrange types in Pascal and Ada is achieved in several other languages by providing more than one size of built-in integer type. C and C++, for example, support integer arithmetic on signed and unsigned variants of char, short, int, long, and long long types, with monotonically nondecreasing sizes.2
 
-2 More speciﬁcally, C requires ranges for these types corresponding to lengths of at least 1, 2, 2, 4, and 8 bytes, respectively. In practice, one ﬁnds implementations in which plain ints are 2, 4, or
-
-## 8 bytes long, including some in which they are the same size as shorts but shorter than longs, and some in which they are the same size as longs, and longer than shorts.
+2 More speciﬁcally, C requires ranges for these types corresponding to lengths of at least 1, 2, 2, 4, and 8 bytes, respectively. In practice, one ﬁnds implementations in which plain ints are 2, 4, or 8 bytes long, including some in which they are the same size as shorts but shorter than longs, and some in which they are the same size as longs, and longer than shorts.
 
 In Ada one would write EXAMPLE 7.15
 
@@ -263,33 +241,41 @@ which belongs to a (potentially different) simpler type. Records are akin to mat
 
 We will examine composite types in more detail in Chapter 8.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 1. What purpose(s) do types serve in a programming language?
 
-## 1. What purpose(s) do types serve in a programming language?
+  2.
+  What does it mean for a language to be strongly typed? Statically typed? What
+  prevents, say, C from being strongly typed?
 
-## 2. What does it mean for a language to be strongly typed? Statically typed? What prevents, say, C from being strongly typed?
+  3.
+  Name two programming languages that are strongly but dynamically
+  typed.
+  4.
+  What is a type clash?
 
-## 3. Name two programming languages that are strongly but dynamically typed.
+  5.
+  Discuss the differences among the denotational, structural, and abstraction-
+  based views of types.
 
-## 4. What is a type clash?
+  6.
+  What does it mean for a set of language features (e.g., a type system) to be
+  orthogonal?
+  7.
+  What are aggregates?
+  8.
+  What are option types? What purpose do they serve?
 
-## 5. Discuss the differences among the denotational, structural, and abstraction- based views of types.
+  9.
+  What is polymorphism? What distinguishes its parametric and subtype vari-
+  eties? What are generics?
 
-## 6. What does it mean for a set of language features (e.g., a type system) to be orthogonal?
-
-## 7. What are aggregates?
-
-## 8. What are option types? What purpose do they serve?
-
-## 9. What is polymorphism? What distinguishes its parametric and subtype vari- eties? What are generics?
-
-## 10. What is the difference between discrete and scalar types?
-
-## 11. Give two examples of languages that lack a Boolean type. What do they use instead?
-
+* What is the difference between discrete and scalar types?
+* Give two examples of languages that lack a Boolean type. What do they use
+  instead?
 * In what ways may an enumeration type be preferable to a collection of named
   constants? In what ways may a subrange type be preferable to its base type?
   In what ways may a string be preferable to an array of characters?
+
 ## 7.2 Type Checking
 
 In most statically typed languages, every deﬁnition of an object (constant, vari- able, subroutine, etc.) must specify the object’s type. Moreover, many of the con- texts in which an object might appear are also typed, in the sense that the rules of the language constrain the types that an object in that context may validly possess. In the subsections below we will consider the topics of type equivalence, type com- patibility, and type inference. Of the three, type compatibility is the one of most concern to programmers. It determines when an object of a certain type can be used in a certain context. At a minimum, the object can be used if its type and the type expected by the context are equivalent (i.e., the same). In many languages, however, compatibility is a looser relationship than equivalence: objects and con- texts are often compatible even when their types are different. Our discussion of type compatibility will touch on the subjects of type conversion (also called cast- ing), which changes a value of one type into a value of another; type coercion, which performs a conversion automatically in certain contexts; and nonconvert- ing type casts, which are sometimes used in systems programming to interpret the bits of a value of one type as if they represented a value of some other type. Whenever an expression is constructed from simpler subexpressions, the ques- tion arises: given the types of the subexpressions (and possibly the type expected
@@ -330,23 +316,29 @@ Here the length of the array is the same in both cases, but the index values are
 
 The problem with structural equivalence mentation-oriented way to think about types. Its principal problem is an inability to distinguish between types that the programmer may think of as distinct, but which happen by coincidence to have the same internal structure:
 
-## 1. type student = record
+  1.
+  type student = record
+  2.
+  name, address : string
+  3.
+  age : integer
 
-## 2. name, address : string
+  4.
+  type school = record
+  5.
+  name, address : string
+  6.
+  age : integer
 
-## 3. age : integer
-
-## 4. type school = record
-
-## 5. name, address : string
-
-## 6. age : integer
-
-## 7. x : student;
-
-## 8. y : school; 9. . . .
-
-## 10. x := y; –– is this an error?
+  7.
+  x : student;
+  8.
+  y : school;
+  9.
+  . . .
+  10.
+  x := y;
+  –– is this an error?
 
 Most programmers would probably want to be informed if they accidentally as- signed a value of type school into a variable of type student, but a compiler whose type checking is based on structural equivalence will blithely accept such an as- signment. Name equivalence is based on the assumption that if the programmer goes to the effort of writing two type deﬁnitions, then those deﬁnitions are probably meant to represent different types. In the example above, variables x and y will be considered to have different types under name equivalence: x uses the type declared at line 1; y uses the type declared at line 4. ■
 
@@ -387,23 +379,7 @@ subtype mode_t is integer range 0..2**16-1; -- unsigned 16-bit integer ... type 
 
 One way to think about the difference between strict and loose name equiva- lence is to remember the distinction between declarations and deﬁnitions (Sec- tion 3.3.3). Understrict name equivalence, a declaration type A = B is considered a deﬁnition. Under loose name equivalence it is merely a declaration; A shares the deﬁnition of B. Consider the following example: EXAMPLE 7.24
 
-Name vs structural equivalence
-
-## 1. type cell = . . . –– whatever
-
-## 2. type alink = pointer to cell
-
-## 3. type blink = alink
-
-## 4. p, q : pointer to cell
-
-## 5. r : alink
-
-## 6. s : blink
-
-## 7. t : pointer to cell
-
-## 8. u : alink
+Name vs structural equivalence 1. type cell = . . . –– whatever 2. type alink = pointer to cell 3. type blink = alink 4. p, q : pointer to cell 5. r : alink 6. s : blink 7. t : pointer to cell 8. u : alink
 
 Here the declaration at line 3 is an alias; it deﬁnes blink to be “the same as” alink. Under strict name equivalence, line 3 is both a declaration and a deﬁnition, and blink is a new type, distinct from alink. Under loose name equivalence, line 3 is just a declaration; it uses the deﬁnition at line 2. Under strict name equivalence, p and q have the same type, because they both use the anonymous (unnamed) type deﬁnition on the right-hand side of line 4, and r and u have the same type, because they both use the deﬁnition at line 2. Under loose name equivalence, r, s, and u all have the same type, as do p and q. Under structural equivalence, all six of the variables shown have the same type, namely pointer to whatever cell is. ■ Both structural and name equivalence can be tricky to implement in the pres- ence of separate compilation. We will return to this issue in Section 15.6.
 
@@ -445,6 +421,7 @@ we expect the types of the arguments to match those of the formal parameters, as
   a machine instruction to effect this conversion. Conversions between different
   lengths of integers can be effected by discarding or sign-extending high-order
   bytes.
+
 We can illustrate these options with the following examples of type conversions EXAMPLE 7.26
 
 Type conversions in Ada in Ada:
@@ -648,15 +625,16 @@ of the program. ML-style type inference is the invention of the language’s cre
 
 Fibonacci function in OCaml introduced in Example 6.87:
 
-## 1. let fib n =
-
-## 2. let rec fib_helper n1 n2 i =
-
-## 3. if i = n then n2
-
-## 4. else fib_helper n2 (n1 + n2) (i + 1) in
-
-## 5. fib_helper 0 1 0;;
+  1.
+  let fib n =
+  2.
+  let rec fib_helper n1 n2 i =
+  3.
+  if i = n then n2
+  4.
+  else fib_helper n2 (n1 + n2) (i + 1) in
+  5.
+  fib_helper 0 1 0;;
 
 The inner let construct introduces a nested scope: function fib_helper is nested inside fib. The body of the outer function, fib, is the expression fib_helper 0 1 0. The body of fib_helper is an if... then ... else expres- sion; it evaluates to either n2 or to fib_helper n2 (n1 + n2) (i + 1), de- pending on whether the third argument to fib_helper is n or not. The keyword rec indicates that fib_helper is recursive, so its name should be made available within its own body—not just in the body of the let. Given this function deﬁnition, an OCaml compiler will reason roughly as fol- lows: Parameter i of fib_helper must have type int, because it is added to 1 at line 4. Similarly, parameter n of fib must have type int, because it is com- pared to i at line 3. In the call to fib_helper at line 5, the types of all three arguments are int, and since this is the only call, the types of n1 and n2 are int. Moreover the type of i is consistent with the earlier inference, namely int, and the types of the arguments to the recursive call at line 4 are similarly consistent. Since fib_helper returns n2 at line 3, the result of the call at line 5 will be an int. Since fib immediately returns this result as its own result, the return type of fib is int. ■
 
@@ -713,33 +691,28 @@ DESIGN & IMPLEMENTATION
 
 7.8 Uniﬁcation Uniﬁcation is a powerful technique. In addition to its role in type inference (which also arises in the templates [generics] of C++), uniﬁcation plays a cen- tral role in the computational model of Prolog and other logic languages. We will consider this latter role in Section 12.1. In the general case the cost of uni- fying the types of two expressions can be exponential [Mai90], but the patho- logical cases tend not to arise in practice.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 13. What is the difference between type equivalence and type compatibility?
 
-## 13. What is the difference between type equivalence and type compatibility?
+* Discuss the comparative advantages of structural and name equivalence for
+  types. Name three languages that use each approach.
 
-## 14. Discuss the comparative advantages of structural and name equivalence for types. Name three languages that use each approach.
+* Explain the difference between strict and loose name equivalence.
+* Explain the distinction between derived types and subtypes in Ada.
 
-## 15. Explain the difference between strict and loose name equivalence.
+* Explain the differences among type conversion, type coercion, and nonconvert-
+  ing type casts.
 
-## 16. Explain the distinction between derived types and subtypes in Ada.
+* Summarize the arguments for and against coercion.
+* Under what circumstances does a type conversion require a run-time check?
 
-## 17. Explain the differences among type conversion, type coercion, and nonconvert- ing type casts.
+* What purpose is served by universal reference types?
+* What is type inference? Describe three contexts in which it occurs.
+* Under what circumstances does an ML compiler announce a type clash?
 
-## 18. Summarize the arguments for and against coercion.
-
-## 19. Under what circumstances does a type conversion require a run-time check?
-
-## 20. What purpose is served by universal reference types?
-
-## 21. What is type inference? Describe three contexts in which it occurs.
-
-## 22. Under what circumstances does an ML compiler announce a type clash?
-
-## 23. Explain how the type inference of ML leads naturally to polymorphism.
-
-## 24. Why do ML programmers often declare the types of variables, even when they don’t have to?
-
-## 25. What is uniﬁcation? What is its role in ML?
+* Explain how the type inference of ML leads naturally to polymorphism.
+* Why do ML programmers often declare the types of variables, even when they
+  don’t have to?
+* What is uniﬁcation? What is its role in ML?
 
 ## 7.3 Parametric Polymorphism
 
@@ -928,28 +901,23 @@ In any particular implementation, numeric, character, and string tests will alwa
 
 Deep assignments are relatively rare. They are used primarily in distributed computing, and in particular for parameter passing in remote procedure call (RPC) systems. These will be discussed in Section C 13.5.4. For user-deﬁned abstractions, no single language-speciﬁed mechanism for equality testing or assignment is likely to produce the desired results in all cases. Languages with sophisticated data abstraction mechanisms usually allow the pro- grammer to deﬁne the comparison and assignment operators for each new data type—or to specify that equality testing and/or assignment is not allowed.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 26. Explain the distinction between implicit and explicit parametric polymor- phism. What are their comparative advantages? 27. What is duck typing? What is its connection to polymorphism? In what lan- guages does it appear? 28. Explain the distinction between overloading and generics. Why is the former sometimes called ad hoc polymorphism?
 
-## 26. Explain the distinction between implicit and explicit parametric polymor- phism. What are their comparative advantages?
+* What is the principal purpose of generics? In what sense do generics serve a
+  broader purpose in C++ and Ada than they do in Java and C#?
 
-## 27. What is duck typing? What is its connection to polymorphism? In what lan- guages does it appear?
+* Under what circumstances can a language implementation share code among
+  separate instances of a generic?
 
-## 28. Explain the distinction between overloading and generics. Why is the former sometimes called ad hoc polymorphism?
-
-## 29. What is the principal purpose of generics? In what sense do generics serve a broader purpose in C++ and Ada than they do in Java and C#?
-
-## 30. Under what circumstances can a language implementation share code among separate instances of a generic?
-
-## 31. What are container classes? What do they have to do with generics?
-
+* What are container classes? What do they have to do with generics?
 * What does it mean for a generic parameter to be constrained? Explain the
   difference between explicit and implicit constraints. Describe how interface
   classes can be used to specify constraints in Java and C#.
-## 33. Why will C# accept int as a generic argument, but Java won’t?
 
-## 34. Under what circumstances will C++ instantiate a generic function implicitly?
+* Why will C# accept int as a generic argument, but Java won’t?
+* Under what circumstances will C++ instantiate a generic function implicitly?
 
-## 35. Why is equality testing more subtle than it ﬁrst appears?
+* Why is equality testing more subtle than it ﬁrst appears?
 
 ## 7.5 Summary and Concluding Remarks
 
@@ -967,19 +935,21 @@ type T = array [1..10] of integer S = T A : T B : T C : S D : array [1..10] of i
 
 ## 7.3 Consider the following declarations:
 
-## 1. type cell –– a forward declaration
-
-## 2. type cell ptr = pointer to cell
-
-## 3. x : cell
-
-## 4. type cell = record
-
-## 5. val : integer
-
-## 6. next : cell ptr
-
-## 7. y : cell
+  1.
+  type cell
+  –– a forward declaration
+  2.
+  type cell ptr = pointer to cell
+  3.
+  x : cell
+  4.
+  type cell = record
+  5.
+  val : integer
+  6.
+  next : cell ptr
+  7.
+  y : cell
 
 Should the declaration at line 4 be said to introduce an alias type? Under strict name equivalence, should x and y have the same type? Explain.
 

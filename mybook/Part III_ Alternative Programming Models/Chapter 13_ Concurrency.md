@@ -23,6 +23,7 @@ The bulk of this text has focused, implicitly, on sequential programs: pro- gram
   more local group of machines are inherently concurrent. So are many embed-
   ded applications: the control systems of a modern automobile, for example,
   may span dozens of processors spread throughout the vehicle.
+
 In general, we use the word concurrent to characterize any system in which two or more tasks may be underway (at an unpredictable point in their execution) at the same time. Under this deﬁnition, coroutines are not concurrent, because at
 
 any given time, all but one of them is stopped at a well-known place. A concurrent system is parallel if more than one task can be physically active at once; this re- quires more than one processor. The distinction is purely an implementation and performance issue: from a semantic point of view, there is no difference between true parallelism and the “quasiparallelism” of a system that switches between tasks at unpredictable times. A parallel system is distributed if its processors are associ- ated with people or devices that are physically separated from one another in the real world. Under these deﬁnitions, “concurrent” applies to all three motivations above. “Parallel” applies to the second and third; “distributed” applies to only the third. We will focus in this chapter on concurrency and parallelism. Parallelism has become a pressing concern since 2005 or so, with the proliferation of multicore processors. We will have less occasion to touch on distribution. While languages have been designed for distributed computing, most distributed systems run sep- arate programs on every networked processor, and use message-passing library routines to communicate among them. We begin our study with an overview of the ways in which parallelism may be used in modern programs. Our overview will touch on the motivation for concurrency (even on uniprocessors) and the concept of races, which are the principal source of complexity in concurrent programs. We will also brieﬂy survey the architectural features of modern multicore and multiprocessor ma- chines. In Section 13.2 we consider the contrast between shared-memory and message-passing models of concurrency, and between language and library-based implementations. Building on coroutines, we explain how a language or li- brary can create and schedule threads. Section 13.3 focuses on low-level mecha- nisms for shared-memory synchronization. Section 13.4 extends the discussion to language-level constructs. Message-passing models of concurrency are consid- ered in Section 13.5 (mostly on the companion site).
@@ -119,27 +120,37 @@ Though dwarfed ﬁnancially by the rest of the computer industry, supercomput- i
 
 technology and the advancement of human knowledge. Supercomputers have changed dramatically over time, and they continue to evolve at a very rapid pace. They have always, however, been parallel machines. Because of the complexity of cache coherence, it is difﬁcult to build large shared-memory machines. SGI sells machines with as many as 256 processors (2048 cores). Cray builds even larger shared-memory machines, but without the ability to cache remote locations. For the most part, however, the vector super- computers of the 1960s–80s were displaced not by large multiprocessors, but by modest numbers of smaller multiprocessors or by very large numbers of com- modity (mainstream) processors, connected by custom high-performance net- works. As network technology “trickled down” into the broader market, these machines in turn gave way to clusters composed of both commodity multicore processors and commodity networks (Gigabit Ethernet or Inﬁniband). As of 2015, clusters have come to dominate everything from modest server farms up to all but the very fastest supercomputer sites. Large-scale on-line services like Google, Amazon, or Facebook are typically backed by clusters with tens or hun- dreds of thousands of cores (in Google’s case, probably millions). Today’s fastest machines are constructed from special high-density multicore chips with low per-core operating power. The Tianhe-2 (the fastest machine in the world as of June 2015) uses a 2:3 mix of Intel 12-core Ivy Bridge and 61-core Phi processors, at 10 W and 5 W per core, respectively. Given current trends, it seems likely that future machines, both high-end and commodity, will be increas- ingly dense and increasingly heterogeneous. From a programming language perspective, the special challenge of supercom- puting is to accommodate nonuniform access times and (in most cases) the lack of hardware support for shared memory across the full machine. Today’s su- percomputers are programmed mostly with message-passing libraries (MPI in particular) and with languages and libraries in which there is a clear syntactic distinction between local and remote memory access.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 1. Explain the distinctions among concurrent, parallel, and distributed.
 
-## 1. Explain the distinctions among concurrent, parallel, and distributed.
+  2.
+  Explain the motivation for concurrency. Why do people write concurrent
+  programs? What accounts for the increased interest in concurrency in recent
+  years?
 
-## 2. Explain the motivation for concurrency. Why do people write concurrent programs? What accounts for the increased interest in concurrency in recent years?
+  3.
+  Describe the implementation levels at which parallelism appears in modern
+  systems, and the levels of abstraction at which it may be considered by the
+  programmer.
+  4.
+  What is a race condition? What is synchronization?
 
-## 3. Describe the implementation levels at which parallelism appears in modern systems, and the levels of abstraction at which it may be considered by the programmer.
+  5.
+  What is a context switch? Preemption?
+  6.
+  Explain the concept of a dispatch loop. What are its advantages and disadvan-
+  tages with respect to multithreaded code?
 
-## 4. What is a race condition? What is synchronization?
+  7.
+  Explain the distinction between a multiprocessor and a cluster; between a pro-
+  cessor and a core.
+  8.
+  What does it mean for memory in a multiprocessor to be uniform? What is
+  the alternative?
+  9.
+  Explain the coherence problem for multicore and multiprocessor caches.
 
-## 5. What is a context switch? Preemption?
-
-## 6. Explain the concept of a dispatch loop. What are its advantages and disadvan- tages with respect to multithreaded code?
-
-## 7. Explain the distinction between a multiprocessor and a cluster; between a pro- cessor and a core.
-
-## 8. What does it mean for memory in a multiprocessor to be uniform? What is the alternative?
-
-## 9. Explain the coherence problem for multicore and multiprocessor caches.
-
-## 10. What is a vector machine? Where does vector technology appear in modern systems?
+* What is a vector machine? Where does vector technology appear in modern
+  systems?
 
 ## 13.2 Concurrent Programming Fundamentals
 
@@ -211,9 +222,7 @@ A parallel loop in C# Parallel.For(0, 3, i => { Console.WriteLine("Thread " + i 
 
 The third argument to Parallel.For is a delegate, in this case a lambda ex- pression. A similar Foreach method expects two arguments—an iterator and a delegate. ■ In many systems it is the programmer’s responsibility to make sure that con- current execution of the loop iterations is safe, in the sense that correctness will never depend on the outcome of race conditions. Access to global variables, for example, must generally be synchronized, to make sure that iterations do not
 
-conﬂict with one another. In a few languages (e.g., Occam), language rules pro- hibit conﬂicting accesses. The compiler checks to make sure that a variable writ- ten by one thread is neither read nor written by any concurrently active thread. In a similar but slightly more ﬂexible vein, the do concurrent loop of Fortran
-
-2008 constitutes an assertion on the programmer’s part that iterations of the loop are mutually independent, and hence can safely be executed in any order, or in parallel. Several rules on the content of the loop—some but not all of them en- forceable by the compiler—reduce the likelihood that programmers will make this assertion incorrectly. Historically, several parallel dialects of Fortran provided other forms of paral- lel loop, with varying semantics. The forall loop of High Performance Fortran (HPF) was subsequently incorporated into Fortran 95. Like do concurrent, it indicates that iterations can proceed in parallel. To resolve race conditions, however, it imposes automatic, internal synchronization on the constituent state- ments of the loop, each of which must be an assignment or a nested forall loop. Speciﬁcally, all reads of variables in a given assignment statement, in all iterations, must occur before any write to the left-hand side, in any iteration. The writes of the left-hand side in turn must occur before any reads in the next assignment statement. In the following example, the ﬁrst assignment in the loop will read EXAMPLE 13.10
+conﬂict with one another. In a few languages (e.g., Occam), language rules pro- hibit conﬂicting accesses. The compiler checks to make sure that a variable writ- ten by one thread is neither read nor written by any concurrently active thread. In a similar but slightly more ﬂexible vein, the do concurrent loop of Fortran 2008 constitutes an assertion on the programmer’s part that iterations of the loop are mutually independent, and hence can safely be executed in any order, or in parallel. Several rules on the content of the loop—some but not all of them en- forceable by the compiler—reduce the likelihood that programmers will make this assertion incorrectly. Historically, several parallel dialects of Fortran provided other forms of paral- lel loop, with varying semantics. The forall loop of High Performance Fortran (HPF) was subsequently incorporated into Fortran 95. Like do concurrent, it indicates that iterations can proceed in parallel. To resolve race conditions, however, it imposes automatic, internal synchronization on the constituent state- ments of the loop, each of which must be an assignment or a nested forall loop. Speciﬁcally, all reads of variables in a given assignment statement, in all iterations, must occur before any write to the left-hand side, in any iteration. The writes of the left-hand side in turn must occur before any reads in the next assignment statement. In the following example, the ﬁrst assignment in the loop will read EXAMPLE 13.10
 
 Forall in Fortran 95 n −1 elements of B and n −1 elements of C, and then update n −1 elements of A. Subsequently, the second assignment statement will read all n elements of A and then update n −1 of them:
 
@@ -410,35 +419,31 @@ Multiprocessor Scheduling
 
 We can extend our preemptive thread package to run on top of more than one OS-provided process by arranging for the processes to share the ready list and re- lated data structures (condition queues, etc.; note that each process must have a separate current thread variable). If the processes run on different physical cores, then more than one thread will be able to run at once. If the processes share a single core, then the program will be able to make forward progress even when all but one of the processes are blocked in the operating system. Any thread that is runnable is placed in the ready list, where it becomes a candidate for execu- tion by any of the application’s processes. When a process calls reschedule, the queue-based ready list we have been using in our examples will give it the longest- waiting thread. The ready list of a more elaborate scheduler might give priority to interactive or time-critical threads, or to threads that last ran on the current core, and may therefore still have data in the cache. Just as preemption introduced a race between voluntary and automatic calls to scheduler operations, true or quasiparallelism introduces races between calls in separate OS processes. To resolve the races, we must implement additional synchronization to make scheduler operations in separate processes atomic. We will return to this subject in Section 13.3.4.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 11. Explain the differences among coroutines, threads, lightweight processes, and heavyweight processes.
 
-## 11. Explain the differences among coroutines, threads, lightweight processes, and heavyweight processes.
+* What is quasiparallelism?
+* Describe the bag of tasks programming model.
 
-## 12. What is quasiparallelism?
+* What is busy-waiting? What is its principal alternative?
+* Name four explicitly concurrent programming languages.
 
-## 13. Describe the bag of tasks programming model.
+* Why don’t message-passing programs require explicit synchronization mech-
+  anisms?
 
-## 14. What is busy-waiting? What is its principal alternative?
+* What are the tradeoffs between language-based and library-based implemen-
+  tations of concurrency?
 
-## 15. Name four explicitly concurrent programming languages.
+* Explain the difference between data parallelism and task parallelism.
+* Describe six different mechanisms commonly used to create new threads of
+  control in a concurrent program.
+* In what sense is fork/join more powerful than co-begin?
 
-## 16. Why don’t message-passing programs require explicit synchronization mech- anisms?
+* What is a thread pool in Java? What purpose does it serve?
+* What is meant by a two-level thread implementation?
+* What is a ready list?
 
-## 17. What are the tradeoffs between language-based and library-based implemen- tations of concurrency?
-
-## 18. Explain the difference between data parallelism and task parallelism.
-
-## 19. Describe six different mechanisms commonly used to create new threads of control in a concurrent program.
-
-## 20. In what sense is fork/join more powerful than co-begin?
-
-## 21. What is a thread pool in Java? What purpose does it serve?
-
-## 22. What is meant by a two-level thread implementation?
-
-## 23. What is a ready list?
-
-## 24. Describe the progressive implementation of scheduling, preemption, and (true) parallelism on top of coroutines.
+* Describe the progressive implementation of scheduling, preemption, and
+  (true) parallelism on top of coroutines.
 
 ## 13.3 Implementing Synchronization
 
@@ -482,9 +487,7 @@ Barriers in ﬁnite element analysis bridge, let us say—as an enormous collect
 
 synchronize with a barrier. The program would halt when no thread found a signiﬁcant change in any forces during the last iteration. ■ The simplest way to implement a busy-wait barrier is to use a globally shared EXAMPLE 13.27
 
-The “sense-reversing” barrier counter, modiﬁed by an atomic fetch_and_decrement instruction. The counter begins at n, the number of threads in the program. As each thread reaches the barrier it decrements the counter. If it is not the last to arrive, the thread then spins on a Boolean ﬂag. The ﬁnal thread (the one that changes the counter from
-
-1 to 0) ﬂips the Boolean ﬂag, allowing the other threads to proceed. To make it easy to reuse the barrier data structures in successive iterations (known as barrier episodes), threads wait for alternating values of the ﬂag each time through. Code for this simple barrier appears in Figure 13.9. ■ Like a simple spin lock, the “sense-reversing” barrier can lead to unacceptable levels of contention on large machines. Moreover the serialization of access to the counter implies that the time to achieve an n-thread barrier is O(n). It is possible to do better, but even the fastest software barriers require O(log n) time to synchronize n threads [MCS91]. Large multiprocessors sometimes provide special hardware to reduce this bound to close to constant time. The Java 7 Phaser class provides unusually ﬂexible barrier support. The set of EXAMPLE 13.28
+The “sense-reversing” barrier counter, modiﬁed by an atomic fetch_and_decrement instruction. The counter begins at n, the number of threads in the program. As each thread reaches the barrier it decrements the counter. If it is not the last to arrive, the thread then spins on a Boolean ﬂag. The ﬁnal thread (the one that changes the counter from 1 to 0) ﬂips the Boolean ﬂag, allowing the other threads to proceed. To make it easy to reuse the barrier data structures in successive iterations (known as barrier episodes), threads wait for alternating values of the ﬂag each time through. Code for this simple barrier appears in Figure 13.9. ■ Like a simple spin lock, the “sense-reversing” barrier can lead to unacceptable levels of contention on large machines. Moreover the serialization of access to the counter implies that the time to achieve an n-thread barrier is O(n). It is possible to do better, but even the fastest software barriers require O(log n) time to synchronize n threads [MCS91]. Large multiprocessors sometimes provide special hardware to reduce this bound to close to constant time. The Java 7 Phaser class provides unusually ﬂexible barrier support. The set of EXAMPLE 13.28
 
 Java 7 phasers participating threads can change from one phaser episode to another. When the number is large, the phaser can be tiered to run in logarithmic time. Moreover, arrival and departure can be speciﬁed as separate operations: in between, a thread can do work that (a) does not require that all other threads have arrived, and (b) does not have to be completed before any other threads depart. ■
 
@@ -621,33 +624,26 @@ a scheduler-based mutual exclusion lock: the P operation acquires the lock; V re
 
 Bounded buffer with semaphores lem. It uses a binary semaphore for mutual exclusion, and two general (or count- ing) semaphores for condition synchronization. Exercise 13.17 considers the use of semaphores to construct an n-thread barrier. ■
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 25. What is mutual exclusion? What is a critical section? 26. What does it mean for an operation to be atomic? Explain the difference be- tween atomicity and condition synchronization. 27. Describe the behavior of a test_and_set instruction. Show how to use it to build a spin lock. 28. Describe the behavior of the compare_and_swap instruction. What advan- tages does it offer in comparison to test_and_set?
 
-## 25. What is mutual exclusion? What is a critical section?
+* Explain how a reader–writer lock differs from an “ordinary” lock.
 
-## 26. What does it mean for an operation to be atomic? Explain the difference be- tween atomicity and condition synchronization.
+* What is a barrier? In what types of programs are barriers common?
+* What does it mean for an algorithm to be nonblocking? What advantages do
+  nonblocking algorithms have over algorithms based on locks?
+* What is sequential consistency? Why is it difﬁcult to implement?
 
-## 27. Describe the behavior of a test_and_set instruction. Show how to use it to build a spin lock.
+* What information is provided by a memory consistency model? What is the
+  relationship between hardware-level and language-level memory models?
 
-## 28. Describe the behavior of the compare_and_swap instruction. What advan- tages does it offer in comparison to test_and_set?
+* Explain how to extend a preemptive uniprocessor scheduler to work correctly
+  on a multiprocessor.
 
-## 29. Explain how a reader–writer lock differs from an “ordinary” lock.
+* What is a spin-then-yield lock?
+* What is a bounded buffer?
 
-## 30. What is a barrier? In what types of programs are barriers common?
-
-## 31. What does it mean for an algorithm to be nonblocking? What advantages do nonblocking algorithms have over algorithms based on locks?
-
-## 32. What is sequential consistency? Why is it difﬁcult to implement?
-
-## 33. What information is provided by a memory consistency model? What is the relationship between hardware-level and language-level memory models?
-
-## 34. Explain how to extend a preemptive uniprocessor scheduler to work correctly on a multiprocessor.
-
-## 35. What is a spin-then-yield lock?
-
-## 36. What is a bounded buffer?
-
-## 37. What is a semaphore? What operations does it support? How do binary and general semaphores differ?
+* What is a semaphore? What operations does it support? How do binary and
+  general semaphores differ?
 
 ## 13.4 Language-Level Constructs
 
@@ -894,32 +890,36 @@ Parallel Logic Programming
 
 Several researchers have noted that the backtracking search of logic languages such as Prolog is also amenable to parallelization. Two strategies are possible. The ﬁrst is to pursue in parallel the subgoals found in the right-hand side of a rule. This strategy is known as AND parallelism. The fact that variables in logic, once initialized, are never subsequently modiﬁed ensures that parallel branches of an AND cannot interfere with one another. The second strategy is known as OR parallelism; it pursues alternative resolutions in parallel. Because they will gener- ally employ different uniﬁcations, branches of an OR must use separate copies of their variables. In a search tree such as that of Figure 12.1, AND parallelism and OR parallelism create new threads at alternating levels. OR parallelism is speculative: since success is required on only one branch, work performed on other branches is in some sense wasted. OR parallelism works well, however, when a goal cannot be satisﬁed (in which case the entire tree must be searched), or when there is high variance in the amount of execution time re- quired to satisfy a goal in different ways (in which case exploring several branches at once reduces the expected time to ﬁnd the ﬁrst solution). Both AND and OR parallelism are problematic in Prolog, because they fail to adhere to the deter- ministic search order required by language semantics. Parlog [Che92], which supports both AND and OR parallelism, is the best known of the parallel Prolog dialects.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 38. What is a monitor? How do monitor condition variables differ from sema- phores?
 
-## 38. What is a monitor? How do monitor condition variables differ from sema- phores?
+* Explain the difference between treating monitor signals as hints and treating
+  them as absolutes.
 
-## 39. Explain the difference between treating monitor signals as hints and treating them as absolutes.
+* What is a monitor invariant? Under what circumstances must it be guaranteed
+  to hold?
 
-## 40. What is a monitor invariant? Under what circumstances must it be guaranteed to hold?
+* Describe the nested monitor problem and some potential solutions.
+* What is deadlock?
 
-## 41. Describe the nested monitor problem and some potential solutions.
-
-## 42. What is deadlock?
-
-## 43. What is a conditional critical region? How does it differ from a monitor?
-
+* What is a conditional critical region? How does it differ from a monitor?
 * Summarize the synchronization mechanisms of Ada 95, Java, and C#. Con-
   trast them with one another, and with monitors and conditional critical re-
   gions. Be sure to explain the features added to Java 5.
-## 45. What is transactional memory? What advantages does it offer over algorithms based on locks? What challenges will need to be overcome before it enters widespread use?
 
-## 46. Describe the semantics of the HPF/Fortran 95 forall loop. How does it differ from do concurrent?
+* What is transactional memory? What advantages does it offer over algorithms
+  based on locks? What challenges will need to be overcome before it enters
+  widespread use?
 
-## 47. Why might pure functional languages be said to provide a particularly attrac- tive setting for concurrent programming?
+* Describe the semantics of the HPF/Fortran 95 forall loop. How does it
+  differ from do concurrent?
 
-## 48. What are futures? In what languages do they appear? What precautions must the programmer take when using them?
+* Why might pure functional languages be said to provide a particularly attrac-
+  tive setting for concurrent programming?
 
-## 49. Explain the difference between AND parallelism and OR parallelism in Prolog.
+* What are futures? In what languages do they appear? What precautions must
+  the programmer take when using them?
+
+* Explain the difference between AND parallelism and OR parallelism in Prolog.
 
 ## 13.5 Message Passing
 
@@ -1024,9 +1024,7 @@ What is the problem with this new version? Explain how it connects to the questi
 
 13.39 The MMX, SSE, and AVX extensions to the x86 instruction set and the Al- tiVec extensions to the Power instruction set make vector operations avail- able to general-purpose code. Learn about these instructions and research their history. What sorts of code are they used for? How are they related to vector supercomputers? To modern graphics processors?
 
-## 13.40 The “Top 500” list (top500.org) maintains information, over time, on the
-
-500 most powerful computers in the world, as measured on the Linpack performance benchmark. Explore the site. Pay particular attention to the historical trends in the kinds of machines deployed. Can you explain these trends? How many cases can you ﬁnd of supercomputer technology mov- ing into the mainstream, and vice versa?
+13.40 The “Top 500” list (top500.org) maintains information, over time, on the 500 most powerful computers in the world, as measured on the Linpack performance benchmark. Explore the site. Pay particular attention to the historical trends in the kinds of machines deployed. Can you explain these trends? How many cases can you ﬁnd of supercomputer technology mov- ing into the mainstream, and vice versa?
 
 13.41 In Section 13.3.3 we noted that different processors provide different lev- els of memory consistency and different mechanisms to force additional ordering when needed. Learn more about these hardware memory mod- els. You might want to start with the tutorial by Adve and Gharachor- loo [AG96].
 

@@ -1,6 +1,6 @@
 # Chapter 14: Scripting Languages
 
-## 14 Scripting Languages
+14 Scripting Languages
 
 Traditional programming languages are intended primarily for the con- struction of self-contained applications: programs that accept some sort of input, manipulate it in some well-understood way, and generate appropriate output. But most actual uses of computers require the coordination of multiple programs. A large institutional payroll system, for example, must process time-reporting data from card readers, scanned paper forms, and manual (keyboard) entry; execute thousands of database queries; enforce hundreds of legal and institutional rules; create an extensive “paper trail” for record-keeping, auditing, and tax preparation purposes; print paychecks; and communicate with servers around the world for on-line direct deposit, tax withholding, retirement accumulation, medical insur- ance, and so on. These tasks are likely to involve dozens or hundreds of separately executable programs. Coordination among these programs is certain to require tests and conditionals, loops, variables and types, subroutines and abstractions— the same sorts of logical tools that a conventional language provides inside an application. On a much smaller scale, a graphic artist or photojournalist may routinely download pictures from a digital camera; convert them to a favorite format; rotate the pictures that were shot in vertical orientation; down-sample them to create browsable thumbnail versions; index them by date, subject, and color histogram; back them up to a remote archive; and then reinitialize the camera’s memory. Performing these steps by hand is likely to be both tedious and error-prone. In a similar vein, the creation of a dynamic web page may require authentication and authorization, database lookup, image manipulation, remote communica- tion, and the reading and writing of HTML text. All these scenarios suggest a need for programs that coordinate other programs. It is of course possible to write coordination code in Java, C, or some other conventional language, but it isn’t always easy. Conventional languages tend to stress efﬁciency, maintainability, portability, and the static detection of errors. Their type systems tend to be built around such hardware-level concepts as ﬁxed- size integers, ﬂoating-point numbers, characters, and arrays. By contrast scripting languages tend to stress ﬂexibility, rapid development, local customization, and
 
@@ -10,9 +10,7 @@ dynamic (run-time) checking. Their type systems, likewise, tend to embrace such 
 
 Modern scripting languages have two principal sets of ancestors. In one set are the command interpreters or “shells” of traditional batch and “terminal” (command- line) computing. In the other set are various tools for text processing and report generation. Examples in the ﬁrst set include IBM’s JCL, the MS-DOS command interpreter, and the Unix sh and csh shell families. Examples in the second set include IBM’s RPG and Unix’s sed and awk. From these evolved Rexx, IBM’s “Restructured Extended Executor,” which dates from 1979, and Perl, originally devised by Larry Wall in the late 1980s, and still one of the most widely used general-purpose scripting languages. Other general-purpose scripting languages include Python, Ruby, PowerShell (for Windows), and AppleScript (for the Mac). With the growth of the World Wide Web in the late 1990s, Perl was widely adopted for “server-side” web scripting, in which a web server executes a pro- gram (on the server’s machine) to generate the content of a page. One early web-scripting enthusiast was Rasmus Lerdorf, who created a collection of scripts to track access to his personal home page. Originally written in Perl but soon redesigned as a full-ﬂedged and independent language, these scripts evolved into PHP, now the most popular platform for server-side web scripting. PHP competi- tors include JSP (Java Server Pages), Ruby on Rails, and, on Microsoft platforms,
 
-PowerShell. For scripting on the client computer, all major browsers implement JavaScript, a language developed by Netscape Corporation in the mid 1990s, and standardized by ECMA (the European standards body) in 1999 [ECM11]. In a classic paper on scripting [Ous98], John Ousterhout, the creator of Tcl, suggested that “Scripting languages assume that a collection of useful components already exist in other languages. They are intended not for writing applications from scratch but rather for combining components.” Ousterhout envisioned a future in which programmers would increasingly rely on scripting languages for the top-level structure of their systems, where clarity, reusability, and ease of de- velopment are crucial. Traditional “systems languages” like C, C++, or Java, he argued, would be used for self-contained, reusable system components, which emphasize complex algorithms or execution speed. As a general rule of thumb that still seems reasonable today, he suggested that code could be developed 5 to
-
-10 times faster in a scripting language, but would run 10 to 20 times faster in a traditional systems language. Some authors reserve the term “scripting” for the glue languages used to coor- dinate multiple programs. In common usage, however, scripting is a broader and vaguer concept, encompassing not only web scripting but also extension languages. These are typically embedded within some larger host program, which they can then control. Many readers will be familiar with the Visual Ba- sic “macros” of Microsoft Ofﬁce and related applications. Others may be fa- miliar with the Lisp-based extension language of the emacs text editor, or the widespread use of Lua in the computer gaming industry. Several other languages, including Tcl, Rexx, Python, and the Guile and Elk dialects of Scheme, have im- plementations designed to be embedded in other applications. In a similar vein, several widely used commercial applications provide their own proprietary exten- sion languages. For graphical user interface (GUI) programming, the Tk toolkit, originally designed for use with Tcl, has been incorporated into several scripting languages, including Perl, Python, and Ruby. One can also view XSLT (extensible stylesheet language transformations) as a scripting language, albeit somewhat different from the others considered in this chapter. XSLT is part of the growing family of XML (extensible markup language) tools. We consider it further in Section 14.3.5.
+PowerShell. For scripting on the client computer, all major browsers implement JavaScript, a language developed by Netscape Corporation in the mid 1990s, and standardized by ECMA (the European standards body) in 1999 [ECM11]. In a classic paper on scripting [Ous98], John Ousterhout, the creator of Tcl, suggested that “Scripting languages assume that a collection of useful components already exist in other languages. They are intended not for writing applications from scratch but rather for combining components.” Ousterhout envisioned a future in which programmers would increasingly rely on scripting languages for the top-level structure of their systems, where clarity, reusability, and ease of de- velopment are crucial. Traditional “systems languages” like C, C++, or Java, he argued, would be used for self-contained, reusable system components, which emphasize complex algorithms or execution speed. As a general rule of thumb that still seems reasonable today, he suggested that code could be developed 5 to 10 times faster in a scripting language, but would run 10 to 20 times faster in a traditional systems language. Some authors reserve the term “scripting” for the glue languages used to coor- dinate multiple programs. In common usage, however, scripting is a broader and vaguer concept, encompassing not only web scripting but also extension languages. These are typically embedded within some larger host program, which they can then control. Many readers will be familiar with the Visual Ba- sic “macros” of Microsoft Ofﬁce and related applications. Others may be fa- miliar with the Lisp-based extension language of the emacs text editor, or the widespread use of Lua in the computer gaming industry. Several other languages, including Tcl, Rexx, Python, and the Guile and Elk dialects of Scheme, have im- plementations designed to be embedded in other applications. In a similar vein, several widely used commercial applications provide their own proprietary exten- sion languages. For graphical user interface (GUI) programming, the Tk toolkit, originally designed for use with Tcl, has been incorporated into several scripting languages, including Perl, Python, and Ruby. One can also view XSLT (extensible stylesheet language transformations) as a scripting language, albeit somewhat different from the others considered in this chapter. XSLT is part of the growing family of XML (extensible markup language) tools. We consider it further in Section 14.3.5.
 
 ## 14.1.1 Common Characteristics
 
@@ -225,25 +223,23 @@ Two steps are required. First, the ﬁle must be marked executable in the eyes o
 
 Specifying the full path name is a safety feature: it anticipates the possibility that the user may have a search path for commands on which some other program named bash appears before the shell. (Unfortunately, the requirement for full path names makes #! lines nonportable, since shells and other interpreters may be installed in different places on different machines.) ■
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 1. Give a plausible one-sentence deﬁnition of “scripting language.” 2. List the principal ways in which scripting languages differ from conventional “systems” languages. 3. From what two principal sets of ancestors are modern scripting languages descended?
 
-## 1. Give a plausible one-sentence deﬁnition of “scripting language.”
+  4.
+  What IBM creation is generally considered the ﬁrst general-purpose scripting
+  language?
 
-## 2. List the principal ways in which scripting languages differ from conventional “systems” languages.
+  6.
+  How does the notion of context in Perl differ from coercion?
 
-## 3. From what two principal sets of ancestors are modern scripting languages descended?
+  7.
+  What is globbing? What is a wildcard?
+  8.
+  What is a pipe in Unix? What is redirection?
 
-## 4. What IBM creation is generally considered the ﬁrst general-purpose scripting language?
-
-## 6. How does the notion of context in Perl differ from coercion?
-
-## 7. What is globbing? What is a wildcard?
-
-## 8. What is a pipe in Unix? What is redirection?
-
-## 9. Describe the three standard I/O streams provided to every Unix process.
-
-## 10. Explain the signiﬁcance of the #! convention in Unix shell scripts.
+  9.
+  Describe the three standard I/O streams provided to every Unix process.
+* Explain the signiﬁcance of the #! convention in Unix shell scripts.
 
 DESIGN & IMPLEMENTATION
 
@@ -337,14 +333,8 @@ Ruby
 
 Ruby was developed in Japan in the early 1990s by Yukihiro “Matz” Matsumoto. Matz writes that he “wanted a language more powerful than Perl, and more object-oriented than Python” [TFH13, Foreword]. The ﬁrst public release was made available in 1995, and quickly gained widespread popularity in Japan. With the publication in 2001 of English-language documentation [TFH13, 1st ed.], Ruby spread rapidly elsewhere as well. Much of its success can be credited to the Ruby on Rails web-development framework. Originally released by David Heinemeier Hansson in 2004, Rails was subsequently adopted by several major players—notably Apple, which included it in the 10.5 “Leopard” release of the Mac OS, and Twitter, which used it for early versions of their infrastructure. In keeping with Matz’s original motivation, Ruby is a pure object-oriented lan- EXAMPLE 14.26
 
-Method call syntax in Ruby guage, in the sense of Smalltalk: everything—even instances of built-in types—is an object. Integers have more than 25 built-in methods. Strings have more than
+Method call syntax in Ruby guage, in the sense of Smalltalk: everything—even instances of built-in types—is an object. Integers have more than 25 built-in methods. Strings have more than 75. Smalltalk-like syntax is even supported: 2 * 4 + 5 is syntactic sugar for (2.*(4)).+(5), which is in turn equivalent to (2.send(‚*‚, 4)).send(‚+‚, 5).3 ■ Figure 14.7 presents a Ruby version of our “force quit” program. Newline EXAMPLE 14.27
 
-* Smalltalk-like syntax is even supported: 2 * 4 + 5 is syntactic sugar for
-  (2.*(4)).+(5), which is in turn equivalent to (2.send(‚*‚, 4)).send(‚+‚,
-  5).3
-  ■
-  Figure 14.7 presents a Ruby version of our “force quit” program. Newline
-  EXAMPLE 14.27
 “Force quit” script in Ruby characters serve to end the current statement, but indentation is not signiﬁcant. A dollar sign ($) at the beginning of an identiﬁer indicates a global name. Though it doesn’t appear in this example, an at sign (@) indicates an instance variable of the current object. Double at signs (@@) indicate an instance variable of the current class. Probably the most distinctive feature of Figure 14.7 is its use of blocks and it- erators. The IO.popen class method takes as argument a string that speciﬁes the name and arguments of an external program. The method also accepts, in a man- ner reminiscent of Smalltalk, an associated block, speciﬁed as a multiline fragment of Ruby code delimited with curly braces. The associated block is essentially an extra parameter to popen, passed as a closure. The closure is invoked by popen, passing as parameter a ﬁle handle (an object of class IO) that represents the out- put of the external command. The |ps| at the beginning of the block speciﬁes the name by which this handle is known within the block. In a similar vein, the each
 
 3 Parentheses here are signiﬁcant. Inﬁx arithmetic follows conventional precedence rules, but method invocation proceeds from left to right. Likewise, parentheses can be omitted around ar- gument lists, but the method-selecting dot (.) groups more tightly than the argument-separating comma (,), so 2.send ’*’, 4.send ’+’, 5 evaluates to 18, not 13.
@@ -379,39 +369,34 @@ One of the oldest existing extension mechanisms is that of the emacs text ed- it
 
 Numbering lines with Emacs Lisp elisp, for short. An example script appears in Figure 14.8. It assumes that the user has used the standard marking mechanism to select a region of text. It then inserts a line number at the beginning of every line in the region. The ﬁrst line is numbered 1 by default, but an alternative starting number can be speciﬁed with an optional parameter. Line numbers are bracketed with a preﬁx and sufﬁx that are “ ” (empty) and “) ” by default, but can be changed by the user if desired. To maintain existing alignment, small numbers are padded on the left with enough spaces to match the width of the number on the ﬁnal line. Many features of Emacs Lisp can be seen in this example. The setq-default command is an assignment that is visible in the current buffer (editing session) and in any concurrent buffers that haven’t explicitly overridden the previous value. The defun command deﬁnes a new command. Its arguments are, in or- der, the command name, formal parameter list, documentation string, interactive speciﬁcation, and body. The argument list for number-region includes the start and end locations of the currently marked region, and the optional initial line number. The documentation string is automatically incorporated into the on-
 
-line help system. The interactive speciﬁcation controls how arguments are passed when the command is invoked through the user interface. (The command can also be called from other scripts, in which case arguments are passed in the con- ventional way.) The “*” raises an exception if the buffer is read-only. The “r” represents the beginning and end of the currently marked region. The “\n” sep- arates the “r” from the following “p,” which indicates an optional numeric preﬁx argument. When the command is bound to a keystroke, a preﬁx argument of, say,
-
-10 can be speciﬁed by preceding the keystroke with “C-u 10” (control-U 10). As usual in Lisp, the let* command introduces a set of local variables in which later entries in the list (fmt) can refer to earlier entries (num-lines). A marker is an index into the buffer that is automatically updated to maintain its position when text is inserted in front of it. We create the finish marker so that newly in- serted line numbers do not alter our notion of where the to-be-numbered region ends. We set finish to nil at the end of the script to relieve emacs of the need to keep updating the marker between now and whenever the garbage collector gets around to reclaiming it. The format command is similar to sprintf in C. We have used it, once in the declaration of fmt and again in the call to insert, to pad all line numbers out to an appropriate length. The save-excursion command is roughly equivalent to an exception handler (e.g., a Java try block) with a finally clause that restores the current focus of attention ((point)) and the borders of the marked region. Our script can be supplied to emacs by including it in a personal start-up ﬁle (usually ~/.emacs), by using the interactive load-file command to read some other ﬁle in which it resides, or by loading it into a buffer, placing the focus of attention immediately after it, and executing the interactive eval-last-sexp command. Once any of these has been done, we can invoke our command in- teractively by typing M-x number-region <RET> (meta-X, followed by the com- mand name and the return key). Alternatively, we can bind our command to a keyboard shortcut:
+line help system. The interactive speciﬁcation controls how arguments are passed when the command is invoked through the user interface. (The command can also be called from other scripts, in which case arguments are passed in the con- ventional way.) The “*” raises an exception if the buffer is read-only. The “r” represents the beginning and end of the currently marked region. The “\n” sep- arates the “r” from the following “p,” which indicates an optional numeric preﬁx argument. When the command is bound to a keystroke, a preﬁx argument of, say, 10 can be speciﬁed by preceding the keystroke with “C-u 10” (control-U 10). As usual in Lisp, the let* command introduces a set of local variables in which later entries in the list (fmt) can refer to earlier entries (num-lines). A marker is an index into the buffer that is automatically updated to maintain its position when text is inserted in front of it. We create the finish marker so that newly in- serted line numbers do not alter our notion of where the to-be-numbered region ends. We set finish to nil at the end of the script to relieve emacs of the need to keep updating the marker between now and whenever the garbage collector gets around to reclaiming it. The format command is similar to sprintf in C. We have used it, once in the declaration of fmt and again in the call to insert, to pad all line numbers out to an appropriate length. The save-excursion command is roughly equivalent to an exception handler (e.g., a Java try block) with a finally clause that restores the current focus of attention ((point)) and the borders of the marked region. Our script can be supplied to emacs by including it in a personal start-up ﬁle (usually ~/.emacs), by using the interactive load-file command to read some other ﬁle in which it resides, or by loading it into a buffer, placing the focus of attention immediately after it, and executing the interactive eval-last-sexp command. Once any of these has been done, we can invoke our command in- teractively by typing M-x number-region <RET> (meta-X, followed by the com- mand name and the return key). Alternatively, we can bind our command to a keyboard shortcut:
 
 (define-key global-map [?\C-#] 'number-region)
 
 This one-line script, executed in any of the ways described above, binds our number-region command to key combination “control-number-sign”. ■
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 11. What is meant by the pattern space in sed? 12. Brieﬂy describe the ﬁelds and associative arrays of awk.
 
-## 11. What is meant by the pattern space in sed?
+* In what ways did even early versions of Perl improve on sed and awk?
+* Explain the special relationship between while loops and ﬁle handles in Perl.
+  What is the meaning of the empty ﬁle handle, <>?
+* Name three widely used commercial packages for mathematical computing.
 
-## 12. Brieﬂy describe the ﬁelds and associative arrays of awk.
+* List several distinctive features of the R statistical scripting language.
 
-## 13. In what ways did even early versions of Perl improve on sed and awk?
+* Explain the meaning of the $ and @ characters at the beginning of variable
+  names in Perl. Explain the different meanings of $, @, and @@ in Ruby.
 
-## 14. Explain the special relationship between while loops and ﬁle handles in Perl. What is the meaning of the empty ﬁle handle, <>?
+* Which of the languages described in Section 14.2.4 uses indentation to control
+  syntactic grouping?
 
-## 15. Name three widely used commercial packages for mathematical computing.
+* List several distinctive features of Python.
+* Describe, brieﬂy, how Ruby uses blocks and iterators.
 
-## 16. List several distinctive features of the R statistical scripting language.
+* What capabilities must a scripting language provide in order to be used for
+  extension?
 
-## 17. Explain the meaning of the $ and @ characters at the beginning of variable names in Perl. Explain the different meanings of $, @, and @@ in Ruby.
-
-## 18. Which of the languages described in Section 14.2.4 uses indentation to control syntactic grouping?
-
-## 19. List several distinctive features of Python.
-
-## 20. Describe, brieﬂy, how Ruby uses blocks and iterators.
-
-## 21. What capabilities must a scripting language provide in order to be used for extension?
-
-## 22. Name several commercial tools that use extension languages.
+* Name several commercial tools that use extension languages.
 
 ## 14.3 Scripting the World Wide Web
 
@@ -520,41 +505,33 @@ IN MORE DEPTH
 
 XML can be used to create specialized markup languages for a very wide range of application domains. XHTML is an almost (but not quite) backward compatible variant of HTML that conforms to the XML standard. Web tools are increasingly being designed to generate XHTML. On the companion site, we consider a variety of topics related to XML, with a particular emphasis on XSLT. We elaborate on the distinction between content and presentation, introduce the general notion of stylesheet languages, and de- scribe the document type deﬁnitions (DTDs) and schemas used to deﬁne domain- speciﬁc applications of XML, using XHTML as an example. Because tags are required to nest, an XML document has a natural tree-based structure. XSLT is designed to process these trees via recursive traversal. Though it can be used for almost any task that takes XML as input, perhaps its most com- mon use is to transform XML into formatted output—often XHTML to be pre- sented in a browser. As an extended example, we consider the formatting of an XML-based bibliographic database.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 23. Explain the distinction between server-side and client-side web scripting.
 
-## 23. Explain the distinction between server-side and client-side web scripting.
+* List the tradeoffs between CGI scripts and embedded PHP.
+* Why are CGI scripts usually installed only in a special directory?
 
-## 24. List the tradeoffs between CGI scripts and embedded PHP.
+* Explain how a PHP page can service its own requests.
+* Why might we prefer to execute a web script on the server rather than the
+  client? Why might we sometimes prefer the client instead?
+* What is the HTML Document Object Model? What is its signiﬁcance for client-
+  side scripting?
+* What is the relationship between JavaScript and Java?
 
-## 25. Why are CGI scripts usually installed only in a special directory?
+* What is an applet? Why applets are usually not considered an example of
+  scripting?
 
-## 26. Explain how a PHP page can service its own requests.
-
-## 27. Why might we prefer to execute a web script on the server rather than the client? Why might we sometimes prefer the client instead?
-
-## 28. What is the HTML Document Object Model? What is its signiﬁcance for client- side scripting?
-
-## 29. What is the relationship between JavaScript and Java?
-
-## 30. What is an applet? Why applets are usually not considered an example of scripting?
-
-## 31. What is HTML? XML? XSLT? How are they related to one another?
+* What is HTML? XML? XSLT? How are they related to one another?
 
 ## 14.4 Innovative Features
 
 In Section 14.1.1, we listed several common characteristics of scripting languages:
 
-## 2. Economy of expression
-
-## 3. Lack of declarations; simple scoping rules
-
-## 4. Flexible dynamic typing
-
-## 5. Easy access to other programs
-
-## 6. Sophisticated pattern matching and string manipulation
-
-## 7. High-level data types
+* Economy of expression
+* Lack of declarations; simple scoping rules
+* Flexible dynamic typing
+* Easy access to other programs
+* Sophisticated pattern matching and string manipulation
+* High-level data types
 
 Several of these are discussed in more detail in the subsections below. Speciﬁ- cally, Section 14.4.1 considers naming and scoping in scripting languages; Sec- tion 14.4.2 discusses string and pattern manipulation; and Section 14.4.3 con- siders data types. Items (1), (2), and (5) in our list, while important, are not particularly difﬁcult or subtle, and will not be considered further here.
 
@@ -583,9 +560,7 @@ Note that while the tuple returned from middle (forwarded on by outer, and print
 ![Figure 14.17 A program...](images/page_774_vector_278.png)
 *Figure 14.17 A program to illustrate scope rules in Perl. The my operator creates a statically scoped local variable; the local operator creates a new dynamically scoped instance of a global variable. The static scope extends from the point of declaration to the lexical end of the block; the dynamic scope extends from elaboration to the end of the block’s execution.*
 
-does provide this functionality. Rather than declare i to be global, R uses a “su- perassignment” operator. Where a normal assignment i <- 4 assigns the value
-
-## 4 into a local variable i, the superassignment i <<- 4 assigns 4 into whatever i would be found under the normal rules of static (lexical) scoping. ■
+does provide this functionality. Rather than declare i to be global, R uses a “su- perassignment” operator. Where a normal assignment i <- 4 assigns the value 4 into a local variable i, the superassignment i <<- 4 assigns 4 into whatever i would be found under the normal rules of static (lexical) scoping. ■
 
 Scoping in Perl
 
@@ -824,9 +799,11 @@ As in the previous example, the numbering corresponds to the occurrence of left 
 sign:
 -
 integer:
+123
+fraction: 45
+mantissa: 123.45
+exponent: -6
 ```
-
-## 123 fraction: 45 mantissa: 123.45 exponent: -6
 
 Note that because of alternation, exactly one of $3 and $4 is guaranteed to be set. Note also that while we need the sixth set of parentheses for grouping (it has a ? quantiﬁer), we don’t really need it for capture. ■ For simple matches, Perl also provides pseudovariables named $`, $&, and $‚. These name the portions of the string before, in, and after the most recent match, EXAMPLE 14.58
 
@@ -844,25 +821,19 @@ With input “now is the time”, this code prints
 
 prefix(now ) match(is) suffix( the time) ■
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 32. Name a scripting language that uses dynamic scoping. 33. Summarize the strategies used in Perl, PHP, Ruby, and Python to determine the scope of variables that are not declared. 34. Describe the conceptual model for dynamically scoped variables in Perl.
 
-## 32. Name a scripting language that uses dynamic scoping.
+* List the principal features found in POSIX regular expressions, but not in the
+  regular expressions of formal language theory (Section 2.1.1).
 
-## 33. Summarize the strategies used in Perl, PHP, Ruby, and Python to determine the scope of variables that are not declared.
+* List the principal features found in Perl REs, but not in those of POSIX.
+* Explain the purpose of search modiﬁers (characters following the ﬁnal delim-
+  iter) in Perl-type regular expressions.
+* Describe the three main categories of escape sequences in Perl-type regular
+  expressions.
+* Explain the difference between greedy and minimal matches.
 
-## 34. Describe the conceptual model for dynamically scoped variables in Perl.
-
-## 35. List the principal features found in POSIX regular expressions, but not in the regular expressions of formal language theory (Section 2.1.1).
-
-## 36. List the principal features found in Perl REs, but not in those of POSIX.
-
-## 37. Explain the purpose of search modiﬁers (characters following the ﬁnal delim- iter) in Perl-type regular expressions.
-
-## 38. Describe the three main categories of escape sequences in Perl-type regular expressions.
-
-## 39. Explain the difference between greedy and minimal matches.
-
-## 40. Describe the notion of capture in regular expressions.
+* Describe the notion of capture in regular expressions.
 
 ## 14.4.3 Data Types
 
@@ -1065,9 +1036,7 @@ $c3 = new Integer;
 # no initial value specified
 ```
 
-Both Integer->new and new Integer are syntactic sugar for calls to Integer:: new with an additional ﬁrst argument that contains the name of the package (class) as a character string. In the ﬁrst line of function new we assign this string into the variable $class. (The shift operator returns the ﬁrst element of pseu- dovariable @_ [the function’s arguments], and shifts the remaining arguments, if any, so they will be seen if shift is used again.) We then create a reference to a new hash, store it in local variable $self, and invoke the bless operator to associate it with the appropriate class. With a second call to shift we retrieve the initial value for our integer, if any. (The “or” expression [||] allows us to use
-
-0 instead if no explicit argument was present.) We assign this initial value into the val ﬁeld of $self using the usual Perl syntax to dereference a pointer and subscript a hash. Finally we return a reference to the newly created object. ■ Once a reference has been blessed, Perl allows it to be used with method in- EXAMPLE 14.73
+Both Integer->new and new Integer are syntactic sugar for calls to Integer:: new with an additional ﬁrst argument that contains the name of the package (class) as a character string. In the ﬁrst line of function new we assign this string into the variable $class. (The shift operator returns the ﬁrst element of pseu- dovariable @_ [the function’s arguments], and shifts the remaining arguments, if any, so they will be seen if shift is used again.) We then create a reference to a new hash, store it in local variable $self, and invoke the bless operator to associate it with the appropriate class. With a second call to shift we retrieve the initial value for our integer, if any. (The “or” expression [||] allows us to use 0 instead if no explicit argument was present.) We assign this initial value into the val ﬁeld of $self using the usual Perl syntax to dereference a pointer and subscript a hash. Finally we return a reference to the newly created object. ■ Once a reference has been blessed, Perl allows it to be used with method in- EXAMPLE 14.73
 
 Invoking methods in Perl vocation syntax: c1->get() and get c1() are syntactic sugar for Integer:: get($c1). Note that this call passes a reference as the additional ﬁrst parameter, rather than the name of a package. Given the declarations of $c1, $c2, and $c3 from Example 14.72, the following code
 
@@ -1170,31 +1139,28 @@ Constructors in Python and Ruby which cannot be overloaded. In Python it is __in
 
 Naming class members in Python and Ruby is explicit in Python; by convention it is usually named self. In Ruby self is a keyword, and the parameter it represents is invisible. Any variable beginning with a single @ sign in Ruby is a ﬁeld of the current object. Within a Python method, uses of object members must name the object explicitly. One must, for example, write self.print(); just print() will not sufﬁce. ■ Ruby methods may be public, protected, or private.8 Access control in Python is purely a matter of convention; both methods and ﬁelds are universally accessible. Finally, Python has multiple inheritance. Ruby has mix-in inheri- tance: a class cannot obtain data from more than one ancestor. Unlike most other languages, however, Ruby allows an interface (mix-in) to deﬁne not only the sig- natures of methods but also their implementation (code).
 
-3CHECK YOUR UNDERSTANDING
-
-## 41. Contrast the philosophies of Perl and Ruby with regard to error checking and reporting.
+3CHECK YOUR UNDERSTANDING 41. Contrast the philosophies of Perl and Ruby with regard to error checking and reporting.
 
 8 The meanings of private and protected in Ruby are different from those in C++, Java, or C#: private methods in Ruby are available only to the current instance of an object; protected methods are available to any instance of the current class or its descendants.
 
-## 42. Compare the numeric types of popular scripting languages to those of com- piled languages like C or Fortran.
+* Compare the numeric types of popular scripting languages to those of com-
+  piled languages like C or Fortran.
+* What are bignums? Which languages support them?
 
-## 43. What are bignums? Which languages support them?
+* What are associative arrays? By what other names are they sometimes known?
+* Why don’t most scripting languages provide direct support for records?
 
-## 44. What are associative arrays? By what other names are they sometimes known?
+* What is a typeglob in Perl? What purpose does it serve?
+* Describe the tuple and set types of Python.
 
-## 45. Why don’t most scripting languages provide direct support for records?
+* Explain the uniﬁcation of arrays and hashes in PHP and Tcl.
+* Explain the uniﬁcation of arrays and objects in JavaScript.
+* Explain how tuples and hashes can be used to emulate multidimensional ar-
+  rays in Python.
 
-## 46. What is a typeglob in Perl? What purpose does it serve?
-
-## 47. Describe the tuple and set types of Python.
-
-## 48. Explain the uniﬁcation of arrays and hashes in PHP and Tcl.
-
-## 49. Explain the uniﬁcation of arrays and objects in JavaScript.
-
-## 50. Explain how tuples and hashes can be used to emulate multidimensional ar- rays in Python.
-
-## 51. Explain the concept of context in Perl. How is it related to type compatibil- ity and type inference? What are the two principal contexts deﬁned by the language’s operators?
+* Explain the concept of context in Perl. How is it related to type compatibil-
+  ity and type inference? What are the two principal contexts deﬁned by the
+  language’s operators?
 
 DESIGN & IMPLEMENTATION
 
@@ -1221,11 +1187,11 @@ end
 
 Instead of computing the expensive function inside get, on every invocation, we compute it once, ahead of time, and deﬁne an appropriate specialized ver- sion of get.
 
-## 52. Compare the approaches to object orientation taken by Perl 5, PHP 5, JavaScript, Python, and Ruby.
+* Compare the approaches to object orientation taken by Perl 5, PHP 5,
+  JavaScript, Python, and Ruby.
+* What is meant by the blessing of a reference in Perl?
 
-## 53. What is meant by the blessing of a reference in Perl?
-
-## 54. What are prototypes in JavaScript? What purpose do they serve?
+* What are prototypes in JavaScript? What purpose do they serve?
 
 ## 14.5 Summary and Concluding Remarks
 

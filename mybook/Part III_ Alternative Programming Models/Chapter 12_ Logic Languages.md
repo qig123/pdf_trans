@@ -1,6 +1,6 @@
 # Chapter 12: Logic Languages
 
-## 12 Logic Languages
+12 Logic Languages
 
 Having considered functional languages in some detail, we now turn to logic languages. The overlap between imperative and functional concepts in pro- gramming language design has led us to discuss the latter at numerous points throughout the text. We have had less occasion to remark on features of logic programming languages. Logic of course is used heavily in the design of digi- tal circuits, and most programming languages provide a logical (Boolean) type and operators. Logic is also heavily used in the formal study of language seman- tics, speciﬁcally in axiomatic semantics.1 In the 1970s, with the work of Alain Colmeraurer and Philippe Roussel of the University of Aix–Marseille in France and Robert Kowalski and associates at the University of Edinburgh in Scotland, researchers also began to employ the process of logical deduction as a general- purpose model of computing. We introduce the basic concepts of logic programming in Section 12.1. We then survey the most widely used logic language, Prolog, in Section 12.2. We consider, in turn, the concepts of resolution and uniﬁcation, support for lists and arithmetic, and the search-based execution model. After presenting an extended example based on the game of tic-tac-toe, we turn to the more advanced topics of imperative control ﬂow and database manipulation. Much as functional programming is based on the formalism of lambda calcu- lus, Prolog and other logic languages are based on ﬁrst-order predicate calculus. A brief introduction to this formalism appears in Section C 12.3 on the compan- ion site. Where functional languages capture the full capabilities of the lambda calculus, however (within the limits, at least, of memory and other resources), logic languages do not capture the full power of predicate calculus. We consider the relevant limitations as part of a general evaluation of logic programming in Section 12.4.
 
@@ -337,23 +337,28 @@ If none of these goals can be satisﬁed, our ﬁnal, default choice is to pick 
 
 good(5). good(1). good(3). good(7). good(9). good(2). good(4). good(6). good(8). ■
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 1. What mathematical formalism underlies logic programming?
 
-## 1. What mathematical formalism underlies logic programming?
+  2.
+  What is a Horn clause?
+  3.
+  Brieﬂy describe the process of resolution in logic programming.
 
-## 2. What is a Horn clause?
+  4.
+  What is a uniﬁcation? Why is it important in logic programming?
+  5.
+  What are clauses, terms, and structures in Prolog? What are facts, rules, and
+  queries?
 
-## 3. Brieﬂy describe the process of resolution in logic programming.
-
-## 4. What is a uniﬁcation? Why is it important in logic programming?
-
-## 5. What are clauses, terms, and structures in Prolog? What are facts, rules, and queries?
-
-## 6. Explain how Prolog differs from imperative languages in its handling of arith- metic.
-
-## 7. Describe the difference between forward chaining and backward chaining. Which is used in Prolog by default?
-
-## 8. Describe the Prolog search strategy. Discuss backtracking and the instantiation of variables.
+  6.
+  Explain how Prolog differs from imperative languages in its handling of arith-
+  metic.
+  7.
+  Describe the difference between forward chaining and backward chaining.
+  Which is used in Prolog by default?
+  8.
+  Describe the Prolog search strategy. Discuss backtracking and the instantiation
+  of variables.
 
 ## 12.2.6 Imperative Control Flow
 
@@ -597,7 +602,10 @@ I = H, !.
 
 The goal param_loop(5, 10, write) will produce the following output:
 
-## 5678910 true.
+```
+5678910
+true.
+```
 
 If we want the numbers on separate lines we can write
 
@@ -746,19 +754,18 @@ true.
 
 When takes ﬁrst succeeds, X is bound to jane_doe. When the inner \+ fails, the binding is broken. Then when the outer \+ succeeds, a new binding is created to an uninstantiated value. Prolog provides no way to pull the binding of X out through the double negation. ■
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 9. Explain the purpose of the cut (!) in Prolog. How does it relate to \+?
 
-## 9. Explain the purpose of the cut (!) in Prolog. How does it relate to \+?
+* Describe three ways in which Prolog programs can depart from a pure logic
+  programming model.
 
-## 10. Describe three ways in which Prolog programs can depart from a pure logic programming model.
+* Describe the generate-and-test programming idiom.
+* Summarize Prolog’s facilities for database manipulation. Be sure to mention
+  assert, retract, and clause.
+* What sorts of logical statements cannot be captured in Horn clauses?
 
-## 11. Describe the generate-and-test programming idiom.
-
-## 12. Summarize Prolog’s facilities for database manipulation. Be sure to mention assert, retract, and clause.
-
-## 13. What sorts of logical statements cannot be captured in Horn clauses?
-
-## 14. What is the closed world assumption? What problems does it cause for logic programming?
+* What is the closed world assumption? What problems does it cause for logic
+  programming?
 
 ## 12.5 Summary and Concluding Remarks
 

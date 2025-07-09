@@ -1,6 +1,6 @@
 # Chapter 9: Subroutines and Control Abstraction
 
-## 9 Subroutines and Control Abstraction
+9 Subroutines and Control Abstraction
 
 In the introduction to Chapter 3, we deﬁned abstraction as a process by which the programmer can associate a name with a potentially complicated pro- gram fragment, which can then be thought of in terms of its purpose or function, rather than in terms of its implementation. We sometimes distinguish between control abstraction, in which the principal purpose of the abstraction is to perform a well-deﬁned operation, and data abstraction, in which the principal purpose of the abstraction is to represent information.1 We will consider data abstraction in more detail in Chapter 10. Subroutines are the principal mechanism for control abstraction in most pro- gramming languages. A subroutine performs its operation on behalf of a caller, who waits for the subroutine to ﬁnish before continuing execution. Most sub- routines are parameterized: the caller passes arguments that inﬂuence the sub- routine’s behavior, or provide it with data on which to operate. Arguments are also called actual parameters. They are mapped to the subroutine’s formal pa- rameters at the time a call occurs. A subroutine that returns a value is usually called a function. A subroutine that does not return a value is usually called a pro- cedure. Statically typed languages typically require a declaration for every called subroutine, so the compiler can verify, for example, that every call passes the right number and types of arguments. As noted in Section 3.2.2, the storage consumed by parameters and local vari- ables can in most languages be allocated on a stack. We therefore begin this chap- ter, in Section 9.1, by reviewing the layout of the stack. We then turn in Section 9.2 to the calling sequences that serve to maintain this layout. In the process, we revisit the use of static chains to access nonlocal variables in nested subroutines, and con- sider (on the companion site) an alternative mechanism, known as a display, that serves a similar purpose. We also consider subroutine inlining and the represen- tation of closures. To illustrate some of the possible implementation alternatives, we present (again on the companion site) case studies of the LLVM compiler for
 
@@ -36,38 +36,34 @@ Perhaps the trickiest division-of-labor issue pertains to saving registers. The 
 
 A typical calling sequence The stack pointer (sp) points to the ﬁrst unused location on the stack (or the last used location, depending on the compiler and machine). The frame pointer (fp) points to a location near the bottom of the frame. Space for all arguments is reserved in the stack, even if the compiler passes some of them in registers (the callee will need a standard place to save them if it ever calls a nested routine that may try to reach a lexically surrounding parameter via the static chain). To maintain this stack layout, the calling sequence might operate as follows. The caller
 
-## 1. saves any caller-saves registers whose values may be needed after the call
-
-## 2. computes the values of arguments and moves them into the stack or registers
-
-## 3. computes the static link (if this is a language with nested subroutines), and passes it as an extra, hidden argument
-
-## 4. uses a special subroutine call instruction to jump to the subroutine, simulta- neously passing the return address on the stack or in a register
+* saves any caller-saves registers whose values may be needed after the call
+* computes the values of arguments and moves them into the stack or registers
+* computes the static link (if this is a language with nested subroutines), and
+  passes it as an extra, hidden argument
+* uses a special subroutine call instruction to jump to the subroutine, simulta-
+  neously passing the return address on the stack or in a register
 
 In its prologue, the callee
 
-## 1. allocates a frame by subtracting an appropriate constant from the sp
-
-## 2. saves the old frame pointer into the stack, and updates it to point to the newly allocated frame
-
-## 3. saves any callee-saves registers that may be overwritten by the current routine (including the static link and return address, if they were passed in registers)
+* allocates a frame by subtracting an appropriate constant from the sp
+* saves the old frame pointer into the stack, and updates it to point to the newly
+  allocated frame
+* saves any callee-saves registers that may be overwritten by the current routine
+  (including the static link and return address, if they were passed in registers)
 
 ![Figure 9.2 A typical...](images/page_449_vector_326.png)
 *Figure 9.2 A typical stack frame. Though we draw it growing upward on the page, the stack actually grows downward toward lower addresses on most machines. Arguments are accessed at positive offsets from the fp. Local variables and temporaries are accessed at negative offsets from the fp. Arguments to be passed to called routines are assembled at the top of the frame, using positive offsets from the sp.*
 
-## 1. moves the return value (if any) into a register or a reserved location in the stack
-
-## 2. restores callee-saves registers if needed
-
-## 3. restores the fp and the sp
-
-## 4. jumps back to the return address
+* moves the return value (if any) into a register or a reserved location in the stack
+* restores callee-saves registers if needed
+* restores the fp and the sp
+* jumps back to the return address
 
 Finally, the caller
 
-## 1. moves the return value to wherever it is needed
-
-## 2. restores caller-saves registers if needed ■
+* moves the return value to wherever it is needed
+* restores caller-saves registers if needed
+  ■
 
 Special-Case Optimizations
 
@@ -139,31 +135,30 @@ DESIGN & IMPLEMENTATION
 
 calls but also (one level of) the two calls within the true subroutine version, only a quarter of the original dynamic calls will remain. ■
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 1. What is a subroutine calling sequence? What does it do? What is meant by the subroutine prologue and epilogue? 2. How do calling sequences typically differ in older (CISC) and newer (RISC) instruction sets? 3. Describe how to maintain the static chain during a subroutine call.
 
-## 1. What is a subroutine calling sequence? What does it do? What is meant by the subroutine prologue and epilogue?
+  4.
+  What is a display? How does it differ from a static chain?
+  5.
+  What are the purposes of the stack pointer and frame pointer registers? Why
+  does a subroutine often need both?
+  6.
+  Why do modern machines typically pass subroutine parameters in registers
+  rather than on the stack?
+  7.
+  Why do subroutine calling conventions often give the caller responsibility for
+  saving half the registers and the callee responsibility for saving the other half?
+  8.
+  If work can be done in either the caller or the callee, why do we typically prefer
+  to do it in the callee?
+  9.
+  Why do compilers typically allocate space for arguments in the stack, even
+  when they pass them in registers?
+* List the optimizations that can be made to the subroutine calling sequence in
+  important special cases (e.g., leaf routines).
+* How does an in-line subroutine differ from a macro?
 
-## 2. How do calling sequences typically differ in older (CISC) and newer (RISC) instruction sets?
-
-## 3. Describe how to maintain the static chain during a subroutine call.
-
-## 4. What is a display? How does it differ from a static chain?
-
-## 5. What are the purposes of the stack pointer and frame pointer registers? Why does a subroutine often need both?
-
-## 6. Why do modern machines typically pass subroutine parameters in registers rather than on the stack?
-
-## 7. Why do subroutine calling conventions often give the caller responsibility for saving half the registers and the callee responsibility for saving the other half?
-
-## 8. If work can be done in either the caller or the callee, why do we typically prefer to do it in the callee?
-
-## 9. Why do compilers typically allocate space for arguments in the stack, even when they pass them in registers?
-
-## 10. List the optimizations that can be made to the subroutine calling sequence in important special cases (e.g., leaf routines).
-
-## 11. How does an in-line subroutine differ from a macro?
-
-## 12. Under what circumstances is it desirable to expand a subroutine in-line?
+* Under what circumstances is it desirable to expand a subroutine in-line?
 
 DESIGN & IMPLEMENTATION
 
@@ -351,35 +346,7 @@ Closures as Parameters
 
 A closure (a reference to a subroutine, together with its referencing environment) may be passed as a parameter for any of several reasons. The most obvious of these arises when the parameter is declared to be a subroutine (sometimes called a formal subroutine). In Ada one might write EXAMPLE 9.20
 
-Subroutines as parameters in Ada
-
-## 1. type int_func is access function (n : integer) return integer;
-
-## 2. type int_array is array (positive range <>) of integer;
-
-## 3. procedure apply_to_A (f : int_func; A : in out int_array) is
-
-## 4. begin
-
-## 5. for i in A'range loop
-
-## 6. A(i) := f(A(i));
-
-## 6. end loop;
-
-## 8. end apply_to_A; ...
-
-## 9. k : integer := 3; -- in nested scope ...
-
-## 10. function add_k (m : integer) return integer is
-
-## 11. begin
-
-## 12. return m + k;
-
-## 13. end add_k; ...
-
-## 14. apply_to_A (add_k'access, B);
+Subroutines as parameters in Ada 1. type int_func is access function (n : integer) return integer; 2. type int_array is array (positive range <>) of integer; 3. procedure apply_to_A (f : int_func; A : in out int_array) is 4. begin 5. for i in A'range loop 6. A(i) := f(A(i)); 6. end loop; 8. end apply_to_A; ... 9. k : integer := 3; -- in nested scope ... 10. function add_k (m : integer) return integer is 11. begin 12. return m + k; 13. end add_k; ... 14. apply_to_A (add_k'access, B);
 
 As discussed in Section 3.6.1, a closure needs to include both a code address and a referencing environment because, in a language with nested subroutines, we need to make sure that the environment available to f at line 6 is the same that would have been available to add_k if it had been called directly at line 14—in particular, that it includes the binding for k. ■ Subroutines are routinely passed as parameters (and returned as results) in functional languages. A list-based version of apply_to_A would look something EXAMPLE 9.21
 
@@ -559,33 +526,30 @@ def foo(): return 2, 3 ... i, j = foo() ■
 
 In functional languages, it is commonplace to return a subroutine as a closure. Many imperative languages permit this as well. C has no closures, but allows a function to return a pointer to a subroutine.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 13. What is the difference between formal and actual parameters? 14. Describe four common parameter-passing modes. How does a programmer choose which one to use when? 15. Explain the rationale for READONLY parameters in Modula-3.
 
-## 13. What is the difference between formal and actual parameters?
+* What parameter mode is typically used in languages with a reference model
+  of variables?
 
-## 14. Describe four common parameter-passing modes. How does a programmer choose which one to use when?
+* Describe the parameter modes of Ada. How do they differ from the modes of
+  other modern languages?
 
-## 15. Explain the rationale for READONLY parameters in Modula-3.
+* Give an example in which it is useful to return a reference from a function in
+  C++.
 
-## 16. What parameter mode is typically used in languages with a reference model of variables?
+* What is an r-value reference? Why might it be useful?
+* List three reasons why a language implementation might implement a param-
+  eter as a closure.
+* What is a conformant (open) array?
 
-## 17. Describe the parameter modes of Ada. How do they differ from the modes of other modern languages?
+* What are default parameters? How are they implemented?
+* What are named (keyword) parameters? Why are they useful?
 
-## 18. Give an example in which it is useful to return a reference from a function in C++.
+* Explain the value of variable-length argument lists. What distinguishes such
+  lists in Java and C# from their counterparts in C and C++?
 
-## 19. What is an r-value reference? Why might it be useful?
-
-## 20. List three reasons why a language implementation might implement a param- eter as a closure.
-
-## 21. What is a conformant (open) array?
-
-## 22. What are default parameters? How are they implemented?
-
-## 23. What are named (keyword) parameters? Why are they useful?
-
-## 24. Explain the value of variable-length argument lists. What distinguishes such lists in Java and C# from their counterparts in C and C++?
-
-## 25. Describe three common mechanisms for specifying the return value of a func- tion. What are their relative strengths and drawbacks?
+* Describe three common mechanisms for specifying the return value of a func-
+  tion. What are their relative strengths and drawbacks?
 
 ## 9.4 Exception Handling
 
@@ -599,7 +563,9 @@ input when it is expecting digits. To cope with such errors without an exception
   call. Most often, the status is passed through an extra, explicit parameter. In
   some languages, the regular return value and the status may be returned to-
   gether as a tuple.
-## 3. Rely on the caller to pass a closure (in languages that support them) for an error-handling routine that the normal routine can call when it runs into trouble.
+* Rely on the caller to pass a closure (in languages that support them) for an
+  error-handling routine that the normal routine can call when it runs into
+  trouble.
 
 The ﬁrst of these options is ﬁne in certain cases, but does not work in the general case. Options 2 and 3 tend to clutter up the program, and impose overhead that we should like to avoid in the common case. The tests in option 2 are particularly offensive: they obscure the normal ﬂow of events in the common case. Because they are so tedious and repetitive, they are also a common source of errors; one can easily forget a needed test. Exception-handling mechanisms address these is- sues by moving error-checking code “out of line,” allowing the normal case to be speciﬁed simply, and arranging for control to branch to a handler when appro- priate. Exception handling was pioneered by PL/I, which includes an executable state- EXAMPLE 9.34
 
@@ -759,25 +725,27 @@ DESIGN & IMPLEMENTATION
 
 been written through to memory will be visible in the handler, but changes that were cached in registers will be lost. To address this limitation, C allows the pro- grammer to specify that certain variables are volatile. A volatile variable is one whose value in memory can change “spontaneously,” for example as the result of activity by an I/O device or a concurrent thread of control. C implementations are required to store volatile variables to memory whenever they are written, and to load them from memory whenever they are read. If a handler needs to see changes to a variable that may be modiﬁed by the protected code, then the pro- grammer must include the volatile keyword in the variable’s declaration.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 26. Describe three ways in which a language may allow programmers to declare exceptions.
 
-## 26. Describe three ways in which a language may allow programmers to declare exceptions.
+* Explain why it is useful to deﬁne exceptions as classes in C++, Java, and C#.
+* Explain the behavior and purpose of a try... finally construct.
 
-## 27. Explain why it is useful to deﬁne exceptions as classes in C++, Java, and C#.
+* Describe the algorithm used to identify an appropriate handler when an ex-
+  ception is raised in a language like Ada or C++.
 
-## 28. Explain the behavior and purpose of a try... finally construct.
+* Explain how to implement exceptions in a way that incurs no cost in the com-
+  mon case (when exceptions don’t arise).
 
-## 29. Describe the algorithm used to identify an appropriate handler when an ex- ception is raised in a language like Ada or C++.
+* How do the exception handlers of a functional language like ML differ from
+  those of an imperative language like C++?
 
-## 30. Explain how to implement exceptions in a way that incurs no cost in the com- mon case (when exceptions don’t arise).
+* Describe the operations that must be performed by the implicit handler for a
+  subroutine.
 
-## 31. How do the exception handlers of a functional language like ML differ from those of an imperative language like C++?
+* Summarize the shortcomings of the setjmp and longjmp library routines
+  of C.
 
-## 32. Describe the operations that must be performed by the implicit handler for a subroutine.
-
-## 33. Summarize the shortcomings of the setjmp and longjmp library routines of C.
-
-## 34. What is a volatile variable in C? Under what circumstances is it useful?
+* What is a volatile variable in C? Under what circumstances is it useful?
 
 ## 9.5 Coroutines
 
@@ -918,25 +886,21 @@ Handling an event with a lambda expression pauseButton.setOnAction(e -> { // do 
 
 This example leverages the functional interface convention of Java lambda ex- pressions, described in Example 3.41. Using this convention, we have effectively matched the brevity of C#. ■ The action performed by a handler needs to be simple and brief, so the handler thread can call back into the kernel for another event. If the handler takes too long, the user is likely to ﬁnd the application nonresponsive. If an event needs to initiate something that is computationally demanding, or that may need to perform additional I/O, the handler may create a new thread to do the work; alternatively, it may pass a request to some existing worker thread.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 35. What was the ﬁrst high-level programming language to provide coroutines? 36. What is the difference between a coroutine and a thread?
 
-## 35. What was the ﬁrst high-level programming language to provide coroutines?
+* Why doesn’t the transfer library routine need to change the program counter
+  when switching between coroutines?
 
-## 36. What is the difference between a coroutine and a thread?
+* Describe three alternative means of allocating coroutine stacks. What are their
+  relative strengths and weaknesses?
 
-## 37. Why doesn’t the transfer library routine need to change the program counter when switching between coroutines?
+* What is a cactus stack? What is its purpose?
+* What is discrete event simulation? What is its connection with coroutines?
 
-## 38. Describe three alternative means of allocating coroutine stacks. What are their relative strengths and weaknesses?
-
-## 39. What is a cactus stack? What is its purpose?
-
-## 40. What is discrete event simulation? What is its connection with coroutines?
-
-## 41. What is an event in the programming language sense of the word?
-
-## 42. Summarize the two main implementation strategies for events.
-
-## 43. Explain the appeal of anonymous delegates (C#) and anonymous inner classes (Java) for handling events.
+* What is an event in the programming language sense of the word?
+* Summarize the two main implementation strategies for events.
+* Explain the appeal of anonymous delegates (C#) and anonymous inner classes
+  (Java) for handling events.
 
 ## 9.7 Summary and Concluding Remarks
 

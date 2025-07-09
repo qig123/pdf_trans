@@ -1,6 +1,6 @@
 # Chapter 10: Data Abstraction and Object Orientation
 
-## 10 Data Abstraction and Object Orientation
+10 Data Abstraction and Object Orientation
 
 In Chapter 3 we presented several stages in the development of data ab- straction, with an emphasis on the scoping mechanisms that control the visibility of names. We began with global variables, whose lifetime spans program execu- tion. We then added local variables, whose lifetime is limited to the execution of a single subroutine; nested scopes, which allow subroutines themselves to be local; and static variables, whose lifetime spans execution, but whose names are visible only within a single scope. These were followed by modules, which allow a collec- tion of subroutines to share a set of static variables; module types, which allow the programmer to instantiate multiple instances of a given abstraction, and classes, which allow the programmer to deﬁne families of related abstractions. Ordinary modules encourage a “manager” style of programming, in which a module exports an abstract type. Module types and classes allow the module itself to be the abstract type. The distinction becomes apparent in two ways. First, the explicit create and destroy routines typically exported from a manager module are replaced by creation and destruction of an instance of the module type. Second, invocation of a routine in a particular module instance replaces invocation of a general routine that expects a variable of the exported type as argument. Classes build on the module-as-type approach by adding mechanisms for inheritance, which allows new abstractions to be deﬁned as reﬁnements or extensions to existing ones, and dynamic method binding, which allows a new version of an abstraction to display newly reﬁned behavior, even when used in a context that expects an earlier version. An instance of a class is known as an object; languages and programming techniques based on classes are said to be object-oriented.1 The stepwise evolution of data abstraction mechanisms presented in Chapter 3 is a useful way to organize ideas, but it does not completely reﬂect the historical development of language features. In particular, it would be inaccurate to sug- gest that object-oriented programming developed as an outgrowth of modules.
 
@@ -444,29 +444,31 @@ int_list_node n(3); string_list_node s("boo!"); int_list L; L.append(&n); // ok 
 
 In a nutshell, generics exist for the purpose of abstracting over unrelated types, something that inheritance does not support. In addition to C++, generics appear in most other statically typed object-oriented languages, including Eiffel, Java, C#, and OCaml.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 1. What are generally considered to be the three deﬁning characteristics of object-oriented programming? 2. In what programming language of the 1960s does object orientation ﬁnd its roots? Who invented that language? Summarize the evolution of the three deﬁning characteristics since that time.
 
-## 1. What are generally considered to be the three deﬁning characteristics of object-oriented programming?
+  3.
+  Name three important beneﬁts of abstraction.
+  4.
+  What are the more common names for subroutine member and data member?
 
-## 2. In what programming language of the 1960s does object orientation ﬁnd its roots? Who invented that language? Summarize the evolution of the three deﬁning characteristics since that time.
+  5.
+  What is a property in C#?
+  6.
+  What is the purpose of the “private” part of an object interface? Why can’t it
+  be hidden completely?
+  7.
+  What is the purpose of the :: operator in C++?
 
-## 3. Name three important beneﬁts of abstraction.
+  8.
+  Explain why in-line subroutines are particularly important in object-oriented
+  languages.
 
-## 4. What are the more common names for subroutine member and data member?
+  9.
+  What are constructors and destructors?
+* Give two other terms, each, for base class and derived class.
 
-## 5. What is a property in C#?
-
-## 6. What is the purpose of the “private” part of an object interface? Why can’t it be hidden completely?
-
-## 7. What is the purpose of the :: operator in C++?
-
-## 8. Explain why in-line subroutines are particularly important in object-oriented languages.
-
-## 9. What are constructors and destructors?
-
-## 10. Give two other terms, each, for base class and derived class.
-
-## 11. Explain why generics may be useful in an object-oriented language, despite the extensive polymorphism already provided by inheritance.
+* Explain why generics may be useful in an object-oriented language, despite
+  the extensive polymorphism already provided by inheritance.
 
 ## 10.2 Encapsulation and Inheritance
 
@@ -613,29 +615,25 @@ static class AddToString { public static int toInt (string s) { // no 'this' ret
 
 No special functionality is available to extension methods. In particular, they cannot access private members of the class that they extend, nor do they support dynamic method binding (Section 10.4). By contrast, several scripting languages, including JavaScript and Ruby, really do allow the programmer to add new meth- ods to existing classes—or even to individual objects. We will explore these op- tions further in Section 14.4.4.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 12. What is meant by an opaque export from a module? 13. What are private types in Ada?
 
-## 12. What is meant by an opaque export from a module?
+* Explain the signiﬁcance of the this parameter in object-oriented languages.
+* How do Java and C# make do without explicit class headers?
+* Explain the distinctions among private, protected, and public class
+  members in C++.
 
-## 13. What are private types in Ada?
+* Explain the distinctions among private, protected, and public base
+  classes in C++.
 
-## 14. Explain the signiﬁcance of the this parameter in object-oriented languages.
+* Describe the notion of selective availability in Eiffel.
+* How do the rules for member name visibility in Smalltalk and Objective-C
+  differ from the rules of most other object-oriented languages?
+* How do inner classes in Java differ from most other nested classes?
 
-## 15. How do Java and C# make do without explicit class headers?
-
-## 16. Explain the distinctions among private, protected, and public class members in C++.
-
-## 17. Explain the distinctions among private, protected, and public base classes in C++.
-
-## 18. Describe the notion of selective availability in Eiffel.
-
-## 19. How do the rules for member name visibility in Smalltalk and Objective-C differ from the rules of most other object-oriented languages?
-
-## 20. How do inner classes in Java differ from most other nested classes?
-
-## 21. Describe the key design difference between the object-oriented features of Smalltalk, Eiffel, and C++ on the one hand, and Ada, CLOS, and Fortran on the other.
-
-## 22. What are extension methods in C#? What purpose do they serve?
+* Describe the key design difference between the object-oriented features of
+  Smalltalk, Eiffel, and C++ on the one hand, and Ada, CLOS, and Fortran
+  on the other.
+* What are extension methods in C#? What purpose do they serve?
 
 ## 10.3 Initialization and Finalization
 
@@ -885,24 +883,20 @@ int v = dequeue();
 
 In modern C++ code, storage management is often facilitated through the use of smart pointers (Section 8.5.3). These arrange, in the destructor for a pointer, to determine whether any other pointers to the same object continue to exist—and if not, to reclaim that pointed-to object. ■ In languages with automatic garbage collection, there is much less need for destructors. In fact, the entire idea of destruction is suspect in a garbage-collected language, because the programmer has little or no control over when an object is going to be destroyed. Java and C# allow the programmer to declare a finalize method that will be called immediately before the garbage collector reclaims the space for an object, but the feature is not widely used.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 23. Does a constructor allocate space for an object? Explain. 24. What is a metaclass in Smalltalk?
 
-## 23. Does a constructor allocate space for an object? Explain.
-
-## 24. What is a metaclass in Smalltalk?
-
-## 25. Why is object initialization simpler in a language with a reference model of variables (as opposed to a value model)?
-
-## 26. How does a C++ (or Java or C#) compiler tell which constructor to use for a given object? How does the answer differ for Eiffel and Smalltalk?
-
-## 27. What is escape analysis? Describe why it might be useful in a language with a reference model of variables.
-
+* Why is object initialization simpler in a language with a reference model of
+  variables (as opposed to a value model)?
+* How does a C++ (or Java or C#) compiler tell which constructor to use for a
+  given object? How does the answer differ for Eiffel and Smalltalk?
+* What is escape analysis? Describe why it might be useful in a language with a
+  reference model of variables.
 * Summarize the rules in C++ that determine the order in which constructors
   are called for a class, its base class(es), and the classes of its ﬁelds. How are
   these rules simpliﬁed in other languages?
-## 29. Explain the difference between initialization and assignment in C++.
 
-## 30. Why does C++ need destructors more than Eiffel does?
+* Explain the difference between initialization and assignment in C++.
+* Why does C++ need destructors more than Eiffel does?
 
 ## 10.4 Dynamic Method Binding
 
@@ -1162,32 +1156,24 @@ std::function<void()> cf = std::bind(foo, 3, 3.14, 'x');
 
 The bind routine (an automatically instantiated generic function) encapsulates its ﬁrst parameter (a function) together with the arguments that should eventually be passed to that function. The standard library even provides a “placeholder” mechanism (not shown here) that allows the programmer to bind only a subset of the function’s parameters, so that parameters eventually passed to the function object can be used to ﬁll in the remaining positions. ■ Object closures are commonly used in Java (and several other languages) to encapsulate start-up arguments for newly created threads of control (more on this in Section 13.2.3). They can also be used (as noted in Exploration 6.46) to implement iterators via the visitor pattern.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 31. Explain the difference between dynamic and static method binding (i.e., be- tween virtual and nonvirtual methods). 32. Summarize the fundamental argument for dynamic method binding. Why do C++ and C# use static method binding by default? 33. Explain the distinction between redeﬁning and overriding a method.
 
-## 31. Explain the difference between dynamic and static method binding (i.e., be- tween virtual and nonvirtual methods).
-
-## 32. Summarize the fundamental argument for dynamic method binding. Why do C++ and C# use static method binding by default?
-
-## 33. Explain the distinction between redeﬁning and overriding a method.
-
-## 34. What is a class-wide type in Ada 95?
-
-## 35. Explain the connection between dynamic method binding and polymor- phism.
+* What is a class-wide type in Ada 95?
+* Explain the connection between dynamic method binding and polymor-
+  phism.
 
 ![Figure 10.5 Subroutine pointers...](images/page_548_vector_409.png)
 *Figure 10.5 Subroutine pointers and virtual methods. Class call_foo encapsulates a subrou- tine pointer and values to be passed to the subroutine. It exports a parameter-less subroutine that can be used to trigger the encapsulated call.*
 
-## 36. What is an abstract method (also called a pure virtual method in C++ and a deferred feature in Eiffel)?
+* What is an abstract method (also called a pure virtual method in C++ and a
+  deferred feature in Eiffel)?
+* What is reverse assignment? Why does it require a run-time check?
 
-## 37. What is reverse assignment? Why does it require a run-time check?
+* What is a vtable? How is it used?
+* What is the fragile base class problem?
 
-## 38. What is a vtable? How is it used?
-
-## 39. What is the fragile base class problem?
-
-## 40. What is an abstract (deferred) class?
-
-## 41. Explain the importance of virtual methods for object closures.
+* What is an abstract (deferred) class?
+* Explain the importance of virtual methods for object closures.
 
 ## 10.5 Mix-In Inheritance
 
@@ -1273,21 +1259,23 @@ IN MORE DEPTH
 
 We have mentioned several features of Smalltalk in previous sections. A some- what longer treatment can be found on the companion site, where we focus in particular on Smalltalk’s anthropomorphic programming model. A full intro- duction to the language is beyond the scope of this book.
 
-3CHECK YOUR UNDERSTANDING
+3CHECK YOUR UNDERSTANDING 42. What is mix-in inheritance? What problem does it solve?
 
-## 42. What is mix-in inheritance? What problem does it solve?
-
-## 43. Outline a possible implementation of mix-in inheritance for a language with statically typed objects. Explain in particular the need for interface-speciﬁc views of an object.
-
-## 44. Describe how mix-ins (and their implementation) can be extended with de- fault method implementations, static (constant) ﬁelds, and even mutable ﬁelds.
-
-## 45. What does true multiple inheritance make possible that mix-in inheritance does not?
+* Outline a possible implementation of mix-in inheritance for a language with
+  statically typed objects. Explain in particular the need for interface-speciﬁc
+  views of an object.
+* Describe how mix-ins (and their implementation) can be extended with de-
+  fault method implementations, static (constant) ﬁelds, and even mutable
+  ﬁelds.
+* What does true multiple inheritance make possible that mix-in inheritance
+  does not?
 
 7 Alan Kay (1940–) joined PARC in 1972. In addition to developing Smalltalk and its graphical user interface, he conceived and promoted the idea of the laptop computer, well before it was feasible to build one. He became a Fellow at Apple Computer in 1984, and has subsequently held positions at Disney and Hewlett-Packard. He received the ACM Turing Award in 2003.
 
-## 46. What is repeated inheritance? What is the distinction between replicated and shared repeated inheritance?
-
-## 47. What does it mean for a language to provide a uniform object model? Name two languages that do so.
+* What is repeated inheritance? What is the distinction between replicated and
+  shared repeated inheritance?
+* What does it mean for a language to provide a uniform object model? Name
+  two languages that do so.
 
 ## 10.8 Summary and Concluding Remarks
 
@@ -1371,14 +1359,8 @@ Does the representation of a bar object contain one b ﬁeld or two? If two, are
 
 ## 10.21 Consider the Java program shown in Figure 10.8. Assume that this is to be compiled to native code on a machine with 4-byte addresses.
 
-(a) Draw a picture of the layout in memory of the object created at line
+(a) Draw a picture of the layout in memory of the object created at line 15. Show all virtual function tables. (b) Give assembly-level pseudocode for the call to c.val at line 19. You may assume that the address of c is in register r1 immediately before the call, and that this same register should be used to pass the hidden this parameter. You may ignore the need to save and restore registers, and don’t worry about where to put the return value.
 
-* Show all virtual function tables.
-  (b) Give assembly-level pseudocode for the call to c.val at line 19. You
-  may assume that the address of c is in register r1 immediately before
-  the call, and that this same register should be used to pass the hidden
-  this parameter. You may ignore the need to save and restore registers,
-  and don’t worry about where to put the return value.
 ![Figure 10.8 A simple...](images/page_561_vector_324.png)
 *Figure 10.8 A simple program in Java.*
 

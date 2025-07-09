@@ -1,8 +1,6 @@
 # Copyright
 
-Morgan Kaufmann is an imprint of Elsevier
-
-## 225 Wyman Street,Waltham, MA 02451, USA
+Morgan Kaufmann is an imprint of Elsevier 225 Wyman Street,Waltham, MA 02451, USA
 
 Copyright © 2016, 2009, 2006, 1999 Elsevier Inc. All rights reserved.
 
