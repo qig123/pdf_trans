@@ -59,72 +59,6 @@ Programming Language Pragmatics covers almost all of the material in the PL “k
 ![Figure 1 Paths through...](images/page_31_vector_349.png)
 *Figure 1 Paths through the text. Darker shaded regions indicate supplemental “In More Depth” sections on the companion site. Section numbers are shown for breaks that do not correspond to supplemental material.*
 
-xxx Preface
-
-Part I Part II Part III Part IV
-
-8 Composite Types
-
-17 Improvement
-
-13 Concurrency
-
-7 Type Systems
-
-5 Architecture
-
-9 Subroutines
-
-11 Functional
-
-15 CodeGen
-
-14 Scripting
-
-4 Semantics
-
-16 Runtime
-
-10 Objects
-
-6 Control
-
-3 Names
-
-12 Logic
-
-2 Syntax
-
-1 Intro
-
-F
-
-R
-
-2.3.4
-
-15.5
-
-P
-
-2.2
-
-C
-
-Q
-
-2.3.3 9.3.3
-
-F: R: P:
-
-The full-year/self-study plan The one-semester Rochester plan The traditional Programming Languages plan; would also de-emphasize implementation material throughout the chapters shown The compiler plan; would also de-emphasize design material throughout the chapters shown The 1+2 quarter plan: an overview quarter and two independent, optional follow-on quarters, one language-oriented, the other compiler-oriented
-
-Companion site (CS) section To be skimmed by students in need of review
-
-C:
-
-Q:
-
 sections, as well as bottom-up parsing (2.3.4), logic languages (Chapter 12), and the second halves of Chapters 15 (Building a Runnable Program) and 16 (Run- time Program Management). Note that the material on functional programming (Chapter 11 in particular) can be taught in either OCaml or Scheme. Some chapters (2, 4, 5, 15, 16, 17) have a heavier emphasis than others on im- plementation issues. These can be reordered to a certain extent with respect to the more design-oriented chapters. Many students will already be familiar with much of the material in Chapter 5, most likely from a course on computer organization; hence the placement of the chapter on the companion site. Some students may also be familiar with some of the material in Chapter 2, perhaps from a course on automata theory. Much of this chapter can then be read quickly as well, pausing perhaps to dwell on such practical issues as recovery from syntax errors, or the ways in which a scanner differs from a classical ﬁnite automaton. A traditional programming languages course (track P in Figure 1) might leave out all of scanning and parsing, plus all of Chapter 4. It would also de-emphasize the more implementation-oriented material throughout. In place of these, it could add such design-oriented CS sections as multiple inheritance (10.6), Small- talk (10.7.1), lambda calculus (11.7), and predicate calculus (12.3).
 
 Preface xxxi
@@ -148,6 +82,4 @@ Bob Cochran, Daniel Crisman, Marcelino Debajo, Chen Ding, Peter Drake, Michael E
 Michael L. Scott Rochester, NY August 2015
 
 This page intentionally left blank
-
-![Uncaptioned Image page 35 xref 2551](images/page_35_uncaptioned_img_2551.jpeg)
 

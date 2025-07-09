@@ -22,5 +22,3 @@ The notation should in most cases be self-explanatory. It uses “assignment sta
 
 This page intentionally left blank
 
-![Uncaptioned Image page 253 xref 2551](images/page_253_uncaptioned_img_2551.jpeg)
-

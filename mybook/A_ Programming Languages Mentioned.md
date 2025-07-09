@@ -8,9 +8,6 @@ Ada : Originally intended to be the standard language for all software commis- s
 
 859
 
-![Figure A.1 Genealogy of...](images/page_893_vector_619.png)
-*Figure A.1 Genealogy of selected programming languages. Dates are approximate. Arrows that continue at the botton of the page indicate ongoing evolution.*
-
 860 Appendix A Programming Languages Mentioned
 
 Fortran I Fortran II
@@ -43,93 +40,8 @@ Algol 68
 
 Pascal
 
-C shell languages
-
-Scheme
-
-1975
-
-Euclid
-
-Clu
-
-ML
-
-Fortran 77
-
-Mesa
-
-Smalltalk 80
-
-1980
-
-Modula-2
-
-Ada
-
-Common
-
-C++
-
-Cedar
-
-Lisp
-
-1985
-
-Objective C
-
-Miranda
-
-Caml
-
-Perl
-
-Oberon
-
-CLOS Haskell
-
-Modula-3
-
-ANSI C
-
-1990
-
-(C90) Eiffel
-
-Fortran 90
-
-Visual
-
-Basic HPF Python
-
-OCaml Ruby Java
-
-1995
-
-Fortran 95
-
-PHP
-
-2000
-
-C#
-
-Scala
-
-2005
-
-F#
-
-Go
-
-2010
-
-Swift
-
-2015
-
-Imperative Scripting Functional
+![Figure A.1 Genealogy of...](images/page_893_vector_619.png)
+*Figure A.1 Genealogy of selected programming languages. Dates are approximate. Arrows that continue at the botton of the page indicate ongoing evolution.*
 
 Appendix A Programming Languages Mentioned 861
 

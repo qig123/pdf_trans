@@ -14,5 +14,3 @@ NEW YORK • OXFORD • PARIS • SAN DIEGO SAN FRANCISCO • SINGAPORE • SYDN
 
 Morgan Kaufmann is an imprint of Elsevier
 
-![Uncaptioned Image page 4 xref 8](images/page_4_uncaptioned_img_8.jpeg)
-
