@@ -40,76 +40,10 @@ EXAMPLE 15.1  Figure 15.1 illustrates a plausible seven-phase structure for a co
 
 EXAMPLE 15.2  In Example 1.20 we used a simple greatest common divisor (GCD) program  GCD program abstract  to illustrate the phases of compilation. The syntax tree for this program appeared  syntax tree (reprise)  in Figure 1.6; it is reproduced here (in slightly altered form) as Figure 15.2. A corresponding control fow graph appears in Figure 15.3. We will discuss techniques  to generate this graph in Section 15.3 and Exercise 15.6. Additional examples of  control fow graphs will appear in Chapter 17.  ■
 
-Character stream
-
-Scanner (lexical analysis)
-
-Token stream
-
-Parser (syntax analysis)
-
-Parse tree
-
-Semantic analysis
-
-Front end
-
-Abstract syntax tree
-
-with annotations
-
-Back end
-
-Intermediate  code generation
-
-Flow graph with pseudoinstructions in basic blocks
-
-Machine-independent  code improvement
-
-Modified flow graph
-
-Target code generation
-
-Machinedependent
-
-(Almost) assembly language
-
-Machine-specific  code improvement
-
-Real assembly language
-
 ![Figure 15.1 A plausible set...](images/page_810_vector_360.png)
 *Figure 15.1  A plausible set of compiler phases. Here we have shown a sharper separation  between semantic analysis and intermediate code generation than we considered in Chapter 1  (see Figure 1.3). Machine-independent code improvement employs an intermediate form that  resembles the assembly language for an idealized machine with an unlimited number of registers.  Machine-specifc code improvement—register allocation and instruction scheduling in  particular—employs the assembly language of the target machine. The dashed line shows a  common “break point” between the front end and back end of a two-pass compiler. In some  implementations, machine-independent code improvement may be located in a separate “middle  end” pass.*
 
 The machine-independent code improvement phase of compilation performs  a variety of transformations on the control fow graph. It modifes the instruction  sequence within each basic block to eliminate redundant loads, stores, and arithmetic computations; this is local code improvement. It also identifes and removes  a variety of redundancies across the boundaries between basic blocks within a  subroutine; this is global code improvement. As an example of the latter, an expression whose value is computed immediately before an if statement need not  be recomputed within the code that follows the else. Likewise an expression that  appears within the body of a loop need only be evaluated once if its value will not  change in subsequent iterations. Some global improvements change the number  of basic blocks and/or the arcs among them.
-
-program
-
-:=
-
-:=
-
-while (5)  call  (6)  call
-
-call
-
-null
-
-(4)  (3)  null
-
-(5)
-
-(3)  null
-
-=/  if
-
-null
-
-Index  Symbol  Type  (5) (6)  >  :=   :=
-
-1  void  type  2  int  type  3  getint  func : (1) → (2)  (5) (6) (5)  −  (6)  −  4  putint  func : (2) → (1)  5  i  (2)  6  j  (2)  (5)  (6)  (6)  (5)
-
-null null
 
 ![Figure 15.2 Syntax tree and...](images/page_811_vector_315.png)
 *Figure 15.2  Syntax tree and symbol table for the GCD program. The only difference from Figure 1.6 is the addition of  explicit null nodes to indicate empty argument lists and to terminate statement lists.*
@@ -117,30 +51,6 @@ null null
 It is worth noting that “global” code improvement typically considers only the  current subroutine, not the program as a whole. Much recent research in compiler technology has been aimed at “truly global” techniques, known as interprocedural code improvement. Since programmers are generally unwilling to give  up separate compilation (recompiling hundreds of thousands of lines of code is a  very time-consuming operation), a practical interprocedural code improver must  do much of its work at link time. One of the (many) challenges to be overcome  is to develop a division of labor and an intermediate representation that allow the  compiler to do as much work as possible during (separate) compilation, but leave  enough of the details undecided that the link-time code improver is able to do its  job.
 
 Following machine-independent code improvement, the next phase of compilation is target code generation. This phase strings the basic blocks together  into a linear program, translating each block into the instruction set of the target  machine and generating branch instructions (or “fall-throughs”) that correspond  to the arcs of the control fow graph. The output of this phase differs from real  assembly language primarily in its continued reliance on virtual registers. So long  as the pseudoinstructions of the intermediate form are reasonably close to those  of the target machine, this phase of compilation, though tedious, is more or less  straightforward.
-
-call getint  i := rv  call getint  j := rv
-
-Start
-
-v13 := i  a1 := v13  call putint
-
-F
-
-v1 := i  v2 := j  v3 := v1 =/ v2  test v3
-
-T
-
-End
-
-v4 := i  v5 := j  v6 := v4 > v5  test v6
-
-T  F
-
-v7 := i  v8 := j  v9 := v7 − v 8  i := v9
-
-v10 := j  v11 := i  v12 := v10 − v11  j := v12
-
-null
 
 ![Figure 15.3 Control flow graph...](images/page_812_vector_455.png)
 *Figure 15.3  Control flow graph for the GCD program. Code within basic blocks is shown  in the pseudo-assembly notation introduced in Sidebar 5.1, with a different virtual register (here  named v1. . . v13) for every computed value. Registers a1 and rv are used to pass values to and  from subroutines.*
@@ -197,23 +107,6 @@ In situations where simplicity and brevity are paramount, designers often turn t
 
 Medium-level stack-based intermediate languages are similarly attractive when  passing code from a compiler to an interpreter or virtual machine. Forty years
 
-ago, P-code (Example 1.15) made it easy to port Pascal to new machines, and  helped to speed the language’s adoption. Today, the compactness of Java bytecode  helps minimize the download time for applets. Common Intermediate Language  (CIL), the analogue of Java bytecode for .NET and other implementations of the  Common Language Infrastructure (CLI), is similarly compact and machine independent. As of 2015, .NET runs only on the x86 and ARM, but the open-source  Mono CLI is available for all the major instruction sets. We will consider Java  bytecode and CIL in some detail in Chapter 16.
-
-Unfortunately, stack-based IF is not well suited to many code improvement  techniques: it limits the ability to eliminate redundancy or improve pipeline performance by reordering calculations. For this reason, languages like Java bytecode  and CIL tend to be used mainly as an external format, not as a representation for  code within a compiler.
-
-In many cases, stack-based code for an expression will occupy fewer bytes, but
-
-```
-EXAMPLE 15.4 
-specify more instructions, than corresponding three-address code. As a concrete 
-Computing Heron’s 
-example, consider Heron’s formula to compute the area of a triangle given the 
-formula 
-lengths of its sides, a, b, and  c:
-```
-
-a + b + c A =  s(s − a)(s − b)(s − c),  where  s =  2
-
 ![Figure 15.4 compares bytecode and...](images/page_816_vector_313.png)
 *Figure 15.4 compares bytecode and three-address versions of this formula. Each  line represents a single instruction. If we assume that a, b, c, and  s are all among  the frst few local variables of the current subroutine, both the Java Virtual Machine  (JVM)  and the  CLI will  be able to  move them  to  or from  the  stack with   single-byte instructions. Consequently, the second-to-last instruction in the left  column is the only one that needs more than a single byte (it takes three: one for*
 
@@ -222,49 +115,6 @@ DESIGN & IMPLEMENTATION
 15.1 Postscript  One of the most pervasive uses of stack-based languages today occurs in document preparation. Many document compilers (TEX, Microsoft Word, etc.)  generate Postscript or the related Portable Document Format (PDF) as their  target language. (Most document compilers employ some special-purpose intermediate language as well, and have multiple back ends, so they can generate  multiple target languages.)
 
 Postscript is stack-based. It is portable, compact, and easy to generate. It  is also written in ASCII, so it can be read (albeit with some diffculty) by human beings. Postscript interpreters are embedded in most professional-quality  printers. Issues of code improvement are relatively unimportant: most of the  time required for printing is consumed by network delays, mechanical paper  transport, and data manipulations embedded in (optimized) library routines;  interpretation time is seldom a bottleneck. Compactness on the other hand is  crucial, because it contributes to network delays.
-
-```
-push a 
-r2 := a 
-push b 
-r3 := b 
-push c 
-r4 := c 
-add  
-r1 :=  r2 +  r3  
-add  
-r1 :=  r1 +  r4  
-push 2 
-r1 := r1 / 2 
-–– s 
-divide 
-pop s 
-push s 
-push s 
-r2 := r1 −r2 
-–– s −a 
-push a 
-subtract 
-push s 
-r3 := r1 −r3 
-–– s −b 
-push b 
-subtract 
-push s 
-r4 := r1 −r4 
-–– s −c 
-push c 
-subtract 
-multiply 
-r3 := r3 × r4 
-multiply 
-r2 := r2 × r3 
-multiply 
-r1 := r1 × r2 
-push sqrt 
-call sqrt 
-call
-```
 
 ![Figure 15.4 Stack-based versus three-address...](images/page_817_vector_336.png)
 *Figure 15.4  Stack-based versus three-address IF. Shown are two versions of code to compute  the area of a triangle using Heron’s formula. At left is a stylized version of Java bytecode or CLI  Common Intermediate Language. At right is corresponding pseudo-assembler for a machine  with three-address instructions. The bytecode requires a larger number of instructions, but  occupies less space.*
@@ -285,30 +135,6 @@ and our 13 instructions will occupy 56 bytes.
 ### 15.3 Code Generation
 
 EXAMPLE 15.5  The back-end structure of Figure 15.1 is too complex to present in any detail in a  Simpler compiler structure  single chapter. To limit the scope of our discussion, we will content ourselves in  this chapter with producing correct but naive code. This choice will allow us to  consider a signifcantly simpler middle and back end. Starting with the structure  of Figure 15.1, we drop the machine-independent code improver and then merge  intermediate and target code generation into a single phase. This merged phase
-
-Character stream
-
-Scanner (lexical analysis)
-
-Token stream
-
-Parser (syntax analysis)
-
-Parse tree
-
-Semantic analysis
-
-Front end  with annotations  Back end
-
-Abstract syntax tree
-
-Naive register allocation
-
-Syntax tree with  additional annotations
-
-Target code generation
-
-Assembly language
 
 ![Figure 15.5 A simpler, nonoptimizing...](images/page_818_vector_263.png)
 *Figure 15.5  A simpler, nonoptimizing compiler structure, assumed in Section 15.3. The target  code generation phase closely resembles the intermediate code generation phase of Figure 15.1.*
@@ -343,82 +169,8 @@ while : stmt1 −→ expr stmt2 stmt3
 
  expr.next free reg := stmt2.next free reg := stmt3.next free reg := stmt1.next free reg   L1 := new label(); L2 := new label()
 
-stmt1.code := [“goto” L1] + [L2 “:”] + stmt2.code + [L1 “:”] + expr.code
-
-+ [“if” expr.reg “goto” L2] + stmt3.code
-
-if : stmt1 −→ expr stmt2 stmt3 stmt4
-
- expr.next free reg := stmt2.next free reg := stmt3.next free reg := stmt4.next free reg :=  stmt1.next free reg   L1 := new label(); L2 := new label()  stmt1.code := expr.code + [“if” expr.reg “goto” L1] + stmt3.code + [“goto” L2]
-
-+ [L1 “:”] + stmt2.code + [L2 “:”] + stmt4.code
-
-assign : stmt1 −→ id expr stmt2
-
- expr.next free reg := stmt2.next free reg := stmt1.next free reg   stmt1.code := expr.code + [id.stp→ name “:=” expr.reg] + stmt2.code
-
-read : stmt1 −→ id1 id2 stmt2
-
-```
- stmt1.code := [“a1 := &” id1.stp→ name] 
-–– fle 
-+ [“call” if id2.stp→ type  =  int  then  “readint”  else  . . . ]  
-+ [id2.stp→ name “:= rv”] + stmt2.code
-```
-
-write : stmt1 −→ id expr stmt2
-
-```
- expr.next free reg := stmt2.next free reg := stmt1.next free reg 
- stmt1.code := [“a1 := &” id.stp→ name] 
-–– fle 
-+ [“a2 :=” expr.reg] 
-–– value 
-+ [“call” if id.stp→ type  =  int  then  “writeint”  else  . . . ]  +  stmt2.code
-```
-
-writeln : stmt1 −→ id stmt2
-
- stmt1.code := [“a1 := &” id.stp→ name] + [“call writeln”] + stmt2.code
-
-null : stmt −→
-
-ϵ
-
- stmt.code := null
-
-‘<>’ : expr1 −→ expr2 expr3
-
- handle op(expr1, expr2, expr3, “=”)
-
-‘>’ : expr1 −→ expr2 expr3
-
- handle op(expr1, expr2, expr3, “>”)
-
-‘− ’ :  expr1 −→ expr2 expr3
-
- handle op(expr1, expr2, expr3, “− ”)
-
-id : expr −→   expr.reg := reg names[expr.next free reg mod k]   expr.code := [expr.reg “:=” expr.stp→ name]
-
-ϵ
-
 ![Figure 15.6 Attribute grammar to...](images/page_819_vector_581.png)
 *Figure 15.6  Attribute grammar to generate code from a syntax tree. Square brackets delimit individual target instructions.  Juxtaposition indicates concatenation within instructions; the ‘+’ operator indicates concatenation of instruction lists. The  handle op macro is used in three of the attribute rules. (continued)*
-
-macro handle op(ref result, L operand, R operand, op : syntax tree node)  result.reg := L operand.reg  L operand.next free reg := result.next free reg  R operand.next free reg := result.next free reg + 1  if R operand.next free reg < k
-
-```
-spill code := restore code := null 
-else 
-spill code := [“*sp :=” reg names[R operand.next free reg mod k]] 
-+ [“sp := sp  − 4”] 
-restore code := [“sp := sp + 4”] 
-+ [reg  names[R operand.next free reg mod k] “:= *sp”] 
-result.code := L operand.code + spill code + R operand.code
-```
-
-+ [result.reg “:=” L operand.reg op R operand.reg] + restore code
 
 ![Figure 15.6 (continued)...](images/page_820_vector_226.png)
 *Figure 15.6  (continued)*
@@ -475,49 +227,6 @@ bound).
 In a particularly complicated fragment of code it is possible to run out of architectural registers. In this case we must spill one or more registers to memory.  Our naive register allocator pushes a register onto the program’s subroutine call  stack, reuses the register for another purpose, and then pops the saved value back  into the register before it is needed again. In effect, architectural registers hold the  top k elements of an expression evaluation stack of effectively unlimited size.  ■  It should be emphasized that our register allocation algorithm, while correct,  makes very poor use of machine resources. We have made no attempt to reorganize expressions to minimize the number of registers used, or to keep commonly used variables in registers over extended periods of time (avoiding loads  and stores). If we were generating medium-level intermediate code, instead of target code, we would employ virtual registers, rather than architectural ones, and  would allocate a new one every time we needed it, never reusing one to hold a different value. Mapping of virtual registers to architectural registers would occur  much later in the compilation process.
 
 EXAMPLE 15.8  Target code for the GCD program appears in Figure 15.7. The frst few lines are  GCD program target code  generated during symbol table traversal, prior to attribute evaluation. Attribute  program.name might be passed to the assembler, to tell it the name of the fle  into which to place the runnable program. A real compiler would probably also  generate assembler directives to embed symbol-table information in the target  program. As in Figure 1.7, the quality of our code is very poor. We will investigate
-
-–– frst few lines generated during symbol table traversal  .data  –– begin static data  i:  .word 0  –– reserve one word to hold i  j:  .word 0  –– reserve one word to hold j  .text  –– begin text (code)  –– remaining lines accumulated into program.code  main:  a1 := &input –– “input” and “output” are fle control blocks
-
-```
-–– located in a library, to be found by the linker 
-call readint 
-–– “readint”, “writeint”, and “writeln” are library subroutines 
-i :=  rv  
-a1 := &input 
-call readint 
-j :=  rv  
-goto L1 
-L2: r1 := i 
-–– body of while loop 
-r2 := j 
-r1 := r1 > r2 
-if r1 goto L3 
-r1 := j 
-–– “else” part 
-r2 := i 
-r1 := r1 − r2 
-j :=  r1  
-goto L4 
-L3: r1 := i 
-–– “then” part 
-r2 := j 
-r1 := r1 − r2 
-i :=  r1  
-L4: 
-L1: r1 := i 
-–– test terminating condition 
-r2 := j 
-r1 := r1 = r2 
-if r1 goto L2 
-a1 := &output 
-r1 := i 
-a2 := r1 
-call writeint 
-a1 := &output 
-call writeln 
-goto exit 
-–– return to operating system
-```
 
 ![Figure 15.7 Target code for...](images/page_822_vector_569.png)
 *Figure 15.7  Target code for the GCD program, generated from the syntax tree of Figure 15.2,  using the attribute grammar of Figure 15.6.*
@@ -619,41 +328,6 @@ These are the principal tasks of an assembler.
 In the early days of computing, most programmers wrote in assembly language. To simplify the more tedious and repetitive aspects of assembly programming, assemblers often provided extensive macro expansion facilities. With the  ubiquity of modern high-level languages, such programmer-centric features have  largely disappeared. Almost all assembly language programs today are written by  compilers.
 
 EXAMPLE 15.10  When passing assembly language directly from the compiler to the assembler, it  Assembly as a final  makes sense to use some internal (records and linked lists) representation. At the  compiler pass
-
-Kernel address space  (inaccessible to  user programs)
-
-0xc0000000
-
-Stack
-
-```
-In early Unix systems with very limited memory, 
-the stack grew downward from the bottom of the 
-text segment; the number 0x08048000 is a legacy 
-of these systems. The sections marked “Shared libraries and memory-mapped fles” typically comprise multiple segments with varying permissions 
-and addresses. (Modern Linux systems randomize 
-the choice of  addresses  to discourage malware.)  The  
-top quarter of the address space belongs to the kernel. Just over 1 MB of space is left unmapped at the 
-bottom of the address space to help catch program 
-bugs in which small integer values are accidentally 
-used as pointers.
-```
-
-Shared libraries and  memory-mapped files
-
-Heap
-
-Uninitialized data
-
-Initialized data
-
-Read-only code  (“text”) and constants
-
-0x08048000
-
-Shared libraries and  memory-mapped files
-
-0x00110000
 
 ![Figure 15.8 Layout of 32-bit...](images/page_826_vector_367.png)
 *Figure 15.8  Layout of 32-bit process address space in x86 Linux (not to scale). Double lines  separate regions with potentially different access permissions.*
@@ -810,84 +484,6 @@ Each to-be-linked compilation unit must be a relocatable object fle. Typically, 
 
 Linking involves two subtasks: relocation and the resolution of external references. Some authors refer to relocation as loading, and call the entire “joining  together” process “link-loading.” Other authors (including the current one) use  “loading” to refer to the process of bringing an executable object fle into memory  for execution. On very simple machines, or on machines with very simple operating systems, loading entails relocation. More commonly, the operating system  uses virtual memory to give every program the impression that it starts at some  standard address. In many systems loading also entails a certain amount of linking (Section C 15.7).
 
-Relocatable object files  Executable object file
-
-Code  …
-
-A B
-
-Imports  M  M
-
-Imports  X
-
-r1 := &M (2300)
-
-300  800
-
-call M (2300)
-
-Exports  M
-
-Exports  X
-
-…
-
-Relocation
-
-500  1800
-
-Relocation
-
-r1 := &L (1800)
-
-2300 900
-
-r2 := Y (3900)
-
-3000
-
-Code  …
-
-Code  …
-
-r3 := X (3300)
-
-500 300  800
-
-L:
-
-r1 := &L (1000)
-
-r1 := &M
-
-1600 1500  400  1000
-
-M:
-
-r2 := Y (400)
-
-call M
-
-r3 := X
-
-Data
-
-L:
-
-X:
-
-M:
-
-Data
-
-Data
-
-X:
-
-Y:
-
-Y:
-
 ![Figure 15.9 Linking relocatable object...](images/page_831_vector_358.png)
 *Figure 15.9  Linking relocatable object files A and B to make an executable object file. For simplicity of presentation, A’s  code section has been placed at offset 0, with B’s code section immediately after, at offset 800 (addresses increase down the  page). To allow the operating system to establish different protections for the code and data segments, A’s data section has  been placed at the next page boundary (offset 3000), with B’s data section immediately after (offset 3500). External references  to M and X have been set to use the appropriate addresses. Internal references to L and Y have been updated by adding in  the starting addresses of B’s code and data sections, respectively.*
 
@@ -1033,40 +629,6 @@ one part  of a  large  system may  require that  other  parts  be recompiled.
 ### 15.9 Exercises
 
 15.1  If you were writing a two-pass compiler, why might you choose a highlevel IF as the link between the front end and the back end? Why might  you choose a medium-level IF?  15.2  Consider a language like Ada or Modula-2, in which a module M can be  divided into a specifcation (header) fle and an implementation (body)  fle for the purpose of separate compilation (Section 10.2.1). Should M’s  specifcation itself be separately compiled, or should the compiler simply  read it in the process of compiling M’s body and the bodies of other modules that use abstractions defned in M? If the specifcation is compiled,  what should the output consist of?  15.3  Many research compilers (e.g., for SR [AO93], Cedar [SZBH86], Lynx  [Sco91], and Modula-3 [Har92]) have used C as their IF. C is well documented and mostly machine independent, and C compilers are much  more widely available than alternative back ends. What are the disadvantages of generating C, and how might they be overcome?  15.4  List as many ways as you can think of in which the back end of a justin-time compiler might differ from that of a more conventional compiler.  What design goals dictate the differences?  15.5  Suppose that k (the number of temporary registers) in Figure 15.6 is 4 (this  is an artifcially small number for modern machines). Give an example of  an expression that will lead to register spilling under our naive register  allocation algorithm.
-
-program
-
-:=
-
-:=
-
-(7)  call
-
-for
-
-(8)  0.0
-
-(10)  1 null
-
-(4)
-
-:= (7)
-
-call  null
-
-:=
-
-call  null  Type  Scope
-
-(6) (9)
-
-÷  Index  Symbol
-
-+
-
-(8)
-
-1  void  type  0  (5)  null 2  int  type  0  (8)  float  3  real  type  0  (8)  (9) 4  getint  func: (1) → (2)  0  5  getreal  func: (1) → (3)  0  (7)  6  putreal  func: (3) → (1)  0  7  n  2 1  8  sum  3 1  9  x  3 1  10  i  2 2
 
 ![Figure 15.10 Syntax tree and...](images/page_837_vector_338.png)
 *Figure 15.10  Syntax tree and symbol table for a program that computes the average of N real numbers. The children of  the for node are the index variable, the lower bound, the upper bound, and the body.*
@@ -1329,84 +891,6 @@ Slots in the local variable array and the operand stack are always 32 bits wide.
 
 Heap  In keeping with the type system of the Java language, a datum in the local  variable array or the operand stack is always either a reference or a value of a  built-in scalar type. Structured data (objects and arrays) must always lie in the
 
-```
-const #1 = Method 
-#6.#15; 
-// 
-java/lang/Object."<init>":()V 
-const #2 = Field 
-#16.#17; 
-// 
-java/lang/System.out:Ljava/io/PrintStream; 
-const #3 = String 
-#18; 
-// 
-Hello, world! 
-const #4 = Method 
-#19.#20; 
-// 
-java/io/PrintStream.println:(Ljava/lang/String;)V 
-const #5 = class 
-#21; 
-// 
-Hello 
-const #6 = class 
-#22; 
-// 
-java/lang/Object 
-const #7 = Asciz 
-<init>; 
-const #8 = Asciz 
-()V; 
-const #9 = Asciz 
-Code; 
-const #10 = Asciz 
-LineNumberTable; 
-const #11 = Asciz 
-main; 
-const #12 = Asciz 
-([Ljava/lang/String;)V; 
-const #13 = Asciz 
-SourceFile; 
-const #14 = Asciz 
-Hello.java; 
-const #15 = NameAndType #7:#8; 
-// 
-"<init>":()V 
-const #16 = class 
-#23; 
-// 
-java/lang/System 
-const #17 = NameAndType #24:#25; 
-// 
-out:Ljava/io/PrintStream; 
-const #18 = Asciz 
-Hello, world!; 
-const #19 = class 
-#26; 
-// 
-java/io/PrintStream 
-const #20 = NameAndType #27:#28; 
-// 
-println:(Ljava/lang/String;)V 
-const #21 = Asciz 
-Hello; 
-const #22 = Asciz 
-java/lang/Object; 
-const #23 = Asciz 
-java/lang/System; 
-const #24 = Asciz 
-out; 
-const #25 = Asciz 
-Ljava/io/PrintStream;; 
-const #26 = Asciz 
-java/io/PrintStream; 
-const #27 = Asciz 
-println; 
-const #28 = Asciz 
-(Ljava/lang/String;)V;
-```
-
 ![Figure 16.1 Content of the...](images/page_848_vector_387.png)
 *Figure 16.1  Content of the JVM constant pool for the program in Example 16.2. The “Asciz” entries (zero-terminated  ASCII) contain null-terminated character-string names. Most other entries pair an indication of the kind of constant with a  reference to one or more additional entries. This output was produced by Sun’s javap tool.*
 
@@ -1533,129 +1017,7 @@ that operate implicitly on the operand stack.
 
 Verification  Safety was one of the principal concerns in the defnition of the  Java language and virtual machine. Many of the things that can “go wrong”  while executing machine code compiled from a more traditional language cannot go wrong when executing bytecode compiled from Java. Some aspects of  safety are obtained by limiting the expressiveness of the byte-code instruction  set or by checking properties at load time. One cannot jump to a nonexistent  address, for example, because method calls specify their targets symbolically by  name, and branch targets are specifed as indices within the code attribute of the  current method. Similarly, where hardware allows displacement addressing from  the frame pointer to access memory outside the current stack frame, the JVM  checks at load time to make sure that references to local variables (specifed by  constant indices into the local variable array) are within the bounds declared.
 
-```
-Code: 
-Stack=3, Locals=4, Args_size=2 
-0: 
-aload_0 
-// this 
-1: 
-getfield 
-#4; //Field head:LLLset$node; 
-4: 
-astore_2 
-5: 
-aload_2 
-// n 
-6: 
-getfield 
-#5; //Field LLset$node.next:LLLset$node; 
-9: 
-ifnull 
-31 
-// conditional branch 
-12: 
-aload_2 
-13: 
-getfield 
-#5; //Field LLset$node.next:LLLset$node; 
-16: 
-getfield 
-#6; //Field LLset$node.val:I 
-19: 
-iload_1 
-// v 
-20: 
-if_icmpge 
-31 
-23: 
-aload_2 
-24: 
-getfield 
-#5; //Field LLset$node.next:LLLset$node; 
-27: 
-astore_2 
-28: 
-goto 
-5 
-31: 
-aload_2 
-32: 
-getfield 
-#5; //Field LLset$node.next:LLLset$node; 
-35: 
-ifnull 
-49 
-38: 
-aload_2 
-39: 
-getfield 
-#5; //Field LLset$node.next:LLLset$node; 
-42: 
-getfield 
-#6; //Field LLset$node.val:I 
-45: 
-iload_1 
-46: 
-if_icmple 
-76 
-49: 
-new 
-#2; //class LLset$node 
-52: 
-dup 
-53: 
-aload_0 
-54: 
-invokespecial #3; //Method LLset$node."<init>":(LLLset;)V 
-57: 
-astore_3 
-58: 
-aload_3 
-// t 
-59: 
-iload_1 
-60: 
-putfield 
-#6; //Field LLset$node.val:I 
-63: 
-aload_3 
-64: 
-aload_2 
-65: 
-getfield 
-#5; //Field LLset$node.next:LLLset$node; 
-68: 
-putfield 
-#5; //Field LLset$node.next:LLLset$node; 
-71: 
-aload_2 
-72: 
-aload_3 
-73: 
-putfield 
-#5; //Field LLset$node.next:LLLset$node; 
-76: 
-return
-```
-
 public void insert(int v) {  node n = head;
-
-while (n.next != null  && n.next.val < v) {
-
-n = n.next;
-
-}  if (n.next == null  || n.next.val > v) {
-
-node t = new node();
-
-t.val = v;
-
-t.next = n.next;
-
-n.next = t;
-
-} // else v already in set  }
 
 ![Figure 16.2 Java source and...](images/page_852_vector_564.png)
 *Figure 16.2  Java source and bytecode for a list insertion method. Output on the right was produced by Oracle’s javac  (compiler) and javap (disassembler) tools, with additional comments inserted by hand.*
@@ -2013,38 +1375,6 @@ EXAMPLE 16.16  Much of the technology of dynamic optimization was pioneered by t
 
 An example of such a trace appears in Figure 16.3. Procedure print matching  takes a set and a predicate as argument, and prints all elements of the set that  match the predicate. At run time, Dynamo may discover that the procedure is  frequently called with a particular predicate p that is almost never true. The hot  path through the fow graph (left side of the fgure) can then be turned into the  trace at the right. If print matching is sometimes called with a different predicate p, it will use a separate copy of the code. Branches out of the trace (in the
 
-procedure print_matching(S : set, p : predicate)  foreach e in S  if p(e)  print e prologue
-
-loop head
-
-loop head
-
-test1
-
-p1
-
-test1
-
-p1
-
-test2
-
-pN
-
-pN
-
-print1
-
-test2
-
-printN
-
-loop foot
-
-loop foot
-
-epilogue
-
 ![Figure 16.3 Creation of a...](images/page_865_vector_360.png)
 *Figure 16.3  Creation of a partial execution trace. Procedure print matching (shown at top)  is often called with a particular predicate, p, which is usually false. The control fow graph (left,  with hot blocks in bold and the hot path in grey) can be reorganized at run time to improve  instruction-cache locality and to optimize across abstraction boundaries (right).*
 
@@ -2211,69 +1541,10 @@ Getting information on a  particular class
 
 Object o = new Object();  System.out.println(o.getClass().getName());  // "java.lang.Object"
 
-```
-Alternatively, we can append the pseudo feld name .class to the name of the 
-type itself:
-```
-
-System.out.println(Object.class.getName());  // "java.lang.Object"
-
-```
-In the reverse direction, we can use static method forName of class Class to 
-obtain a Class object for a type with a given (fully qualifed) character string 
-name:
-```
-
-Class stringClass = Class.forName("java.lang.String");  Class intArrayClass = Class.forName("[I");
-
-```
-Method forName works only for reference types. For built-ins, one can either use 
-the .class syntax or the .TYPE feld of one of the standard wrapper classes:
-```
-
-Class intClass = Integer.TYPE;  ■
-
-```
-Given a Class object c, one  can  call  c.getSuperclass() to obtain a Class 
-object for c’s parent. In a similar vein, c.getClasses() will return an array of 
-Class objects, one for each public class declared within c’s class. Perhaps more 
-interesting, c.getMethods(), c.getFields(), and  c.getConstructors() will 
-return arrays of objects representing all c’s public methods, felds, and constructors (including those inherited from ancestor classes). The elements of these 
-arrays are instances of classes Method, Field, and  Constructor, respectively. 
-These are declared in package java.lang.reflect, and serve roles analogous to 
-that of Class. The many methods of these classes allow one to query almost any 
-aspect of the Java type system, including modifers (static, private, final, 
-abstract, etc.), type parameters of generics (but not of generic instances—those 
-are erased), interfaces implemented by classes, exceptions thrown by methods, 
-and much more. Perhaps the most conspicuous thing that is not available through 
-the Java refection API is the bytecode that implements methods. Even this, however, can be examined using third-party tools such as the Apache Byte Code Engineering Library (BCEL) or ObjectWeb’s ASM, both of which are open source.
-```
-
-EXAMPLE 16.22
-
 ![Figure 16.4 shows Java code...](images/page_872_vector_570.png)
 *Figure 16.4 shows Java code to list the methods declared in (but not inherited  by) a given class. Also shown is output for AccessibleObject, the  parent  class   of Method, Field, and  Constructor. (The primary purpose of this class is to*
 
 Listing the methods of a  Java class
-
-import static java.lang.System.out;
-
-public static void listMethods(String s)
-
-```
-throws java.lang.ClassNotFoundException { 
-Class c = Class.forName(s); 
-// throws if class not found 
-for (Method m : c.getDeclaredMethods()) {
-```
-
-out.print(Modifier.toString(m.getModifiers()) + " ");  out.print(m.getReturnType().getName() + " ");  out.print(m.getName() + "(");  boolean first = true;  for (Class p : m.getParameterTypes()) {
-
-if (!first) out.print(", ");  first = false;  out.print(p.getName());  }  out.println(") ");  }  }
-
-Sample output for listMethods("java.lang.reflect.AccessibleObject"):
-
-public java.lang.annotation.Annotation getAnnotation(java.lang.Class)  public boolean isAnnotationPresent(java.lang.Class)  public [Ljava.lang.annotation.Annotation; getAnnotations()  public [Ljava.lang.annotation.Annotation; getDeclaredAnnotations()  public static void setAccessible([Ljava.lang.reflect.AccessibleObject;, boolean)  public void setAccessible(boolean)  private static void setAccessible0(java.lang.reflect.AccessibleObject, boolean)  public boolean isAccessible()
 
 ![Figure 16.4 Java reflection code...](images/page_873_vector_407.png)
 *Figure 16.4  Java reflection code to list the methods of a given class. Sample output is shown below below the code.*
@@ -2383,25 +1654,6 @@ EXAMPLE 16.26  The C# equivalent of Figure 16.5 appears in Figure 16.6. Here use
 
 EXAMPLE 16.27  An obvious use is the automated creation of documentation. Java annotations  javadoc  (frst introduced in Java 5) were inspired at least in part by experience with the
 
-```
-import static java.lang.System.out; 
-import java.lang.annotation.*;
-```
-
-@Retention(RetentionPolicy.RUNTIME)  @interface Documentation{  String author();  String date();  double revision();  String docString();  }
-
-```
-@Documentation( 
-author = "Michael Scott", 
-date = "July, 2015", 
-revision = 0.1, 
-docString = "Illustrates the use of annotations" 
-) 
-public class Annotate {
-```
-
-public static void main(String[] args) {  Class<Annotate> c = Annotate.class;  Documentation a = c.getAnnotation(Documentation.class);  out.println("author:  " + a.author());  out.println("date:  " + a.date());  out.println("revision:  " + a.revision());  out.println("docString: " + a.docString());  }  }
-
 ![Figure 16.5 User-defined annotations in...](images/page_876_vector_374.png)
 *Figure 16.5  User-defined annotations in Java. Retention is a built-in annotation for annotations. It indicates here that Documentation annotations should be saved in the class fle produced by the Java compiler, where they will be available to run-time refection.*
 
@@ -2410,32 +1662,6 @@ earlier javadoc tool, which produces HTML-formatted documentation based on  stru
 EXAMPLE 16.28  The various communication technologies in .NET make extensive use of atIntercomponent  tributes to indicate which methods should be available for remote execution, how  communication  their parameters should be marshalled into messages, which classes need serialization code, and so forth. Automatic tools use these attributes to create appropriate stubs for remote communication, as described (in language-neutral terms)  in Section C 13.5.4.  ■
 
 EXAMPLE 16.29  In a similar vein, the .NET LINQ mechanism uses attributes to defne the mapAttributes for LINQ  ping between classes in a user program and tables in a relational database, allow­
-
-using System;  using System.Reflection;
-
-```
-[AttributeUsage(AttributeTargets.Class)] 
-// Documentation attribute can applied only to classes 
-public class DocumentationAttribute : System.Attribute { 
-public string author; 
-public string date; 
-// these should perhaps be properties 
-public double revision; 
-public string docString; 
-public DocumentationAttribute(string a, string d, double r, string s) {
-```
-
-author = a;  date = d;  revision = r;  docString = s;  }  }
-
-```
-[Documentation("Michael Scott", 
-"July, 2015", 0.1, "Illustrates the use of attributes")] 
-public class Attr {
-```
-
-public static void Main(string[] args) {  System.Reflection.MemberInfo tp = typeof(Attr);  object[] attrs =
-
-tp.GetCustomAttributes(typeof(DocumentationAttribute), false);  // false means don't search ancestor classes and interfaces  DocumentationAttribute a = (DocumentationAttribute) attrs[0];  Console.WriteLine("author:  " + a.author);  Console.WriteLine("date:  " + a.date);  Console.WriteLine("revision:  " + a.revision);  Console.WriteLine("docString: " + a.docString);  }  }
 
 ![Figure 16.6 User-defined attributes in...](images/page_877_vector_407.png)
 *Figure 16.6  User-defined attributes in C#. This code is roughly equivalent to the Java version in Figure 16.5. AttributeUsage  is a predefned attribute indicating properties of the attribute to whose declaration it is attached.*

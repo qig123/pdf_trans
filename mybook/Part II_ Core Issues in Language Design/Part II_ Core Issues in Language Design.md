@@ -230,43 +230,6 @@ convention, and associates right-to-left, so 4**3**2 is 262144 and not 4096.
 In Ada, exponentiation does not associate: one must write either (4**3)**2 or
 ```
 
-Fortran  Pascal  C  Ada
-
-++, -- (post-inc., dec.)
-
-**  not  ++, -- (pre-inc., dec.),  abs (absolute value),  +, - (unary),  not, **  &, * (address, contents of),  !, ~ (logical, bit-wise not)
-
-*, /  *, /,  * (binary), /,  *, /, mod, rem  div, mod, and  % (modulo division)
-
-+, - (unary  +, - (unary and  +, - (binary)  +, - (unary)  and binary)  binary), or
-
-```
-<<, >> 
-+, - (binary), 
-(left and  right bit  shift)  
-& (concatenation)
-```
-
-.eq., .ne., .lt.,  <, <=, >, >=,  <, <=, >, >=  =, /= , <, <=, >, >=  .le., .gt., .ge.  =, <>, IN  (inequality tests)  (comparisons)
-
-.not.  ==, != (equality tests)
-
-& (bit-wise and)
-
-^ (bit-wise exclusive or)
-
-| (bit-wise inclusive or)
-
-.and.  && (logical and)  and, or, xor  (logical operators)
-
-.or.  || (logical or)
-
-.eqv., .neqv.  ?: (if ...then ...else)  (logical comparisons)
-
-=, +=, -=, *=, /=, %=,  >>=, <<=, &=, ^=, |=  (assignment)
-
-, (sequencing)
-
 ![Figure 6.1 Operator precedence levels...](images/page_261_vector_480.png)
 *Figure 6.1  Operator precedence levels in Fortran, Pascal, C, and Ada. The operators at the top of the fgure group most  tightly.*
 
@@ -362,14 +325,6 @@ expressions. In C one may write
 (f(a)+3)->b[c] = 2;
 
 In this expression f(a) returns a pointer to some element of an array of pointers  to structures (records). The assignment places the value 2 into the c-th element
-
-a 4  a 4
-
-b 2  b
-
-2
-
-c 2  c
 
 ![Figure 6.2 The value (left)...](images/page_264_vector_163.png)
 *Figure 6.2  The value (left) and reference (right) models of variables. Under the reference  model, it becomes important to distinguish between variables that refer to the same object and  variables that refer to different objects whose values happen (at the moment) to be equal.*
@@ -1383,28 +1338,8 @@ Rather than test its controlling expression sequentially against a series of pos
 
 EXAMPLE 6.54  in a single instruction. The general form of the anticipated target code appears  Jump tables  in Figure 6.3. The elided calculation at label L6 can take any of several forms.  The most common of these simply indexes into an array, as shown in Figure 6.4.
 
-goto L6  –– jump to code to compute address  L1: clause A
-
-goto L7  L2: clause B
-
-goto L7  L3: clause C
-
-```
-goto L7 
-. . .  
-L4: clause D
-```
-
-goto L7  L5: clause E
-
-goto L7
-
-L6: r1 := . . .  –– computed target of branch  goto *r1  L7:
-
 ![Figure 6.3 General form of...](images/page_291_vector_256.png)
 *Figure 6.3  General form of target code generated for a five-arm case statement.*
-
-T:  &L1  –– controlling expression = 1  &L2  &L3  &L3  &L3  &L5  &L2  &L5  &L5  &L4  –– controlling expression = 10  L6: r1 := . . .  –– calculate controlling expression  if r1 < 1 goto L5  if r1 > 10 goto L5  –– L5 is the “else” arm  r1 −:= 1  –– subtract off lower bound  r1 := T[r1]  goto *r1  L7:
 
 ![Figure 6.4 Jump table to...](images/page_291_vector_483.png)
 *Figure 6.4  Jump table to control branching in a case statement. This code replaces the last  three lines of Figure 6.3.*
@@ -1695,27 +1630,6 @@ would be written as follows in Python:
 
 7  Unfortunately, terminology is not consistent across languages. Euclid uses the term “generator”  for what are called “iterator objects” here. Python uses it for what are called “true iterators” here.
 
-```
-class BinTree: 
-def __init__(self): 
-# constructor 
-self.data = self.lchild = self.rchild = None 
-... 
-# other methods: insert, delete, lookup, ...
-```
-
-```
-def preorder(self): 
-if self.data != None: 
-yield self.data 
-if self.lchild != None: 
-for d in self.lchild.preorder(): 
-yield d 
-if self.rchild != None: 
-for d in self.rchild.preorder(): 
-yield d
-```
-
 ![Figure 6.5 Python iterator for...](images/page_302_vector_244.png)
 *Figure 6.5  Python iterator for preorder enumeration of the nodes of a binary tree. Because  Python is dynamically typed, this code will work for any data that support the operations needed  by insert, lookup, and so on (probably just <). In a statically typed language, the BinTree  class would need to be generic.*
 
@@ -1762,31 +1676,6 @@ cout << n << "\n";  }
 DESIGN & IMPLEMENTATION
 
 6.9 “True” iterators and iterator objects  While the iterator library mechanisms of C++ and Java are highly useful,  it is worth emphasizing that they are not the functional equivalents of “true”  iterators, as found in Clu, Python, Ruby, and C#. Their key limitation is the  need to maintain all intermediate state in the form of explicit data structures,  rather than in the program counter and local variables of a resumable execution context.
-
-```
-class BinTree<T> implements Iterable<T> { 
-BinTree<T> left; 
-BinTree<T> right; 
-T val;  
-... 
-// other methods: insert, delete, lookup, ...
-```
-
-public Iterator<T> iterator() {
-
-```
-return new TreeIterator(this); 
-} 
-private class TreeIterator implements Iterator<T> {
-```
-
-private Stack<BinTree<T>> s = new Stack<BinTree<T>>();  TreeIterator(BinTree<T> n) {
-
-if (n.val != null) s.push(n);  }  public boolean hasNext() {
-
-return !s.empty();  }  public T next() {
-
-if (!hasNext()) throw new NoSuchElementException();  BinTree<T> n = s.pop();  if (n.right != null) s.push(n.right);  if (n.left != null) s.push(n.left);  return n.val;  }  public void remove() {  throw new UnsupportedOperationException();  }  }  }
 
 ![Figure 6.6 Java code for...](images/page_304_vector_408.png)
 *Figure 6.6  Java code for preorder enumeration of the nodes of a binary tree. The nested  TreeIterator class uses an explicit Stack object (borrowed from the standard library) to keep  track of subtrees whose nodes have yet to be enumerated. Java generics, specifed as <T> type  arguments for BinTree, Stack, Iterator, and  Iterable, allow next to return an object of  the appropriate type, rather than the undifferentiated Object. The  remove method is part of  the Iterator interface, and must therefore be provided, if only as a placeholder.*
@@ -3786,8 +3675,6 @@ Ord. Type consistency in Haskell can thus be verifed entirely at compile time:
 there is no need for run-time checks.
 ```
 
-let compare x p q =  if x = p then  if x = q then "both"  else "first"  else  if x = q then "second"  else "neither";;
-
 ![Figure 7.1 An OCaml program...](images/page_363_vector_156.png)
 *Figure 7.1  An OCaml program to illustrate checking for type consistency.*
 
@@ -3960,18 +3847,6 @@ EXAMPLE 7.48  entire classes. Among other things, such classes may serve as cont
 
 EXAMPLE 7.49  C++, for example, a generic can be parameterized by values as well. We can see  Generic parameters  an example in Figure 7.3, where an integer parameter has been used to specify the
 
-function min(x, y : integer)  generic  return integer is  begin  if x < y then return x;  else return y;  end if;  end min;
-
-type T is private;  with function "<"(x, y : T) return Boolean;  function min(x, y : T) return T;
-
-function min(x, y : T) return T is  begin
-
-if x < y then return x;  else return y;  end if;  end min;
-
-function min(x, y : long_float)  return long_float is  begin  if x < y then return x;  else return y;  end if;  end min;
-
-function int_min is new min(integer, "<");  function real_min is new min(long_float, "<");  function string_min is new min(string, "<");  function date_min is new min(date, date_precedes);
-
 ![Figure 7.2 Overloading (left) versus...](images/page_367_vector_256.png)
 *Figure 7.2  Overloading (left) versus generics (right) in Ada.*
 
@@ -3999,19 +3874,6 @@ NB: While Haskell also provides something called a Functor (specifcally,
 a type class that supports a mapping function), its use of the term has little in 
 common with that of OCaml and SML.
 ```
-
-```
-template<class item, int max_items = 100> 
-class queue {
-```
-
-item items[max_items];  int next_free, next_full, num_items;  public:
-
-queue() : next_free(0), next_full(0), num_items(0) { }  bool enqueue(const item& it) {
-
-if (num_items == max_items) return false;  ++num_items;  items[next_free] = it;  next_free = (next_free + 1) % max_items;  return true;  }  bool dequeue(item* it) {
-
-if (num_items == 0) return false;  --num_items;  *it = items[next_full];  next_full = (next_full + 1) % max_items;  return true;  }  };  ...  queue<process> ready_list;  queue<int, 50> int_queue;
 
 ![Figure 7.3 Generic array-based queue...](images/page_368_vector_321.png)
 *Figure 7.3  Generic array-based queue in C++.*
@@ -4150,54 +4012,6 @@ string strings[30];
 we can perform the following calls without instantiating anything explicitly:
 
 sort(ints, 10);  sort(reals, 50);  sort(strings, 30);
-
-Explicit (generics)  Implicit  Ada  C++  Java  C#  Lisp  ML
-
-Applicable to  subroutines,  modules
-
-subroutines,  classes
-
-subroutines,  classes
-
-subroutines,  classes
-
-functions  functions
-
-Abstract over  types; subroutines; values of  arbitrary types
-
-types; enum,  int, and pointer  constants
-
-types only  types only  types only  types only
-
-Constraints  explicit  (varied)
-
-implicit  explicit  (inheritance)
-
-explicit  (inheritance)
-
-implicit  implicit
-
-Checked at  compile time  (defnition)
-
-compile time  (instantiation)
-
-compile time  (defnition)
-
-compile time  (defnition)
-
-run time  compile time  (inferred)
-
-Natural  implementation
-
-multiple copies  multiple copies  single copy  (erasure)
-
-multiple copies  (reifcation)
-
-single copy  single copy
-
-Subroutine  instantiation
-
-explicit  implicit  implicit  implicit  —  —
 
 ![Figure 7.4 Mechanisms for parametric...](images/page_372_vector_294.png)
 *Figure 7.4  Mechanisms for parametric polymorphism in Ada, C++, Java, C#, Lisp, and ML. Erasure and reifcation are  discussed in Section C 7.3.2.*
@@ -4597,16 +4411,6 @@ the struct tag to be used as a type name without the struct prefx; in effect, it
 performs the typedef implicitly.
 ```
 
-4 bytes/32 bits
-
-name
-
-atomic_number
-
-atomic_weight
-
-metallic
-
 ![Figure 8.1 Likely layout in...](images/page_387_vector_170.png)
 *Figure 8.1  Likely layout in memory for objects of type element on a 32-bit machine. Alignment restrictions lead to the shaded “holes.”*
 
@@ -4634,38 +4438,6 @@ type element = record
 
 ...  end;  pragma Pack(element);
 
-struct T {
-
-int j;  int k;  };  struct S {
-
-i
-
-n.j
-
-n.k
-
-int i;  struct T n;
-
-};
-
-```
-class T {
- public int j;
- public int k; 
-} 
-class S {
- public int i;
- public T n;
-```
-
-i
-
-n j
-
-k
-
-}
-
 ![Figure 8.2 Layout of memory...](images/page_388_vector_263.png)
 *Figure 8.2  Layout of memory for a nested struct (class) in C (top) and Java (bottom).  This layout refects the fact that n is an embedded value in C, but a reference in Java. We have  assumed here that integers and pointers have equal size.*
 
@@ -4681,18 +4453,6 @@ my_element := copper;
 
 Ada also allows records to be compared for equality (if my_element = copper  then ...). Many other languages (including C and its successors) support assignment but not equality testing, though C++ allows the programmer to defne  the latter for individual record types.  ■
 
-4 bytes/32 bits
-
-atomic_
-
-name
-
-number
-
-atomic_weight
-
-metallic
-
 ![Figure 8.3 Likely memory layout...](images/page_389_vector_155.png)
 *Figure 8.3  Likely memory layout for packed element records. The atomic_number and  atomic_weight felds are nonaligned, and can only be read or written (on most machines) via  multi-instruction sequences.*
 
@@ -4703,14 +4463,6 @@ EXAMPLE 8.10  In addition to complicating comparisons, holes in records waste sp
 DESIGN & IMPLEMENTATION
 
 8.2 The order of record felds  Issues of record feld order are intimately tied to implementation tradeoffs:  Holes in records waste space, but alignment makes for faster access. If holes  contain garbage we can’t compare records by looping over words or bytes, but  zeroing out the holes would incur costs in time and code space. Predictable  layout is important for mirroring hardware structures in “systems” languages,  but reorganization may be advantageous in large records if we can group frequently accessed felds together, so they lie in the same cache line.
-
-4 bytes/32 bits
-
-name  metallic
-
-atomic_number
-
-atomic_weight
 
 ![Figure 8.4 Rearranging record fields...](images/page_390_vector_156.png)
 *Figure 8.4  Rearranging record fields to minimize holes. By sorting felds according to the size  of their alignment constraint, a compiler can minimize the space devoted to holes, while keeping  the felds aligned.*
@@ -4869,10 +4621,6 @@ table[name] = value;  // value is implicitly  }  }  }  // a parameter of set  ..
 
 Why the difference? In C++, operator[] can return a reference (an explicit  l-value), which can be used on either side of an assignment (further information can be found under “References in C++” in Section 9.3.1). C# has no  comparable l-value mechanism, so it needs separate methods to get and set  the value of d["Jane Doe"].
 
-matrix(3:6, 4:7)  matrix(6:, 5)
-
-matrix(:4, 2:8:2)  matrix(:, (/2, 5, 9/))
-
 ![Figure 8.5 Array slices (sections)...](images/page_395_vector_302.png)
 *Figure 8.5  Array slices (sections) in Fortran 90. Much like the values in the header of an  enumeration-controlled loop (Section 6.5.1), a : b : c in a subscript indicates positions a, a + c,  a + 2c,  . . .  through  b. If  a or b is omitted, the corresponding bound of the array is assumed. If c is  omitted, 1 is assumed. It is even possible to use negative values of c in order to select positions in  reverse order. The slashes in the second subscript of the lower right example delimit an explicit  list of positions.*
 
@@ -4954,10 +4702,6 @@ The name “dope  vector”  presumably derives  from  the notion of  “having 
 has been drugged (“doped”) is of signifcant, if unethical, use in placing bets.
 ```
 
-void square(int n, double M[n][n]) {  double T[n][n];  for (int i = 0; i < n; i++) {  // compute product into T  for (int j = 0; j < n; j++) {  double s = 0;  for (int k = 0; k < n; k++) {
-
-s += M[i][k] * M[k][j];  }  T[i][j] = s;  }  }  for (int i = 0; i < n; i++) {  // copy T back into M  for (int j = 0; j < n; j++) {  M[i][j] = T[i][j];  }  }  }
-
 ![Figure 8.6 A dynamic local...](images/page_398_vector_265.png)
 *Figure 8.6  A dynamic local array in C. Function square multiplies a matrix by itself and  replaces the original with the product. To do so it needs a scratch array of the same shape as  the parameter. Note that the declarations of M and T both rely on parameter n.*
 
@@ -4968,30 +4712,6 @@ Ada and C (though not C++) support dynamic shape for both parameters and
 EXAMPLE 8.18  local variables. Among other things, local arrays can be declared to match the  Local arrays of dynamic  shape of conformant array parameters, facilitating the implementation of algoshape in C  rithms that require temporary space for calculations. Figure 8.6 contains a simple  example in C. Function square accepts an array parameter M of dynamic shape  and allocates a local variable T of the same dynamic shape.  ■
 
 EXAMPLE 8.19  In many languages, including Ada and C, the shape of a local array becomes  Stack allocation of  fxed at elaboration time. For such arrays it is still possible to place the space for  elaborated arrays  the array in the stack frame of its subroutine, but an extra level of indirection is  required (see Figure 8.7). In order to ensure that every local object can be found  using a known offset from the frame pointer, we divide the stack frame into a  fixed-size part and a variable-size part. An object whose size is statically known  goes in the fxed-size part. An object whose size is not known until elaboration  time goes in the variable-size part, and a pointer to it, together with a dope vector, goes in the fxed-size part. If the elaboration of the array is buried in a nested  block, the compiler delays allocating space (i.e., changing the stack pointer) until  the block is entered. It still allocates space for the pointer and the dope vector
-
-sp
-
--- Ada:  procedure foo(size : integer) is
-
-Variable-size  M : array (1..size, 1..size)  part of the frame  of long_float;  ...  begin
-
-M
-
-Temporaries
-
-...  end foo;
-
-Pointer to M
-
-Local  variables  Fixed-size part  of the frame  // C99:  void foo(int size) {  double M[size][size];  ...  fp }
-
-Dope vector
-
-Bookkeeping
-
-Return address
-
-Arguments  and returns
 
 ![Figure 8.7 Elaboration-time allocation of...](images/page_399_vector_354.png)
 *Figure 8.7  Elaboration-time allocation of arrays. Here M is a square two-dimensional array  whose bounds are determined by a parameter passed to foo at run time. The compiler arranges  for a pointer to M and a dope vector to reside at static offsets from the frame pointer. M cannot  be placed among the other local variables because it would prevent those higher in the frame  from having static offsets. Additional variable-size arrays or records are easily accommodated.*
@@ -5077,8 +4797,6 @@ EXAMPLE 8.23  caching (Section C 5.1). Figure 8.8 shows the orientation of cache
 
 4  Fran Allen (1932–) joined IBM’s T. J. Watson Research Center in 1957, and stayed for her entire  professional career. Her seminal paper, Program Optimization [All69] helped launch the feld  of code improvement. Her PTRAN (Parallel TRANslation) group, founded in the early 1980s,  developed much of the theory of automatic parallelization. In 1989 Dr. Allen became the frst  woman to be named an IBM Fellow. In 2006 she became the frst to receive the ACM Turing  Award.
 
-Row-major order  Column-major order
-
 ![Figure 8.8 Row- and column-major...](images/page_402_vector_245.png)
 *Figure 8.8  Row- and column-major memory layout for two-dimensional arrays. In row-major  order, the elements of a row are contiguous in memory; in column-major order, the elements  of a column are contiguous. The second cache line of each array is shaded, on the assumption  that each element is an eight-byte foating-point number, that cache lines are 32 bytes long (a  common size), and that the array begins at a cache line boundary. If the array is indexed from  A[0,0] to A[9,9], then in the row-major case elements A[0,4] through A[0,7] share a cache line;  in the column-major case elements A[4,0] through A[7,0] share a cache line.*
 
@@ -5150,40 +4868,6 @@ DESIGN & IMPLEMENTATION
 
 8.4 Array layout  The layout of arrays in memory, like the ordering of record felds, is intimately  tied to tradeoffs in design and implementation. While column-major layout  appears to offer no advantages on modern machines, its continued use in Fortran means that programmers must be aware of the underlying implementation in order to achieve good locality in nested loops. Row-pointer layout,  likewise, has no performance advantage on modern machines (and a likely  performance penalty, at least for numeric code), but it is a more natural ft for  the “reference to object” data organization of languages like Java. Its impacts  on space consumption and locality may be positive or negative, depending on  the details of individual applications.
 
-char days[][10] = {  "Sunday", "Monday", "Tuesday",  "Wednesday", "Thursday",  "Friday", "Saturday"  };  ...  days[2][3] == 's';  /* in Tuesday */
-
-char *days[] = {  "Sunday", "Monday", "Tuesday",  "Wednesday", "Thursday",  "Friday", "Saturday"  };  ...  days[2][3] == 's';  /* in Tuesday */
-
-S u n d a y
-
-S u n d a y  M o n d a y  T u e s d a y  W e d n e s d a y  T h u r s d a y  F r i d a y  S a t u r d a y
-
-M o n d a y
-
-T
-
-u
-
-e s d a y
-
-W e d n e s
-
-d a y
-
-s h
-
-T
-
-u r
-
-d a y
-
-F i r
-
-d a y
-
-d a y S a t u r
-
 ![Figure 8.9 Contiguous array allocation...](images/page_404_vector_279.png)
 *Figure 8.9  Contiguous array allocation vs row pointers in C. The declaration on the left is a true two-dimensional array. The  slashed boxes are NUL bytes; the shaded areas are holes. The declaration on the right is a ragged array of pointers to arrays of  characters. The arrays of characters may be located anywhere in memory—next to each other or separated, and in any order.  In both cases, we have omitted bounds in the declaration that can be deduced from the size of the initializer (aggregate). Both  data structures permit individual characters to be accessed using double subscripts, but the memory layout (and corresponding  address arithmetic) is quite different.*
 
@@ -5213,20 +4897,6 @@ number of elements in a row (assuming row-major layout). The size of a plane
 (S1) is  the  size  of  a row (S2) times the number of rows in a plane. The address of 
 A[i, j, k] is then
 ```
-
-L3
-
-L1
-
-L2
-
-j
-
-k
-
-Address of A
-
-i
 
 ![Figure 8.10 Virtual location of...](images/page_405_vector_247.png)
 *Figure 8.10  Virtual location of an array with nonzero lower bounds.  By computing the  constant portions of an array index at compile time, we effectively index into an array whose  starting address is offset in memory, but whose lower bounds are all zero.*
@@ -5518,26 +5188,6 @@ our tree could be specifed textually as ‚(#\R (#\X ()()) (#\Y (#\Z ()())
 case, the outermost such list contains three elements: the character R and nested
 ```
 
-Node R
-
-Node X
-
-Node Y
-
-Z R
-
-Node
-
-Node W
-
-X
-
-Y
-
-W Z
-
-Empty
-
 ![Figure 8.11 Implementation of a...](images/page_413_vector_251.png)
 *Figure 8.11  Implementation of a tree in ML. The abstract (conceptual) tree is shown at the  lower left.*
 
@@ -5562,36 +5212,6 @@ an exception  to  this  rule,  see Exercise  8.21.)  In ML,  the imperative feat
 Even when writing in a functional style, one often fnds a need for types that
 
 EXAMPLE 8.35  are mutually recursive. In a compiler, for example, it is likely that symbol table  Mutually recursive types  records and syntax tree nodes will need to refer to each other. A syntax tree node  in OCaml  that represents a subroutine call will need to refer to the symbol table record that  represents the subroutine. The symbol table record, for its part, will need to refer  to the syntax tree node at the root of the subtree that represents the subroutine’s  code. If types are declared one at a time, and if names must be declared before  they can be used, then whichever mutually recursive type is declared frst will be
-
-C  C
-
-C
-
-R
-
-A
-
-C  C  C  C
-
-C  C
-
-A
-
-X
-
-A
-
-Y
-
-C  C  C
-
-C  C  C
-
-A
-
-A  W
-
-Z
 
 ![Figure 8.12 Implementation of a...](images/page_414_vector_286.png)
 *Figure 8.12  Implementation of a tree in Lisp. A diagonal slash through a box indicates a null pointer. The C and A tags serve  to distinguish the two kinds of memory blocks: cons cells and blocks containing atoms.*
@@ -5653,12 +5273,6 @@ Pointer-based tree
 EXAMPLE 8.40
 
 Pointer dereferencing
-
-R
-
-X  Y
-
-Z  W
 
 ![Figure 8.13 Typical implementation of...](images/page_416_vector_176.png)
 *Figure 8.13  Typical implementation of a tree in a language with explicit pointers.  Figure 8.12, a diagonal slash through a box indicates a null pointer.*
@@ -5997,22 +5611,6 @@ In order for reference counts to work, the language implementation must be  able
 
 EXAMPLE 8.52  The most important problem with reference counts stems from their defniReference counts and  tion of a “useful object.” While it is defnitely true that an object is useless if no  circular structures  references to it exist, it may also be useless when references do exist. As shown  in Figure 8.14, reference counts may fail to collect circular structures. They work  well only for structures that are guaranteed to be noncircular. Many language  implementations use reference counts for variable-length strings; strings never  contain references to anything else. Perl uses reference counts for all dynamically allocated data; the manual warns the programmer to break cycles manually  when data aren’t needed anymore. Some purely functional languages may also be  able to use reference counts safely in all cases, if the lack of an assignment statement prevents them from introducing circularity. Finally, reference counts can  be used to reclaim tombstones. While it is certainly possible to create a circular  structure with tombstones, the fact that the programmer is responsible for explicit deallocation of heap objects implies that reference counts will fail to reclaim  tombstones only when the programmer has failed to reclaim the objects to which  they refer.  ■
 
-Stack  Heap
-
-stooges  2  "larry"
-
-1  "moe"
-
-1  "curly"
-
-stooges := nil;
-
-stooges
-
-1 "larry"  1  "moe"
-
-1 "curly"
-
 ![Figure 8.14 Reference counts and...](images/page_425_vector_283.png)
 *Figure 8.14  Reference counts and circular lists. The list shown here cannot be found via any  program variable, but because it is circular, every cell contains a nonzero count.*
 
@@ -6066,62 +5664,6 @@ To return from block X to block U (after part (d) of the fgure), the collector w
 Stop-and-Copy  In a language with variable-size heap blocks, the garbage collector can reduce external fragmentation by performing storage compaction.
 
 7  In many language implementations, the stack and heap grow toward each other from opposite  ends of memory (Section 15.4); if the heap is full, the stack can’t grow. In a system with virtual  memory the distance between the two may theoretically be enormous, but the space that backs  them up on disk is still limited, and shared between them.
-
-prev
-
-prev
-
-R
-
-R
-
-(a)
-
-(b)
-
-curr
-
-curr
-
-S  T
-
-S  T
-
-U  V
-
-U  V
-
-W  X
-
-W  X
-
-prev
-
-prev
-
-R
-
-R
-
-(c)
-
-(d)
-
-curr
-
-curr
-
-S  T
-
-T S
-
-U  V
-
-U  V
-
-W  X
-
-W  X
 
 ![Figure 8.15 Heap exploration via...](images/page_428_vector_416.png)
 *Figure 8.15  Heap exploration via pointer reversal. The block currently under examination is indicated by the curr pointer.  The previous block is indicated by the prev pointer. As the garbage collector moves from one block to the next, it changes the  pointer it follows to refer back to the previous block. When it returns to a block it restores the pointer. Each reversed pointer  must be marked (indicated with a shaded box), to distinguish it from other, forward pointers in the same block.*
@@ -6630,30 +6172,6 @@ EXAMPLE 9.2  frame pointer. If the size of an object (e.g., a local array) is no
 
 EXAMPLE 9.3  In a language with nested subroutines and static scoping (e.g., Ada, Common  Static and dynamic links  Lisp, ML, Scheme, or Swift), objects that lie in surrounding subroutines, and
 
-A
-
-B
-
-C
-
-C
-
-fp
-
-D
-
-D
-
-B
-
-Static  Dynamic
-
-links  links  E
-
-E
-
-A
-
 ![Figure 9.1 Example of subroutine...](images/page_446_vector_295.png)
 *Figure 9.1  Example of subroutine nesting, taken from Figure 3.5. Within B, C, and  D, all  fve   routines are visible. Within A and E, routines  A, B, and  E are visible, but C and D are not.  Given the calling sequence A, E, B, D, C, in that order, frames will be allocated on the stack as  shown at right, with the indicated static and dynamic links.*
 
@@ -6730,28 +6248,6 @@ In its prologue, the callee
   (including the static link and return address, if they were passed in registers)
 
 After the subroutine has completed, the epilogue
-
-sp
-
-Arguments  to called  routines
-
-Temporaries
-
-Local  variables
-
-Current frame  Direction of stack growth  (lower addresses)
-
-Saved regs.,  static link
-
-Saved fp
-
-fp
-
-Return address
-
-(Arguments   from caller)
-
-Previous (calling)  frame
 
 ![Figure 9.2 A typical stack...](images/page_449_vector_326.png)
 *Figure 9.2  A typical stack frame. Though we draw it growing upward on the page, the stack  actually grows downward toward lower addresses on most machines. Arguments are accessed  at positive offsets from the fp. Local variables and temporaries are accessed at negative offsets  from the fp. Arguments to be passed to called routines are assembled at the top of the frame,  using positive offsets from the sp.*
@@ -7330,27 +6826,6 @@ them in variables.
 
 The delegates of C# extend the notion of object closures to provide type safety  without the restrictions of inheritance. A delegate can be instantiated not only  with a specifed object method (subsuming the object closures of C++ and Java)  but also with a static function (subsuming the subroutine pointers of C and C++)  or with an anonymous nested delegate or lambda expression (subsuming true  subroutine closures). If an anonymous delegate or lambda expression refers to  objects declared in the surrounding method, then those objects have unlimited  extent. Finally, as we shall see in Section 9.6.2, a C# delegate can actually contain  a list of closures, in which case calling the delegate has the effect of calling all the  entries on the list, in turn. (This behavior generally makes sense only when each  entry has a void return type. It is used primarily when processing events.)
 
-9.3.2 Call by Name
-
-Explicit subroutine parameters are not the only language feature that requires a  closure to be passed as a parameter. In general, a language implementation must  pass a closure whenever the eventual use of the parameter requires the restoration  of a previous referencing environment. Interesting examples occur in the call-byname parameters of Algol 60 and Simula, the label parameters of Algol 60 and  Algol 68, and the call-by-need parameters of Miranda, Haskell, and R.
-
-IN MORE DEPTH
-
-```
-We consider call by name in more detail on the companion site. When Algol 60 
-was defned, most programmers programmed in assembly language (Fortran was 
-only a few years old, and Lisp was even newer). The assembly languages of the 
-day made heavy use of macros, and it was natural for the Algol designers to 
-propose a parameter-passing mechanism that mimicked the behavior of macros, 
-namely normal-order argument evaluation (Section 6.6.2). It was also natural, 
-given common practice in assembly language, to allow a goto to jump to a label 
-that  was passed as a parameter.
-```
-
-Call-by-name parameters have some interesting and powerful applications,  but they are more diffcult to implement (and more expensive to use) than one  might at frst expect: they require the passing of closures, sometimes referred to  as thunks. Label parameters are typically implemented by closures as well. Both  call-by-name and label parameters tend to lead to inscrutable code; modern languages typically encourage programmers to use explicit formal subroutines and  structured exceptions instead. Signifcantly, most of the arguments against call  by name disappear in purely functional code, where side-effect freedom ensures  that the value of a parameter will always be the same regardless of when it is evaluated. Leveraging this observation, Haskell (and its predecessor Miranda) employs  normal-order evaluation for all parameters.
-
-9.3.3 Special-Purpose Parameters
-
 ![Figure 9.3 contains a summary...](images/page_466_vector_482.png)
 *Figure 9.3 contains a summary of the common parameter-passing modes. In this  subsection we examine other aspects of parameter passing.*
 
@@ -7361,30 +6836,6 @@ In Section 3.3.6, we noted that default parameters provide an attractive alterna
 EXAMPLE 9.24
 
 Default parameters in Ada
-
-Parameter  Representative  Implementation  Permissible  Change to  mode  languages  mechanism  operations  actual?  Alias?
-
-value  C/C++, Pascal,  Java/C# (value types)  value  read, write  no  no
-
-in, const  Ada, C/C++, Modula-3  value or reference  read only  no  maybe
-
-out  Ada  value or reference  write only  yes  maybe
-
-value/result  Algol W  value  read, write  yes  no
-
-var, ref  Fortran, Pascal, C++  reference  read, write  yes  yes
-
-sharing  Lisp/Scheme, ML,  Java/C# (reference types)  value or reference  read, write  yes  yes
-
-r-value ref  C++11  reference  read, write  yes ∗  no ∗
-
-in out  Ada, Swift  value or reference  read, write  yes  maybe
-
-name  Algol 60, Simula  closure (thunk)  read, write  yes  yes
-
-need  Haskell, R  closure (thunk) with  read, write†  yes†  yes†
-
-memoization
 
 ![Figure 9.3 Parameter-passing modes. Column...](images/page_467_vector_296.png)
 *Figure 9.3  Parameter-passing modes. Column 1 indicates common names for modes. Column 2 indicates prominent  languages that use the modes, or that introduced them. Column 3 indicates implementation via passing of values, references, or  closures. Column 4 indicates whether the callee can read or write the formal parameter. Column 5 indicates whether changes  to the formal parameter affect the actual parameter. Column 6 indicates whether changes to the formal or actual parameter,  during the execution of the subroutine, may be visible through the other. ∗Behavior is undefned if the program attempts to  use an r-value argument after the call. †Changes to arguments passed by need in R will happen only on the frst use; changes in  Haskell are not permitted.*
@@ -8009,38 +7460,6 @@ DESIGN & IMPLEMENTATION
 
 9.7 Coroutine stacks  Many languages require coroutines or threads to be declared at the outermost  level of lexical nesting, to avoid the complexity of noncontiguous stacks. Most  thread libraries for sequential languages (the POSIX standard pthread library  among them) likewise require or at least permit the use of contiguous stacks.
 
-A
-
-P  P
-
-S
-
-R
-
-D
-
-M
-
-C
-
-B
-
-D
-
-A
-
-B
-
-Q
-
-S
-
-Q M
-
-C
-
-R
-
 ![Figure 9.4 A cactus stack....](images/page_487_vector_268.png)
 *Figure 9.4  A cactus stack. Each branch to the side represents the creation of a coroutine  (A, B, C, and  D). The static nesting of blocks is shown at right. Static links are shown with  arrows. Dynamic links are indicated simply by vertical arrangement: each routine has called the  one above it. (Coroutine B, for example, was created by the main program, M. B in turn called  subroutine S and created coroutine D.)*
 
@@ -8119,26 +7538,6 @@ the event handler returns, the trampoline restores state (including all register
 from the buffer written by the kernel, and jumps back into the main program. To 
 avoid recursive events, the kernel typically disables further signals when it jumps
 ```
-
-User application  OS kernel  main  program  execution  interrupt
-
-handler
-
-hardware  interrupt
-
-[save state]
-
-event  handler  signal  trampoline
-
-call
-
-return from  interrupt
-
-return
-
-[restore state]
-
-return
 
 ![Figure 9.5 Signal delivery through...](images/page_491_vector_313.png)
 *Figure 9.5  Signal delivery through a trampoline. When an interrupt occurs (or when another  process performs an operation that should appear as an event), the main program may be at an  arbitrary place in its code. The kernel saves state and invokes a trampoline routine that in turn  calls the event handler through the normal calling sequence. After the event handler returns, the  trampoline restores the saved state and returns to where the main program left off.*
@@ -8437,16 +7836,6 @@ weaknesses you encounter in the abstraction facilities of the language.
 
 dling in the style of most other modern languages uses handler-case and  error. Show that the distinction between these is mainly a matter of style,  rather than expressive power. In other words, show that each facility can be  used to emulate the other.
 
-#include <signal.h>  #include <stdio.h>  #include <string.h>
-
-char* days[7] = {"Sunday", "Monday", "Tuesday",  "Wednesday", "Thursday", "Friday", "Saturday"};  char today[10];
-
-void handler(int n) {  printf(" %s\n", today);  }
-
-int main() {  signal(SIGTSTP, handler);  // ^Z at keyboard  for(int n = 0; ; n++) {
-
-strcpy(today, days[n%7]);  }  }
-
 ![Figure 9.6 A problematic program...](images/page_499_vector_276.png)
 *Figure 9.6  A problematic program in C to illustrate the use of signals. In most Unix systems,  the SIGTSTP signal is generated by typing control-Z at the keyboard.*
 
@@ -8626,20 +8015,6 @@ const char *description;  list_err(const char *s) {description = s;}  };
 class list_node {
 
 list_node* prev;  list_node* next;  list_node* head_node;  public:
-
-int val;  // the actual data in a node  list_node() {  // constructor  prev = next = head_node = this;  // point to self  val = 0;  // default value  }  list_node* predecessor() {
-
-if (prev == this || prev == head_node) return nullptr;  return prev;  }  list_node* successor() {
-
-if (next == this || next == head_node) return nullptr;  return next;  }  bool singleton() {
-
-return (prev == this);  }  void insert_before(list_node* new_node) {
-
-if (!new_node->singleton())
-
-throw new list_err("attempt to insert node already on list");  prev->next = new_node;  new_node->prev = prev;  new_node->next = this;  prev = new_node;  new_node->head_node = head_node;  }  void remove() {  if (singleton())
-
-throw new list_err("attempt to remove node not currently on list");  prev->next = next;  next->prev = prev;  prev = next = head_node = this;  // point to self  }  ~list_node() {  // destructor  if (!singleton())  throw new list_err("attempt to delete node still on list");  }  };
 
 ![Figure 10.1 A simple class...](images/page_507_vector_606.png)
 *Figure 10.1  A simple class for list nodes in C++. In this example we envision a list of integers.*
@@ -9459,18 +8834,6 @@ List and queue abstractions  in Ada 2005
 
 All of the list and queue subroutines in Figure 10.2 take an explicit frst parameter. Ada 95 and CLOS do not use “object.method()” notation. Python and  Ada 2005 do use this notation, but only as syntactic sugar: a call to A.B(C, D)
 
-generic  type item is private;  -- Ada supports both type  default_value : item;  -- and value generic parameters  package g_list is  list_err : exception;  type list_node is tagged private;
-
--- 'tagged' means extendable; 'private' means opaque  type list_node_ptr is access all list_node;  -- 'all' means that this can point at 'aliased' nonheap data  procedure initialize(self : access list_node; v : item := default_value);
-
--- 'val' will get default value if second parameter is not provided  procedure finalize(self : access list_node);  function get_val(self : access list_node) return item;  function predecessor(self : access list_node) return list_node_ptr;  function successor(self : access list_node) return list_node_ptr;  function singleton(self : access list_node) return boolean;  procedure insert_before(self : access list_node; new_node : list_node_ptr);  procedure remove(self : access list_node);
-
-type list is tagged private;  type list_ptr is access all list;  procedure initialize(self : access list);  procedure finalize(self : access list);  function empty(self : access list) return boolean;  function head(self : access list) return list_node_ptr;  procedure append(self : access list; new_node : list_node_ptr);  private
-
-type list_node is tagged record  prev, next, head_node : list_node_ptr;  val : item;  end record;  type list is tagged record  head_node : aliased list_node;  -- 'aliased' means that an 'all' pointer can refer to this  end record;  end g_list;  ...  package body g_list is
-
--- definitions of subroutines  ...  end g_list;
-
 ![Figure 10.2 Generic list and...](images/page_525_vector_525.png)
 *Figure 10.2  Generic list and queue abstractions in Ada 2005. The tagged types list and queue provide inheritance; the  packages provide encapsulation. Declaring self to have type access XX (instead of XX_ptr) causes the compiler to recognize  the subroutine as a method of the tagged type; ptr.method(args) is syntactic sugar for method(ptr,args) if ptr refers to  an object of a tagged type. Function delete_node (next page) uses the Unchecked_Deallocation library package to create  a type-specifc routine for memory reclamation. The expression list_ptr(self) is a (type-safe) cast. (continued)*
 
@@ -9481,32 +8844,6 @@ generic package g_list.queue is
 -- dot means queue is child of g_list 
 type queue is new list with private;
 ```
-
--- 'new' means it's a subtype; 'with' means it's an extension  type queue_ptr is access all queue;  procedure initialize(self : access queue);  procedure finalize(self : access queue);  function empty(self : access queue) return boolean;  procedure enqueue(self : access queue; v : item);  function dequeue(self : access queue) return item;  function head(self : access queue) return item;  private
-
-type queue is new list with null record;  -- no new fields  end g_list.queue;  ...  with Ada.Unchecked_Deallocation;  -- for delete_node, below  package body g_list.queue is
-
-```
-procedure initialize(self : access queue) is 
-begin 
-list_ptr(self).initialize; 
--- call base class constructor 
-end initialize;
-```
-
-procedure finalize(self : access queue) is ...  -- similar  function empty(self : access queue) return boolean is ...  -- to initialize
-
-procedure enqueue(self : access queue; v : item) is  new_node : list_node_ptr;  -- local variable  begin
-
-new_node := new list_node;  new_node.initialize;  -- no automatic constructor calls  list_ptr(self).append(new_node);  end enqueue;
-
-procedure delete_node is new Ada.Unchecked_Deallocation  (Object => list_node, Name => list_node_ptr);
-
-function dequeue(self : access queue) return item is  head_node : list_node_ptr;  rtn : item;  begin
-
-if list_ptr(self).empty then raise list_err; end if;  head_node := list_ptr(self).head;  head_node.remove;  rtn := head_node.val;  delete_node(head_node);  return rtn;  end dequeue;
-
-function head(self : access queue) return item is ...  -- similar to delete  end g_list.queue;
 
 ![Figure 10.2 (continued)...](images/page_526_vector_600.png)
 *Figure 10.2  (continued)*
@@ -10287,70 +9624,8 @@ Implementation of a virtual  method call
 
 6  Terminology differs in other languages. In Eiffel, an interface is called a fully deferred class. In  Scala, it’s called a trait.
 
-```
-class foo { 
-F 
-foo’s vtable
-int a;
- 
-double b;
- 
-char c; 
-public: 
-virtual void k( ... 
-virtual int l( ... 
-virtual void m(); 
-virtual double n( ...
- 
-... 
-} F;
-```
-
-foo::k
-
-a
-
-foo::l
-
-b  code pointers
-
-foo::n  foo::m
-
-c
-
 ![Figure 10.3 Implementation of virtual...](images/page_543_vector_203.png)
 *Figure 10.3  Implementation of virtual methods. The representation of object F begins with the address of the vtable for  class foo. (All objects of this class will point to the same vtable.) The vtable itself consists of an array of addresses, one for the  code of each virtual method of the class. The remainder of F consists of the representations of its felds.*
-
-```
-class bar : public foo { 
-B 
-bar’s vtable
- 
-int w; 
-public: 
-void m() override; 
-virtual double s( ... 
-virtual char *t( ...
- 
-... 
-} B;
-```
-
-foo::k
-
-a
-
-foo::l
-
-bar::m  code pointers
-
-b
-
-foo::n  bar::s
-
-w  c
-
-bar::t
 
 ![Figure 10.4 Implementation of single...](images/page_543_vector_354.png)
 *Figure 10.4  Implementation of single inheritance. As in Figure 10.3, the representation of object B begins with the address of  its class’s vtable. The frst four entries in the table represent the same members as they do for foo, except that one—m—has  been overridden and now contains the address of the code for a different subroutine. Additional felds of bar follow the ones  inherited from foo in the representation of B; additional virtual methods follow the ones inherited from foo in the vtable of  class bar.*
@@ -10519,27 +9794,6 @@ tween virtual and nonvirtual methods).  32. Summarize the fundamental argument f
 
 phism.
 
-```
-class fn_call { 
-public:
-```
-
-virtual void operator()() = 0;  };  void schedule_at(fn_call& fc, time t) {
-
-...  }  ...  void foo(int a, double b, char c) {
-
-```
-... 
-} 
-class call_foo : public fn_call {
-```
-
-int arg1;  double arg2;  char arg3;  public:
-
-call_foo(int a, double b, char c) :  // constructor  arg1(a), arg2(b), arg3(c) {  // member initialization is all that is required  }  void operator()() {  foo(arg1, arg2, arg3);  }  };  ...  call_foo cf(3, 3.14, 'x');  // declaration/constructor call  schedule_at(cf, now() + delay);
-
-// at some point in the future, the discrete event system  // will call cf.operator()(), which will cause a call to  // foo(3, 3.14, 'x')
-
 ![Figure 10.5 Subroutine pointers and...](images/page_548_vector_408.png)
 *Figure 10.5  Subroutine pointers and virtual methods. Class call_foo encapsulates a subroutine pointer and values to be passed to the subroutine. It exports a parameter-less subroutine  that can be used to trigger the encapsulated call.*
 
@@ -10663,98 +9917,8 @@ public class widget { ...
 interface sortable_object {
 ```
 
-```
-String get_sort_name(); 
-bool less_than(sortable_object o); 
-// All methods of an interface are automatically public. 
-} 
-interface graphable_object { 
-void display_at(Graphics g, int x, int y); 
-// Graphics is a standard library class that provides a context 
-// in which to render graphical objects. 
-} 
-interface storable_object {
-```
-
-```
-String get_stored_name(); 
-} 
-class named_widget extends widget implements sortable_object {
-```
-
-public String name;  public String get_sort_name() {return name;}  public bool less_than(sortable_object o) {
-
-```
-return (name.compareTo(o.get_sort_name()) < 0); 
-// compareTo is a method of the standard library class String. 
-} 
-} 
-class augmented_widget extends named_widget
-```
-
-implements graphable_object, storable_object {  ...  // more data members  public void display_at(Graphics g, int x, int y) {
-
-```
-... 
-// series of calls to methods of g 
-} 
-public String get_stored_name() {return name;} 
-} 
-... 
-class sorted_list {
-```
-
-```
-public void insert(sortable_object o) { ... 
-public sortable_object first() { ... 
-... 
-} 
-class browser_window extends Frame { 
-// Frame is the standard library class for windows. 
-public void add_to_window(graphable_object o) { ... 
-... 
-} 
-class dictionary { 
-public void insert(storable_object o) { ... 
-public storable_object lookup(String name) { ... 
-... 
-}
-```
-
 ![Figure 10.6 Interface classes in...](images/page_551_vector_594.png)
 *Figure 10.6  Interface classes in Java. By implementing the sortable_object interface in  named_widget and the graphable_object and storable_object interfaces in augmented_  widget, we obtain the ability to pass objects of those classes to and from such routines as  sorted_list.insert, browser_window.add_to_window, and  dictionary.insert.*
-
-augmented_widget
-
-object  vtable
-
-widget view
-
-augmented_  widget part
-
-a  b
-
-widget fields
-
-sortable_object view
-
-name  −a
-
-c
-
-sortable_  object part
-
-graphable_object view
-
-storable_object view
-
-−b
-
-graphable_  object part
-
-−c
-
-storable_  object part
 
 ![Figure 10.7 Implementation of mix-in...](images/page_552_vector_312.png)
 *Figure 10.7  Implementation of mix-in inheritance. Objects of class augmented_widget contain four vtable addresses, one for the class itself (as in Figure 10.3), and three for the implemented interfaces. The view of the object that is passed to interface routines points directly  at the relevant vtable pointer. The vtable then begins with a “this correction” offset, used to  regenerate a pointer to the object itself.*
@@ -11105,55 +10269,6 @@ compiled to native code on a machine with 4-byte addresses.
   the call, and that this same register should be used to pass the hidden
   this parameter. You may ignore the need to save and restore registers,
   and don’t worry about where to put the return value.
-
-  1.
-  interface Pingable {
-  2.
-  public void ping();
-  3.
-  }
-
-```
-4. 
-class Counter implements Pingable { 
-5. 
-int count = 0; 
-6. 
-public void ping() { 
-7. 
-++count; 
-8. 
-} 
-9. 
-public int val() { 
-10. 
-return count; 
-11. 
-} 
-12. 
-}
-```
-
-```
-13. 
-public class Ping { 
-14. 
-public static void main(String args[]) { 
-15. 
-Counter c = new Counter(); 
-16. 
-c.ping(); 
-17. 
-c.ping(); 
-18. 
-int v = c.val(); 
-19. 
-System.out.println(v); 
-20. 
-} 
-21. 
-}
-```
 
 ![Figure 10.8 A simple program...](images/page_561_vector_324.png)
 *Figure 10.8  A simple program in Java.*

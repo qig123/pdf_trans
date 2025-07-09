@@ -1,11 +1,5 @@
 # A: Programming Languages Mentioned
 
-## A Programming Languages Mentioned
-
-This appendix provides brief descriptions, bibliographic references, and  (in many cases) URLs for on-line information concerning each of the principal  programming languages mentioned in this book. The URLs are accurate as of  June 2015, though they are subject to change as people move fles around. Some  additional URLs can be found in the bibliographic references.
-
-Bill Kinnersley maintains an index of on-line materials for approximately 2500  programming languages at people.ku.edu/~nkinners/LangList/Extras/langlist.htm.
-
 ![Figure A.1 shows the genealogy...](images/page_892_vector_311.png)
 *Figure A.1 shows the genealogy of some of the more infuential or widely used  programming languages. The date for each language indicates the approximate  time at which its features became widely known. Arrows indicate principal infuences on design. Many infuences, of course, cannot be shown in a single fgure.*
 
@@ -54,84 +48,6 @@ Algol 68
 1970
 
 Pascal
-
-C  shell  languages
-
-Scheme
-
-1975
-
-Euclid
-
-Clu
-
-ML
-
-Fortran 77
-
-Mesa
-
-Smalltalk 80
-
-1980
-
-Modula-2
-
-Ada
-
-Common  Lisp
-
-C++  Objective C
-
-Cedar
-
-1985
-
-Miranda
-
-Caml
-
-Perl
-
-Oberon  Modula-3
-
-CLOS  Haskell
-
-ANSI C  (C90)  Eiffel
-
-1990
-
-Fortran 90
-
-Visual  Basic HPF  Python
-
-OCaml  Ruby  Java
-
-1995
-
-Fortran 95
-
-PHP
-
-2000
-
-C#
-
-Scala
-
-2005
-
-F#
-
-Go
-
-2010
-
-Swift
-
-2015
-
-Imperative  Scripting  Functional
 
 unconventional terminology and is very diffcult to read; other sources (e.g.,  Pagan’s book [Pag76]) are more accessible.  Algol W : A smaller, simpler alternative to Algol 68, proposed by Niklaus Wirth  and C. A. R. Hoare [WH66, Sit72]. The precursor to Pascal. Introduced the  case statement.  APL : Designed by Kenneth Iverson in the late 1950s and early 1960s, primar­
 

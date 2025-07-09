@@ -170,6 +170,7 @@ def get_markdown_from_block(block, deep_headings_info_list, font_size_threshold)
 
 
 # ==================== Main Extraction Function ====================
+# ==================== Main Extraction Function (with Area Exclusion Logic) ====================
 def run_extraction(pdf_path, output_dir="mybook"):
     if os.path.exists(output_dir): shutil.rmtree(output_dir)
     os.makedirs(output_dir)
@@ -182,6 +183,7 @@ def run_extraction(pdf_path, output_dir="mybook"):
     print(f"Found {len(chapter_toc)} top-level chapters to process.")
     markdown_files_list = []
     
+    # Load heading detection config once
     min_level_for_text = HD_CONFIG.get("min_heading_level_for_text_match", 3)
     font_multiplier = HD_CONFIG.get("font_size_multiplier", 1.2)
 
@@ -194,20 +196,17 @@ def run_extraction(pdf_path, output_dir="mybook"):
         if i + 1 < len(chapter_toc): end_page = chapter_toc[i+1][2]
         print(f"  - Content spans from page {start_page} to {end_page - 1}.")
 
-        # Split headings into deep (text-match) and shallow (font-match)
         deep_headings_info_list = []
         try:
             start_index = original_toc.index(chapter_item)
             for j in range(start_index + 1, len(original_toc)):
                 sub_item = original_toc[j]
-                if sub_item[0] < min_level_for_text: continue # Skip shallow headings
                 if sub_item[0] >= min_level_for_text:
                     deep_headings_info_list.append({"original": sub_item[1], "level": sub_item[0]})
                 if sub_item[0] <= level: break
         except ValueError: print(f"  - Warning: Could not find chapter '{title}' in the main TOC.")
 
         if deep_headings_info_list: print(f"  - Using text-match for {len(deep_headings_info_list)} deep headings (Level {min_level_for_text}+).")
-        else: print(f"  - No deep headings found for text-matching.")
         
         current_chapter_dir = os.path.join(output_dir, safe_title)
         os.makedirs(current_chapter_dir, exist_ok=True)
@@ -221,41 +220,71 @@ def run_extraction(pdf_path, output_dir="mybook"):
             if page_num >= doc.page_count: continue
             page = doc.load_page(page_num)
             
-            # Analyze page for font-based heading detection
+            page_data = page.get_text("dict", flags=fitz.TEXTFLAGS_SEARCH)
+            blocks = sorted(page_data.get("blocks", []), key=lambda b: (b["bbox"][1], b["bbox"][0]))
+            
+            # === STAGE 1: Identify all image/diagram areas to IGNORE text from ===
+            ignored_areas = []
+            caption_image_map = {} # Maps a caption's block index to its image info
+
+            # First, add all raster image blocks to ignored areas
+            for b in blocks:
+                if b['type'] == 1: # This is a raster image
+                    ignored_areas.append(fitz.Rect(b['bbox']))
+            
+            # Second, find captions and their associated image/diagram areas
+            for idx, b in enumerate(blocks):
+                if b['type'] == 0:
+                    text = "".join("".join(s['text'] for s in l['spans']) for l in b.get('lines', [])).strip()
+                    if CAPTION_REGEX.match(text):
+                        image_info = find_image_for_caption(doc, page, blocks, idx, current_image_dir, processed_img_xrefs)
+                        if image_info and image_info.get("bbox"):
+                            # Store the info to generate the markdown tag later
+                            caption_image_map[idx] = image_info
+                            # Add its area to the ignore list, with a small buffer
+                            area_to_ignore = fitz.Rect(image_info["bbox"])
+                            area_to_ignore += (-5, -5, 5, 5) # Add 5px padding
+                            ignored_areas.append(area_to_ignore)
+
+            # === STAGE 2: Generate Markdown, skipping text in ignored areas ===
             dominant_size = find_dominant_font_size(page)
             font_size_threshold = dominant_size * font_multiplier
-            
-            page_data = page.get_text("dict", flags=fitz.TEXTFLAGS_SEARCH)
-            blocks = sorted(page_data["blocks"], key=lambda b: (b["bbox"][1], b["bbox"][0]))
-            
             page_content_parts = {}
-            ignored_text_areas = []
 
             for idx, b in enumerate(blocks):
-                if b['type'] != 0: continue
-                block_bbox = fitz.Rect(b["bbox"])
+                if b['type'] != 0: continue # Only process text blocks here
+                
+                block_bbox = fitz.Rect(b['bbox'])
+                
+                # Skip headers/footers
                 if is_header_or_footer(block_bbox, page.rect): continue
-                if any(area.intersects(block_bbox) for area in ignored_text_areas): continue
                 
+                # THE CRUCIAL CHECK: Skip any text block inside an image/diagram area
+                if any(area.intersects(block_bbox) for area in ignored_areas):
+                    # However, we MUST NOT skip the caption text itself.
+                    # A caption might be slightly inside its own buffered ignore_area.
+                    if idx in caption_image_map:
+                         pass # It's a caption, let it through.
+                    else:
+                         continue # It's text inside a diagram, SKIP IT.
+                
+                # This block is safe to process.
                 image_md = ""
-                text_for_caption = "".join("".join(s['text'] for s in l['spans']) for l in b.get('lines', [])).strip()
-                if CAPTION_REGEX.match(text_for_caption):
-                    image_info = find_image_for_caption(doc, page, blocks, idx, current_image_dir, processed_img_xrefs)
-                    if image_info:
-                        relative_path = os.path.join("images", quote(image_info["filename"]))
-                        short_alt = ' '.join(text_for_caption.split()[:5]) + "..."
-                        image_md = f"![{short_alt}]({relative_path})\n"
-                        if image_info.get("bbox"): ignored_text_areas.append(image_info["bbox"])
-                
-                # Pass all necessary info to the hybrid markdown converter
+                # Check if this block is a caption that has a linked image
+                if idx in caption_image_map:
+                    image_info = caption_image_map[idx]
+                    relative_path = os.path.join("images", quote(image_info["filename"]))
+                    caption_text = "".join("".join(s['text'] for s in l['spans']) for l in b.get('lines', [])).strip()
+                    short_alt = ' '.join(caption_text.split()[:5]) + "..."
+                    image_md = f"![{short_alt}]({relative_path})\n"
+
                 markdown_text = get_markdown_from_block(b, deep_headings_info_list, font_size_threshold)
                 
                 if markdown_text:
                     page_content_parts[idx] = image_md + markdown_text
-
-            # Uncaptioned image processing
+            
+            # --- Uncaptioned image processing (unchanged logic) ---
             for img in page.get_images(full=True):
-                # ... (unchanged)
                 xref = img[0]
                 if xref not in processed_img_xrefs:
                     img_block_idx = -1
@@ -275,12 +304,13 @@ def run_extraction(pdf_path, output_dir="mybook"):
             for idx in sorted(page_content_parts.keys()):
                 chapter_content += page_content_parts[idx]
 
+        # Finalize and write chapter content
         chapter_content = re.sub(r'\n{3,}', '\n\n', chapter_content)
         with open(output_filepath, "w", encoding="utf-8") as f: f.write(chapter_content)
         relative_md_path = os.path.relpath(output_filepath, output_dir).replace(os.sep, '/')
         markdown_files_list.append(relative_md_path)
     
-    # Metadata generation
+    # Metadata generation at the end
     metadata = doc.metadata
     book_title = metadata.get('title') or os.path.splitext(os.path.basename(pdf_path))[0]
     book_authors = [metadata.get('author')] if metadata.get('author') else ["Unknown Author"]

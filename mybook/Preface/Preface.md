@@ -88,64 +88,6 @@ Programming Language Pragmatics covers almost all of the material in the PL  “
 
 For self-study, or for a full-year course (track F in Figure 1), I recommend  working through the book from start to fnish, turning to the companion site  as each “In More Depth” section is encountered. The one-semester course at  Rochester (track R) also covers most of the book, but leaves out most of the CS
 
-Part I  Part II  Part III  Part IV
-
-8 Composite Types
-
-17 Improvement
-
-13 Concurrency
-
-7 Type Systems
-
-5 Architecture
-
-9 Subroutines
-
-11 Functional
-
-15 CodeGen
-
-16 Runtime
-
-14 Scripting
-
-4 Semantics
-
-10 Objects
-
-6 Control
-
-12 Logic
-
-3 Names
-
-2 Syntax
-
-1 Intro
-
-F
-
-R
-
-2.3.4
-
-15.5
-
-P
-
-2.2
-
-C
-
-Q
-
-2.3.3  9.3.3
-
-F: The full-year/self-study plan  R: The one-semester Rochester plan  Companion site (CS) section  P: The traditional Programming Languages plan;  To be skimmed by students  would also de-emphasize implementation material  in need of review  throughout the chapters shown  C: The compiler plan; would also de-emphasize design material
-
-throughout the chapters shown  Q: The 1+2 quarter plan: an overview quarter and two independent, optional  follow-on quarters, one language-oriented, the other compiler-oriented
-
 ![Figure 1 Paths through the...](images/page_31_vector_349.png)
 *Figure 1  Paths through the text. Darker shaded regions indicate supplemental “In More Depth” sections on the companion  site. Section numbers are shown for breaks that do not correspond to supplemental material.*
 

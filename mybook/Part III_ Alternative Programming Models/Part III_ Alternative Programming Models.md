@@ -489,38 +489,6 @@ If we change the input string to 010010, the interpreter will print
 
 (q0 q2 q3 q1 q3 q2 q0 accept)  ■
 
-(define simulate
-
-(lambda (dfa input)
-
-(letrec ((helper  ; note that helper is tail recursive,  ; but builds the list of moves in reverse order  (lambda (moves d2 i)
-
-(let ((c (current-state d2)))
-
-(if (null? i) (cons c moves)
-
-(helper (cons c moves) (move d2 (car i)) (cdr i)))))))  (let ((moves (helper '() dfa input)))
-
-(reverse (cons (if (is-final? (car moves) dfa)
-
-'accept 'reject) moves))))))
-
-;; access functions for machine description:  (define current-state car)  (define transition-function cadr)  (define final-states caddr)  (define is-final? (lambda (s dfa) (memq s (final-states dfa))))
-
-(define move
-
-(lambda (dfa symbol)
-
-(let ((cs (current-state dfa)) (trans (transition-function dfa)))
-
-(list
-
-(if (eq? cs 'error)
-
-'error  (let ((pair (assoc (list cs symbol) trans)))
-
-(if pair (cadr pair) 'error))) ; new start state  trans  ; same transition function  (final-states dfa)))))  ; same final states
-
 ![Figure 11.1 Scheme program to...](images/page_582_vector_387.png)
 *Figure 11.1  Scheme program to simulate the actions of a DFA. Given a machine description  and an input symbol i, function move searches for a transition labeled i from the start state to  some new state s. It then returns a new machine with the same transition function and fnal  states, but with s as its “start” state. The main function, simulate, encapsulates a tail-recursive  helper function that accumulates an inverted list of moves, returning when it has consumed all  input symbols. The wrapper then checks to see if the helper ended in a fnal state; it returns the  (properly ordered) series of moves, with accept or reject at the end. The functions cadr  and caddr are defned as (lambda (x) (car (cdr x))) and (lambda (x) (car (cdr (cdr  x)))), respectively. Scheme provides a large collection of such abbreviations.*
 
@@ -538,24 +506,6 @@ What
  a
  first-class value?
 ```
-
-Start  q1
-
-1
-
-q0
-
-1
-
-0  0  0  0
-
-1
-
-q2
-
-1  q3
-
-(define zero-one-even-dfa  '(q0  ; start state  (((q0 0) q2) ((q0 1) q1) ((q1 0) q3) ((q1 1) q0)  ; transition fn  ((q2 0) q0) ((q2 1) q3) ((q3 0) q1) ((q3 1) q2))  (q0)))  ; final states
 
 ![Figure 11.2 DFA to accept...](images/page_583_vector_241.png)
 *Figure 11.2  DFA to accept all strings of zeros and ones containing an even number of each.  At the bottom of the fgure is a representation of the machine as a Scheme data structure, using  the conventions of Figure 11.1.*
@@ -1176,71 +1126,8 @@ OCaml record differ from a record (structure) in languages like C or Pascal?
 languages such as C and Pascal?
 ```
 
-open List;;  (* includes rev, find, and mem functions *)
-
-```
-type state = int;; 
-type 'a  dfa = {  
-current_state : state; 
-transition_function : (state * 'a * state) list; 
-final_states : state list; 
-};; 
-type decision = Accept | Reject;;
-```
-
-```
-let move (d:'a dfa) (x:'a) : 'a dfa =  
-{ current_state = ( 
-let (_, _, q) = 
-find (fun (s, c, _) -> s = d.current_state && c = x) 
-d.transition_function in 
-q); 
-transition_function = d.transition_function; 
-final_states = d.final_states; 
-};;
-```
-
-let simulate (d:'a dfa) (input:'a list) : (state list * decision) =
-
-```
-let rec helper moves d2 remaining_input : (state option * state list) = 
-match remaining_input with 
-| [] -> (Some d2.current_state, moves) 
-| hd ::  tl ->
-```
-
-let new_moves = d2.current_state :: moves in  try helper new_moves (move d2 hd) tl  with Not_found -> (None, new_moves) in  match helper [] d input with  | (None, moves) -> (rev moves, Reject)  | (Some last_state, moves) ->
-
-( rev (last_state :: moves),  if mem last_state d.final_states then Accept else Reject);;
-
 ![Figure 11.3 OCaml program to...](images/page_599_vector_471.png)
 *Figure 11.3  OCaml program to simulate the actions of a DFA. Given a machine description  and an input symbol i, function move searches for a transition labeled i from the start state to  some new state s. If the search fails, find raises exception Not_found, which propagates out of  move; otherwise  move returns a new machine with the same transition function and fnal states,  but with s as its “start” state. Note that the code is polymorphic in the type of the input symbols.  The main function, simulate, encapsulates a tail-recursive helper function that accumulates an  inverted list of moves, returning when it has consumed all input symbols. The encapsulating  function then checks to see if the helper ended in a fnal state; it returns the (properly ordered)  series of moves, together with an Accept or Reject indication. The built-in option constructor  (Example 7.6) is used to distinguish between a real state (Some s) and an error state (None).*
-
-Start  q1
-
-b
-
-q0
-
-b
-
-a  a  a  a
-
-b
-
-q2
-
-b  q3
-
-```
-let a_b_even_dfa : char dfa = 
-{ current_state = 0; 
-transition_function = 
-[ (0, 'a', 2); (0, 'b', 1); (1, 'a', 3); (1, 'b', 0); 
-(2, 'a', 0); (2, 'b', 3); (3, 'a', 1);  (3,  'b', 2) ];  
-final_states = [0]; 
-};;
-```
 
 ![Figure 11.4 DFA to accept...](images/page_600_vector_262.png)
 *Figure 11.4  DFA to accept all strings of as and bs containing an even number of each. At  the bottom of the fgure is a representation of the machine as an OCaml data structure, using  the conventions of Figure 11.3.*
@@ -2304,38 +2191,6 @@ Because resolution is associative and commutative (Exercise 12.5), a backwardcha
 
 EXAMPLE 12.15  one by one in some particular order (e.g., left to right). The resulting search  Search tree exploration  can be described in terms of a tree of subgoals, as shown in Figure 12.1. The  Prolog interpreter (or program) explores this tree depth frst, from left to right.  It starts at the beginning of the database, searching for a rule R whose head can  be unifed with the top-level goal. It then considers the terms in the body of R as  subgoals, and attempts to satisfy them, recursively, left to right. If at any point a  subgoal fails (cannot be satisfed), the interpreter returns to the previous subgoal  and attempts to satisfy it in a different way (i.e., to unify it with the head of a  different clause).  ■
 
-rainy(seattle).  rainy(rochester).  cold(rochester).  snowy(X) :- rainy(X), cold(X).
-
-snowy(C)
-
-Original goal
-
-Success
-
-_C  = _X
-
-snowy(X)
-
-Candidate clauses
-
-AND
-
-X =  Subgoals
-
-seattle
-
-rainy(X)  cold(X)
-
-OR
-
-cold(seattle)  fails; backtrack
-
-rainy(seattle)  rainy(rochester)  cold(rochester)
-
-Candidate clauses
-
-X  = rochester
-
 ![Figure 12.1 Backtracking search in...](images/page_632_vector_331.png)
 *Figure 12.1  Backtracking search in Prolog. The tree of potential resolutions consists of alternating AND and OR levels. An AND level consists of subgoals from the right-hand side of a  rule, all of which must be satisfed. An OR level consists of alternative database clauses whose  head will unify with the subgoal above; one of these must be satisfed. The notation _C = _X   is meant to indicate that while both C and X are uninstantiated, they have been associated with  one another in such a way that if either receives a value in the future it will be shared by both.*
 
@@ -2398,46 +2253,6 @@ From a logical point of view, our database still defnes the same relationships. 
 
 EXAMPLE 12.19  In the previous subsection we saw how the order of clauses in the Prolog database,  Tic-tac-toe in Prolog  and the order of terms within a right-hand side, can affect both the effciency of
 
-edge(a, b). edge(b, c). edge(c, d).  edge(d, e). edge(b, e). edge(d, f). path(X, Y) :- path(X, Z), edge(Z, Y).
-
-path(X, X).
-
-path(a, a)
-
-X1 = a, Y1 = a
-
-OR
-
-path(X, X)  X2
-
-path(X, Y)
-
-= X1, Y2 = Y1, Z1 = ?
-
-AND
-
-path(X, Z)  edge(Z, Y)
-
-X3
-
-= X2, Y3 = Y2
-
-OR
-
-path(X, Y)  path(X, X)
-
-X4 = X3, Y4 = Y3, Z2
-
-= ?
-
-AND
-
-path(X, Z)  edge(Z, Y)
-
-. . .
-
-. . .
-
 ![Figure 12.2 Infinite regression in...](images/page_634_vector_302.png)
 *Figure 12.2  Infinite regression in Prolog. In this fgure even a simple query like ?- path(a,  a) will never terminate: the interpreter will never fnd the trivial branch.*
 
@@ -2488,16 +2303,6 @@ Our third choice is to create a “split”—a situation in which our opponent 
 split(A) :- x(B), x(C), different(B, C),
 
 line(A, B, D), line(A, C, E), empty(D), empty(E).  same(A, A).  different(A, B) :- \+(same(A, B)).
-
-## O 1 2  3
-
-6 X O
-
-4
-
-7 8 9
-
-## X
 
 ![Figure 12.3 A “split” in...](images/page_636_vector_171.png)
 *Figure 12.3  A “split” in tac-tac-toe. If X takes the bottom center square (square 8), no future  move by O will be able to stop X from winning the game—O cannot block both the 2–5–8 line  and the 7–8–9 line.*
@@ -2751,34 +2556,6 @@ external (syntactic) representations of programs or program extensions.
 ```
 
 ordered_line(1, 2, 3).  ordered_line(4, 5, 6).  ordered_line(7, 8, 9).  ordered_line(1, 4, 7).  ordered_line(2, 5, 8).  ordered_line(3, 6, 9).  ordered_line(1, 5, 9).  ordered_line(3, 5, 7).  line(A, B, C) :- ordered_line(A, B, C).  line(A, B, C) :- ordered_line(A, C, B).  line(A, B, C) :- ordered_line(B, A, C).  line(A, B, C) :- ordered_line(B, C, A).  line(A, B, C) :- ordered_line(C, A, B).  line(A, B, C) :- ordered_line(C, B, A).
-
-full(A) :- x(A).  full(A) :- o(A).  empty(A) :- \+(full(A)).  % NB: empty must be called with an already-instantiated A.  same(A, A).  different(A, B) :- \+(same(A, B)).
-
-move(A) :- good(A), empty(A), !.
-
-% strategy:  good(A) :- win(A).  good(A) :- strong_build(A).  good(5).  good(1).  good(3).
-
-good(A) :- block_win(A).  good(A) :- weak_build(A).  good(7).  good(9).  good(2).
-
-good(A) :- split(A).
-
-good(4).  good(6).  good(8).
-
-win(A) :- x(B), x(C), line(A, B, C).  block_win(A) :- o(B), o(C), line(A, B, C).  split(A) :- x(B), x(C), different(B, C), line(A, B, D), line(A, C, E), empty(D), empty(E).  strong_build(A) :- x(B), line(A, B, C), empty(C), \+(risky(C)).  weak_build(A) :- x(B), line(A, B, C), empty(C), \+(double_risky(C)).  risky(C) :- o(D), line(C, D, E), empty(E).  double_risky(C) :- o(D), o(E), different(D, E), line(C, D, F), line(C, E, G), empty(F), empty(G).
-
-all_full :- full(1), full(2), full(3), full(4), full(5),
-
-full(6), full(7), full(8), full(9).  done :- ordered_line(A, B, C), x(A), x(B), x(C), write('I won.'), nl.  done :- all_full, write('Draw.'), nl.
-
-getmove :- repeat, write('Please enter a move: '), read(X), empty(X), assert(o(X)).  makemove :- move(X), !, assert(x(X)).  makemove :- all_full.
-
-printsquare(N) :- o(N), write(' o ').  printsquare(N) :- x(N), write(' x ').  printsquare(N) :- empty(N), write('  ').  printboard :- printsquare(1), printsquare(2), printsquare(3), nl,
-
-printsquare(4), printsquare(5), printsquare(6), nl,  printsquare(7), printsquare(8), printsquare(9), nl.  clear :- retractall(x(_)), retractall(o(_)).
-
-% main goal:  play :- clear, repeat, getmove, respond.  respond :- ordered_line(A, B, C), o(A), o(B), o(C),
-
-printboard, write('You won.'), nl.  % shouldn't ever happen!  respond :- makemove, printboard, done.
 
 ![Figure 12.4 Tic-tac-toe program in...](images/page_642_vector_583.png)
 *Figure 12.4  Tic-tac-toe program in Prolog.*
@@ -3273,80 +3050,12 @@ EXAMPLE 13.4  Without language or library support for threads, a browser must ei
 
 To guarantee good interactive response, we must make sure that no subaction  of continue task takes very long to execute. Clearly we must end the current action whenever we wait for a message. We must also end it whenever we read from  a fle, since disk operations are slow. Finally, if any task needs to compute for  longer than about a tenth of a second (the typical human perceptual threshold),  then we must divide the task into pieces, between which we save state and return  to the top of the loop. These considerations imply that the condition at the top  of the loop must cover the full range of asynchronous events, and that evaluations of the condition must be interleaved with continued execution of any tasks  that were subdivided due to lengthy computation. (In practice we would probably need a more sophisticated mechanism than simple interleaving to ensure that  neither input-driven nor compute-bound tasks hog more than their share of resources.)  ■
 
-procedure parse page(address : url)
-
-```
-contact server, request page contents 
-parse html header() 
-while current token in {“<p>”, “<h1>”, “<ul>”,  . . . ,
-```
-
-```
-“<background”, “<image”, “<table”, “<frameset”,  . . .  }
-case current token of
-```
-
-```
-“<p>” 
-: break paragraph() 
-“<h1>”
-:
- format
- heading(); match(“< /h1>”) 
-“<ul>”
- :
- format
-list(); match(“< /ul>”) 
-. . .  
-“<background” :
-```
-
-a : attributes := parse attributes()  fork render background(a)  “<image” : a : attributes := parse attributes()  fork render image(a)  “<table”  : a : attributes := parse attributes()  scan forward for “< /table>” token  token stream s :=. . .  –– table contents  fork format table(s, a)  “<frameset” :
-
-```
-a : attributes := parse attributes() 
-parse frame list(a) 
-match(“< /frameset>”) 
-. . .  
-. . .  
-procedure parse frame list(a1 : attributes) 
-while current token in {“<frame”, “<frameset”, “<noframes>”}
-case current token of 
-“<frame” : a2 : attributes := parse attributes() 
-fork format frame(a1, a2) 
-. . .
-```
-
 ![Figure 13.1 Thread-based code from...](images/page_662_vector_423.png)
 *Figure 13.1  Thread-based code from a hypothetical Web browser. To frst approximation,  the parse page subroutine is the root of a recursive descent parser for HTML. In several cases,  however, the actions associated with recognition of a construct (background, image, table, frameset) proceed concurrently with continued parsing of the page itself. In this example, concurrent  threads are created with the fork operation. An additional thread would likely execute in response to keyboard and mouse events.*
 
 The principal problem with a dispatch loop—beyond the complexity of subdividing tasks and saving state—is that it hides the algorithmic structure of the program. Every distinct task (retrieving a page, rendering an image, walking through  nested menus) could be described elegantly with standard control-fow mechanisms, if not for the fact that we must return to the top of the dispatch loop  at every delay-inducing operation. In effect, the dispatch loop turns the program  “inside out,” making the management of tasks explicit and the control fow within  tasks implicit. The resulting complexity is similar to what we encountered when
 
 type task descriptor = record
-
-```
-–– felds in lieu of thread-local variables, plus control-fow information 
-. . .  
-ready tasks : queue of task descriptor 
-. . .  
-procedure dispatch()
-```
-
-loop
-
-–– try to do something input-driven  if a new event E (message, keystroke, etc.) is available
-
-if an existing task T is waiting for E
-
-continue task(T, E)  else if E can be handled quickly, do so  else
-
-allocate and initialize new task T  continue task(T, E)  –– now do something compute bound
-
-if ready tasks is nonempty
-
-continue task(dequeue(ready tasks), ‘ok’)
-
-procedure continue task(T : task, E : event)  if T is rendering an image  and E is a message containing the next block of data  continue image render(T, E)  else if T is formatting a page  and E is a message containing the next block of data  continue page parse(T, E)  else if T is formatting a page  and E is ‘ok’  –– we’re compute bound  continue page parse(T, E)  else if T is reading the bookmarks fle  and E is an I/O completion event  continue goto page(T, E)  else if T is formatting a frame  and E is a push of the “stop” button  deallocate T and all tasks dependent upon it  else if E is the “edit preferences” menu item  edit preferences(T, E)  else if T is already editing preferences  and E is a newly typed keystroke  edit preferences(T, E)  . . .
 
 ![Figure 13.2 Dispatch loop from...](images/page_663_vector_531.png)
 *Figure 13.2  Dispatch loop from a hypothetical non-thread-based Web browser. The clauses  in continue task must cover all possible combinations of task state and triggering event. The  code in each clause performs the next coherent unit of work for its task, returning when (1) it  must wait for an event, (2) it has consumed a signifcant amount of compute time, or (3) the  task is complete. Prior to returning, respectively, code (1) places the task in a dictionary (used  by dispatch) that maps awaited events to the tasks that are waiting for them, (2) enqueues the  task in ready tasks, or (3) deallocates the task.*
@@ -3389,18 +3098,6 @@ DESIGN & IMPLEMENTATION
 13.1 What, exactly, is a processor?  From roughly 1975 to 2005, a processor typically ran only one thread at a  time, and occupied one full chip. Today, most vendors still use the term “processor” to refer to the physical device that “does the computing,” and whose  pins connect it to the rest of the computer, but the internal structure is much  more complicated: there may be more than one chip inside the physical package, each chip may have multiple cores (each of which would have been called  a “processor” in previous hardware generations), and each core may have  multiple hardware threads (independent register sets, which allow the core’s  pipeline(s) to run a mix of instructions drawn from multiple software threads).  A modern processor may also include many megabytes of on-chip cache, organized into multiple levels, and physically distributed and shared among the  cores in complicated ways. Increasingly, processors may incorporate on-chip  memory controllers, network interfaces, graphical processing units, or other  formerly “peripheral” components, making continued use of the term “processor” problematic but no less common.
 
 From a software perspective, the good news is that operating systems and  programming languages generally model every concurrent activity as a thread,  regardless of whether it shares a core, a chip, or a package with other threads.  We will follow this convention for most of the rest of this chapter, ignoring the  complexity of the underlying hardware. When we need to refer to the hardware  on which a thread runs, we will usually call it a “core.” The bad news is that  a model of computing in which “everything is just a thread” hides details that  are crucial to understanding and improving performance. Future chips are  likely to include ever larger numbers of heterogeneous cores and complex onchip networks. To use these chips effectively, language implementations will  need to become much more sophisticated about scheduling threads onto the  underlying hardware. How much of the task will need to be visible to the  application programmer remains to be determined.
-
-Core A  Core B  Core Z
-
-Cache  X : 4
-
-Cache  X : 3  Cache
-
-...
-
-Bus
-
-Memory  X : 3
 
 ![Figure 13.3 The cache coherence...](images/page_666_vector_197.png)
 *Figure 13.3  The cache coherence problem for shared-memory multicore and multiprocessor  machines. Here cores A and B have both read variable X from memory. As a side effect, a  copy of X has been created in the cache of each core. If A now changes X to 4 and B reads X  again, how do we ensure that the result is a 4 and not the still-cached 3? Similarly, if Z reads X  into its cache, how do we ensure that it obtains the 4 from A’s cache instead of the stale 3 from  memory?*
@@ -3534,16 +3231,6 @@ In blocking synchronization (also called scheduler-based synchronization), the  
 DESIGN & IMPLEMENTATION
 
 13.2 Hardware and software communication  As described in Section 13.1.2, the distinction between shared memory and  message passing applies not only to languages and libraries but also to computer hardware. It is important to note that the model of communication and  synchronization provided by the language or library need not necessarily agree  with that of the underlying hardware. It is easy to implement message passing  on top of shared-memory hardware. With a little more effort, one can also implement shared memory on top of message-passing hardware. Systems in this  latter camp are sometimes referred to as software distributed shared memory  (S-DSM).
-
-Shared memory  Message passing  Distributed computing
-
-Language  Java, C#  C/C++11
-
-Go  Erlang
-
-Extension  OpenMP  Remote procedure call
-
-Library  pthreads,  MPI  Internet libraries  Windows threads
 
 ![Figure 13.4 Examples of parallel...](images/page_670_vector_180.png)
 *Figure 13.4  Examples of parallel programming systems. There is also a very large number of  experimental, pedagogical, or niche proposals for each of the regions in the table.*
@@ -3694,8 +3381,6 @@ same time, all of which execute concurrently with each other and with whatever
 task is executing (the current instance of) P. The main program behaves like an 
 initial default task.
 ```
-
-(a)  (b)
 
 ![Figure 13.5 Lifetime of concurrent...](images/page_675_vector_269.png)
 *Figure 13.5  Lifetime of concurrent threads.  With co-begin, parallel loops, or launch-atelaboration (a), threads are always properly nested. With fork/join (b), more general patterns  are possible.*
@@ -3879,44 +3564,6 @@ EXAMPLE 13.20  a uniprocessor, the all-threads-on-one-process extreme may be acc
 
 In the common two-level organization of concurrency (user-level threads on  top of kernel-level processes), similar code appears at both levels of the system:  the language run-time system implements threads on top of one or more processes in much the same way that the operating system implements processes on
 
-Thread scheduler
-
-Thread Ml
-
-Thread Mb
-
-Thread Ma
-
-Thread 1b
-
-Thread 1k
-
-Thread 1a
-
-User space
-
-## ...  ...  ...
-
-Process Ma
-
-Process Mj
-
-Process 1a
-
-Process 1i
-
-## ...  ...
-
-OS kernel
-
-## ...
-
-## ...
-
-Core 1  Core 2  Core N
-
-Process scheduler
-
 ![Figure 13.6 Two-level implementation of...](images/page_681_vector_312.png)
 *Figure 13.6  Two-level implementation of threads. A thread scheduler, implemented in a library  or language run-time package, multiplexes threads on top of one or more kernel-level processes,  just as the process scheduler, implemented in the operating system kernel, multiplexes processes  on top of one or more physical cores.*
 
@@ -3931,10 +3578,6 @@ To turn coroutines into threads, we proceed in a series of three steps. First, w
 Uniprocessor Scheduling
 
 EXAMPLE 13.21  Figure 13.7 illustrates the data structures employed by a simple scheduler. At any  Cooperative  particular time, a thread is either blocked (i.e., for synchronization) or runnable.  multithreading on a  A runnable thread may actually be running on some process or it may be awaiting  uniprocessor
-
-current_thread  ready_list
-
-Waiting for condition foo  Waiting for condition bar
 
 ![Figure 13.7 Data structures of...](images/page_682_vector_226.png)
 *Figure 13.7  Data structures of a simple scheduler. A designated  current thread is running.  Threads on the ready list are runnable. Other threads are blocked, waiting for various conditions  to become true. If threads run on top of more than one OS-level process, each such process  will have its own current thread variable. If a thread makes a call into the operating system, its  process may block in the kernel.*
@@ -4088,10 +3731,6 @@ Spin Locks
 
 Dekker is generally credited with fnding the frst two-thread mutual exclusion algorithm that requires no atomic instructions other than load and store.  Dijkstra [Dij65] published a version that works for n threads in 1965. Peterson  [Pet81] published a much simpler two-thread algorithm in 1981. Building on
 
-type lock = Boolean := false;
-
-procedure acquire lock(ref L : lock)  while not test and set(L)  while L  –– nothing –– spin  procedure release lock(ref L : lock)  L := false
-
 ![Figure 13.8 A simple test-and-test_and_set...](images/page_687_vector_168.png)
 *Figure 13.8  A simple test-and-test_and_set lock. Waiting processes spin with ordinary read  (load) instructions until the lock appears to be free, then use test_and_set to acquire it. The  very frst access is a test_and_set, for speed in the common (no competition) case.*
 
@@ -4150,10 +3789,6 @@ Barriers
 Data-parallel algorithms are often structured as a series of high-level steps, or  phases, typically expressed as iterations of some outermost loop. Correctness often depends on making sure that every thread completes the previous step before  any moves on to the next. A barrier serves to provide this synchronization.
 
 EXAMPLE 13.26  As a concrete example, finite element analysis models a physical object—a  Barriers in finite element  bridge, let us say—as an enormous collection of tiny fragments. Each fragment of  analysis  the bridge imparts forces to the fragments adjacent to it. Gravity exerts a downward force on all fragments. Abutments exert an upward force on the fragments  that make up base plates. The wind exerts forces on surface fragments. To evaluate stress on the bridge as a whole (e.g., to assess its stability and resistance to  failures), a fnite element program might divide the fragments among a large collection of threads (probably one per core). Beginning with the external forces,  the program would then proceed through a sequence of iterations. In each iteration, each thread would recompute the forces on its fragments based on the  forces found in the previous iteration. Between iterations, the threads would
-
-shared count : integer := n  shared sense : Boolean := true  per-thread private local sense : Boolean := true
-
-procedure central barrier()  local sense := not local sense  –– each thread toggles its own sense  if fetch and decrement(count) = 1  –– last arriving thread  count := n  –– reinitialize for next iteration  sense := local sense  –– allow other threads to proceed  else  repeat  –– spin  until sense = local sense
 
 ![Figure 13.9 A simple “sense-reversing”...](images/page_689_vector_245.png)
 *Figure 13.9  A simple “sense-reversing” barrier. Each thread has its own copy of local sense.  Threads share a single copy of count and sense.*
@@ -4246,20 +3881,6 @@ In the CAS-based update of Example 13.29, the “prepare” part of the algorith
 
 EXAMPLE 13.30  Figure 13.10 illustrates a widely used nonblocking concurrent queue. The  The M&S queue  dequeue operation does not require cleanup, but the enqueue operation does.  To add an element to the end of the queue, a thread reads the current tail pointer  to fnd the last node in the queue, and uses a CAS to change the next pointer of  that node to point to the new node instead of being null. If the CAS succeeds (no  other thread has already updated the relevant next pointer), then the new node  has been inserted. As cleanup, the tail pointer must be updated to point to the  new node, but any thread can do this—and will, if it discovers that tail–>next is  not null.  ■  Nonblocking algorithms have several advantages over blocking algorithms.  They are inherently tolerant of page faults and preemption: if a thread stops running partway through an operation, it never prevents other threads from making  progress. Nonblocking algorithms can also safely be used in signal (event) and  interrupt handlers, avoiding problems like the one described in Example 13.22.  For several important data structures and algorithms, including stacks, queues,  sorted lists, priority queues, hash tables, and memory management, nonblocking  algorithms can also be faster than locks. Unfortunately, these algorithms tend to  be exceptionally subtle and diffcult to devise. They are used primarily in the implementation of language-level concurrency mechanisms and in standard library  packages.
 
-Dequeue  Enqueue
-
-head  head tail  tail
-
-## . . .  . . .
-
-step 1
-
-head  tail
-
-step 2
-
-## . . .
-
 ![Figure 13.10 Operations on a...](images/page_692_vector_236.png)
 *Figure 13.10  Operations on a nonblocking concurrent queue. In the dequeue operation  (left), a single CAS swings the head pointer to the next node in the queue. In the enqueue  operation (right), a frst CAS changes the next pointer of the tail node to point at the new node,  at which point the operation is said to have logically completed. A subsequent “cleanup” CAS,  which can be performed by any thread, swings the tail pointer to point at the new node as well.*
 
@@ -4313,22 +3934,6 @@ To avoid temporal loops, implementors of concurrent languages and libraries  mus
 In Example 13.31, both A and B must prevent their read from bypassing (completing before) the logically earlier write. Typically this can be accomplished by
 
 3  Fences are also sometimes known as memory barriers. They are unrelated to the garbage collection barriers of Section 8.5.3 (“Tracing Collection”), the synchronization barriers of Section 13.3.1, or the RTL barriers of Section C 15.2.1.
-
-Initially: X = Y = 0  Core A:  Core B:
-
-X := 1  Y := 1
-
-Core C:
-
-Core D:
-
-cx := X
-
-dy := Y
-
-cy := Y
-
-dx := X
 
 ![Figure 13.11 Concurrent propagation of...](images/page_694_vector_185.png)
 *Figure 13.11  Concurrent propagation of writes. On some machines, it is possible for concurrent writes to reach cores in different orders. Arrows show apparent temporal ordering. Here  C may read cy = 0 and cx = 1, while D reads dx = 0 and dy = 1.*
@@ -4394,12 +3999,6 @@ regardless of the order specifed by the compiler in machine code. On B’s core,
 would also have been possible for either the compiler or the hardware to read p
 ```
 
-Initially: p : foo = null  initialized : volatile Boolean = false
-
-Thread A:  Thread B:  p:= new foo()  repeat  −− nothing −− spin synchronization  initialized := true  until initialized  order
-
-x := p.a  program order
-
 ![Figure 13.12 Protecting initialization with...](images/page_696_vector_181.png)
 *Figure 13.12  Protecting initialization with a volatile flag. Here labeling initialized as volatile  avoids a data race, and ensures that B will not access p until it is safe to do so.*
 
@@ -4423,16 +4022,6 @@ EXAMPLE 13.34
 
 Scheduling threads on  processes
 
-shared scheduler lock : low level lock  shared ready list : queue of thread  per-process private current thread : thread
-
-procedure reschedule()  –– assume that scheduler lock is already held and that timer signals are disabled  t : thread  loop  t := dequeue(ready list)  if t = null
-
-exit  –– else wait for a thread to become runnable  release lock(scheduler lock)  –– window allows another thread to access ready list (no point in reenabling  –– signals; we’re already trying to switch to a different thread)  acquire lock(scheduler lock)  transfer(t)  –– caller must release scheduler lock and reenable timer signals after we return
-
-procedure yield()  disable signals()  acquire lock(scheduler lock)  enqueue(ready list, current thread)  reschedule()  release lock(scheduler lock)  reenable signals()
-
-procedure sleep on(ref Q : queue of thread)  –– assume that caller has already disabled timer signals and acquired  –– scheduler lock, and will reverse these actions when we return  enqueue(Q, current thread)  reschedule()
-
 ![Figure 13.13 Pseudocode for part...](images/page_697_vector_426.png)
 *Figure 13.13  Pseudocode for part of a simple reentrant (parallelism-safe) scheduler. Every  process has its own copy of current thread. There is a single shared scheduler lock and a single  ready list. If processes have dedicated cores, then the low level lock can be an ordinary spin  lock; otherwise it can be a “spin-then-yield” lock (Figure 13.14). The loop inside reschedule  busy-waits until the ready list is nonempty. The code for sleep on cannot disable timer signals  and acquire the scheduler lock itself, because the caller needs to test a condition and then block  as a single atomic operation.*
 
@@ -4454,16 +4043,6 @@ Scheduler-Based Synchronization
 
 The problem with busy-wait synchronization is that it consumes processor  cycles—cycles that are therefore unavailable for other computation. Busy-wait  synchronization makes sense only if (1) one has nothing better to do with the  current core, or (2) the expected wait time is less than the time that would be  required to switch contexts to some other thread and then switch back again. To  ensure acceptable performance on a wide variety of systems, most concurrent
 
-type lock = Boolean := false;
-
-procedure acquire lock(ref L : lock)
-
-while not test and set(L)  count := TIMEOUT  while L
-
-count −:= 1  if count = 0  OS yield()  –– relinquish core and drop priority  count := TIMEOUT
-
-procedure release lock(ref L : lock)  L := false
-
 ![Figure 13.14 A simple spin-then-yield...](images/page_699_vector_220.png)
 *Figure 13.14  A simple spin-then-yield lock, designed for execution on a multiprocessor that  may be multiprogrammed (i.e., on which OS-level processes may be preempted). If unable  to acquire the lock in a fxed, short amount of time, a process calls the OS scheduler to yield  its core and to lower its priority enough that other processes (if any) will be allowed to run.  Hopefully the lock will be available the next time the yielding process is scheduled for execution.*
 
@@ -4472,22 +4051,6 @@ programming languages employ scheduler-based synchronization mechanisms,  which 
 In the following subsection we consider semaphores, the most common form of  scheduler-based synchronization. In Section 13.4 we consider the higher-level notions of monitors, conditional critical regions, and transactional memory. In each  case, scheduler-based synchronization mechanisms remove the waiting thread  from the scheduler’s ready list, returning it only when the awaited condition is  true (or is likely to be true). By contrast, a spin-then-yield lock is still a busy-wait  mechanism: the currently running process relinquishes the core, but remains on  the ready list. It will perform a test_and_set operation every time the lock  appears to be free, until it fnally succeeds. It is worth noting that busy-wait synchronization is generally “level-independent”—it can be thought of as synchronizing threads, processes, or cores, as desired. Scheduler-based synchronization  is “level-dependent”—it is specifc to threads when implemented in the language  run-time system, or to processes when implemented in the operating system.
 
 EXAMPLE 13.37  We will use a bounded buffer abstraction to illustrate the semantics of various  The bounded buffer  scheduler-based synchronization mechanisms. A bounded buffer is a concurrent  problem  queue of limited size into which producer threads insert data, and from which  consumer threads remove data. The buffer serves to even out fuctuations in the  relative rates of progress of the two classes of threads, increasing system throughput. A correct implementation of a bounded buffer requires both atomicity and  condition synchronization: the former to ensure that no thread sees the buffer in  an inconsistent state in the middle of some other thread’s operation; the latter to  force consumers to wait when the buffer is empty and producers to wait when the  buffer is full.  ■
-
-type semaphore = record
-
-N : integer –– always non-negative  Q : queue of threads
-
-procedure P(ref S : semaphore)  disable signals()  acquire lock(scheduler lock)  if S.N > 0
-
-S.N −:= 1  else
-
-sleep on(S.Q)  release lock(scheduler lock)  reenable signals()
-
-procedure V(ref S : semaphore)  disable signals()  acquire lock(scheduler lock)  if S.Q is nonempty
-
-enqueue(ready list, dequeue(S.Q))  else
-
-S.N +:= 1  release lock(scheduler lock)  reenable signals()
 
 ![Figure 13.15 Semaphore operations, for...](images/page_700_vector_330.png)
 *Figure 13.15  Semaphore operations, for use with the scheduler code of Figure 13.13.*
@@ -4512,12 +4075,6 @@ A semaphore whose counter is initialized to one and for which P and V operations
 ```
 
 4  P stands for the Dutch word passeren (to pass) or proberen (to test); V stands for vrijgeven (to  release) or verhogen (to increment). To keep them straight, speakers of English may wish to think  of P as standing for “pause,” since a thread will pause at a P operation if the semaphore count is  negative. Algol 68 calls the P and V operations down and up, respectively.
-
-shared buf : array [1..SIZE] of bdata  shared next full, next empty : integer := 1, 1  shared mutex : semaphore := 1  shared empty slots, full slots : semaphore := SIZE, 0
-
-procedure insert(d : bdata)  P(empty slots)  P(mutex)  buf[next empty] := d  next empty := next empty mod SIZE + 1  V(mutex)  V(full slots)
-
-function remove() : bdata  P(full slots)  P(mutex)  d : bdata := buf[next full]  next full := next full mod SIZE + 1  V(mutex)  V(empty slots)  return d
 
 ![Figure 13.16 Semaphore-based code for...](images/page_701_vector_308.png)
 *Figure 13.16  Semaphore-based code for a bounded buffer. The mutex binary semaphore  protects the data structure proper. The full slots and empty slots general semaphores ensure  that no operation starts until it is safe to do so.*
@@ -4570,16 +4127,6 @@ Though widely used, semaphores are also widely considered to be too “low level
 Monitors were suggested by Dijkstra [Dij72] as a solution to the problems of  semaphores. They were developed more thoroughly by Brinch Hansen [Bri73],  and formalized by Hoare [Hoa74] in the early 1970s. They have been incorporated into at least a score of languages, of which Concurrent Pascal [Bri75], Modula (1) [Wir77b], and Mesa [LR80] were probably the most infuential.5 They
 
 5  Together with Smalltalk and Interlisp, Mesa was one of three infuentiallanguages to emerge from  Xerox’s Palo Alto Research Center in the 1970s. All three were developed on the Alto personal  computer, which pioneered such concepts as the bitmapped display, the mouse, the graphical  user interface, WYSIWYG editing, Ethernet networking, and the laser printer. The Mesa project  was led by Butler Lampson (1943–), who played a key role in the later development of Euclid and  Cedar as well. For his contributions to personal and distributed computing, Lampson received  the ACM Turing Award in 1992.
-
-monitor bounded buf  imports bdata, SIZE  exports insert, remove
-
-buf : array [1..SIZE] of bdata  next full, next empty : integer := 1, 1  full slots : integer := 0  full slot, empty slot : condition
-
-entry insert(d : bdata)  if full slots = SIZE
-
-wait(empty slot)  buf[next empty] := d  next empty := next empty mod SIZE + 1  full slots +:= 1  signal(full slot)
-
-entry remove() : bdata  if full slots = 0  wait(full slot)  d : bdata := buf[next full]  next full := next full mod SIZE + 1  full slots −:= 1  signal(empty slot)  return d
 
 ![Figure 13.17 Monitor-based code for...](images/page_703_vector_349.png)
 *Figure 13.17  Monitor-based code for a bounded buffer. Insert and remove are entry subroutines: they require exclusive access to the monitor’s data. Because conditions are memory-less,  both insert and remove can safely end their operation with a signal.*
@@ -4679,20 +4226,6 @@ The principal mechanism for synchronization in Ada, introduced in Ada 83, is  ba
 DESIGN & IMPLEMENTATION
 
 13.7 Conditional critical regions  Conditional critical regions avoid the question of signal semantics, because  they use explicit Boolean conditions instead of condition variables, and because conditions can be awaited only at the beginning of critical regions. At  the same time, they introduce potentially signifcant ineffciency. In the general case, the code used to exit a conditional critical region must tentatively  resume each waiting thread, allowing that thread to recheck its condition in  its own referencing environment. Optimizations are possible in certain special  cases (e.g., for conditions that depend only on global variables, or that consist  of only a single Boolean variable), but in the worst case it may be necessary to  perform context switches in and out of every waiting thread on every exit from  a region.
-
-buffer : record
-
-buf : array [1..SIZE] of bdata  next full, next empty : integer := 1, 1  full slots : integer := 0
-
-procedure insert(d : bdata)
-
-region buffer when full slots < SIZE
-
-buf[next empty] := d  next empty := next empty mod SIZE + 1  full slots −:= 1
-
-function remove() : bdata  region buffer when full slots > 0
-
-d : bdata := buf[next full]  next full := next full mod SIZE + 1  full slots +:= 1  return d
 
 ![Figure 13.18 Conditional critical regions...](images/page_708_vector_264.png)
 *Figure 13.18  Conditional critical regions for a bounded buffer. Boolean conditions on the  region statements eliminate the need for explicit condition variables.*
@@ -4870,73 +4403,6 @@ loop  valid time := clock  read set := write map := ∅  try
 In the body of the transaction (your code here), reads and writes of a location 
 with address x are replaced with calls to read(x) and write(x, v), using  the  code
 ```
-
-struct orec  procedure write(x : address, v : value)  owned : Boolean  write map[x] := v  val : union (time, transaction id)
-
-```
-procedure commit() 
-function read(x : address) : value 
-try 
-if x ∈ write map.domain then return write map[x] 
-lock map : map address → orec := ∅ 
-loop 
-done : Boolean := false 
-repeat 
-for x : address ∈ write map.domain 
-o : orec := orecs[hash(x)] 
-o : orec := orecs[hash(x)] 
-until not o.owned 
-if o = true, me 
-t : time := o.val 
-–– when last modifed 
-if o.owned then throw abort 
-if t > valid  time 
-if not CAS(&orecs[hash(x)], o, true, me ) 
-–– may be inconsistent with previous reads 
-throw abort 
-validate() 
-–– attempt to extend valid time 
-lock map[x] := o 
-v : value :=  *x  
-n :  time := 1  + fetch and increment(&clock) 
-if o = orecs[hash(x)] 
-validate() 
-read set +:= {x} 
-done := true 
-return v 
-for x, v : address, value  ∈ write map
-```
-
-⟨
-
-⟨
-
-⟨  ⟨
-
-```
-*x = v 
-–– write back 
-procedure validate() 
-fnally 
-t :  time := clock  
-–– do this however control leaves the try block 
-for x : address ∈ read set 
-for x, o : address, orec  ∈ lock map 
-o : orec := orecs[hash(x)] 
-orecs[hash(x)] := if done 
-if (not o.owned and o.val > valid time) 
-then false, n 
-–– update 
-or (o.owned and o.val = me) 
-else o 
-–– restore 
-throw abort 
-valid time := t
-```
-
-⟨  ⟨
-
-⟨
 
 ![Figure 13.19 Possible pseudocode for...](images/page_715_vector_374.png)
 *Figure 13.19  Possible pseudocode for a software TM system. The read and write routines are used to replace ordinary  loads and stores within the body of the transaction. The validate routine is called from both read and commit. It attempts to  verify that no previously read value has since been overwritten and, if successful, updates valid time. Various fence instructions  (not shown) may be needed if the underlying hardware is not sequentially consistent.*
@@ -5728,39 +5194,6 @@ natural to want to automate the editing process. Tools to accomplish this task
 constitute the second principal class of ancestors for modern scripting languages.
 ```
 
-```
-# label (target for branch): 
-:top 
-/<[hH][123]>.*<\/[hH][123]>/ { 
-;# match whole heading 
-h 
-;# save copy of pattern space 
-s/\(<\/[hH][123]>\).*$/\1/ 
-;# delete text after closing tag 
-s/^.*\(<[hH][123]>\)/\1/ 
-;# delete text before opening tag 
-p 
-;# print what remains 
-g 
-;# retrieve saved pattern space 
-s/<[hH][123]>// 
-;# delete opening tag 
-s/<\/[hH][123]>// 
-;# delete closing tag 
-b top  
-} 
-;# and branch to top of script 
-/<[hH][123]>/ { 
-;# match opening tag (only) 
-N 
-;# extend search to next line 
-b top  
-} 
-;# and branch to top of script 
-d 
-;# if no match at all, delete
-```
-
 ![Figure 14.1 Script in sed...](images/page_746_vector_266.png)
 *Figure 14.1  Script in sed to extract headers from an HTML file. The script assumes that  opening and closing tags are properly matched, and that headers do not nest.*
 
@@ -5793,12 +5226,6 @@ suited to “one-line programs,” typically entered verbatim from the keyboard 
 
 EXAMPLE 14.19  the -e command-line switch. The following, for example, will read from standard  One-line scripts in sed  input, delete blank lines, and (implicitly) print the nonblank lines to standard  output:
 
-/<[hH][123]>/ {  # execute this block if line contains an opening tag  do {
-
-open_tag = match($0, /<[hH][123]>/)  $0 = substr($0, open_tag)  # delete text before opening tag  # $0 is the current input line  while (!/<\/[hH][123]>/) {  # print interior lines  print  #  in their entirety  if (getline != 1) exit  }  close_tag = match($0, /<\/[hH][123]>/) + 4
-
-print substr($0, 0, close_tag)  # print through closing tag  $0 = substr($0, close_tag + 1)  # delete through closing tag  } while (/<[hH][123]>/)  # repeat if more opening tags  }
-
 ![Figure 14.2 Script in awk...](images/page_747_vector_254.png)
 *Figure 14.2  Script in awk to extract headers from an HTML file. Unlike the sed script, this  version prints interior lines incrementally. It again assumes that the input is well formed.*
 
@@ -5818,10 +5245,6 @@ EXAMPLE 14.20  actions whose patterns evaluate to true. An example with a single
 Several conventions can be seen in this example. The current input line is 
 available in the pseudovariable $0. The  getline function reads into this variable
 ```
-
-BEGIN {  # "noise" words  nw["a"] = 1;  nw["an"] = 1;  nw["and"] = 1;  nw["but"] = 1  nw["by"] = 1;  nw["for"] = 1;  nw["from"] = 1; nw["in"] = 1  nw["into"] = 1; nw["nor"] = 1;  nw["of"] = 1;  nw["on"] = 1  nw["or"] = 1;  nw["over"] = 1; nw["the"] = 1;  nw["to"] = 1  nw["via"] = 1;  nw["with"] = 1  }  {  for (i=1; i <= NF; i++) {
-
-if ((!nw[$i] || i == 0 || $(i-1) ~ /[:-]$/) && ($i !~ /.+[A-Z]/)) {  # capitalize  $i = toupper(substr($i, 1, 1)) substr($i, 2)  }  printf $i " ";  # don't add trailing newline  }  printf "\n";  }
 
 ![Figure 14.3 Script in awk...](images/page_748_vector_265.png)
 *Figure 14.3  Script in awk to capitalize a title. The BEGIN block is executed before reading any  input lines. The main block has no explicit pattern, so it is applied to every input line.*
@@ -5847,10 +5270,6 @@ awk '{ print $2 }'  ■
 Associative arrays will be considered in more detail in Section 14.4.3. Briefy,
 
 EXAMPLE 14.22  they combine the functionality of hash tables with the syntax of arrays. We can  Capitalizing a title in awk  illustrate both felds and associative arrays with an example script (Figure 14.3)  that capitalizes each line of its input as if it were a title. The script declines to  modify “noise” words (articles, conjunctions, and short prepositions) unless they  are the frst word of the title or of a subtitle, where a subtitle follows a word ending  with a colon or a dash. The script also declines to modify words in which any letter  other than the frst is already capitalized.  ■
-
-while (<>) {  # iterate over lines of input  next if !/<[hH][123]>/;  # jump to next iteration  while (!/<\/[hH][123]>/) { $_ .= <>; }  # append next line to $_  s/.*?(<[hH][123]>.*?<\/[hH][123]>)//s;
-
-# perform minimal matching; capture parenthesized expression in $1  print $1, "\n";  redo unless eof;  # continue without reading next line of input  }
 
 ![Figure 14.4 Script in Perl...](images/page_749_vector_167.png)
 *Figure 14.4  Script in Perl to extract headers from an HTML file. For simplicity we have again  adopted the strategy of buffering entire headers, rather than printing them incrementally.*
@@ -5927,16 +5346,6 @@ frst element of this array, a scalar. A single variable name may have different
 values when interpreted as a scalar, an array, a hash table, a subroutine, or a fle
 ```
 
-$#ARGV == 0 || die "usage: $0 pattern\n";  open(PS, "ps -w -w -x -o'pid,command' |");  # 'process status' command  <PS>;  # discard header line  while (<PS>) {
-
-@words = split;  # parse line into space-separated words  if (/$ARGV[0]/i && $words[0] ne $$) {
-
-chomp;  # delete trailing newline  print;  do {
-
-print "? ";  $answer = <STDIN>;  } until $answer =~ /^[yn]/i;  if ($answer =~ /^y/i) {
-
-kill 9, $words[0];  # signal 9 in Unix is always fatal  sleep 1;  # wait for 'kill' to take effect  die "unsuccessful; sorry\n" if kill 0, $words[0];  }  # kill 0 tests for process existence  }  }
-
 ![Figure 14.5 Script in Perl...](images/page_752_vector_287.png)
 *Figure 14.5  Script in Perl to “force quit” errant processes. Perl’s text processing features  allow us to parse the output of ps, rather than fltering it through an external tool like sed or  awk.*
 
@@ -5996,23 +5405,6 @@ employs the somewhat more verbose syntax of method calls, rather than the builti
 
 2  Rexx and Tcl have object-oriented extensions, named Object Rexx and Incr Tcl, respectively.  Perl 5 includes some (rather awkward) object-oriented features; Perl 6 will have more uniform  object support.
 
-```
-import os, re, subprocess, sys, time 
-if len(sys.argv) != 2:
-```
-
-sys.stderr.write('usage: ' + sys.argv[0] + ' pattern\n')  sys.exit(1)  ps = subprocess.Popen(['/bin/ps', '-w', '-w', '-x',
-
-'-o', 'pid,command'], stdout=subprocess.PIPE)  toss = ps.stdout.readline()  # discard header line  for line in ps.stdout:
-
-line = line.decode().rstrip()  proc = int(re.search('\S+', line).group())  if re.search(sys.argv[1], line) and proc != os.getpid():
-
-print(line + '? ', flush=True, end='')  answer = sys.stdin.readline()  while not re.search('^[yn]', answer, re.I):
-
-print('? ', flush=True, end='')  answer = sys.stdin.readline()  if re.search('^y', answer, re.I):
-
-os.kill(proc, 9)  time.sleep(1)  try:  # expect exception if process  os.kill(proc, 0)  # no longer exists  sys.stderr.write('unsuccessful; sorry\n');  sys.exit(1)  except: pass  # do nothing on expected exception
-
 ![Figure 14.6 Script in Python...](images/page_754_vector_352.png)
 *Figure 14.6  Script in Python 3 to “force quit” errant processes. Compare with Figure 14.5.*
 
@@ -6065,16 +5457,6 @@ name by which this handle is known within the block. In a similar vein, the each
 
 3  Parentheses here are signifcant. Infx arithmetic follows conventional precedence rules, but  method invocation proceeds from left to right. Likewise, parentheses can be omitted around argument lists, but the method-selecting dot (.) groups more tightly than the argument-separating  comma (,), so 2.send ’*’, 4.send ’+’, 5 evaluates to 18, not 13.
 
-ARGV.length() == 1 or begin  $stderr.print("usage: #{$0} pattern\n"); exit(1)  end
-
-pat = Regexp.new(ARGV[0])  # treat command-line arg as regular expression  IO.popen("ps -w -w -x -o'pid,command'") {|ps|  ps.gets  # discard header line  ps.each {|line|
-
-pid = line.split[0].to_i  if line =~ pat and pid != Process.pid then  print line.chomp  begin
-
-print "? "  answer = $stdin.gets  end until answer =~ /^[yn]/i  if answer =~ /^y/i then
-
-Process.kill(9, pid)  sleep(1)  begin  # expect exception (process gone)  Process.kill(0, pid)  $stderr.print("unsuccessful; sorry\n"); exit(1)  rescue  # handler -- do nothing  end  end  end  }  }
-
 ![Figure 14.7 Script in Ruby...](images/page_756_vector_375.png)
 *Figure 14.7  Script in Ruby to “force quit” errant processes. Compare with Figures 14.5  and 14.6.*
 
@@ -6119,16 +5501,6 @@ To admit extension, a tool must
 incorporate, or communicate with, an interpreter for a scripting language.  provide hooks that allow scripts to call the tool’s existing commands.  allow the user to tie newly defned commands to user interface events.
 
 With care, these mechanisms can be made independent of any particular scripting  language. Microsoft’s Windows Script interface allows almost any language to be  used to script the operating system, web server, and browser. GIMP, the widely  used GNU Image Manipulation Program, has a comparably general interface: it  comes with a built-in interpreter for a dialect of Scheme, and supports plug-ins  (externally provided interpreter modules) for Perl and Tcl, among others. There  is a tendency, of course, for user communities to converge on a favorite language,  to facilitate sharing of code. Microsoft tools are usually scripted with PowerShell;  GIMP with Scheme; Adobe tools with Visual Basic on the PC, or AppleScript on  the Mac.
-
-(setq-default line-number-prefix "")  (setq-default line-number-suffix ") ")  (defun number-region (start end &optional initial)
-
-"Add line numbers to all lines in region.  With optional prefix argument, start numbering at num.  Line number is bracketed by strings line-number-prefix  and line-number-suffix (default \"\" and \") \")."
-
-(interactive "*r\np")  ; how to parse args when invoked from keyboard  (let* ((i (or initial 1))  (num-lines (+ -1 initial (count-lines start end)))  (fmt (format "%%%dd" (length (number-to-string num-lines))))
-
-; yields "%1d", "%2d", etc. as appropriate  (finish (set-marker (make-marker) end)))  (save-excursion  (goto-char start)  (beginning-of-line)  (while (< (point) finish)
-
-(insert line-number-prefix (format fmt i) line-number-suffix)  (setq i (1+ i))  (forward-line 1))  (set-marker finish nil))))
 
 ![Figure 14.8 Emacs Lisp function...](images/page_758_vector_309.png)
 *Figure 14.8  Emacs Lisp function to number the lines in a selected region of text.*
@@ -6199,12 +5571,6 @@ Server-side scripts are typically used when the service provider wants to retain
 
 4  The term “URI” is often used interchangeably with “URL” (uniform resource locator), but the  World Wide Web Consortium distinguishes between the two. All URIs are hierarchical (multipart) names. URLs are one kind of URIs; they use a naming scheme that indicates where to fnd  the resource. Other URIs can use other naming schemes.
 
-#!/usr/bin/perl
-
-print "Content-type: text/html\n\n";  print "<!DOCTYPE html>\n";
-
-print "<html lang=\"en\">\n";  $host = `hostname`; chop $host;  print "<head>\n";  print "<meta charset=\"utf-8\">\n";  print "<title>Status of ", $host, "</title>\n";  print "</head>\n<body>\n";  print "<h1>", $host, "</h1>\n";  print "<pre>\n", `uptime`, "\n", `who`;  print "</pre>\n</body>\n</html>\n";
-
 ![Figure 14.9 A simple CGI...](images/page_761_vector_234.png)
 *Figure 14.9  A simple CGI I script in Perl. If this script is named status.perl, and is installed  in the server’s cgi-bin directory, then a user anywhere on the Internet can obtain summary  statistics and a list of users currently logged into the server by typing hostname/cgi-bin/status.perl  into a browser window.*
 
@@ -6222,20 +5588,6 @@ EXAMPLE 14.30  CGI scripts are commonly used to process on-line forms. A simple 
 
 Adder web form with a  appears in Figure 14.11. The form element in the HTML fle specifes the URI  CGI I script  of the CGI script, which is invoked when the user hits the Submit button. Values  previously entered into the input felds are passed to the script either as a trailing
 
-<!DOCTYPE html>  <html lang="en">  <head>  <meta charset="utf-8">  <title>Status of sigma.cs.rochester.edu</title>  </head>  <body>  <h1>sigma.cs.rochester.edu</h1>  <pre>  22:10  up 5 days, 12:50, 5 users, load averages: 0.40 0.37 0.31
-
-scott  console  Feb 13 09:21  scott  ttyp2  Feb 17 15:27  test  ttyp3  Feb 18 17:10  test  ttyp4  Feb 18 17:11  </pre>  </body>  </html>
-
-Status of sigma.cs.rochester.edu
-
-## sigma.cs.rochester.edu
-
-22:10  up 5 days, 12:50, 5 users, load averages:
-
-0.40 0.37 0.31
-
-scott  console  Feb 13 09:21  scott  ttyp2  Feb 17 15:27  test  ttyp3  Feb 18 17:10  test  ttyp4  Feb 18 17:11
-
 ![Figure 14.10 Sample output from...](images/page_762_vector_405.png)
 *Figure 14.10  Sample output from the script of Figure 14.9. HTML source appears at top; the  rendered page is below.*
 
@@ -6247,36 +5599,10 @@ Though widely used, CGI scripts have several disadvantages:
 
 5  One typically uses post type forms for one-time requests. A get type form appears a little  clumsier, because arguments are visibly embedded in the URI, but this gives it the advantage of  repeatability: it can be “bookmarked” by client browsers.
 
-<!DOCTYPE html>  <html lang="en">  <head><meta charset="utf-8"><title>Adder</title></head>  <body>  <form action="/cgi-bin/add.perl" method="post">  <p><input name="argA" size=3>First addend<br>
-
-Adder
-
-12  34
-
-First addend  Second addend    Submit  
-
-<input name="argB" size=3>Second addend</p>  <p><input type="submit"></p>  </form>  </body>  </html>
-
-#!/usr/bin/perl
-
-use CGI qw(:standard);  # provides access to CGI input fields  $argA = param("argA");  $argB = param("argB");  $sum = $argA + $argB;
-
-print "Content-type: text/html\n\n";  print "<!DOCTYPE html>\n";
-
-print "<html lang=\"en\">\n";  print "<head><meta charset=\"utf-8\"><title>Sum</title></head>\n<body>\n";  print "<p>$argA plus $argB is $sum</p>\n";  print "</body>\n</html>\n";
-
-<!DOCTYPE html>  <html lang="en">  <head><meta charset="utf-8"><title>Sum</title></head>  <body>  <p>12 plus 34 is 46</p>  </body>  </html>
-
-Sum
-
-12 plus 34 is 46
-
 ![Figure 14.11 An interactive CGI...](images/page_763_vector_453.png)
 *Figure 14.11  An interactive CGI I form. Source for the original web page is shown at the upper left, with the rendered page  to the right. The user has entered 12 and 34 in the text felds. When the Submit button is pressed, the client browser sends a  request to the server for URI /cgi-bin/add.perl. The values 12 and 13 are contained within the request. The Perl script, shown  in the middle, uses these values to generate a new web page, shown in HTML at the bottom left, with the rendered page to  the right.*
 
 The web server must launch each script as a separate program, with potentially  signifcant overhead (though a CGI script compiled to native code can be very  fast once running).  Because the server has little control over the behavior of a script, scripts must  generally be installed in a trusted directory by trusted system administrators;  they cannot reside in arbitrary locations as ordinary pages do.
-
-<!DOCTYPE html>  <html lang="en">  <head>  <meta charset="utf-8">  <title>Status of <?php echo $host = chop(`hostname`) ?></title>  </head>  <body>  <h1><?php echo $host ?></h1>  <pre>  <?php echo `uptime`, "\n", `who` ?>  </pre>  </body>  </html>
 
 ![Figure 14.12 A simple PHP...](images/page_764_vector_221.png)
 *Figure 14.12  A simple PHP script embedded in a web page. When served by a PHP-enabled  host, this page performs the equivalent of the CGI script of Figure 14.9.*
@@ -6292,10 +5618,6 @@ EXAMPLE 14.31
 The PHP equivalent of Figure 14.9 appears in Figure 14.12. Most of the text  in this fgure is standard HTML. PHP code is embedded between <?php and ?>  delimiters. These delimiters are not themselves HTML; rather, they indicate a  processing instruction that needs to be executed by the PHP interpreter to generate  replacement text. The “boilerplate” parts of the page can thus appear verbatim;  they need not be generated by print (Perl) or echo (PHP) commands. Note that  the separate script fragments are part of a single program. The $host variable,  for example, is set in the frst fragment and used again in the second.  ■
 
 Remote monitoring with a  PHP script
-
-<!DOCTYPE html>  <html lang="en">  <head><meta charset="utf-8"><title>20 numbers</title></head>  <body>  <p>  <?php
-
-for ($i = 0; $i < 20; $i++) {  if ($i % 2) { ?>  <b><?php  echo " $i"; ?>  </b><?php  } else echo " $i";  }  ?>  </p>  </body>  </html>
 
 ![Figure 14.13 A fragmented PHP...](images/page_765_vector_265.png)
 *Figure 14.13  A fragmented PHP script. The if and for statements work as one might  expect, despite the intervening raw HTML. When requested by a browser, this page displays the  numbers from 0 to 19, with odd numbers written in bold.*
@@ -6313,32 +5635,6 @@ Adder web form with a  Adder page of Figure 14.11 to invoke a PHP script instead
 The PHP script itself is shown in the top half of Figure 14.14. Form values are  made available to the script in an associative array (hash table) named _REQUEST.  No special library is required.  ■
 
 EXAMPLE 14.34  Because our PHP script is executed directly by the web server, it can safely  Self-posting Adder web  reside in an arbitrary web directory, including the one in which the Adder page  form  resides. In fact, by checking to see how a page was requested, we can merge the  form and the script into a single page, and let it service its own requests! We  illustrate this option in the bottom half of Figure 14.14.  ■
-
-<!DOCTYPE html>  <html lang="en">  <head><meta charset="utf-8"><title>Adder</title></head>  <body><p>  <?php
-
-$argA = $_REQUEST['argA']; $argB = $_REQUEST['argB'];  $sum = $argA + $argB;  echo "$argA plus $argB is $sum\n";  ?>  </p></body></html>
-
-<!DOCTYPE html>  <html lang="en">  <head><meta charset="utf-8">  <?php
-
-$argA = $_REQUEST['argA'];  $argB = $_REQUEST['argB'];  if ($argA == "" || $argB == "") {  ?>  <title>Adder</title></head><body>  <form action="adder.php" method="post">  <p><input name="argA" size="3"> First addend<br>
-
-```
-<input name="argB" size="3"> Second addend</p> 
-<p><input type="submit"></p> 
-</form></body></html> 
-<?php 
-} else {  
-?> 
-<title>Sum</title></head><body><p> 
-<?php 
-$sum = $argA + $argB; 
-echo "$argA plus $argB is $sum\n"; 
-?> 
-</p></body></html> 
-<?php 
-} 
-?>
-```
 
 ![Figure 14.14 An interactive PHP...](images/page_766_vector_531.png)
 *Figure 14.14  An interactive PHP web page. The script at top could be used in place of the  script in the middle of Figure 14.11. The lower script in the current fgure replaces both the web  page at the top and the script in the middle of Figure 14.11. It checks to see if it has received a  full set of arguments. If it hasn’t, it displays the fll-in form; if it has, it displays results.*
@@ -6360,20 +5656,6 @@ Rather than replace the page with output text, as our CGI and PHP scripts did,  
 14.3.4 Java Applets and Other Embedded Elements
 
 As an alternative to requiring client-side scripts to interact with the DOM of a  web page, many browsers support an embedding mechanism that allows a browser  plug-in to assume responsibility for some rectangular region of the page, in which  it can then display whatever it wants. In other words, plug-ins are less a matter  of scripting the browser than of bypassing it entirely. Historically, plug-ins were
-
-<!DOCTYPE html>  <html lang="en">  <head><meta charset="utf-8"><title>Adder</title>  <script type="text/javascript">  function doAdd() {
-
-Adder
-
-12  First addend  34  Second addend      Calculate       12 plus 34 is 46
-
-argA = parseInt(document.adder.argA.value)  argB = parseInt(document.adder.argB.value)  x = document.getElementById('sum')  while (x.hasChildNodes())
-
-x.removeChild(x.lastChild)  // delete old content  t = document.createTextNode(argA + " plus "
-
-+ argB + " is " + (argA + argB))  x.appendChild(t)  }  </script>  </head>  <body>  <form name="adder" onsubmit="return false">  <p><INPUT name="argA" size=3> First addend<br>
-
-<INPUT name="argB" size=3> Second addend</p>  <p><input type="button" onclick="doAdd()" value="Calculate"></p>  </form>  <p><span id="sum"></span></p>  </body>  </html>
 
 ![Figure 14.15 An interactive JavaScript...](images/page_768_vector_352.png)
 *Figure 14.15  An interactive JavaScript web page. Source appears at left. The rendered version on the right shows the  appearance of the page after the user has entered two values and hit the Calculate button, causing the output message to  appear. By entering new values and clicking again, the user can calculate as many sums as desired. Each new calculation will  replace the output message.*
@@ -6501,28 +5783,6 @@ What Is the Scope of an Undeclared Variable?
 
 In languages with static scoping, the lack of declarations raises an interesting  question: when we access a variable x, how do we know if it is local, global, or (if  scopes can nest) something in-between? Existing languages take several different  approaches. In Perl, all variables are global unless explicitly declared. In PHP,  they are local unless explicitly imported (and all imports are global, since scopes  do not nest). Ruby, too, has only two real levels of scoping, but as we saw in Section 14.2.4, it distinguishes between them using prefx characters on names: foo  is a local variable; $foo is a global variable; @foo is an instance variable of the current object (the one whose method is currently executing); @@foo is an instance
 
-```
-i = 1;  j = 3  
-def outer(): 
-def middle(k):
-```
-
-```
-def inner(): 
-global i 
-# from main program, not outer 
-i = 4  
-inner() 
-return i, j, k 
-# 3-element tuple 
-i = 2 
-# new local i 
-return middle(j) 
-# old (global) j
-```
-
-print(outer())  print(i, j)
-
 ![Figure 14.16 A program to...](images/page_773_vector_222.png)
 *Figure 14.16  A program to illustrate scope rules in Python. There is one instance each of j  and k, but  two of  i: one global and one local to outer. The scope of the latter is all of outer,  not just the portion after the assignment. The global statement provides inner with access to  the outermost i, so it can write it without defning a new instance.*
 
@@ -6564,21 +5824,6 @@ Interestingly, there is no way in Python for a nested routine to write a variabl
 ```
 
 EXAMPLE 14.38  that belongs to a surrounding but nonglobal scope. In Figure 14.16, inner could  Superassignment in R  not be modifed to write outer’s i. R provides an alternative mechanism that
-
-sub outer($) {  # must be called with scalar arg  $sub_A = sub {
-
-print "sub_A  $lex, $dyn\n";  };  my $lex = $_[0];  # static local initialized to first arg  local $dyn = $_[0];  # dynamic local initialized to first arg  $sub_B = sub {
-
-print "sub_B  $lex, $dyn\n";  };  print "outer  $lex, $dyn\n";  $sub_A->();  $sub_B->();  }
-
-```
-$lex  =  1; $dyn = 1;  
-print "main 
-$lex, $dyn\n"; 
-outer(2); 
-print "main 
-$lex, $dyn\n";
-```
 
 ![Figure 14.17 A program to...](images/page_774_vector_278.png)
 *Figure 14.17  A program to illustrate scope rules in Perl. The my operator creates a statically  scoped local variable; the local operator creates a new dynamically scoped instance of a global  variable. The static scope extends from the point of declaration to the lexical end of the block;  the dynamic scope extends from elaboration to the end of the block’s execution.*
@@ -6802,35 +6047,6 @@ $foo = "albatross";  $foo =~ s/[aeiou]/-/g;  # "-lb-tr-ss"  ■
 DESIGN & IMPLEMENTATION
 
 14.9 Automata for regular expressions  POSIX regular expressions are typically implemented using the constructions  described in Section 2.2.1, which transform the RE into an NFA and then a  DFA. Advanced REs of the sort provided by Perl are typically implemented  via backtracking search in the obvious NFA. The NFA-to-DFA construction  is usually not employed because it fails to preserve some of the advanced  RE extensions (notably the capture mechanism described in Examples 14.55–  14.58) [CfWO12, pp. 241–246]. Some implementations use a DFA frst to determine whether there is a match, and then an NFA or backtracking search to  actually effect the match. This strategy pays the price of the slower automaton  only when it’s sure to be worthwhile.
-
-Escape  Meaning
-
-```
-\0 
-NUL character 
-\a 
-alarm (BEL) character  
-\b 
-backspace (within character class) 
-\e 
-escape (ESC) character  
-\f 
-form-feed (FF) character  
-\n 
-newline 
-\r 
-return 
-\t 
-tab 
-\NNN 
-character given by NNN in octal 
-\x{abcd} 
-character given by abcd in hexadecimal
-```
-
-\b  word boundary (outside character classes)  \B  not a word boundary  \A  beginning of string  \z  end of string  \Z  prior to fnal newline, or end of string if none
-
-\d  digit (decimal)  \D  not a digit  \s  white space (space, tab, newline, return, form feed)  \S  not white space  \w  word character (letter, digit, underscore)  \W  not a word character
 
 ![Figure 14.18 Regular expression escape...](images/page_780_vector_346.png)
 *Figure 14.18  Regular expression escape sequences in Perl. Sequences in the top portion of  the table represent individual characters. Sequences in the middle are zero-width assertions.  Sequences at the bottom are built-in character classes. Note that these are only examples: Perl  assigns a meaning to almost every backslash-character sequence.*
@@ -7245,29 +6461,6 @@ Object support in Perl 5 boils down to two main things: (1) a “blessing” mec
 
 7  More extensive features, currently under design for Perl 6, will not be covered here.
 
-{  package Integer;
-
-```
-sub new { 
-my $class = shift; 
-# probably "Integer" 
-my $self = {}; 
-# reference to new hash 
-bless($self, $class); 
-$self->{val} = (shift || 0); 
-return $self; 
-} 
-sub set { 
-my $self = shift; 
-$self->{val} = shift; 
-} 
-sub get { 
-my $self = shift; 
-return $self->{val}; 
-} 
-}
-```
-
 ![Figure 14.19 Object-oriented programming in...](images/page_791_vector_277.png)
 *Figure 14.19  Object-oriented programming in Perl. Blessing a reference (object) into package  Integer allows Integer’s functions to serve as the object’s methods.*
 
@@ -7402,14 +6595,6 @@ document.write(c2.get() + "&nbsp;&nbsp;" + c3.get() + "<br>");  c2.set(4);  c3.s
 This code will print
 
 3 0  4 5  ■
-
-function Integer(n) {
-
-this.val = n || 0;  // use 0 if n is missing (undefined)  }  function Integer_set(n) {
-
-this.val = n;  }  function Integer_get() {
-
-return this.val;  }  Integer.prototype.set = Integer_set;  Integer.prototype.get = Integer_get;
 
 ![Figure 14.20 Object-oriented programming in...](images/page_794_vector_201.png)
 *Figure 14.20  Object-oriented programming in JavaScript. The Integer function is used as a  constructor. Assignments to members of its prototype object serve to establish methods. These  will be available to any object created by Integer that doesn’t have corresponding members of  its own.*
@@ -7657,34 +6842,6 @@ brackets, or braces in-between), then add an extra space, unless the
 character preceding the period, question mark, or exclamation point 
 is a capital letter (in which case we assume it is an abbreviation).
 ```
-
-Pascal’s Triangle
-
-## Pascal’s Triangle
-
-1
-
-1  1  1  3  1  4 1  5  10 1  6  15 1  7  21  35  1  8  28  56  1  9  36  84  126
-
-1
-
-2
-
-1  1  4  1  5  1  15  6  1 21  7  1  56  28  8  1  84  36  9  1
-
-3
-
-6
-
-10
-
-20
-
-35
-
-70
-
-126
 
 ![Figure 14.21 Pascal’s triangle rendered...](images/page_800_vector_254.png)
 *Figure 14.21  Pascal’s triangle rendered in a web page (Exercise 14.8).*

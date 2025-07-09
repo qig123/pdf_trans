@@ -96,8 +96,6 @@ A complete list of sidebars appears in Appendix B.
 
 6  Donald E. Knuth (1938–), Professor Emeritus at Stanford University and one of the foremost  fgures in the design and analysis of algorithms, is also widely known as the inventor of the TEX  typesetting system (with which this book was produced) and of the literate programming methodology with which TEX was constructed. His multivolume The Art of Computer Programming has  an honored place on the shelf of most professional computer scientists. He received the ACM  Turing Award in 1974.
 
-declarative  functional  Lisp/Scheme, ML, Haskell  datafow  Id, Val  logic, constraint-based  Prolog, spreadsheets, SQL  imperative  von Neumann  C, Ada, Fortran, ...  object-oriented  Smalltalk, Eiffel, Java, ...  scripting  Perl, Python, PHP, ...
-
 ![Figure 1.1 Classification of programming...](images/page_44_vector_171.png)
 *Figure 1.1  Classification of programming languages. Note that the categories are fuzzy, and  open to debate. In particular, it is possible for a functional language to be object-oriented, and  many authors do not consider functional programming to be declarative.*
 
@@ -167,28 +165,6 @@ various numbers c) for which these rules allow one to prove that gcd(a, b, g) is
 A Prolog version of this algorithm appears at the bottom of Figure 1.2. It may be  easier to understand if one reads “if” for :- and “and” for commas.  ■  It should be emphasized that the distinctions among language families are not  clear-cut. The division between the von Neumann and object-oriented languages,  for example, is often very fuzzy, and many scripting languages are also objectoriented. Most of the functional and logic languages include some imperative  features, and several recent imperative languages have added functional features.  The descriptions above are meant to capture the general favor of the families,  without providing formal defnitions.
 
 Imperative languages—von Neumann and object-oriented—receive the bulk  of the attention in this book. Many issues cut across family lines, however, and  the interested reader will discover much that is applicable to alternative computational models in most chapters of the book. Chapters 11 through 14 contain  additional material on functional, logic, concurrent, and scripting languages.
-
-```
-int gcd(int a, int b) { 
-// C 
-while  (a != b)  {  
-if  (a  >  b) a  = a  - b;  
-else b = b - a; 
-} 
-return a; 
-}
-```
-
-```
-let rec gcd a b =  
-(* OCaml *)  
-if a =  b then a  
-else  if  a > b  then gcd b (a - b)
-```
-
-else gcd a (b - a)
-
-gcd(A,B,G) :- A = B, G = A.  % Prolog  gcd(A,B,G) :- A > B, C is A-B, gcd(C,B,G).  gcd(A,B,G) :- B > A, C is B-A, gcd(C,A,G).
 
 ![Figure 1.2 The GCD algorithm...](images/page_47_vector_256.png)
 *Figure 1.2  The GCD algorithm in C (top), OCaml (middle), and Prolog (bottom). All three  versions assume (without checking) that their inputs are positive integers.*
@@ -518,62 +494,8 @@ any subsequent phases start. If desired, a pass may be written as a separate pro
 commonly divided into passes so that the front end may be shared by compilers
 ```
 
-Character stream
-
-Scanner (lexical analysis)
-
-Token stream
-
-Front  end
-
-Parser (syntax analysis)
-
-Parse tree
-
-Semantic analysis and  intermediate code generation
-
-Symbol table
-
-Abstract syntax tree or  other intermediate form
-
-Machine-independent  code improvement (optional)
-
-Modified  intermediate form
-
-Target code generation
-
-Back  end  Target language  (e.g., assembler)
-
-Machine-specific  code improvement (optional)
-
-Modified  target language
-
 ![Figure 1.3 Phases of compilation....](images/page_60_vector_275.png)
 *Figure 1.3  Phases of compilation.  Phases are listed on the right and the forms in which  information is passed between phases are listed on the left. The symbol table serves throughout  compilation as a repository for information about identifers.*
-
-Character stream
-
-Scanner (lexical analysis)
-
-Token stream
-
-Front  end
-
-Parser (syntax analysis)
-
-Symbol table
-
-Parse tree
-
-Semantic analysis and  intermediate code generation
-
-Abstract syntax tree or  other intermediate form
-
-Tree-walk routines
-
-Program input
-
-Program output
 
 ![Figure 1.4 Phases of interpretation....](images/page_60_vector_505.png)
 *Figure 1.4  Phases of interpretation. The front end is essentially the same as that of a compiler.  The fnal phase “executes” the intermediate form, typically using a set of mutually recursive  subroutines that walk the syntax tree.*
@@ -849,26 +771,6 @@ flow graph whose nodes resemble fragments of assembly language for a simple
 
 10 As we shall see in Section 6.1.3, Java and C# actually do enforce initialization at compile time,  but only by adopting a conservative set of rules for “defnite assignment,” outlawing programs  for which correctness is diffcult or impossible to verify at compile time.
 
-program
-
-:=
-
-:=
-
-while  (5)  call
-
-(6)  call  call
-
-(3)
-
-(3)  (4)  (5) =/  if
-
-(5) (6)  >  :=  :=
-
-Index  Symbol  Type
-
-1  void  type  (5) (6)  (5)  −  (6)  −  2  int  type  3  getint  func : (1) → (2)  4  putint  func : (2) → (1)  (5)  (6)  (6)  (5) 5  i  (2)  6  j  (2)
-
 ![Figure 1.6 Syntax tree and...](images/page_67_vector_325.png)
 *Figure 1.6  Syntax tree and symbol table for the GCD program. Note the contrast to Figure 1.5: the syntax tree retains just the essential structure of the program, omitting details that  were needed only to drive the parsing algorithm.*
 
@@ -879,8 +781,6 @@ idealized machine. We will consider this option further in Chapter 15, where a  
 The code generation phase of a compiler translates the intermediate form into  the target language. Given the information contained in the syntax tree, generating correct code is usually not a diffcult task (generating good code is harder,
 
 EXAMPLE 1.26  as we shall see in Section 1.6.4). To generate assembly or machine language, the  GCD program assembly  code generator traverses the symbol table to assign locations to variables, and  code  then traverses the intermediate representation of the program, generating loads  and stores for variable references, interspersed with appropriate arithmetic operations, tests, and branches. Naive code for our GCD example appears in Figure 1.7,  in x86 assembly language. It was generated automatically by a simple pedagogical  compiler.  The assembly language mnemonics may appear a bit cryptic, but the comments on each line (not generated by the compiler!) should make the correspon­
-
-pushl  %ebp  # \  movl  %esp, %ebp  # ) reserve space for local variables  subl  $16, %esp  # /  call  getint  # read  movl  %eax, -8(%ebp)  # store i  call  getint  # read  movl  %eax, -12(%ebp)  # store j  A:  movl  -8(%ebp), %edi  # load i  movl  -12(%ebp), %ebx  # load j  cmpl  %ebx, %edi  # compare  je  D  # jump if i == j  movl  -8(%ebp), %edi  # load i  movl  -12(%ebp), %ebx  # load j  cmpl  %ebx, %edi  # compare  jle  B  # jump if i < j  movl  -8(%ebp), %edi  # load i  movl  -12(%ebp), %ebx  # load j  subl  %ebx, %edi  # i = i - j  movl  %edi, -8(%ebp)  # store i  jmp  C  B:  movl  -12(%ebp), %edi  # load j  movl  -8(%ebp), %ebx  # load i  subl  %ebx, %edi  # j = j - i  movl  %edi, -12(%ebp)  # store j  C:  jmp  A  D:  movl  -8(%ebp), %ebx  # load i  push  %ebx  # push i (pass to putint)  call  putint  # write  addl  $4, %esp  # pop i  leave  # deallocate space for local variables  mov  $0, %eax  # exit status for program  ret  # return to operating system
 
 ![Figure 1.7 Naive x86 assembly...](images/page_68_vector_431.png)
 *Figure 1.7  Naive x86 assembly language for the GCD program.*
@@ -1343,24 +1243,8 @@ id
 (intercept)
 ```
 
-expr
-
-expr  op  expr
-
-expr  expr op  +  id(intercept)
-
-id(slope)  *  id(x)
-
 ![Figure 2.1 Parse tree for...](images/page_84_vector_171.png)
 *Figure 2.1  Parse tree for slope * x + intercept (grammar in Example 2.4).*
-
-expr
-
-expr  op  expr
-
-id(slope)  *  expr  op  expr
-
-id(x)  +  id(intercept)
 
 ![Figure 2.2 Alternative (less desirable)...](images/page_84_vector_301.png)
 *Figure 2.2  Alternative (less desirable) parse tree for slope * x + intercept (grammar in  Example 2.4). The fact that more than one tree exists implies that our grammar is ambiguous.*
@@ -1419,30 +1303,8 @@ This grammar is unambiguous. It captures precedence in the way factor, term,  an
 
 9  Given a specifc grammar, there are many ways to create other equivalent grammars. We could,  for example, replace A with some new symbol B everywhere it appears in the right-hand side of  a production, and then create a new production B −→ A.
 
-expr
-
-expr  add_op  term
-
-term  factor mult_op term  +
-
-factor  factor  *  number(5)
-
-number(3)  number(4)
-
 ![Figure 2.3 Parse tree for...](images/page_86_vector_181.png)
 *Figure 2.3  Parse tree for 3 + 4 * 5, with precedence (grammar in Example 2.8).*
-
-expr
-
-expr  add_op  term
-
-add_op expr  term  -factor
-
-term  -factor  number(3)
-
-factor  number(4)
-
-number(10)
 
 ![Figure 2.4 Parse tree for...](images/page_86_vector_342.png)
 *Figure 2.4  Parse tree for 10 – 4 – 3, with left associativity (grammar in Example 2.8).*
@@ -1502,23 +1364,6 @@ Here we have used non-*, non-/, and  non-newline as shorthand for the alternatio
 ■
 ```
 
-EXAMPLE 2.10
-
-How might we go about recognizing the tokens of our calculator language? The  simplest approach is entirely ad hoc. Pseudocode appears in Figure 2.5. We can  structure the code however we like, but it seems reasonable to check the simpler  and more common cases frst, to peek ahead when we need to, and to embed  loops for comments and for long tokens such as identifers and numbers.
-
-An ad hoc scanner for  calculator tokens
-
-```
-After fnding a token the scanner returns to the parser. When invoked again it 
-repeats the algorithm from the beginning, using the next available characters of 
-input (including any that were peeked at but not consumed the last time). 
-■ 
-As a rule, we accept the longest possible token in each invocation of the scanner. Thus foobar is always foobar and never f or foo or foob. More  to  the  
-point, in a language like C, 3.14159 is a real number and never 3, ., and  14159. 
-White space (blanks, tabs, newlines, comments) is generally ignored, except to 
-the extent that it separates tokens (e.g., foo bar is different from foobar).
-```
-
 ![Figure 2.5 could be extended...](images/page_88_vector_228.png)
 *Figure 2.5 could be extended fairly easily to outline a scanner for some larger  programming language. The result could then be feshed out, by hand, to create  code in some implementation language. Production compilers often use such  ad hoc scanners; the code is fast and compact. During language development,  however, it is usually preferable to build a scanner in a more structured way, as  an explicit representation of a finite automaton. Finite automata can be generated  automatically from a set of regular expressions, making it easy to regenerate a  scanner when token defnitions change.*
 
@@ -1531,19 +1376,6 @@ Finite automaton for a  calculator scanner
 DESIGN & IMPLEMENTATION
 
 2.3 Nested comments  Nested comments can be handy for the programmer (e.g., for temporarily  “commenting out” large blocks of code). Scanners normally deal only with  nonrecursive constructs, however, so nested comments require special treatment. Some languages disallow them. Others require the language implementor to augment the scanner with special-purpose comment-handling code. C  and C++ strike a compromise: /* ... */ style comments are not allowed to  nest, but /* ... */ and //... style comments can appear inside each other.  The programmer can thus use one style for “normal” comments and the other  for “commenting out.” (The C99 designers note, however, that conditional  compilation (#if) is preferable [Int03a, p. 58].)
-
-skip any initial white space (spaces, tabs, and newlines)  if cur char ∈ {‘(’, ‘)’, ‘+’, ‘-’, ‘*’}  return the corresponding single-character token  if cur char = ‘:’  read the next character  if it is ‘=’ then return assign else announce an error  if cur char = ‘/’  peek at the next character  if it is ‘*’ or ‘/’
-
-```
-read additional characters until “*/” or  newline is seen, respectively 
-jump back to top of code 
-else return div 
-if cur char = . 
-read the next character 
-if it is a digit
-```
-
-read any additional digits  return number  else announce an error  if cur char is a digit  read any additional digits and at most one decimal point  return number  if cur char is a letter  read any additional letters and digits  check to see whether the resulting string is read or write  if so then return the corresponding token  else return id  else announce an error
 
 ![Figure 2.5 Outline of an...](images/page_89_vector_379.png)
 *Figure 2.5  Outline of an ad hoc scanner for tokens in our calculator language.*
@@ -1562,114 +1394,12 @@ NFA is said to accept an input string (token) if there exists a path from the st
 
 ϵ
 
-space, tab, newline
-
-Start
-
-1
-
-newline
-
-/  /  /
-
-3
-
-non-newline
-
-2
-
-  *
-  *
-
-div
-
-4  5
-
-  *
-  non-*
-
-non-/or *
-
--+ ) (
-
-*
-
-plus lparen
-
-minus  times
-
-6  7  8  9
-
-10
-
-rparen
-
-:
-
-11  12
-
-assign
-
-=
-
-.
-
-13
-
-digit
-
-digit  digit
-
-digit
-
-.
-
-14  15
-
-number number
-
-letter, digit
-
-letter
-
-16
-
-id or keyword
-
 ![Figure 2.6 Pictorial representation of...](images/page_90_vector_415.png)
 *Figure 2.6  Pictorial representation of a scanner for calculator tokens, in the form of a  finite automaton. This fgure roughly parallels the code in Figure 2.5. States are numbered  for reference in Figure 2.12. Scanning for each token begins in the state marked “Start.” The  final states, in which a token is recognized, are indicated by double circles. Comments, when  recognized, send the scanner back to its start state, rather than a fnal state.*
 
 state to a fnal state whose non-epsilon transitions are labeled, in order, by the  characters of the token.
 
 To avoid the need to search all possible paths for one that “works,” the second  step of a scanner generator translates the NFA into an equivalentDFA: an automaton that accepts the same language, but in which there are no epsilon transitions,  and no states with more than one outgoing transition labeled by the same character. The third step is a space optimization that generates a fnal DFA with the  minimum possible number of states.
-
-c  (a) Base case
-
-A B
-
-(b) Concatenation  AB
-
-ϵ
-
-ϵ
-
-A
-
-ϵ
-
-ϵ
-
-B A|B  (c) Alternation
-
-ϵ
-
-ϵ  ϵ
-
-A
-
-ϵ
-
-(d) Kleene closure  A*
 
 ![Figure 2.7 Construction of an...](images/page_91_vector_409.png)
 *Figure 2.7  Construction of an NFA equivalent to a given regular expression. Part (a) shows  the base case: the automaton for the single letter c. Parts (b), (c), and (d), respectively, show  the constructions for concatenation, alternation, and Kleene closure. Each construction retains a  unique start state and a single fnal state. Internal detail is hidden in the diamond-shaped center  regions.*
@@ -1679,66 +1409,6 @@ From a Regular Expression to an NFA
 EXAMPLE 2.12  A trivial regular expression consisting of a single character c is equivalent to a  Constructing an NFA for a  simple two-state NFA (in fact, a DFA), illustrated in part (a) of Figure 2.7. Simigiven regular expression  larly, the regular expression is equivalent to a two-state NFA whose arc is labeled  by . Starting with this base we can use three subconstructions, illustrated in parts  (b) through (d) of the same fgure, to build larger NFAs to represent the concatenation, alternation, or Kleene closure of the regular expressions represented by  smaller NFAs. Each step preserves three invariants: there are no transitions into  the initial state, there is a single fnal state, and there are no transitions out of  the fnal state. These invariants allow smaller automata to be joined into larger
 
 ϵ ϵ
-
-ϵ
-
-ϵ  d
-
-ϵ
-
-.  d
-
-Start  .  Start  d  Start  d*
-
-ϵ
-
-.  d d  .
-
-Start  .d  Start  d.
-
-.  d
-
-ϵ
-
-ϵ
-
-ϵ  Start  .d |d.
-
-ϵ
-
-d  .
-
-.  d
-
-ϵ  ϵ
-
-ϵ
-
-5  6  7
-
-ϵ
-
-ϵ  ϵ
-
-ϵ  ϵ  ϵ  d
-
-d
-
-11  12  13  14
-
-1  2  3  4
-
-ϵ
-
-Start
-
-d  .
-
-ϵ
-
-ϵ
-
-8  9  10
 
 ![Figure 2.8 Construction of an...](images/page_92_vector_403.png)
 *Figure 2.8  Construction of an NFA equivalent to the regular expression d *( .d | d. ) d *.  In the top row are the primitive automata for . and d, and the Kleene closure construction for  d *. In the second and third rows we have used the concatenation and alternation constructions  to build .d, d., and  ( .d | d. ) . The fourth row uses concatenation again to complete the  NFA. We have labeled the states in the fnal automaton for reference in subsequent fgures.*
@@ -1797,26 +1467,6 @@ Starting from a regular expression, we have now constructed an equivalent DFA.
 
 EXAMPLE 2.15  Though this DFA has seven states, a bit of thought suggests that a smaller one  Minimal DFA for  should exist. In particular, once we have seen both a d and a ., the only valid  d*( .d | d. ) d*  transitions are on d, and we ought to be able to make do with a single fnal state.
 
-Start
-
-d  d
-
-A[1, 2, 4, 5, 8]  B[2, 3, 4, 5, 8, 9]
-
-.  .
-
-C[6]  D[6, 10, 11, 12, 14]
-
-d  d
-
-E[7, 11, 12, 14]  F[7, 11, 12, 13, 14]
-
-d d
-
-d
-
-G[12, 13, 14]
-
 ![Figure 2.9 A DFA equivalent...](images/page_94_vector_263.png)
 *Figure 2.9  A DFA equivalent to the NFA at the bottom of Figure 2.8. Each state of the DFA  represents the set of states that the NFA could be in after seeing the same input.*
 
@@ -1853,36 +1503,6 @@ the control fow of the program using gotos or  nested  case (switch) statements;
 the other, described in the following subsection, uses a table and a driver. As 
 a general rule, handwritten automata tend to use nested case statements, while
 ```
-
-d (b)
-
-d,.  Start (a)  Start  d,.  DEFG  d
-
-AB
-
-.  .
-
-ABC
-
-d  d
-
-DEFG C
-
-(c)  Start
-
-A  d
-
-B  d
-
-.
-
-.
-
-d  d
-
-C
-
-DEFG
 
 ![Figure 2.10 Minimization of the...](images/page_95_vector_263.png)
 *Figure 2.10  Minimization of the DFA of Figure 2.9. In each step we split a set of states to  eliminate a transition ambiguity.*
@@ -2021,40 +1641,8 @@ state = 0 . . number of states  token = 0 . . number of tokens  scan tab : array
 
 action : (move, recognize, error)  new state : state  token tab : array [state] of token  –– what to recognize  keyword tab : set of record
 
-k image : string  k token : token  –– these three tables are created by a scanner generator tool
-
-tok : token  cur char : char  remembered chars : list of char  repeat
-
-cur state : state := start state  image : string := null  remembered state : state := 0  –– none  loop
-
-read cur char  case scan tab[cur char, cur state].action  move:
-
-if token tab[cur state] = 0  –– this could be a fnal state  remembered state := cur state  remembered chars :=  add cur char to remembered chars  cur state := scan tab[cur char, cur state].new state  recognize:  tok := token tab[cur state]  unread cur char  –– push back into input stream  exit inner loop  error:
-
-ϵ
-
-```
-if remembered state = 0 
-tok := token tab[remembered state] 
-unread remembered chars 
-remove remembered chars from image 
-exit inner loop 
-–– else print error message and recover; probably start over 
-append cur char to image 
-–– end inner loop 
-until tok ∈{white space, comment}
-look  image up  in keyword  tab and replace tok with appropriate keyword if found 
-return tok, image
-```
-
-⟨
-
 ![Figure 2.11 Driver for a...](images/page_99_vector_576.png)
 *Figure 2.11  Driver for a table-driven scanner, with code to handle the ambiguous case in  which one valid token is a prefx of another, but some intermediate string is not.*
-
-Current input character  State space, tab  newline  /  * ( ) + -:  =  .  digit  letter  other
-
-1  17  17  2  10  6  7  8  9  11  –  13  14  16  –  2  –  –  3  4  –  –  –  –  –  –  –  –  –  –  div  3  3 18 3  3  3  3  3  3  3  3  3 3 3 3 4  4  4  4  5  4  4  4  4  4  4  4  4  4  4  5  4 4 18  5  4  4  4  4  4  4  4 4 4 4 6  –  –  –  –  –  –  –  –  –  –  –  –  –  –  lparen  7  –  –  –  –  –  –  –  –  –  –  –  –  –  –  rparen  8  –  –  –  –  –  –  –  –  –  –  –  –  –  –  plus  9  –  –  –  –  –  –  –  –  –  –  –  –  –  –  minus  10  –  –  –  –  –  –  –  –  –  –  –  –  –  –  times  11  – – –  –  –  –  –  –  –  12  – – – – 12  –  –  –  –  –  –  –  –  –  –  –  –  –  –  assign  13  – – –  –  –  –  –  –  –  –  –  15 – – 14  – – –  –  –  –  –  –  –  –  15  14 – –  number  15  – – –  –  –  –  –  –  –  –  –  15 – –  number  16  – – –  –  –  –  –  –  –  –  –  16 16 –  identifer  17  17  17  –  –  –  –  –  –  –  –  –  –  –  –  white space  18  –  –  –  –  –  –  –  –  –  –  –  –  –  –  comment
 
 ![Figure 2.12 Scanner tables for...](images/page_100_vector_318.png)
 *Figure 2.12  Scanner tables for the calculator language. These could  be  used  by  the code  of  Figure 2.11.  States  are  numbered   as in Figure 2.6, except for the addition of two states—17 and 18—to “recognize” white space and comments. The right-hand  column represents table token tab; the rest of the fgure is scan tab. Numbers in the table indicate an entry for which the  corresponding action is move. Dashes appear where there is no way to extend the current token: if the corresponding entry  in token tab is nonempty, then action is recognize; otherwise,  action is error. Table  keyword tab (not shown) contains the  strings read and write.*
@@ -2118,10 +1706,6 @@ its running time t(n) is proportional to f (n) in the worst case. More precisely
 O(f (n)) ⇐⇒ ∃ c, m [n > m −→ t(n) < c f  (n)].
 ```
 
-Direction  Derivation  Parse tree  Class  of scanning  discovered  construction  Algorithm used
-
-LL  left-to-right  left-most  top-down  predictive  LR  left-to-right  right-most  bottom-up  shift-reduce
-
 ![Figure 2.13 Principal classes of...](images/page_103_vector_142.png)
 *Figure 2.13  Principal classes of linear-time parsing algorithms.*
 
@@ -2161,76 +1745,6 @@ id_list
 
 id(A)
 
-id(A) ,
-
-id_list
-
-id(A) , id(B)
-
-id(A)  id_list_tail
-
-id(A) , id(B) ,
-
-id_list
-
-id(A) , id(B) , id(C)
-
-id(A)  id_list_tail
-
-id(A) , id(B) , id(C) ;
-
-id(A) , id(B) , id(C)  id_list_tail
-
-, id(B) id_list_tail
-
-;
-
-id_list
-
-id(A) , id(B)  id_list_tail
-
-id(A)  id_list_tail
-
-,  id(C) id_list_tail
-
-, id(B) id_list_tail
-
-;
-
-id(A)  id_list_tail
-
-, id(C) id_list_tail
-
-, id(B) id_list_tail
-
-id_list
-
-id(A)  id_list_tail
-
-, id(C) id_list_tail
-
-;  id_list
-
-, id(B) id_list_tail
-
-, id(C) id_list_tail
-
-id(A)  id_list_tail
-
-;
-
-, id(B) id_list_tail
-
-id_list  id id_list_tail
-
-, id(C) id_list_tail
-
-id_list_tail  , id id_list_tail
-
-;
-
-id_list_tail  ;
-
 ![Figure 2.14 Top-down (left) and...](images/page_104_vector_501.png)
 *Figure 2.14  Top-down (left) and bottom-up parsing (right) of the input string A, B, C;.  Grammar appears at lower left.*
 
@@ -2269,38 +1783,6 @@ id list prefix −→ id list prefix , id
 
 This grammar cannot be parsed top-down, because when we see an id on the  input and we’re expecting an id list prefix, we have no way to tell which of the two
 
-id(A)  id_list_prefix  , id(C)
-
-id_list_prefix  id_list_prefix  ,  id(B)
-
-id(A)  id(A)
-
-id_list_prefix  ,  id_list_prefix
-
-id(A)  id_list_prefix  , id(C)
-
-id_list_prefix  ,  id(B)  id_list_prefix  ,  id(B)
-
-id(A)  id(A)
-
-id_list_prefix  id_list_prefix  ;
-
-id_list_prefix  ,  id(B)  id_list_prefix  , id(C)
-
-id(A)  id_list_prefix  ,  id(B)
-
-id_list_prefix  ,  id(A)
-
-id_list_prefix  ,  id(B)  id_list
-
-id(A)  id_list_prefix  ;
-
-id_list_prefix  , id(C)
-
-id_list  id_list_prefix ;  id_list_prefix  ,  id(B)  id_list_prefix  id_list_prefix , id
-
-id  id(A)
-
 ![Figure 2.15 Bottom-up parse of...](images/page_106_vector_431.png)
 *Figure 2.15  Bottom-up parse of A, B, C; using a grammar (lower left) that allows lists to be  collapsed incrementally.*
 
@@ -2313,32 +1795,6 @@ EXAMPLE 2.22
 To illustrate top-down (predictive) parsing, let us consider the grammar for a simple “calculator” language, shown in Figure 2.16. The calculator allows values to  be read into named variables, which may then be used in expressions. Expressions  in turn may be written to the output. Control fow is strictly linear (no loops, if  statements, or other jumps). In a pattern that will repeat in many of our examples,  we have included an initial augmenting production, program −→ stmt list $$,
 
 Top-down grammar for a  calculator language
-
-program −→ stmt list $$
-
-stmt list −→ stmt stmt list |
-
-ϵ
-
-stmt −→ id := expr | read id | write expr
-
-expr −→ term term tail
-
-term tail −→ add op term term tail |
-
-ϵ
-
-term −→ factor factor tail
-
-factor tail −→ mult op factor factor tail |
-
-ϵ
-
-factor −→ ( expr ) | id | number
-
-add op −→ + | ­
-
-mult op −→ * | /
 
 ![Figure 2.16 LL(1) grammar for...](images/page_107_vector_218.png)
 *Figure 2.16  LL(1) grammar for a simple calculator language.*
@@ -2394,65 +1850,8 @@ produce an equivalent target program in some other language—the parser must
 
 procedure match(expected)  if input token = expected then consume input token()  else parse error
 
-–– this is the start routine:  procedure program()  case input token of
-
-id, read, write, $$ :  stmt list()  match($$)  otherwise parse error
-
-procedure stmt list()
-
-case input token of  id, read, write : stmt(); stmt list()  $$ : skip  –– epsilon production  otherwise parse error
-
-procedure stmt()
-
-case input token of  id : match(id); match(:=); expr()  read : match(read); match(id)  write : match(write); expr()  otherwise parse error
-
-procedure expr()
-
-case input token of  id, number, ( : term(); term tail()  otherwise parse error
-
-procedure term tail()
-
-```
-case input token of 
-+, - : add  op(); term(); term tail() 
-), id, read, write, $$ :
-```
-
-skip  –– epsilon production  otherwise parse error
-
-procedure term()
-
-case input token of  id, number, ( : factor(); factor tail()  otherwise parse error
-
 ![Figure 2.17 Recursive descent parser...](images/page_109_vector_547.png)
 *Figure 2.17  Recursive descent parser for the calculator language. Execution begins in procedure program. The recursive calls trace out a traversal of the parse tree. Not shown is code to  save this tree (or some similar structure) for use by later phases of the compiler. (continued)*
-
-procedure factor tail()
-
-case input token of
-
-```
-*, / : mult  op(); factor(); factor tail() 
-+, -, ), id, read, write, $$ :
-```
-
-skip  –– epsilon production  otherwise parse error
-
-procedure factor()
-
-case input token of
-
-id : match(id)  number : match(number)  ( : match((); expr(); match())  otherwise parse error
-
-procedure add op()  case input token of
-
-+ : match(+)  - : match(-)  otherwise parse error
-
-procedure mult op()  case input token of
-
-* : match(*)
-  / : match(/)
-  otherwise parse error
 
 ![Figure 2.17 (continued)...](images/page_110_vector_349.png)
 *Figure 2.17  (continued)*
@@ -2468,30 +1867,6 @@ production: one possible expansion of the symbol for which the subroutine was
 named. The tokens that label a given arm are those that predict the production. 
 A token  X may predict a production for either of two reasons: (1) the right-hand
 ```
-
-program
-
-stmt_list  $$
-
-stmt  stmt_list
-
-read  id(A)  stmt  stmt_list
-
-read  id(B)  stmt  stmt_list
-
-id(sum) := expr  stmt  stmt_list
-
-term  term_tail  write  expr  stmt  stmt_list
-
-factor  factor_tail  add_op  term  term_tail  term  term_tail  write  expr  ϵ
-
-id(A)  ϵ  +  factor  factor_tail  ϵ  factor  factor_tail  ϵ  term  term_tail
-
-id(B)  ϵ  id(sum)  ϵ  factor  factor_tail  ϵ
-
-id(sum)  mult_op  factor  factor_tail
-
-/  number(2)  ϵ
 
 ![Figure 2.18 Parse tree for...](images/page_111_vector_388.png)
 *Figure 2.18  Parse tree for the sum-and-average program of Example 2.24, using the grammar of Figure 2.16.*
@@ -2698,33 +2073,6 @@ In a recursive descent parser, each arm of a case statement corresponds to a  pr
 
 Driver and table for  top-down parsing
 
-```
-terminal = 1 . . number of terminals 
-non terminal = number of terminals + 1 . .  number of symbols 
-symbol = 1 . . number of symbols 
-production = 1 . . number of productions
-```
-
-parse tab : array [non terminal, terminal] of record
-
-action : (predict, error)  prod : production  prod tab : array [production] of list of symbol  –– these two tables are created by a parser generator tool
-
-parse stack : stack of symbol
-
-parse stack.push(start symbol)  loop
-
-expected sym : symbol := parse stack.pop()  if expected sym ∈ terminal
-
-match(expected sym)  –– as in Figure 2.17  if expected sym = $$ then return  –– success!  else
-
-if parse tab[expected sym, input token].action = error
-
-parse error  else
-
-prediction : production := parse tab[expected sym, input token].prod  foreach sym : symbol in reverse prod tab[prediction]
-
-parse stack.push(sym)
-
 ![Figure 2.19 Driver for a...](images/page_116_vector_360.png)
 *Figure 2.19  Driver for a table-driven LL(1) parser.*
 
@@ -2735,10 +2083,6 @@ EXAMPLE 2.34
 Table-driven parse of the  “sum and average”  program
 
 Initially, the parse stack contains the start symbol of the grammar (in our case,  program). When it predicts a production, the parser pushes the right-hand-side  symbols onto the parse stack in reverse order, so the frst of those symbols ends up  at top-of-stack. The parse completes successfully when we match the end marker
-
-Top-of-stack  Current input token  nonterminal  id  number  read  write  :=  (  )  +  *  /  $$
-
-program  1  –  1  1  –  –  –  –  –  –  –  1  stmt list  2  –  2  2  –  –  –  –  –  –  –  3  stmt  4  –  5  6  –  –  –  –  –  –  –  –  expr  7  7  –  –  –  7  –  –  –  –  –  –  term tail  9  –  9  9  –  –  9  8  8  –  –  9  term  10  10 – – –  10  –  –  –  –  –  – factor tail  12 – 12 12 –  –  12  12  12  11  11  12 factor  14  15 – – –  13  –  –  –  –  –  – add op  – – – – –  –  –  16  17  –  –  – mult op  – – – – –  –  –  –  –  18  19  –
 
 ![Figure 2.20 LL(1) parse table...](images/page_117_vector_229.png)
 *Figure 2.20  LL(1) parse table for the calculator language. Table entries indicate the production to predict (as numbered in  Figure 2.23). A dash indicates an error. When the top-of-stack symbol is a terminal, the appropriate action is always to match  it against an incoming token from the scanner. An auxiliary table, not shown here, gives the right-hand-side symbols for each  production.*
@@ -2787,206 +2131,6 @@ stmt stmt list) we can deduce that { id, read, write} ⊂ FIRST(stmt list), beca
 
 Parse stack  Input stream  Comment
 
-```
-program 
-read A read B . . . 
-initial stack contents 
-stmt list $$ 
-read A read B . . . 
-predict program −→ stmt list $$ 
-stmt stmt list $$ 
-read A read B . . . 
-predict stmt list −→ stmt stmt list 
-read id stmt list $$ 
-read A read B . . . 
-predict stmt −→ read id 
-id stmt list $$ 
-A read B . .  .  
-match  read 
-stmt list $$ 
-read B sum := . .  .  
-match  id 
-stmt stmt list $$ 
-read B sum := . . . 
-predict stmt list −→ stmt stmt list 
-read id stmt list $$ 
-read B sum := . . . 
-predict stmt −→ read id 
-id stmt list $$ 
-B sum := . .  .  
-match  read 
-stmt list $$ 
-sum := A + B . .  .  
-match  id 
-stmt stmt list $$ 
-sum := A + B . . . 
-predict stmt list −→ stmt stmt list 
-id := expr stmt list $$ 
-sum := A + B . . . 
-predict stmt −→ id := expr 
-:= expr stmt list $$ 
-:= A + B . .  .  
-match  id 
-expr stmt list $$ 
-A + B . . .  
-match  := 
-term term tail stmt list $$ 
-A + B . . . 
-predict expr −→ term term tail 
-factor factor tail term tail stmt list $$ 
-A + B . . . 
-predict term −→ factor factor tail 
-id factor tail term tail stmt list $$ 
-A + B . . . 
-predict factor −→ id 
-factor tail term tail stmt list $$ 
-+ B write sum . .  .  
-match  id 
-term tail stmt list $$ 
-+ B write sum . . . 
-predict factor tail −→ 
-add op term term tail stmt list $$ 
-+ B write sum . . . 
-predict term tail −→ add op term term tail 
-+ term term tail stmt list $$ 
-+ B write sum . . . 
-predict add op −→ + 
-term term tail stmt list $$ 
-B write sum . . .  
-match  + 
-factor factor tail term tail stmt list $$ 
-B write sum . . . 
-predict term −→ factor factor tail 
-id factor tail term tail stmt list $$ 
-B write sum . . . 
-predict factor −→ id 
-factor tail term tail stmt list $$ 
-write sum . .  .  
-match  id 
-term tail stmt list $$ 
-write sum write . . . 
-predict factor tail −→ 
-stmt list $$ 
-write sum write . . . 
-predict term tail −→ 
-stmt stmt list $$ 
-write sum write . . . 
-predict stmt list −→ stmt stmt list 
-write expr stmt list $$ 
-write sum write . . . 
-predict stmt −→ write expr 
-expr stmt list $$ 
-sum write sum / 2 
-match write 
-term term tail stmt list $$ 
-sum write sum / 2 
-predict expr −→ term term tail 
-factor factor tail term tail stmt list $$ 
-sum write sum / 2 
-predict term −→ factor factor tail 
-id factor tail term tail stmt list $$ 
-sum write sum / 2 
-predict factor −→ id 
-factor tail term tail stmt list $$ 
-write sum / 2 
-match id 
-term tail stmt list $$ 
-write sum / 2 
-predict factor tail −→ 
-stmt list $$ 
-write sum / 2 
-predict term tail −→ 
-stmt stmt list $$ 
-write sum / 2 
-predict stmt list −→ stmt stmt list 
-write expr stmt list $$ 
-write sum / 2 
-predict stmt −→ write expr 
-expr stmt list $$ 
-sum / 2 
-match write 
-term term tail stmt list $$ 
-sum / 2 
-predict expr −→ term term tail 
-factor factor tail term tail stmt list $$ 
-sum / 2 
-predict term −→ factor factor tail 
-id factor tail term tail stmt list $$ 
-sum / 2 
-predict factor −→ id 
-factor tail term tail stmt list $$ 
-/ 2 
-match id 
-mult op factor factor tail term tail stmt list $$ / 2 
-predict factor tail −→ mult op factor factor tail 
-/ factor factor tail term tail stmt list $$ 
-/ 2 
-predict mult op −→ / 
-factor factor tail term tail stmt list $$ 
-2 
-match / 
-number factor tail term tail stmt list $$ 
-2 
-predict factor −→ number 
-factor tail term tail stmt list $$ 
-match number 
-term tail stmt list $$ 
-predict factor tail −→ 
-stmt list $$ 
-predict term tail −→ 
-$$ 
-predict stmt list −→
-```
-
-ϵ
-
-ϵ ϵ
-
-ϵ ϵ
-
-ϵ ϵ ϵ
-
-```
-program −→ stmt list $$ 
-$$ ∈ FOLLOW(stmt list) 
-stmt list −→ stmt stmt list 
-stmt list −→ 
-EPS(stmt list) =  true 
-stmt −→ id := expr 
-id ∈ FIRST(stmt) 
-stmt −→ read id 
-read ∈ FIRST(stmt) 
-stmt −→ write expr 
-write ∈ FIRST(stmt) 
-expr −→ term term tail 
-term tail −→ add op term term tail 
-term tail −→ 
-EPS(term tail) =  true 
-term −→ factor factor tail 
-factor tail −→ mult op factor factor tail 
-factor tail −→ 
-EPS(factor tail) =  true 
-factor −→ ( expr )
-( ∈ FIRST(factor) and  ) ∈ FOLLOW(expr) 
-factor −→ id 
-id ∈ FIRST(factor) 
-factor −→ number 
-number ∈ FIRST(factor) 
-add op −→ +
-+ ∈ FIRST(add op) 
-add op −→ - ∈ FIRST(add op) 
-mult op −→ *
-* ∈ FIRST(mult op) 
-mult op −→ /
-/ ∈ FIRST(mult op)
-```
-
-ϵ
-
-ϵ
-
-ϵ
-
 ![Figure 2.22 “Obvious” facts (right)...](images/page_119_vector_296.png)
 *Figure 2.22  “Obvious” facts (right) about the LL(1) calculator grammar (left).*
 
@@ -2997,14 +2141,6 @@ DESIGN & IMPLEMENTATION
 A better way to visualize the two implementations of top-down parsing is to remember that both  are discovering a parse tree via depth-frst left-toright traversal. When we are at a given point in  the parse—say the circled node in the tree shown  here—the implicit call stack of a recursive descent  parser holds a frame for each of the nodes on the  path back to the root, created when the routine corresponding to that node was called. (This path is  shown in grey.)
 
 But these nodes are immaterial. What matters for the rest of the parse—as  shown on the white path here—are the upcoming calls on the case statement  arms of the recursive descent routines. Those calls—those parse tree nodes—  are precisely the contents of the explicit stack of a table-driven LL parser.
-
-FIRST  program { id, read, write, $$}  PREDICT  stmt list { id, read, write}  1. program −→ stmt list $$ { id, read, write, $$} stmt { id, read, write}  2. stmt list −→ stmt stmt list { id, read, write} expr { (, id, number}  3. stmt list −→  { $$} term tail { +, -}  4. stmt −→ id := expr { id} term { (, id, number}  5. stmt −→ read id { read} factor tail { *, /}  6. stmt −→ write expr { write} factor { (, id, number}  7. expr −→ term term tail { (, id, number} add op { +, -}  8. term tail −→ add op term term tail { +, -} mult op { *, /}  9. term tail −→  { ), id, read, write, $$} 10. term −→ factor factor tail { (, id, number} FOLLOW  11. factor tail −→ mult op factor factor tail { *, /} program ∅  12. factor tail −→  { +, -, ), id, read, write, $$} stmt list { $$}  13. factor −→ ( expr ) { (} stmt { id, read, write, $$}  14. factor −→ id { id} expr { ), id, read, write, $$}  15. factor −→ number { number} term tail { ), id, read, write, $$}  16. add op −→ + { +} term { +, -, ), id, read, write, $$}  17. add op −→ - { -} factor tail { +, -, ), id, read, write, $$}  18. mult op −→ * { *} factor { +, -, *, /, ), id, read, write, $$}  19. mult op −→ / { /} add op { (, id, number} mult op { (, id, number}
-
-ϵ
-
-ϵ
-
-ϵ
 
 ![Figure 2.23 FIRST, FOLLOW, and...](images/page_120_vector_331.png)
 *Figure 2.23  FIRST, FOLLOW, and PREDICT sets for the calculator language. FIRST(c) =  { c} ∀ tokens c. EPS(A) is  true iff A  ∈ {stmt list, term tail, factor tail}.*
@@ -3029,58 +2165,6 @@ Figure 2.23. The parse table of Figure 2.20 follows directly from PREDICT.
 The algorithm to compute EPS, FIRST, FOLLOW, and  PREDICT sets appears, a 
 bit more formally, in Figure 2.24. It relies on the following defnitions:
 ```
-
-```
-–– EPS values and FIRST sets for all symbols: 
-for all terminals c, EPS(c) := false; FIRST(c) :=  { c}
-for all nonterminals X, EPS(X) :=  if  X −→ 
-then true else false; FIRST(X) :=  ∅ 
-repeat
-```
-
-ϵ
-
-outer for all productions X −→ Y1 Y2 ... Yk ,
-
-⟨   ⟨
-
-```
-inner for i in 1 . . k 
-add FIRST(Yi) to  FIRST(X) 
-if not EPS(Yi) (yet) then continue outer loop
-```
-
-```
-EPS(X) :=  true  
-until no further progress
-```
-
-–– Subroutines for strings, similar to inner loop above:
-
-function string EPS(X1 X2 ... Xn )  for i in 1 . . n  if not EPS(Xi) then return false  return true
-
-function string FIRST(X1 X2 ... Xn )  return value := ∅  for i in 1 . . n
-
-add FIRST(Xi) to return value  if not EPS(Xi) then return
-
-```
-–– FOLLOW sets for all symbols: 
-for all symbols X, FOLLOW(X) :=  ∅ 
-repeat
-```
-
-```
-for all productions A −→ α B β, 
-add string FIRST(β) to  FOLLOW(B) 
-for all productions A −→ α B 
-or A −→ α B β, where string EPS(β) =  true,  
-add FOLLOW(A) to  FOLLOW(B) 
-until no further progress
-```
-
-–– PREDICT sets for all productions:  for all productions A −→ α
-
-PREDICT(A −→ α) := string FIRST(α) ∪ (if string EPS(α) then FOLLOW(A) else  ∅ )
 
 ![Figure 2.24 Algorithm to calculate...](images/page_121_vector_475.png)
 *Figure 2.24  Algorithm to calculate FIRST, FOLLOW, and PREDICT sets. The grammar is LL(1)  if and only if all PREDICT sets for productions with the same left-hand side are disjoint.*
@@ -3168,40 +2252,6 @@ id list =⇒ id id list tail
 The symbols that need to be joined together at each step of the parse to represent  the next step of the backward derivation are called the handle of the sentential  form. In the parse trace above, the handles are underlined.  ■
 
 EXAMPLE 2.37  In our id list example, no handles were found until the entire input had been  Bottom-up grammar for  shifted onto the stack. In general this will not be the case. We can obtain a more  the calculator language  realistic example by examining an LR version of our calculator language, shown  in Figure 2.25. While the LL grammar of Figure 2.16 can be parsed bottomup, the version in Figure 2.25 is preferable for two reasons. First, it uses a leftrecursive production for stmt list. Left recursion allows the parser to collapse  long statement lists as it goes along, rather than waiting until the entire list is
-
-* program −→ stmt list $$
-
-* stmt list −→ stmt list stmt
-
-* stmt list −→ stmt
-
-* stmt −→ id := expr
-
-* stmt −→ read id
-
-* stmt −→ write expr
-
-* expr −→ term
-
-* expr −→ expr add op term
-
-* term −→ factor
-
-* term −→ term mult op factor
-
-* factor −→ ( expr )
-
-* factor −→ id
-
-* factor −→ number
-
-* add op −→ +
-
-* add op −→ ­
-
-* mult op −→ *
-
-* mult op −→ /
 
 ![Figure 2.25 LR(1) grammar for...](images/page_124_vector_315.png)
 *Figure 2.25  LR(1) grammar for the calculator language. Productions have been numbered for  reference in future fgures.*
@@ -3400,62 +2450,6 @@ stmt list −→ . stmt list stmt  stmt list −→ . stmt  stmt −→ . id := 
 
 on stmt shift and reduce (pop 1 state, push stmt list on input)  on id shift and goto 3  on read shift and goto 1  on write shift and goto 4
 
-  1.
-  stmt −→ read . id
-
-on id shift and reduce (pop 2 states, push stmt on input)
-
-  2.
-  program −→ stmt list . $$
-  stmt list −→ stmt list . stmt
-
-on $$ shift and reduce (pop 2 states, push program on input)  on stmt shift and reduce (pop 2 states, push stmt list on input)
-
-stmt −→ . id := expr  stmt −→ . read id  stmt −→ . write expr
-
-on id shift and goto 3  on read shift and goto 1  on write shift and goto 4
-
-  3.
-  stmt −→ id . := expr
-
-on := shift and goto 5
-
-  4.
-  stmt −→ write . expr
-
-on expr shift and goto 6
-
-expr −→ . term  expr −→ . expr add op term  term −→ . factor  term −→ . term mult op factor  factor −→ . ( expr )  factor −→ . id  factor −→ . number
-
-on term shift and goto 7
-
-on factor shift and reduce (pop 1 state, push term on input)
-
-on ( shift and goto 8  on id shift and reduce (pop 1 state, push factor on input)  on number shift and reduce (pop 1 state, push factor on input)
-
-  5.
-  stmt −→ id := . expr
-
-on expr shift and goto 9
-
-expr −→ . term  expr −→ . expr add op term  term −→ . factor  term −→ . term mult op factor  factor −→ . ( expr )  factor −→ . id  factor −→ . number
-
-on term shift and goto 7
-
-on factor shift and reduce (pop 1 state, push term on input)
-
-on ( shift and goto 8  on id shift and reduce (pop 1 state, push factor on input)  on number shift and reduce (pop 1 state, push factor on input)
-
-  6.
-  stmt −→ write expr .
-  expr −→ expr . add op term
-
-on FOLLOW(stmt) =  { id, read, write, $$} reduce
-
-(pop 2 states, push stmt on input)  on add op shift and goto 10  on + shift and reduce (pop 1 state, push add op on input)  on - shift and reduce (pop 1 state, push add op on input)
-
-add op −→ . +  add op −→ . ­
-
 ![Figure 2.26 CFSM for the...](images/page_129_vector_584.png)
 *Figure 2.26  CFSM for the calculator grammar (Figure 2.25). Basis and closure items in each state are separated by a  horizontal rule. Trivial reduce-only states have been eliminated by use of “shift and reduce” transitions. (continued)*
 
@@ -3479,283 +2473,18 @@ mult op −→ . *  mult op −→ . /
   factor −→ ( . expr )
   on expr shift and goto 12
 
-expr −→ . term  expr −→ . expr add op term  term −→ . factor  term −→ . term mult op factor  factor −→ . ( expr )  factor −→ . id  factor −→ . number
-
 on term shift and goto 7
-
-on factor shift and reduce (pop 1 state, push term on input)
-
-on ( shift and goto 8  on id shift and reduce (pop 1 state, push factor on input)  on number shift and reduce (pop 1 state, push factor on input)
-
-  9.
-  stmt −→ id := expr .
-  expr −→ expr . add op term
-
-on FOLLOW(stmt) = { id, read, write, $$} reduce  (pop 3 states, push stmt on input)  on add op shift and goto 10  on + shift and reduce (pop 1 state, push add op on input)  on - shift and reduce (pop 1 state, push add op on input)
-
-add op −→ . +  add op −→ . -
-
-  10.
-  expr −→ expr add op . term
-  on term shift and goto 13
-
-term −→ . factor  term −→ . term mult op factor  factor −→ . ( expr )  factor −→ . id  factor −→ . number
-
-on factor shift and reduce (pop 1 state, push term on input)
-
-on ( shift and goto 8  on id shift and reduce (pop 1 state, push factor on input)  on number shift and reduce (pop 1 state, push factor on input)
-
-  11.
-  term −→ term mult op . factor
-  on factor shift and reduce (pop 3 states, push term on input)
-
-factor −→ . ( expr )  factor −→ . id  factor −→ . number
-
-on ( shift and goto 8  on id shift and reduce (pop 1 state, push factor on input)  on number shift and reduce (pop 1 state, push factor on input)
-
-  12.
-  factor −→ ( expr . )
-  expr −→ expr . add op term
-
-on ) shift and reduce (pop 3 states, push factor on input)  on add op shift and goto 10
-
-add op −→ . +  add op −→ . -
-
-on + shift and reduce (pop 1 state, push add op on input)  on - shift and reduce (pop 1 state, push add op on input)
-
-  13.
-  expr −→ expr add op term .
-  term −→ term . mult op factor
-
-```
-on FOLLOW(expr) =  { id, read, write, $$, ), +, -} reduce 
-(pop 3 states, push expr on input) 
-on mult op shift and goto 11 
-on * shift and reduce (pop 1 state, push mult op on input) 
-on / shift and reduce (pop 1 state, push mult op on input)
-```
-
-mult op −→ . *  mult op −→ . /
-
-:=
-
-expr
-
-3
-
-5
-
-id
-
-9
-
-term
-
-(
-
-add_op  add_op
-
-id
-
-read
-
-12
-
-Start  0
-
-1
-
-expr
-
-(
-
-read
-
-(
-
-8
-
-10
-
-stmt_list
-
-2
-
-term  term
-
-(
-
-(
-
-write  write
-
-mult_op  mult_op
-
-term
-
-4
-
-7
-
-11
-
-13
-
-add_op
-
-expr
-
-6
 
 ![Figure 2.27 Pictorial representation of...](images/page_131_vector_271.png)
 *Figure 2.27  Pictorial representation of the CFSM of Figure 2.26. Reduce actions are not  shown.*
 
-Top-of-stack  Current input symbol  state  sl  s  e  t  f  ao  mo  id   lit   r   w   :=   (  )  +  *  /  $$
-
-0  s2 b3  –  –  –  –  –  s3  –  s1 s4  –  –  –  –  –  –  –  – 1  –  –  –  –  –  –  –  b5  –  –  –  –  –  –  –  –  –  –  – 2  – b2  –  –  –  –  –  s3  –  s1 s4  –  –  –  –  –  –  –  b1 3  –  –  –  –  –  –  –  –  –  –  –  s5  –  –  –  –  –  –  – 4  –  –  s6  s7  b9  –  –  b12 b13  –  –  –  s8  –  –  –  –  –  – 5  –  –  s9  s7  b9  –  –  b12 b13  –  –  –  s8  –  –  –  –  –  – 6  –  –  –  –  –  s10  –  r6  –  r6  r6  –  –  –  b14  b15  –  –  r6  7  –  –  –  –  –  –  s11  r7  –  r7  r7  –  –  r7  r7  r7  b16  b17  r7  8  –  –  s12  s7  b9  –  –  b12 b13  –  –  –  s8  –  –  –  –  –  – 9  –  –  –  –  –  s10  –  r4  –  r4  r4  –  –  –  b14  b15  –  –  r4  10  –  –  –  s13  b9  –  –  b12 b13  –  –  –  s8  –  –  –  –  –  – 11  –  –  –  –  b10  –  –  b12 b13  –  –  –  s8  –  –  –  –  –  – 12  –  –  –  –  –  s10  –  –  –  –  –  –  –  b11  b14  b15  –  –  –  13  –  –  –  –  –  –  s11  r8  –  r8  r8  –  –  r8  r8  r8  b16  b17  r8
-
 ![Figure 2.28 SLR(1) parse table...](images/page_131_vector_537.png)
 *Figure 2.28  SLR(1) parse table for the calculator language. Table entries indicate whether to shift (s), reduce (r), or shift  and then reduce (b). The accompanying number is the new state when shifting, or the production that has been recognized  when (shifting and) reducing. Production numbers are given in Figure 2.25. Symbol names have been abbreviated for the sake  of formatting. A dash indicates an error. An auxiliary table, not shown here, gives the left-hand-side symbol and right-hand-side  length for each production.*
-
-state = 1 . . number of states  symbol = 1 . . number of symbols  production = 1 . . number of productions  action rec = record
-
-action : (shift, reduce, shift reduce, error)  new state : state  prod : production
-
-parse tab : array [symbol, state] of action rec  prod tab : array [production] of record  lhs : symbol  rhs len : integer  –– these two tables are created by a parser generator tool
-
-parse stack : stack of record
-
-sym : symbol  st : state
-
-⟨
-
-parse stack.push( null, start state )  cur sym : symbol := scan()  loop  cur state : state := parse stack.top().st
-
-–– get new token from scanner
-
-–– peek at state at top of stack  if cur state = start state and cur sym = start symbol
-
-return  –– success!  ar : action rec := parse tab[cur state, cur sym]  case ar.action
-
-shift:
-
-⟨
-
-parse stack.push( cur sym, ar.new state )  cur sym := scan()  –– get new token from scanner  reduce:  cur sym := prod tab[ar.prod].lhs  parse stack.pop(prod tab[ar.prod].rhs len)  shift reduce:
-
-cur sym := prod tab[ar.prod].lhs  parse stack.pop(prod tab[ar.prod].rhs len−1)  error:  parse error
 
 ![Figure 2.29 Driver for a...](images/page_132_vector_509.png)
 *Figure 2.29  Driver for a table-driven SLR(1) parser. We call the scanner directly, rather  than using the global input token of Figures 2.17 and 2.19, so that we can set cur sym to be  an arbitrary symbol. We pass to the pop() routine a parameter that indicates the number of  symbols to remove from the stack.*
 
 Parse stack  Input stream  Comment
-
-0  0 read 1  0  0  0 stmt list 2  0 stmt list 2 read 1  0 stmt list 2  0  0 stmt list 2  0 stmt list 2 id 3  0 stmt list 2 id 3 := 5  0 stmt list 2 id 3 := 5  0 stmt list 2 id 3 := 5  0 stmt list 2 id 3 := 5 term 7  0 stmt list 2 id 3 := 5  0 stmt list 2 id 3 := 5 expr 9  0 stmt list 2 id 3 := 5 expr 9  0 stmt list 2 id 3 := 5 expr 9 add op 10  0 stmt list 2 id 3 := 5 expr 9 add op 10  0 stmt list 2 id 3 := 5 expr 9 add op 10  0 stmt list 2 id 3 := 5 expr 9 add op 10 term 13  0 stmt list 2 id 3 := 5  0 stmt list 2 id 3 := 5 expr 9  0 stmt list 2  0  0 stmt list 2  0 stmt list 2 write 4  0 stmt list 2 write 4  0 stmt list 2 write 4  0 stmt list 2 write 4 term 7  0 stmt list 2 write 4  0 stmt list 2 write 4 expr 6  0 stmt list 2  0  0 stmt list 2  0 stmt list 2 write 4  0 stmt list 2 write 4  0 stmt list 2 write 4  0 stmt list 2 write 4 term 7  0 stmt list 2 write 4 term 7  0 stmt list 2 write 4 term 7 mult op 11  0 stmt list 2 write 4 term 7 mult op 11  0 stmt list 2 write 4  0 stmt list 2 write 4 term 7  0 stmt list 2 write 4  0 stmt list 2 write 4 expr 6  0 stmt list 2  0  0 stmt list 2  0  [done]
-
-```
-read A read B ... 
-A read B ... 
-stmt read B ... 
-stmt list read B ... 
-read B sum ... 
-B sum := ... 
-stmt sum := ... 
-stmt list sum := ... 
-sum := A ... 
-:= A +  ... 
-A + B  ... 
-factor + B  ... 
-term + B  ... 
-+ B write ... 
-expr + B write ... 
-+ B write ... 
-add op B write ... 
-B write sum ... 
-factor write sum ... 
-term write sum ... 
-write sum ... 
-expr write sum ... 
-write sum ... 
-stmt write sum ... 
-stmt list write sum ... 
-write sum ... 
-sum write sum ... 
-factor write sum ... 
-term write sum ... 
-write sum ... 
-expr write sum ... 
-write sum ... 
-stmt write sum ... 
-stmt list write sum ... 
-write sum / ... 
-sum / 2 ... 
-factor / 2  ... 
-term / 2  ... 
-/ 2 $$  
-mult op 2 $$  
-2 $$  
-factor $$ 
-term $$ 
-$$ 
-expr $$ 
-$$ 
-stmt $$ 
-stmt list $$ 
-$$ 
-program
-```
-
-```
-shift read 
-shift id(A) & reduce by  stmt −→ read id 
-shift stmt & reduce by  stmt list −→ stmt 
-shift stmt list 
-shift read 
-shift id(B) & reduce by  stmt −→ read id 
-shift stmt & reduce by  stmt list −→ stmt list stmt 
-shift stmt list 
-shift id(sum) 
-shift := 
-shift id(A) & reduce by  factor −→ id 
-shift factor & reduce by  term −→ factor 
-shift term 
-reduce by expr −→ term 
-shift expr 
-shift + & reduce by  add op −→ + 
-shift add op 
-shift id(B) & reduce by  factor −→ id 
-shift factor & reduce by  term −→ factor 
-shift term 
-reduce by expr −→ expr add op term 
-shift expr 
-reduce by stmt −→ id := expr 
-shift stmt & reduce by  stmt list −→ stmt 
-shift stmt list 
-shift write 
-shift id(sum) & reduce by  factor −→ id 
-shift factor & reduce by  term −→ factor 
-shift term 
-reduce by expr −→ term 
-shift expr 
-reduce by stmt −→ write expr 
-shift stmt & reduce by  stmt list −→ stmt list stmt 
-shift stmt list 
-shift write 
-shift id(sum) & reduce by  factor −→ id 
-shift factor & reduce by  term −→ factor 
-shift term 
-shift / & reduce by  mult op −→ / 
-shift mult op 
-shift number(2) & reduce by  factor −→ number 
-shift factor & reduce by  term −→ term mult op factor 
-shift term 
-reduce by expr −→ term 
-shift expr 
-reduce by stmt −→ write expr 
-shift stmt & reduce by  stmt list −→ stmt list stmt 
-shift stmt list 
-shift $$ & reduce by  program −→ stmt list $$
-```
 
 a parallel program (or the operating system) to wait for a signal from another  process or an I/O device.
 
@@ -4374,55 +3103,12 @@ EXAMPLE 3.2  routine calls makes it easy to allocate space for locals on a stack
 
 While the location of a stack frame cannot be predicted at compile time (the  compiler cannot in general tell what other frames may already be on the stack),  the offsets of objects within a frame usually can be statically determined. Moreover, the compiler can arrange (in the calling sequence or prologue) for a particular register, known as the frame pointer to always point to a known location  within the frame of the current subroutine. Code that needs to access a local variable within the current frame, or an argument near the top of the calling frame,
 
-sp
-
-procedure C  D; E
-
-Arguments  to called  routines
-
-Subroutine D
-
-```
-procedure B
-      if ... then B else C
-```
-
-fp
-
-procedure A  B
-
-Temporaries
-
-−− main program  A
-
-Subroutine C
-
-Local  variables
-
-Direction of stack  growth (usually  lower addresses)
-
-Miscellaneous  bookkeeping
-
-Subroutine B
-
-fp (when subroutine  C is running)
-
-Return address
-
-Subroutine B
-
-Subroutine A
-
 ![Figure 3.1 Stack-based allocation of...](images/page_154_vector_345.png)
 *Figure 3.1  Stack-based allocation of space for subroutines. We assume here that subroutines have been called as shown  in the upper right. In particular, B has called itself once, recursively, before calling C. If  D returns and C calls E, E’s frame  (activation record) will occupy the same space previously used for D’s frame. At any given time, the stack pointer (sp) register   points to the frst unused location on the stack (or the last used location on some machines), and the frame pointer (fp)  register points to a known location within the frame of the current subroutine. The relative order of felds within a frame may  vary from machine to machine and compiler to compiler.*
 
 can do so by adding a predetermined offset to the value in the frame pointer.  As we discuss in Section C 5.3.1, almost every processor provides a displacement  addressing mechanism that allows this addition to be specifed implicitly as part  of an ordinary load or store instruction. The stack grows “downward” toward  lower addresses in most language implementations. Some machines provide special push and pop instructions that assume this direction of growth. Local variables, temporaries, and bookkeeping information typically have negative offsets  from the frame pointer. Arguments and returns typically have positive offsets;  they reside in the caller’s frame.
 
 Even in a language without recursion, it can be advantageous to use a stack for  local variables, rather than allocating them statically. In most programs the pattern of potential calls among subroutines does not permit all of those subroutines  to be active at the same time. As a result, the total space needed for local variables of currently active subroutines is seldom as large as the total space across all
-
-Heap
-
-Allocation request
 
 ![Figure 3.2 Fragmentation. The shaded...](images/page_155_vector_163.png)
 *Figure 3.2  Fragmentation. The shaded blocks are in use; the clear blocks are free. Crosshatched space at the ends of in-use blocks represents internal fragmentation. The discontiguous  free blocks indicate external fragmentation. While there is more than enough total free space  remaining to satisfy an allocation request of the illustrated size, no single remaining block is large  enough.*
@@ -4523,8 +3209,6 @@ The simplest static scope rule is probably that of early versions of Basic, in  
 
 Scope rules are somewhat more complex in (pre-Fortran 90) Fortran, though  not much more. Fortran distinguishes between global and local variables. The  scope of a local variable is limited to the subroutine in which it appears; it is not  visible elsewhere. Variable declarations are optional. If a variable is not declared,  it is assumed to be local to the current subroutine and to be of type integer if its  name begins with the letters I–N, or real otherwise. (Different conventions for  implicit declarations can be specifed by the programmer. In Fortran 90 and its  successors, the programmer can also turn off implicit declarations, so that use of  an undeclared variable becomes a compile-time error.)
 
-/*  Place into *s a new name beginning with the letter 'L' and  continuing with the ASCII representation of a unique integer.  Parameter s is assumed to point to space large enough to hold any  such name; for the short ints used here, 7 characters suffice.  */  void label_name (char *s) {  static short int n;  /* C guarantees that static locals  are initialized to zero */  sprintf (s, "L%d\0", ++n);  /* "print" formatted output to s */  }
-
 ![Figure 3.3 C code to...](images/page_160_vector_200.png)
 *Figure 3.3  C code to illustrate the use of static variables.*
 
@@ -4591,56 +3275,12 @@ The C++ :: operator is also used to name members (felds or methods) of a base cl
 hidden by members of a derived class; we will consider this use in Section 10.2.2.
 ```
 
-procedure P1(A1)  A1 X P2  P4  var X  −− local to P1  ...  procedure P2(A2)
-
-A2 P3
-
-...  procedure P3(A3)
-
-A3
-
-...  begin  ...  −− body of P3  end  ...  begin
-
-...  −− body of P2
-
-end
-
-...  procedure P4(A4)  ...  function F1(A5)
-
-A4 F1
-
-A5 X
-
-var X  −− local to F1  ...  begin
-
-...  −− body of F1  end  ...  begin
-
-...  −− body of P4  end  ...  begin  ...  −− body of P1  end
-
 ![Figure 3.4 Example of nested...](images/page_162_vector_393.png)
 *Figure 3.4  Example of nested subroutines, shown in pseudocode. Vertical bars indicate the  scope of each name, for a language in which declarations are visible throughout their subroutine.  Note the hole in the scope of the outer X.*
 
 time. Using this register as a base for displacement (register plus offset) addressing, target code can access objects within the current subroutine. But what about  objects in lexically surrounding subroutines? To fnd these we need a way to fnd  the frames corresponding to those scopes at run time. Since a nested subroutine  may call a routine in an outer scope, the order of stack frames at run time may not  necessarily correspond to the order of lexical nesting. Nonetheless, we can be sure  that there is some frame for the surrounding scope already in the stack, since the  current subroutine could not have been called unless it was visible, and it could  not have been visible unless the surrounding scope was active. (It is actually possible in some languages to save a reference to a nested subroutine, and then call  it when the surrounding scope is no longer active. We defer this possibility to  Section 3.6.2.)
 
 The simplest way in which to fnd the frames of surrounding scopes is to maintain a static link in each frame that points to the “parent” frame: the frame of the
-
-A  B
-
-C  fp
-
-C
-
-D
-
-D
-
-B
-
-E
-
-E
-
-A
 
 ![Figure 3.5 Static chains. Subroutines...](images/page_163_vector_287.png)
 *Figure 3.5  Static chains. Subroutines A, B, C, D, and  E are nested as shown on the left. If the  sequence of nested calls at run time is A, E, B, D, and  C, then the static links in the stack will  look as shown on the right. The code for subroutine C can fnd local objects at known offsets  from the frame pointer. It can fnd local objects of the surrounding scope, B, by dereferencing its  static chain once and then applying an offset. It can fnd local objects in B’s surrounding scope,  A, by dereferencing its static chain twice and then applying an offset.*
@@ -4872,14 +3512,6 @@ Modules as Abstractions
 
 A module allows a collection of objects—subroutines, variables, types, and so  on—to be encapsulated in such a way that (1) objects inside are visible to each  other, but (2) objects on the inside may not be visible on the outside unless they  are exported, and (3) objects on the outside may not be visible on the inside unless they are imported. Import and export conventions vary signifcantly from  one language to another, but in all cases, only the visibility of objects is affected;  modules do not affect the lifetime of the objects they contain.
 
-#include <time.h>  namespace rand_mod {  unsigned int seed = time(0);  // initialize from current time of day  const unsigned int a = 48271;  const unsigned int m = 0x7fffffff;
-
-void set_seed(unsigned int s) {
-
-seed = s;  }  unsigned int rand_int() {
-
-return seed = (a * seed) % m;  }  }
-
 ![Figure 3.6 Pseudorandom number generator...](images/page_170_vector_221.png)
 *Figure 3.6  Pseudorandom number generator module in C++. Uses the linear congruential  method, with a default seed taken from the current time of day. While there exist much better  (more random) generators, this one is simple, and acceptable for many purposes.*
 
@@ -4925,20 +3557,6 @@ Modules as Managers
 Modules facilitate the construction of abstractions by allowing data to be made  private to the subroutines that use them. When used as in Figure 3.6, however,
 
 EXAMPLE 3.15  each module defnes a single abstraction. Continuing our previous example, there  Module as “manager” for a  are times when it may be desirable to have more than one pseudorandom numtype  ber generator. When debugging a game, for example, we might want to obtain  deterministic (repeatable) behavior in one particular game module (a particular
-
-#include <time.h>  namespace rand_mgr {  const unsigned int a = 48271;  const unsigned int m = 0x7fffffff;
-
-```
-typedef struct { 
-unsigned int seed; 
-} generator;
-```
-
-generator* create() {  generator* g = new generator;  g->seed = time(0);  return g;  }  void set_seed(generator* g, unsigned int s) {
-
-g->seed = s;  }  unsigned int rand_int(generator* g) {
-
-return g->seed = (a * g->seed) % m;  }  }
 
 ![Figure 3.7 Manager module for...](images/page_172_vector_309.png)
 *Figure 3.7  Manager module for pseudorandom numbers in C++.*
@@ -4998,18 +3616,6 @@ and 10.1, respectively.
 ```
 
 3.8
-
-class rand_gen {
-
-unsigned int seed = time(0);  const unsigned int a = 48271;  const unsigned int m = 0x7fffffff;
-
-public:
-
-void set_seed(unsigned int s) {
-
-seed = s;  }  unsigned int rand_int() {
-
-return seed = (a * seed) % m;  }  };
 
 ![Figure 3.8 Pseudorandom number generator...](images/page_174_vector_222.png)
 *Figure 3.8  Pseudorandom number generator class in C++.*
@@ -5076,38 +3682,6 @@ Languages with dynamic scoping include APL, Snobol, Tcl, TEX (the  typesetting l
 
 9  Scheme and Common Lisp are statically scoped, though the latter allows the programmer to  specify dynamic scoping for individual variables. Static scoping was added to Perl in version 5;  the programmer now chooses static or dynamic scoping explicitly in each variable declaration.  (We consider this choice in more detail in Section 14.4.1.)
 
-  1.
-  n : integer
-  –– global declaration
-
-  2.
-  procedure frst( )
-  3.
-  n := 1
-
-  4.
-  procedure second( )
-  5.
-  n : integer
-  –– local declaration
-  6.
-  frst( )
-
-```
-7. 
-n := 2  
-8. 
-if read integer( ) > 0 
-9. 
-second( ) 
-10. 
-else 
-11. 
-frst( ) 
-12. 
-write integer(n)
-```
-
 ![Figure 3.9 Static versus dynamic...](images/page_176_vector_239.png)
 *Figure 3.9  Static versus dynamic scoping. Program output depends on both scope rules and,  in the case of dynamic scoping, a value read at run time.*
 
@@ -5152,27 +3726,6 @@ In a language with dynamic scoping, an interpreter (or the output of a compiler)
 IN MORE DEPTH
 
 A symbol table with visibility support can be implemented in several different  ways. One appealing approach, due to LeBlanc and Cook [CL83], is described on  the companion site, along with both association lists and central reference tables.
-
-max score : integer  –– maximum possible score
-
-function scaled score(raw score : integer) : real
-
-```
-return raw score / max score * 100 
-. . .  
-procedure foo( )
-```
-
-```
-max score : real := 0 
-–– highest percentage seen so far 
-. . .  
-foreach student in class
-```
-
-student.percent := scaled score(student.points)  if student.percent > max score
-
-max score := student.percent
 
 ![Figure 3.10 The problem with...](images/page_178_vector_212.png)
 *Figure 3.10  The problem with dynamic scoping. Procedure scaled score probably does not  do what the programmer intended when dynamic scope rules allow procedure foo to change  the meaning of max score.*
@@ -5244,10 +3797,6 @@ DESIGN & IMPLEMENTATION
 
 3.7 Pointers in C and Fortran  The tendency of pointers to introduce aliases is one of the reasons why Fortran compilers tended, historically, to produce faster code than C compilers:  pointers are heavily used in C, but missing from Fortran 77 and its predecessors. It is only in recent years that sophisticated alias analysis algorithms have  allowed C compilers to rival their Fortran counterparts in speed of generated  code. Pointer analysis is suffciently important that the designers of the C99  standard decided to add a new keyword to the language. The restrict qualifer, when attached to a pointer declaration, is an assertion on the part of the  programmer that the object to which the pointer refers has no alias in the current scope. It is the programmer’s responsibility to ensure that the assertion is  correct; the compiler need not attempt to check it. C99 also introduced strict  aliasing. This allows the compiler to assume that pointers of different types  will never refer to the same location in memory. Most compilers provide a  command-line option to disable optimizations that exploit this rule; otherwise (poorly written) legacy programs may behave incorrectly when compiled  at higher optimization levels.
 
-declare  type month is (jan, feb, mar, apr, may, jun,
-
-jul, aug, sep, oct, nov, dec);  type print_base is (dec, bin, oct, hex);  mo : month;  pb : print_base;  begin  mo := dec;  -- the month dec (since mo has type month)  pb := oct;  -- the print_base oct (since pb has type print_base)  print(oct);  -- error!  insufficient context  -to decide which oct is intended
-
 ![Figure 3.11 Overloading of enumeration...](images/page_180_vector_198.png)
 *Figure 3.11  Overloading of enumeration constants in Ada.*
 
@@ -5272,16 +3821,6 @@ EXAMPLE 3.23  an error. Most languages that allow overloaded enumeration constan
 print(month'(oct));
 
 In Modula-3 and C#, every use of an enumeration constant must be prefxed with  a type name, even when there is no chance of ambiguity:
-
-struct complex {
-
-double real, imaginary;  };  enum base {dec, bin, oct, hex};
-
-int i;  complex x;
-
-void print_num(int n) { ...  void print_num(int n, base b) { ...  void print_num(complex c) { ...
-
-print_num(i);  // uses the first function above  print_num(i, hex);  // uses the second function above  print_num(x);  // uses the third function above
 
 ![Figure 3.12 Simple example of...](images/page_181_vector_245.png)
 *Figure 3.12  Simple example of overloading in C++. In each case the compiler can tell which  function is intended by the number and types of arguments.*
@@ -5495,69 +4034,12 @@ is sometimes available as an option with dynamic scoping as well.
 ■
 ```
 
-```
-type person = record 
-. . .  
-age : integer 
-. . .  
-threshold : integer 
-people : database
-```
-
-function older than threshold(p : person) : boolean  return p.age ≥ threshold
-
-procedure print person(p : person)  –– Call appropriate I/O routines to print record on standard output.  –– Make use of nonlocal variable line length to format data in columns.  . . .
-
-procedure print selected records(db : database;  predicate, print routine : procedure)  line length : integer
-
-if device type(stdout) = terminal  line length := 80  else  –– Standard output is a fle or printer.  line length := 132  foreach record r in db  –– Iterating over these may actually be  –– a lot more complicated than a ‘for’ loop.  if predicate(r)
-
-print routine(r)
-
-```
-–– main program 
-. . .  
-threshold := 35 
-print selected records(people, older than threshold, print person)
-```
-
 ![Figure 3.13 Program (in pseudocode)...](images/page_186_vector_431.png)
 *Figure 3.13  Program (in pseudocode) to illustrate the importance of binding rules. One  might argue that deep binding is appropriate for the environment of function older than  threshold (for access to threshold), while shallow binding is appropriate for the environment  of procedure print person (for access to line length).*
 
 ## 3.6.1 Subroutine Closures
 
 Deep binding is implemented by creating an explicit representation of a referencing environment (generally the one in which the subroutine would execute  if called at the present time) and bundling it together with a reference to the  subroutine. The bundle as a whole is referred to as a closure. Usually the subroutine itself can be represented in the closure by a pointer to its code. In a language with dynamic scoping, the representation of the referencing environment  depends on whether the language implementation uses an association list or a
-
-def A(I, P):
-
-```
-def B(): 
-print(I)
-```
-
-B
-
-```
-# body of A:  
-if I >  1:  
-P() 
-else: 
-A(2, B)
-```
-
-A I == 2  P == B
-
-A I == 1  P == C
-
-```
-def C(): 
-pass 
-# do nothing
-```
-
-main program
-
-A(1, C)  # main program
 
 ![Figure 3.14 Deep binding in...](images/page_187_vector_225.png)
 *Figure 3.14  Deep binding in Python. At right is a conceptual view of the run-time stack.  Referencing environments captured in closures are shown as dashed boxes and arrows. When  B is called via formal parameter P, two  instances of  I exist. Because the closure for P was  created in the initial invocation of A, B’s static link (solid arrow) points to the frame of that earlier  invocation. B uses that invocation’s instance of I in its print statement, and the output is a 1.*
@@ -5659,10 +4141,6 @@ the non-nested subroutines of C and the rule against passing nonglobal subroutin
 subroutines in many imperative languages refects in large part the desire to 
 avoid heap allocation, which would be needed for local variables with unlimited extent.
 ```
-
-plus-x x = 2  rtn = anon  anon  y = 3
-
-main program  main program
 
 ![Figure 3.15 The need for...](images/page_190_vector_149.png)
 *Figure 3.15  The need for unlimited extent. When function plus-x is called in Example 3.32,  it returns (left side of the fgure) a closure containing an anonymous function. The referencing  environment of that function encompasses both plus-x and main—including the local variables  of plus-x itself. When the anonymous function is subsequently called (right side of the fgure),  it must be able to access variables in the closure’s environment—in particular, the x inside  plus-x—despite the fact that plus-x is no longer active.*
@@ -6152,23 +4630,6 @@ R(1)
 
 ## (a) What does this program print?
 
-```
-typedef struct list_node { 
-void* data; 
-struct list_node* next; 
-} list_node;
-```
-
-list_node* insert(void* d, list_node* L) {  list_node* t = (list_node*) malloc(sizeof(list_node));  t->data = d;  t->next = L;  return t;  }
-
-list_node* reverse(list_node* L) {  list_node* rtn = 0;  while (L) {
-
-rtn = insert(L->data, rtn);  L = L->next;  }  return rtn;  }
-
-void delete_list(list_node* L) {
-
-while (L) {  list_node* t = L;  L = L->next;  free(t->data);  free(t);  }  }
-
 ![Figure 3.16 List management routines...](images/page_202_vector_397.png)
 *Figure 3.16  List management routines for Exercise 3.7.*
 
@@ -6623,42 +5084,6 @@ EXAMPLE 4.5
 
 Top-down AG to count the  elements of a list
 
-  1.
-  E1 −→ E2 + T
-   E1.val := sum(E2.val, T.val)
-
-  2.
-  E1 −→ E2 - T
-   E1.val := difference(E2 .val, T.val)
-
-  3.
-  E −→ T
-   E.val := T.val
-
-  4.
-  T1 −→ T2 * F
-   T1.val := product(T2.val, F.val)
-
-  5.
-  T1 −→ T2 / F
-   T1.val := quotient(T2.val, F.val)
-
-  6.
-  T −→ F
-   T.val := F.val
-
-  7.
-  F1 −→ - F2
-   F1.val := additive inverse(F2.val)
-
-  8.
-  F −→ ( E )
-   F.val := E.val
-
-  9.
-  F −→ const
-   F.val := const.val
-
 ![Figure 4.1 A simple attribute...](images/page_219_vector_215.png)
 *Figure 4.1  A simple attribute grammar for constant expressions, using the standard arithmetic operations. Each semantic rule is introduced by a  sign.*
 
@@ -6682,61 +5107,6 @@ For purposes other than translation—e.g., in a theorem prover or machineindepe
 of denotational, operational, or  axiomatic semantics. Interested readers can fnd 
 references in the Bibliographic Notes at the end of the chapter.
 ```
-
-8 E
-
-T
-
-8
-
-4 T
-
-  *
-  F
-
-2
-
-F
-
-4
-
-2
-
-const
-
-E  ) (
-
-4
-
-E
-
-1
-
-T
-
-3
-
-+
-
-T
-
-F
-
-1
-
-3
-
-F
-
-1
-
-3
-
-const
-
-1
-
-const
 
 ![Figure 4.2 Decoration of a...](images/page_220_vector_351.png)
 *Figure 4.2  Decoration of a parse tree for (1 + 3) * 2, using the attribute grammar of  Figure 4.1. The val attributes of symbols are shown in boxes. Curving arrows show the attribute  fow, which is strictly upward in this case. Each box holds the output of a single semantic rule;  the arrow(s) entering the box indicate the input(s) to the rule. At the second level of the tree,  for example, the two arrows pointing into the box with the 8 represent application of the rule  T1.val := product(T2 .val, F.val).*
@@ -6838,65 +5208,6 @@ EXAMPLE 4.10
 
 Top-down AG for constant  expressions
 
-  1.
-  E −→ T TT
-
- TT.st := T.val   E.val := TT.val
-
-  2.
-  TT1 −→ + T TT2
-
- TT2.st := TT1.st + T.val   TT1.val := TT2.val
-
-  3.
-  TT1 −→ - T TT2
-
- TT2.st := TT1.st − T.val   TT1.val := TT2.val
-
-  4.
-  TT −→
-
-ϵ
-
- TT.val := TT.st
-
-  5.
-  T −→ F FT
-
- FT.st := F.val   T.val := FT.val
-
-  6.
-  FT1 −→ * F FT2
-
- FT2.st := FT1.st × F.val   FT1.val := FT2.val
-
-  7.
-  FT1 −→ / F FT2
-
- FT2.st := FT1.st ÷ F.val   FT1.val := FT2.val
-
-  8.
-  FT −→
-
-ϵ
-
- FT.val := FT.st
-
-  9.
-  F1 −→ - F2
-
- F1.val := − F2.val
-
-  10.
-  F −→ ( E )
-
- F.val := E.val
-
-  11.
-  F −→ const
-
- F.val := const.val
-
 ![Figure 4.3 An attribute grammar...](images/page_223_vector_365.png)
 *Figure 4.3  An attribute grammar for constant expressions based on an LL(1) CFG. In this  grammar several productions have two semantic rules.*
 
@@ -6907,92 +5218,6 @@ Attribute Flow
 Just as a context-free grammar does not specify how it should be parsed, an attribute grammar does not specify the order in which attribute rules should be  invoked. Put another way, both notations are declarative: they defne a set of valid  trees, but they don’t say how to build or decorate them. Among other things, this  means that the order in which attribute rules are listed for a given production is  immaterial; attribute fow may require them to execute in any order. If, in Figure 4.3, we were to reverse the order in which the rules appear in productions  1, 2, 3, 5, 6, and/or 7 (listing the rule for symbol.val frst), it would be a purely  cosmetic change; the grammar would not be altered.
 
 We say an attribute grammar is well defined if its rules determine a unique set  of values for the attributes of every possible parse tree. An attribute grammar is  noncircular if it never leads to a parse tree in which there are cycles in the attribute  fow graph—that is, if no attribute, in any parse tree, ever depends (transitively)
-
-E
-
-8
-
-T
-
-8
-
-8 8
-
-TT
-
-FT
-
-4
-
-4 8
-
-F
-
-ϵ
-
-F
-
-E
-
-4
-
-2
-
-FT
-
-8 8
-
-(  )
-
-*
-
-TT
-
-T
-
-1
-
-1 4
-
-2
-
-ϵ
-
-const
-
-1
-
-FT
-
-1 1
-
-3
-
-4 4
-
-T
-
-F
-
-TT +
-
-F
-
-const  FT
-
-1
-
-3
-
-3 3
-
-ϵ  ϵ
-
-3
-
-ϵ
-
-const
 
 ![Figure 4.4 Decoration of a...](images/page_224_vector_339.png)
 *Figure 4.4  Decoration of a top-down parse tree for (1 + 3) * 2, using the AG of Figure 4.3. Curving arrows again indicate  attribute fow; the arrow(s) entering a given box represent the application of a single semantic rule. Flow in this case is no  longer strictly bottom-up, but it is still left-to-right. At FT and TT nodes, the left box holds the st attribute; the right holds val.*
@@ -7059,34 +5284,6 @@ to abandon the requirement that declarations precede uses.
 
 3  Most authors use the term one-pass only for compilers that translate all the way from source to  target code in a single pass. Some authors insist only that intermediate code be generated in a  single pass, and permit additional pass(es) to translate intermediate code to target code.
 
-E1 −→ E2 + T   E1.ptr := make bin op(“+”, E2.ptr, T.ptr)
-
-E1 −→ E2 - T   E1.ptr := make bin op(“−”, E2.ptr, T.ptr)
-
-E −→ T
-
- E.ptr := T.ptr
-
-T1 −→ T2 * F   T1.ptr := make bin op(“×”, T2.ptr, F.ptr)
-
-T1 −→ T2 / F   T1.ptr := make bin op(“÷”, T2.ptr, F.ptr)
-
-T −→ F
-
- T.ptr := F.ptr
-
-F1 −→ - F2
-
- F1.ptr := make un op(“+/−”, F2.ptr)
-
-F −→ ( E )
-
- F.ptr := E.ptr
-
-F −→ const
-
- F.ptr := make leaf(const.val)
-
 ![Figure 4.5 Bottom-up (S-attributed) attribute...](images/page_227_vector_311.png)
 *Figure 4.5  Bottom-up (S-attributed) attribute grammar to construct a syntax tree. The  symbol +/− is used (as it is on calculators) to indicate change of sign.*
 
@@ -7124,54 +5321,6 @@ same in each case.
   a
   one-pass compiler?
 
-E −→ T TT
-
- TT.st := T.ptr   E.ptr := TT.ptr
-
-TT1 −→ + T TT2
-
- TT2.st := make bin op(“+”, TT1.st, T.ptr)   TT1.ptr := TT2.ptr
-
-TT1 −→ - T TT2
-
- TT2.st := make bin op(“−”, TT1.st, T.ptr)   TT1.ptr := TT2.ptr
-
-TT −→
-
-ϵ
-
- TT.ptr := TT.st
-
-T −→ F FT
-
- FT.st := F.ptr   T.ptr := FT.ptr
-
-FT1 −→ * F FT2
-
- FT2.st := make bin op(“×”, FT1.st, F.ptr)   FT1.ptr := FT2.ptr
-
-FT1 −→ / F FT2
-
- FT2.st := make bin op(“÷”, FT1.st, F.ptr)   FT1.ptr := FT2.ptr
-
-FT −→
-
-ϵ
-
- FT.ptr := FT.st
-
-F1 −→ - F2
-
- F1.ptr := make un op(“+/−”, F2.ptr)
-
-F −→ ( E )
-
- F.ptr := E.ptr
-
-F −→ const
-
- F.ptr := make leaf(const.val)
-
 ![Figure 4.6 Top-down (L-attributed) attribute...](images/page_228_vector_431.png)
 *Figure 4.6  Top-down (L-attributed) attribute grammar to construct a syntax tree. Here the  st attribute, like the ptr attribute (and unlike the st attribute of Figure 4.3), is a pointer to a  syntax tree node.*
 
@@ -7189,153 +5338,10 @@ T
 
 *
 
-×
-
-T  (d) F *
-
-+
-
-2
-
-3 1
-
-T
-
-F
-
-*
-
-const 2
-
-F
-
-(c)
-
-(  ) E
-
-+
-
-2
-
-3 1
-
-E
-
-E  (b)
-
-T
-
-+
-
-+
-
-3 1
-
-E  +  T
-
-F
-
-T
-
-(a)
-
-3  3
-
-const
-
-F
-
-1  1
-
-const
-
 ![Figure 4.7 Construction of a...](images/page_229_vector_547.png)
 *Figure 4.7  Construction of a syntax tree for (1 + 3) * 2 via decoration of a bottom-up  parse tree, using the grammar of Figure 4.5. This fgure reads from bottom to top. In diagram  (a), the values of the constants 1 and 3 have been placed in new syntax tree leaves. Pointers  to these leaves propagate up into the attributes of E and T. In (b), the pointers to these leaves  become child pointers of a new internal + node. In (c) the pointer to this node propagates up  into the attributes of T, and a new leaf is created for 2. Finally, in (d), the pointers from T and F  become child pointers of a new internal × node, and a pointer to this node propagates up into  the attributes of E.*
 
 E
-
-E T  TT
-
-T  TT F  FT
-
-FT
-
-F
-
-E
-
-(  )
-
-E
-
-(  )
-
-T
-
-TT
-
-TT
-
-+
-
-FT
-
-F
-
-T +  +
-
-TT
-
-3 1
-
-const 1  1
-
-ϵ
-
-(a)
-
-ϵ
-
-F
-
-FT
-
-const 3
-
-ϵ
-
-E
-
-(b)
-
-TT
-
-T
-
-ϵ
-
-FT
-
-×
-
-  *
-  *
-
-F
-
-FT
-
-+
-
-2
-
-const 2
-
-ϵ
-
-3 1
-
-(c)
 
 ![Figure 4.8 Construction of a...](images/page_230_vector_515.png)
 *Figure 4.8  Construction of a syntax tree via decoration of a top-down parse tree, using the grammar of Figure 4.6. In the  top diagram, (a), the value of the constant 1 has been placed in a new syntax tree leaf. A pointer to this leaf then propagates to  the st attribute of TT. In (b), a second leaf has been created to hold the constant 3. Pointers to the two leaves then become  child pointers of a new internal + node, a pointer to which propagates from the st attribute of the bottom-most TT, where   it was created, all the way up and over to the st attribute of the top-most FT. In (c), a third leaf has been created for the  constant 2. Pointers to this leaf and to the + node then become the children of a new × node, a pointer to which propagates  from the st of the lower FT, where it was created, all the way to the root of the tree.*
@@ -7373,40 +5379,8 @@ has higher overhead than action routines, and doesn’t really save the compiler
 writer that much work.
 ```
 
-E −→ T { TT.st := T.ptr } TT { E.ptr := TT.ptr }
-
-TT1 −→ + T { TT2.st := make bin op(“+”, TT1.st, T.ptr) } TT2 { TT1.ptr := TT2.ptr }
-
-TT1 −→ - T { TT2.st := make bin op(“−”, TT1.st, T.ptr) } TT2 { TT1.ptr := TT2.ptr }
-
-TT −→  { TT.ptr := TT.st }
-
-ϵ
-
-T −→ F { FT.st := F.ptr } FT { T.ptr := FT.ptr }
-
-FT1 −→ * F { FT2.st := make bin op(“×”, FT1.st, F.ptr) } FT2 { FT1.ptr := FT2.ptr }
-
-FT1 −→ / F { FT2.st := make bin op(“÷”, FT1.st, F.ptr) } FT2 { FT1.ptr := FT2.ptr }
-
-FT −→  { FT.ptr := FT.st }
-
-ϵ
-
-F1 −→ - F2 { F1.ptr := make un op(“+/−”, F2.ptr) }
-
-F −→ ( E ) { F.ptr := E.ptr }
-
-F −→ const { F.ptr := make leaf(const.ptr) }
-
 ![Figure 4.9 LL(1) grammar with...](images/page_232_vector_232.png)
 *Figure 4.9  LL(1) grammar with action routines to build a syntax tree.*
-
-procedure term tail(lhs : tree node ptr)  case input token of
-
-+, - :  op : string := add op()  return term tail(make bin op(op, lhs, term()))
-
-–– term() is a recursive call with no arguments  ), id, read, write, $$ :  –– epsilon production  return lhs  otherwise parse error
 
 ![Figure 4.10 Recursive descent parsing...](images/page_232_vector_372.png)
 *Figure 4.10  Recursive descent parsing with embedded “action routines.” Compare with the  routine of the same name in Figure 2.17, and with productions 2 through 4 in Figure 4.9.*
@@ -7442,28 +5416,6 @@ For a top-down parser with an L-attributed grammar, we have two principal  optio
 
 In both families of parsers, it is common for some of the contextual information for action routines to be kept in global variables. The symbol table in  particular is usually global. Rather than pass its full contents through attributes  from one production to the next, we pass an indication of the currently active  scope. Lookups in the global table then use this scope information to obtain the  right referencing environment.
 
-program −→ stmt list $$
-
-stmt list −→ stmt list decl | stmt list stmt |
-
-ϵ
-
-decl −→ int id | real id
-
-stmt −→ id := expr | read id | write expr
-
-expr −→ term | expr add op term
-
-term −→ factor | term mult op factor
-
-factor −→ ( expr ) | id | int_const | real_const |
-
-float ( expr ) | trunc ( expr )
-
-add op −→ + | ­
-
-mult op −→ * | /
-
 ![Figure 4.11 Context-free grammar for...](images/page_234_vector_216.png)
 *Figure 4.11  Context-free grammar for a calculator language with types and declarations.  The intent is that every identifer be declared before use, and that types not be mixed in computations.*
 
@@ -7478,28 +5430,6 @@ In our discussion so far we have used attribute grammars solely to decorate pars
 EXAMPLE 4.14  Figure 4.11 contains a bottom-up CFG for a calculator language with types and  Bottom-up CFG for  declarations. The grammar differs from that of Example 2.37 in three ways: (1) we  calculator language with  allow declarations to be intermixed with statements, (2) we differentiate between  types  integer and real constants (presumably the latter contain a decimal point), and (3)  we require explicit conversions between integer and real operands. The intended  semantics of our language requires that every identifer be declared before it is  used, and that types not be mixed in computations.  ■
 
 EXAMPLE 4.15  Extrapolating from the example in Figure 4.5, it is easy to add semantic funcSyntax tree to average an  tions or action routines to the grammar of Figure 4.11 to construct a syntax tree  integer and a real  for the calculator language (Exercise 4.21). The obvious structure for such a tree  would represent expressions as we did in Figure 4.7, and would represent a program as a linked list of declarations and statements. As a concrete example, Figure 4.12 contains the syntax tree for a simple program to print the average of an  integer and a real.  ■
-
-program
-
-int_decl
-
-read
-
-a  real_decl
-
-read a
-
-write b
-
-int a  b  null
-
-read a  ÷  real b  read b  write (float (a) + b) / 2.0  2.0
-
-+
-
-b float
-
-a
 
 ![Figure 4.12 Syntax tree for...](images/page_235_vector_306.png)
 *Figure 4.12  Syntax tree for a simple calculator program.*
@@ -7552,10 +5482,6 @@ variant of B, and may appear anywhere a B is expected on a right-hand side.
 ■
 ```
 
-Attributes  Class of node  Variants  Inherited  Synthesized
-
-program  — —  location, errors  item  int decl, real decl,  symtab, errors in  location, errors out  read, write, :=, null  expr  int const, real const,  symtab  location, type, errors,  id, +, −, ×, ÷,  name (id only)  float, trunc
-
 ![Figure 4.13 Classes of nodes...](images/page_236_vector_185.png)
 *Figure 4.13  Classes of nodes for the syntax tree attribute grammar of Figure 4.14. With the  exception of name, all variants of a given class have all the class’s attributes.*
 
@@ -7567,117 +5493,8 @@ Our handling of semantic errors illustrates a common technique. In order to  con
 
 program −→ item
 
- item.symtab := null   program.errors := item.errors out   item.errors in := null
-
-int decl : item1 −→ id item2
-
-```
- declare name(id, item1, item2, int)  
- item1.errors out := item2.errors out
-```
-
-real decl : item1 −→ id item2
-
-```
- declare name(id, item1, item2, real)  
- item1.errors out := item2.errors out
-```
-
-read : item1 −→ id item2
-
-```
- item2.symtab := item1.symtab 
- if id.name, ?  ∈ item1.symtab
-```
-
-⟨
-
-item2.errors in := item1.errors in  else
-
-item2.errors in := item1.errors in + [id.name “undefned at” id.location]   item1.errors out := item2.errors out
-
-write : item1 −→ expr item2
-
- expr.symtab := item1.symtab   item2.symtab := item1.symtab   item2.errors in := item1.errors in + expr.errors   item1.errors out := item2.errors out
-
-‘:=’ : item1 −→ id expr item2
-
-```
- expr.symtab := item1.symtab 
- item2.symtab := item1.symtab 
- if id.name, A  ∈ item1.symtab 
-–– for some type A 
-if A = error and expr.type = error and A = expr.type
-```
-
-⟨
-
-item2.errors in := item1.errors in + [“type clash at” item1.location]  else
-
-item2.errors in := item1.errors in + expr.errors  else
-
-item2.errors in := item1.errors in + [id.name “undefned at” id.location]
-
-+ expr.errors   item1.errors out := item2.errors out
-
-null : item −→
-
-ϵ
-
- item.errors out := item.errors in
-
 ![Figure 4.14 Attribute grammar to...](images/page_237_vector_518.png)
 *Figure 4.14  Attribute grammar to decorate an abstract syntax tree for the calculator language with types. We use square brackets to delimit error messages and pointed brackets to  delimit symbol table entries. Juxtaposition indicates concatenation within error messages; the  ‘+’ and  ‘−’ operators indicate insertion and removal in lists. We assume that every node has  been initialized by the scanner or by action routines in the parser to contain an indication of  the location (line and column) at which the corresponding construct appears in the source (see  Exercise 4.22). The ‘?’ symbol is used as a “wild card”; it matches any type. (continued)*
-
-id : expr −→
-
-ϵ ⟨
-
-```
- if id.name, A  ∈ expr.symtab 
-–– for some type A 
-expr.errors := null 
-expr.type := A 
-else 
-expr.errors := [id.name “undefned at” id.location] 
-expr.type := error
-```
-
-int const : expr −→
-
-ϵ
-
- expr.type := int
-
-real const : expr −→
-
-ϵ
-
- expr.type := real
-
-‘+’ :  expr1 −→ expr2 expr3
-
- expr2.symtab := expr1.symtab   expr3.symtab := expr1.symtab   check types(expr1, expr2, expr3)
-
-‘−’ :  expr1 −→ expr2 expr3
-
- expr2.symtab := expr1.symtab   expr3.symtab := expr1.symtab   check types(expr1, expr2, expr3)
-
-‘×’ :  expr1 −→ expr2 expr3
-
- expr2.symtab := expr1.symtab   expr3.symtab := expr1.symtab   check types(expr1, expr2, expr3)
-
-‘÷’ :  expr1 −→ expr2 expr3
-
- expr2.symtab := expr1.symtab   expr3.symtab := expr1.symtab   check types(expr1, expr2, expr3)
-
-float : expr1 −→ expr2
-
- expr2.symtab := expr1.symtab   convert type(expr2, expr1, int, real, “foat of non-int”)
-
-trunc : expr1 −→ expr2
-
- expr2.symtab := expr1.symtab   convert type(expr2, expr1, real, int, “trunc of non-real”)
 
 ![Figure 4.14 (continued on next...](images/page_238_vector_478.png)
 *Figure 4.14  (continued on next page)*
@@ -7685,38 +5502,6 @@ trunc : expr1 −→ expr2
 we associate with any symbol table entry or expression for which we have already  generated a message.
 
 Though it takes a bit of checking to verify the fact, our attribute grammar is  noncircular and well defned. No attribute is ever assigned a value more than  once. (The helper routines at the end of Figure 4.14 should be thought of as  macros, rather than semantic functions. For the sake of brevity we have passed  them entire tree nodes as arguments. Each macro calculates the values of two different attributes. Under a strict formulation of attribute grammars each macro
-
-macro declare name(id, cur item, next item : syntax tree node; t : type)
-
-```
-if id.name, ?  ∈ cur item.symtab 
-next item.errors in := cur item.errors in + [“redefnition of” id.name “at” cur item.location] 
-next item.symtab := cur item.symtab − id.name, ? + id.name, error 
-else 
-next item.errors in := cur item.errors in 
-next item.symtab := cur item.symtab + id.name, t
-```
-
-⟨
-
-⟨   ⟨
-
-⟨
-
-macro check types(result, operand1, operand2)
-
-if operand1.type = error or operand2.type = error  result.type := error  result.errors := operand1.errors + operand2.errors  else if operand1.type = operand2.type  result.type := error  result.errors := operand1.errors + operand2.errors + [“type clash at” result.location]  else  result.type := operand1.type  result.errors := operand1.errors + operand2.errors
-
-macro convert type(old expr, new expr : syntax tree node; from t, to t : type; msg : string)
-
-```
-if old expr.type = from t or  old  expr.type = error 
-new expr.errors := old expr.errors 
-new expr.type := to t 
-else 
-new expr.errors := old expr.errors + [msg “at” old expr.location] 
-new expr.type := error
-```
 
 ![Figure 4.14 (continued)...](images/page_239_vector_355.png)
 *Figure 4.14  (continued)*
@@ -7745,76 +5530,6 @@ growing message list.
 In our example grammar we accumulate error messages into a synthesized attribute of the root of the syntax tree. In an ad hoc attribute evaluator we might be 
 tempted to print these messages on the fy as the errors are discovered. In prac­
 ```
-
-program
-
-e
-
-int_decl
-
-s ei eo
-
-read
-
-s ei eo
-
-a
-
-n
-
-real_decl
-
-s ei eo
-
-a
-
-n
-
-read
-
-s ei eo
-
-b
-
-n
-
-write
-
-s ei eo
-
-b
-
-n
-
-null
-
-= errors_in  = errors_out  = errors  = symtab  = type  = name
-
-ei  eo  e  s  t  n
-
-s ei eo
-
-÷
-
-s t  e
-
-+
-
-2.0
-
-s t  e  s t  e
-
-location attribute not shown
-
-float
-
-b
-
-s t  e  s t  e n
-
-a
-
-s t  e n
 
 ![Figure 4.15 Decoration of the...](images/page_240_vector_434.png)
 *Figure 4.15  Decoration of the syntax tree of Figure 4.12, using the grammar of Figure 4.14.  Location information, which we assume has been initialized in every node by the parser, contributes to error messages, but does not otherwise propagate through the tree.*
@@ -7882,22 +5597,6 @@ In subsequent chapters (6–10 in particular) we will consider a wide variety  o
 ϵ
 
 , abc, aabbcc, aaabbbccc, ... is not context free. It can be captured,  however, using an attribute grammar. Give an underlying CFG and a set of  attribute rules that associates a Boolean attribute ok with the root R of each
-
-## . cdr
-
-## .  ϵ  .
-
-quote
-
-## .  ϵ
-
-## .
-
-a
-
-## . b
-
-c  ϵ
 
 ![Figure 4.16 Natural syntax tree...](images/page_243_vector_243.png)
 *Figure 4.16  Natural syntax tree for the Lisp expression (cdr ‚(a b c)).*
