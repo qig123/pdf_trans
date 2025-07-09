@@ -1,5 +1,3 @@
-# Chapter 9: Subroutines and Control Abstraction
-
 ## **9**
 **Subroutines and Control Abstraction**
 

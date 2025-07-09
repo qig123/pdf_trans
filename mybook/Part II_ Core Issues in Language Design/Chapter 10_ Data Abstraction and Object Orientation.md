@@ -1,5 +1,3 @@
-# Chapter 10: Data Abstraction and Object Orientation
-
 ## **10**
 **Data Abstraction and Object**
 **Orientation**

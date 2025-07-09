@@ -1,5 +1,3 @@
-# Index
-
 ## **Index**
 
 In each entry, pages in the main text are listed ﬁrst, followed by pages on the companion site.

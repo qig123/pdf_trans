@@ -1,5 +1,3 @@
-# Chapter 11: Functional Languages
-
 ## **11**
 **Functional Languages**
 

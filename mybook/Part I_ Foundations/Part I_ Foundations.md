@@ -1,5 +1,3 @@
-# Part I: Foundations
-
 ## **I**
 **Foundations**
 

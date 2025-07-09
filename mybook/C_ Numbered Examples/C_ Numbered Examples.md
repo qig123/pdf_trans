@@ -1,5 +1,3 @@
-# C: Numbered Examples
-
 ## **C**
 **Numbered Examples**
 

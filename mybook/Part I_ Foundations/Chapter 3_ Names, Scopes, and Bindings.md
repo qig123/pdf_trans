@@ -1,5 +1,3 @@
-# Chapter 3: Names, Scopes, and Bindings
-
 ## **3**
 **Names, Scopes, and Bindings**
 

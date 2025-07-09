@@ -1,5 +1,3 @@
-# Chapter 12: Logic Languages
-
 ## **12**
 **Logic Languages**
 

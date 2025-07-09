@@ -1,5 +1,3 @@
-# Chapter 5: Target Machine Architecture
-
 ## **5**
 **Target Machine Architecture**
 

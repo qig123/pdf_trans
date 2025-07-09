@@ -1,5 +1,3 @@
-# Part III: Alternative Programming Models
-
 ## **III**
 **Alternative Programming Models**
 

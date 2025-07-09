@@ -1,5 +1,3 @@
-# Part II: Core Issues in Language Design
-
 ## **II**
 **Core Issues in Language Design**
 

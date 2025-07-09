@@ -1,5 +1,3 @@
-# A: Programming Languages Mentioned
-
 ## **A**
 **Programming Languages Mentioned**
 

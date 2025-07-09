@@ -1,5 +1,3 @@
-# Chapter 6: Control Flow
-
 ## **6**
 **Control Flow**
 

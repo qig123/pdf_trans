@@ -1,5 +1,3 @@
-# Chapter 8: Composite Types
-
 ## **8**
 **Composite Types**
 

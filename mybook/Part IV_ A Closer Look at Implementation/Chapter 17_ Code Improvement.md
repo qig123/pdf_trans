@@ -1,5 +1,3 @@
-# Chapter 17: Code Improvement
-
 ## **17**
 **Code Improvement**
 

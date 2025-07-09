@@ -1,5 +1,3 @@
-# Chapter 13: Concurrency
-
 ## **13**
 
 ### **Concurrency**

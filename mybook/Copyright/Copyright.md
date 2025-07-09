@@ -1,5 +1,3 @@
-# Copyright
-
 Morgan Kaufmann is an imprint of Elsevier
 225 Wyman Street,Waltham, MA 02451, USA
 

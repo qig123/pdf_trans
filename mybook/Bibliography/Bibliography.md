@@ -1,5 +1,3 @@
-# Bibliography
-
 ## **Bibliography**
 
 [ACD+96] Cristiana

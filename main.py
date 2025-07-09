@@ -187,7 +187,7 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
         current_image_dir = os.path.join(md_file_containing_dir, "images")
         os.makedirs(current_image_dir, exist_ok=True)
         
-        chapter_content = f"# {title}\n\n"
+        chapter_content = ""
         processed_img_xrefs = set()
 
         for page_num in range(start_page - 1, end_page - 1):
@@ -224,22 +224,27 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
 
             # 2. 处理所有文本块 (使用新的格式化函数)
             for idx, b in enumerate(blocks):
+                # 如果块已经被处理过（比如，被识别为图注），或者不是文本块，就跳过
                 if idx in processed_block_indices or b['type'] != 0:
                     continue
                 
                 block_bbox = fitz.Rect(b["bbox"])
+
+                # 忽略页眉页脚
                 if is_header_or_footer(block_bbox, page.rect):
                     continue
-                
-                is_in_image_area = any(area.intersects(block_bbox) for area in ignored_text_areas)
-                if not is_in_image_area:
-                    # **调用新的智能格式化函数**
-                    markdown_text = get_markdown_from_block(b, body_size, heading_map)
-                    if markdown_text:
-                        page_content_parts[idx] = markdown_text
-                
-                processed_block_indices.add(idx)
 
+                # 忽略图片区域内的文本
+                if any(area.intersects(block_bbox) for area in ignored_text_areas):
+                    continue
+
+                # **核心逻辑：直接将块转换为Markdown**
+                markdown_text = get_markdown_from_block(b, body_size, heading_map)
+                if markdown_text:
+                    page_content_parts[idx] = markdown_text
+                
+                # 标记此块已处理
+                processed_block_indices.add(idx)
             # 3. 处理未被图注关联的图片
             for img in page.get_images(full=True):
                 xref = img[0]

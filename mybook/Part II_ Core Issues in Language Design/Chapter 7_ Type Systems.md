@@ -1,5 +1,3 @@
-# Chapter 7: Type Systems
-
 ## **7**
 **Type Systems**
 

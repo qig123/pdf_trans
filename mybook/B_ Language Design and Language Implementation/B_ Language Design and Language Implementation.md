@@ -1,5 +1,3 @@
-# B: Language Design and Language Implementation
-
 ## **B**
 **Language Design and Language**
 **Implementation**

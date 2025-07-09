@@ -1,5 +1,3 @@
-# Chapter 16: Run-Time Program Management
-
 ## **16**
 **Run-Time Program Management**
 

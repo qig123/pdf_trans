@@ -1,5 +1,3 @@
-# Foreword
-
 ## **Foreword**
 
 Programming languages are universally accepted as one of the core subjects that

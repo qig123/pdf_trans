@@ -1,5 +1,3 @@
-# Part IV: A Closer Look at Implementation
-
 ## **IV**
 **A Closer Look at Implementation**
 

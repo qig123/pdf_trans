@@ -1,5 +1,3 @@
-# Chapter 4: Semantic Analysis
-
 ## **4**
 **Semantic Analysis**
 

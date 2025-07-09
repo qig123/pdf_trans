@@ -1,5 +1,3 @@
-# About the Author
-
 ## **About the Author**
 
 Michael L. Scott is a professor and past chair of the Department of Computer Sci-

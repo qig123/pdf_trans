@@ -1,5 +1,3 @@
-# Chapter 15: Building a Runnable Program
-
 ## **15**
 **Building a Runnable Program**
 

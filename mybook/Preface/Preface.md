@@ -1,5 +1,3 @@
-# Preface
-
 ## **Preface**
 
 **A course in computer programming** provides the typical student’s ﬁrst ex-

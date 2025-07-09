@@ -1,5 +1,3 @@
-# Chapter 2: Programming Language Syntax
-
 ## **2**
 **Programming Language Syntax**
 

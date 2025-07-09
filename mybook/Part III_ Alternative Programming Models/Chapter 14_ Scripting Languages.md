@@ -1,5 +1,3 @@
-# Chapter 14: Scripting Languages
-
 ## **14**
 **Scripting Languages**
 
