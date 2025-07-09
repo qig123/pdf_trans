@@ -1,8 +1,8 @@
 # B: Language Design and Language Implementation
 
-## B Language Design and Language
+B Language Design and Language
 
-## Implementation
+Implementation
 
 Throughout this text, we have had occasion to remark on the many connections  between language design and language implementation. Some of the more direct  connections have been highlighted in separate sidebars. We list those sidebars  here.
 
@@ -46,50 +46,9 @@ Chapter 7: Type Systems
 
 Chapter 8: Composite Types
 
-```
-8.1 
-Struct tags and typedef in C and C++ 
-353 
-8.2 
-The order of record felds 
-356
-```
+8.1  Struct tags and typedef in C and C++  353  8.2  The order of record felds  356
 
-```
-8.13 
-The placement of variant felds 
-C·141 
-8.3 
-Is [ ]  an operator? 
-361 
-8.4 
-Array layout 
-370 
-8.5 
-Lower bounds on array indices 
-373 
-8.6 
-Implementation of pointers 
-378 
-8.7 
-Stack smashing 
-385 
-8.8 
-Pointers and arrays 
-386 
-8.9 
-Garbage collection 
-390 
-8.10 
-What exactly is garbage? 
-393 
-8.11 
-Reference counts versus tracing 
-396 
-8.12 
-car and cdr 
-399
-```
+8.13  The placement of variant felds  C·141  8.3  Is [ ]  an operator?  361  8.4  Array layout  370  8.5  Lower bounds on array indices  373  8.6  Implementation of pointers  378  8.7  Stack smashing  385  8.8  Pointers and arrays  386  8.9  Garbage collection  390  8.10  What exactly is garbage?  393  8.11  Reference counts versus tracing  396  8.12  car and cdr  399
 
 Chapter 9: Subroutines and Control Abstraction
 
@@ -97,32 +56,7 @@ Chapter 9: Subroutines and Control Abstraction
 
 Chapter 10: Data Abstraction and Object Orientation
 
-```
-10.1 
-What goes in a class declaration? 
-476 
-10.2 
-Containers/collections 
-484 
-10.3 
-The value/reference tradeoff 
-498 
-10.4 
-Initialization and assignment 
-501 
-10.5 
-Initialization of “expanded” objects 
-502 
-10.6 
-Reverse assignment 
-511 
-10.7 
-The fragile base class problem 
-512 
-10.8 
-The cost of multiple inheritance 
-C·197
-```
+10.1  What goes in a class declaration?  476  10.2  Containers/collections  484  10.3  The value/reference tradeoff  498  10.4  Initialization and assignment  501  10.5  Initialization of “expanded” objects  502  10.6  Reverse assignment  511  10.7  The fragile base class problem  512  10.8  The cost of multiple inheritance  C·197
 
 Chapter 11: Functional Languages
 
@@ -138,50 +72,7 @@ Chapter 13: Concurrency
 
 Chapter 14: Scripting Languages
 
-```
-14.1 
-Compiling interpreted languages 
-702 
-14.2 
-Canonical implementations 
-703 
-14.3 
-Built-in commands in the shell 
-707 
-14.4 
-Magic numbers 
-712 
-14.5 
-JavaScript and Java 
-736 
-14.6 
-How far can you trust a script? 
-737 
-14.14 
-W3C and WHATWG 
-C·260 
-14.7 
-Thinking about dynamic scoping 
-742 
-14.8 
-The grep command and the birth of Unix tools 
-744 
-14.9 
-Automata for regular expressions 
-746 
-14.10 
-Compiling regular expressions 
-749 
-14.11 
-Typeglobs in Perl 
-754 
-14.12 
-Executable class declarations 
-763 
-14.13 
-Worse Is Better 
-764
-```
+14.1  Compiling interpreted languages  702  14.2  Canonical implementations  703  14.3  Built-in commands in the shell  707  14.4  Magic numbers  712  14.5  JavaScript and Java  736  14.6  How far can you trust a script?  737  14.14  W3C and WHATWG  C·260  14.7  Thinking about dynamic scoping  742  14.8  The grep command and the birth of Unix tools  744  14.9  Automata for regular expressions  746  14.10  Compiling regular expressions  749  14.11  Typeglobs in Perl  754  14.12  Executable class declarations  763  14.13  Worse Is Better  764
 
 Chapter 15: Building a Runnable Program
 
@@ -189,17 +80,7 @@ Chapter 15: Building a Runnable Program
 
 Chapter 16: Run-Time Program Management
 
-```
-16.1 
-Run-time systems 
-808 
-16.2 
-Optimizing stack-based IF 
-812 
-16.3 
-Verifcation of class fles and bytecode 
-820
-```
+16.1  Run-time systems  808  16.2  Optimizing stack-based IF  812  16.3  Verifcation of class fles and bytecode  820
 
 16.7  Assuming a just-in-time compiler  C·287  16.8  References and pointers  C·290  16.4  Emulation and interpretation  830  16.5  Creating a sandbox via binary rewriting  835  16.6  DWARF  846
 

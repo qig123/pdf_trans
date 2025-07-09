@@ -1,6 +1,6 @@
 # Bibliography
 
-## Bibliography
+Bibliography
 
 [AK02] Randy Allen and Ken Kennedy.  Optimizing Compilers for Modern Architectures: A Dependence-Based Approach. Morgan Kaufmann, San Francisco, CA, 2002.
 
@@ -54,14 +54,7 @@ crete type inference: A comparison of optimization techniques for object-oriente
 
 tion. Cambridge University Press, Cambridge, England,  1997. Text available in ML, Java, and C versions. C version  specialized by Maia Ginsburg; Java version (second edition, 2002) specialized by Jens Palsberg.
 
-```
-[BAD+09] Robert L. Bocchino, Jr., Vikram S. Adve, Danny 
-Dig, Sarita Adve, Stephen Heumann, Rakesh Komuravelli, Jeffrey Overbey, Patrick Simmons, Hyojin Sung, and 
-Mohsen Vakilian. A type and effect system for deterministic parallel Java. 
-In Proceedings of the Twenty-Fourth 
-ACM SIGPLAN Conference on Object-Oriented Programming, Systems, Languages, and Applications, Orlando,  FL,  
-October 2009.
-```
+[BAD+09] Robert L. Bocchino, Jr., Vikram S. Adve, Danny  Dig, Sarita Adve, Stephen Heumann, Rakesh Komuravelli, Jeffrey Overbey, Patrick Simmons, Hyojin Sung, and  Mohsen Vakilian. A type and effect system for deterministic parallel Java.  In Proceedings of the Twenty-Fourth  ACM SIGPLAN Conference on Object-Oriented Programming, Systems, Languages, and Applications, Orlando,  FL,   October 2009.
 
 [Arm07] Joe Armstrong.  What’s all this fuss about Erlang?  The Pragmatic Programmers, 2007. Available at  pragprog.com/articles/erlang.html.
 
@@ -79,36 +72,15 @@ cepts and notations for concurrent programming. ACM  Computing Surveys, 15(1):3�
 
 ward D. Lazowska, and Henry M. Levy. Lightweight remote procedure call. ACM Transactions on Computer Systems, 8(1):37–55, February 1990.
 
-```
-[Ass93] Association for Computing Machinery, New York, 
-NY. Proceedings of the Second ACM SIGPLAN History of 
-Programming Languages (HOPL) Conference, Cambridge,  
-MA, April 1993. In ACM SIGPLAN Notices, 28(3), March 
-1993.
-```
+[Ass93] Association for Computing Machinery, New York,  NY. Proceedings of the Second ACM SIGPLAN History of  Programming Languages (HOPL) Conference, Cambridge,   MA, April 1993. In ACM SIGPLAN Notices, 28(3), March  1993.
 
-```
-[Ban97] Utpal Banerjee. Dependence Analysis, volume 3 of 
-Loop Transformations for Restructuring Compilers. Kluwer  
-Academic Publishers, Boston, MA, 1997.
-```
+[Ban97] Utpal Banerjee. Dependence Analysis, volume 3 of  Loop Transformations for Restructuring Compilers. Kluwer   Academic Publishers, Boston, MA, 1997.
 
 [Bar84] Hendrik Pieter Barendregt. The Lambda Calculus:  Its Syntax and Semantics, volume 103 of Studies in Logic  and the Foundations of Mathematics. North-Holland, Amsterdam, The Netherlands, revised edition, 1984.
 
-```
-[Ass07] Association for Computing Machinery, New York, 
-NY. Proceedings of the Third ACM SIGPLAN History of 
-Programming Languages (HOPL) Conference, San  Diego,  
-CA, June 2007.
-```
+[Ass07] Association for Computing Machinery, New York,  NY. Proceedings of the Third ACM SIGPLAN History of  Programming Languages (HOPL) Conference, San  Diego,   CA, June 2007.
 
-```
-[BCR04]  David  F. Bacon, Perry  Cheng,  and  V. T. Rajan.  A  
-unifed theory of garbage collection. In Proceedings of the 
-Nineteenth ACM SIGPLAN Conference on Object-Oriented 
-Programming, Systems, Languages, and Applications, pages  
-50–68, Vancouver, BC, Canada, October 2004.
-```
+[BCR04]  David  F. Bacon, Perry  Cheng,  and  V. T. Rajan.  A   unifed theory of garbage collection. In Proceedings of the  Nineteenth ACM SIGPLAN Conference on Object-Oriented  Programming, Systems, Languages, and Applications, pages   50–68, Vancouver, BC, Canada, October 2004.
 
 [Atk73] M. Stella Atkins. Mutual recursion in Algol 60 us­
 
@@ -116,13 +88,7 @@ ing restricted compilers.  Communications of the ACM,  16(1):47–48, 1973.
 
 [AU72] Alfred V. Aho and Jeffrey D. Ullman. The Theory of  Parsing, Translation and Compiling. Prentice-Hall, Englewood Cliffs, NJ, 1972. Two-volume set.
 
-```
-[BDB00] Vasanth Bala, Evelyn Duesterwald, and Sanjeev 
-Banerjia. Dynamo: A transparent dynamic optimization 
-system. In Proceedings of the SIGPLAN 2000 Conference on 
-Programming Language Design and Implementation, pages  
-1–12, Vancouver, BC, Canada, June 2000.
-```
+[BDB00] Vasanth Bala, Evelyn Duesterwald, and Sanjeev  Banerjia. Dynamo: A transparent dynamic optimization  system. In Proceedings of the SIGPLAN 2000 Conference on  Programming Language Design and Implementation, pages   1–12, Vancouver, BC, Canada, June 2000.
 
 [AWZ88] Bowen Alpern, Mark N. Wegman, and F. Ken­
 
@@ -178,12 +144,7 @@ ence on Programming Language Design and Implementation, pages 261–268, Chicago
 
 [BS96] David F. Bacon and Peter F. Sweeney. Fast static anal­
 
-```
-ysis of C++ virtual function calls. In Proceedings of the 
-Eleventh ACM SIGPLAN Conference on Object-Oriented 
-Programming, Systems, Languages, and Applications, pages  
-324–341, San Jose, CA, October 1996.
-```
+ysis of C++ virtual function calls. In Proceedings of the  Eleventh ACM SIGPLAN Conference on Object-Oriented  Programming, Systems, Languages, and Applications, pages   324–341, San Jose, CA, October 1996.
 
 [BM77] Robert S. Boyer and J. Strother Moore.  A fast  string searching algorithm. Communications of the ACM,  20(10):762–772, October 1977.
 
@@ -303,12 +264,7 @@ cesses.  In F. Genuys, editor, Programming Languages,  pages 43–112. Academic 
 
 [Dij68b] Edsger W. Dijkstra. Go To statement considered  harmful.  Communications of the ACM, 11(3):147–148,  March 1968.
 
-```
-[Due05] Evelyn Duesterwald. 
-Design and engineering of 
-a dynamic  binary  optimizer.  Proceedings of the IEEE, 
-93(2):436–448, February 2005.
-```
+[Due05] Evelyn Duesterwald.  Design and engineering of  a dynamic  binary  optimizer.  Proceedings of the IEEE,  93(2):436–448, February 2005.
 
 [Dij72] Edsger W. Dijkstra.  Hierarchical ordering of sequential processes. In Charles Antony Richard Hoare and  Ronald H. Perrott, editors, Operating Systems Techniques,  A.P.I.C. Studies in Data Processing #9, pages 72–93. Academic Press, London, England, 1972. Also Acta Informatica, 1(8):115–138, 1971.
 
@@ -334,10 +290,7 @@ bugging format.  The Pragmatic Programmers, April  2012. Available as dwarfstd.o
 
 [Ear70] Jay Earley.  An effcient context-free parsing algorithm. Communications of the ACM, 13(2):94–102, February 1970.
 
-```
-[Dio78] Bernard A. Dion. Locally Least-Cost Error Correctors 
-for Context-Free and Context-Sensitive Parsers. Ph.  D.  dissertation, University of Wisconsin–Madison, 1978. Computer Sciences Technical Report #344.
-```
+[Dio78] Bernard A. Dion. Locally Least-Cost Error Correctors  for Context-Free and Context-Sensitive Parsers. Ph.  D.  dissertation, University of Wisconsin–Madison, 1978. Computer Sciences Technical Report #344.
 
 [ECM06a] ECMA International, Geneva, Switzerland. C#  Language Specification, fourth edition, June 2006. ECMA334, ISO/IEC 23270. Available as ecma-international.org/  publications/files/ECMA-ST/Ecma-334.pdf .
 
@@ -345,11 +298,7 @@ for Context-Free and Context-Sensitive Parsers. Ph.  D.  dissertation, Universit
 
 [ECM06b] ECMA  International,  Geneva,  Switzerland.  Eiffel:  Analysis, Design and Programming Language,  second edition, June 2006.  ECMA-367. Available at
 
-```
-[Fie00] Roy Thomas Fielding. 
-Architectural Styles and the 
-Design of Network-based Software Architectures. Ph.  D.  dissertation, University of California, Irvine, 2000.
-```
+[Fie00] Roy Thomas Fielding.  Architectural Styles and the  Design of Network-based Software Architectures. Ph.  D.  dissertation, University of California, Irvine, 2000.
 
 ecma-international.org/publications/standards/Ecma-367.  htm.
 
@@ -425,11 +374,7 @@ Compiler Design. Springer-Verlag, New York, NY, second  edition, 2012.
 
 [GFH82] Mahadevan Ganapathi, Charles N. Fischer, and  John L. Hennessy. Retargetable compiler code generation.  ACM Computing Surveys, 14(4):573–592, December 1982.
 
-```
-[Gor79]  Michael  J. C. Gordon.  The Denotational Description 
-of Programming Languages: An Introduction.
-SpringerVerlag, New York, NY, 1979.
-```
+[Gor79]  Michael  J. C. Gordon.  The Denotational Description  of Programming Languages: An Introduction. SpringerVerlag, New York, NY, 1979.
 
 [GG78] R. Steven Glanville and Susan L. Graham. A new  method for compiler code generation.  In Conference  Record of the Fifth Annual ACM Symposium on Principles  of Programming Languages, pages 231–240, Tucson, AZ,  January 1978.
 
@@ -445,11 +390,7 @@ ilies of languages related to ALGOL. Journal of the ACM,  9(3):350–371, 1962.
 
 [GJL+03] Ronald Garcia, Jaakko Järvi, Andrew Lumsdaine,  Jeremy Siek, and Jeremiah Willcock. A comparative study  of language support for generic programming. In Proceedings of the Eighteenth ACM SIGPLAN Conference on  Object-Oriented Programming, Systems, Languages, and  Applications, pages 115–134, Anaheim, CA, October 2003.
 
-```
-[Gri81] David Gries. The Science of Programming. Texts  and  
-Monographs in Computer Science. Springer-Verlag, New 
-York, NY, 1981.
-```
+[Gri81] David Gries. The Science of Programming. Texts  and   Monographs in Computer Science. Springer-Verlag, New  York, NY, 1981.
 
 [GS99] Joseph (Yossi) Gil and Peter F. Sweeney. Space- and  time-effcient memory layout for multiple inheritance.  In Proceedings of the Fourteenth ACM SIGPLAN Conference on Object-Oriented Programming, Systems, Languages, and Applications, pages 256–275, Denver, CO,  November 1999.
 
@@ -459,11 +400,7 @@ York, NY, 1981.
 
 [GL05] Samuel Z. Guyer and Calvin Lin.  Client-driven  pointer analysis. Science of Computer Programming, 58(1–  2):83–114, October 2005.
 
-```
-[GLDW87] Robert A. Gingell, Meng Lee, Xuong T. Dang, 
-and Mary S. Weeks. Shared libraries in SunOS. In Proceedings of the 1987 Summer USENIX Conference, pages  
-131–145, Phoenix, AZ, June 1987.
-```
+[GLDW87] Robert A. Gingell, Meng Lee, Xuong T. Dang,  and Mary S. Weeks. Shared libraries in SunOS. In Proceedings of the 1987 Summer USENIX Conference, pages   131–145, Phoenix, AZ, June 1987.
 
 [GTW78] Joseph A. Goguen, James W. Thatcher, and Eric G.  Wagner. An initial algebra approach to the specifcation,  correctness, and implementation of abstract data types. In  Raymond T. Yeh, editor, Current Trends in Programming  Methodology, volume 4, pages 80–149. Prentice-Hall, Englewood Cliffs, NJ, 1978.
 
@@ -623,18 +560,9 @@ tion of functional programming languages. ACM Computing Surveys, 21(3):359–411
 
 [Int14a] International Organization for Standardization,  Geneva, Switzerland. Information Technology—Programming Languages, Their Environments and System Software Interfaces—Programming Language COBOL, 2014.  ISO/IEC 1989:2014.
 
-```
-[JPAR68] Walter L. Johnson, James H. Porter, Stephanie I. 
-Ackley, and  Douglas  T. Ross.  Automatic  generation  of  effcient lexical processors using fnite state techniques. Communications of the ACM, 11(12):805–813, December 1968.
-```
+[JPAR68] Walter L. Johnson, James H. Porter, Stephanie I.  Ackley, and  Douglas  T. Ross.  Automatic  generation  of  effcient lexical processors using fnite state techniques. Communications of the ACM, 11(12):805–813, December 1968.
 
-```
-[JW91] Kathleen Jensen and Niklaus Wirth. 
-Pascal User 
-Manual and Report: ISO Pascal Standard. Springer-Verlag,  
-New York, NY, fourth edition, 1991. Revised by Andrew 
-B. Mickel and James F. Miner. ISBN 0-387-97649-3.
-```
+[JW91] Kathleen Jensen and Niklaus Wirth.  Pascal User  Manual and Report: ISO Pascal Standard. Springer-Verlag,   New York, NY, fourth edition, 1991. Revised by Andrew  B. Mickel and James F. Miner. ISBN 0-387-97649-3.
 
 [Int14b] International Organization for Standardization,  Geneva, Switzerland. Information Technology—Programming Languages—C++, 2014. ISO/IEC 14882:2014.
 
@@ -644,10 +572,7 @@ B. Mickel and James F. Miner. ISBN 0-387-97649-3.
 
 ysis algorithm for context-free languages. Technical Report AFCRL-65-758, Air Force Cambridge Research Laboratory, Bedford, MA, 1965.
 
-```
-[Ive62] Kenneth E. Iverson. A Programming Language. John  
-Wiley and Sons, New York, NY, 1962.
-```
+[Ive62] Kenneth E. Iverson. A Programming Language. John   Wiley and Sons, New York, NY, 1962.
 
 [KCR+ 98] Richard Kelsey, William Clinger, Jonathan Rees,
 
@@ -663,14 +588,9 @@ sions and closures.  Science of Computer Programming,  75(9):762–772, Septembe
 
 [JG89] Geraint Jones and Michael Goldsmith. Programming  in occam2. Prentice-Hall International Series in Computer  Science. Prentice-Hall, Englewood Cliffs, NJ, second edition, 1989.
 
-```
-[Kep04] Stephan Kepser. 
-A simple proof for the Turingcompleteness of XSLT and XQuery. In Proceedings, Extreme Markup Languages 2004, Montréal,  Canada,  August
-```
+[Kep04] Stephan Kepser.  A simple proof for the Turingcompleteness of XSLT and XQuery. In Proceedings, Extreme Markup Languages 2004, Montréal,  Canada,  August
 
-  2004.
-  Available as conferences.idealliance.org/extreme/
-  html/2004/Kepser01/EML2004Kepser01.html.
+2004.  Available as conferences.idealliance.org/extreme/  html/2004/Kepser01/EML2004Kepser01.html.
 
 [KWS97] Leonidas I. Kontothanassis, Robert Wisniewski,  and Michael L. Scott. Scheduler-conscious synchronization. ACM Transactions on Computer Systems, 15(1):3–40,  February 1997.
 
@@ -682,11 +602,7 @@ A simple proof for the Turingcompleteness of XSLT and XQuery. In Proceedings, Ex
 
 [Lam87] Leslie Lamport.  A fast mutual exclusion algorithm. ACM Transactions on Computer Systems, 5(1):1–  11, February 1987.
 
-```
-[Kle56] Stephen C. Kleene. Representation of events in nerve 
-nets and fnite automata. In Claude E. Shannon and John 
-McCarthy, editors, Automata Studies, number  34  in  Annals of Mathematical Studies, pages 3–41. Princeton University Press, Princeton, NJ, 1956.
-```
+[Kle56] Stephen C. Kleene. Representation of events in nerve  nets and fnite automata. In Claude E. Shannon and John  McCarthy, editors, Automata Studies, number  34  in  Annals of Mathematical Studies, pages 3–41. Princeton University Press, Princeton, NJ, 1956.
 
 [Lam94] Leslie Lamport. LaTeX: A Document Preparation  System. Addison-Wesley Professional, Reading, MA, second edition, 1994.
 
@@ -720,11 +636,7 @@ guage. In Proceedings of the USENIX Very High Level Languages Symposium, pages 1
 
 [KP78] Brian W. Kernighan and Phillip J. Plauger. The Ele­
 
-```
-[LH89]  Kai Li and  Paul Hudak.  Memory  coherence  in shared  
-virtual memory systems. ACM Transactions on Computer 
-Systems, 7(4):321–359, November 1989.
-```
+[LH89]  Kai Li and  Paul Hudak.  Memory  coherence  in shared   virtual memory systems. ACM Transactions on Computer  Systems, 7(4):321–359, November 1989.
 
 ments of Programming Style. McGraw-Hill, New York, NY,  second edition, 1978.
 
@@ -776,11 +688,7 @@ dling: An axiomatic approach.  ACM Transactions on  Programming Languages and Sy
 
 [McC60] John McCarthy. Recursive functions of symbolic  expressions and their computation by machine, Part I.  Communications of the ACM, 3(4):184–195, April 1960.
 
-```
-[LS79] Barbara Liskov and Alan Snyder. Exception handling 
-in CLU. IEEE Transactions on Software Engineering, SE–  
-5(6):546–558, November 1979.
-```
+[LS79] Barbara Liskov and Alan Snyder. Exception handling  in CLU. IEEE Transactions on Software Engineering, SE–   5(6):546–558, November 1979.
 
 [McG82] James R. McGraw. The VAL language: Description  and analysis.  ACM Transactions on Programming Languages and Systems, 4(1):44–82, January 1982.
 
@@ -798,11 +706,7 @@ J. Craig Schaffert. Abstraction mechanisms in CLU. Communications of the ACM, 20
 
 [Mes12] Message Passing Interface Forum. MPI: A MessagePassing Interface Standard, September 2012. Version 3.0.  Available as mpi-forum.org/docs/mpi-3.0/mpi30-report.  pdf .
 
-```
-[Mac77] M. Donald MacLaren. Exception handling in PL/I. 
-In David B. Wortman, editor, Proceedings of an ACM Conference on Language Design for Reliable Software, pages  
-101–104, Raleigh, NC, 1977.
-```
+[Mac77] M. Donald MacLaren. Exception handling in PL/I.  In David B. Wortman, editor, Proceedings of an ACM Conference on Language Design for Reliable Software, pages   101–104, Raleigh, NC, 1977.
 
 [Mey92a] Bertrand Meyer. Applying “design by contract”.  IEEE Computer, 25(10):40–51, October 1992.
 
@@ -856,10 +760,7 @@ gor V. Bochmann. A sampler of formal defnitions. ACM  Computing Surveys, 8(2):19
 
 raine De Vere.  Error repair in shift-reduce parsers.  ACM Transactions on Programming Languages and Systems, 17(4):672–689, July 1995.
 
-```
-[Moo78] David A. Moon. MacLisp Reference Manual. MIT  
-Artifcial Intelligence Laboratory, 1978.
-```
+[Moo78] David A. Moon. MacLisp Reference Manual. MIT   Artifcial Intelligence Laboratory, 1978.
 
 [Moo86] David A. Moon.  Object-oriented programming  with Flavors.  In OOPSLA ’86 Conference Proceedings:  Object-Oriented Programming Systems, Languages, and  Applications, pages 1–8, Portland, OR, September 1986.
 
@@ -899,12 +800,7 @@ tics with Isabelle/HOL. Springer Science+Business Media,  Berlin, Germany, 2015.
 
 [Pie02] Benjamin C. Pierce. Types and Programming Lan­
 
-```
-[Ous82] John K. Ousterhout. 
-Scheduling techniques for 
-concurrent systems. In Proceedings of the Third International Conference on Distributed Computing Systems, pages  
-22–30, Miami/Ft. Lauderdale, FL, October 1982.
-```
+[Ous82] John K. Ousterhout.  Scheduling techniques for  concurrent systems. In Proceedings of the Third International Conference on Distributed Computing Systems, pages   22–30, Miami/Ft. Lauderdale, FL, October 1982.
 
 guages. MIT Press, Cambridge, MA, 2002.
 
@@ -920,10 +816,7 @@ guages. MIT Press, Cambridge, MA, 2002.
 
 gramming for the 21st century. IEEE Computer, 31(3):23–  30, March 1998.
 
-```
-[Pag76] Frank G. Pagan. A Practical Guide to Algol 68. John  
-Wiley and Sons, London, England, 1976.
-```
+[Pag76] Frank G. Pagan. A Practical Guide to Algol 68. John   Wiley and Sons, London, England, 1976.
 
 [Rad82] George Radin. The 801 minicomputer. In Proceed­
 
@@ -1007,12 +900,7 @@ berg, Andy Lowry, Daniel M. Yellin, and Shaula Alexander  Yemini. Hermes: A Lang
 
 [SBN82] Daniel P. Siewiorek, C. Gordon Bell, and Allen  Newell.  Computer Structures: Principles and Examples.  McGraw-Hill, New York, NY, 1982.
 
-```
-guages. Pearson/Addison-Wesley, Boston, MA, eleventh 
-edition, 2015. 
-[Sei05] Peter Seibel. Practical Common Lisp. Apress  L.  P.,  
-2005.
-```
+guages. Pearson/Addison-Wesley, Boston, MA, eleventh  edition, 2015.  [Sei05] Peter Seibel. Practical Common Lisp. Apress  L.  P.,   2005.
 
 [SCG+13] Alex Shinn, John Cowan, Arthur A. Gleckler,  Steven Ganz, Aaron W. Hsu, Bradley Lucier, Emmanuel  Medernach, Alexey Radul, Jeffrey T. Read, David Rush,  Benjamin L. Russel, Olin Shivers, Alaric Snell-Pym, Gerald J. Sussman, Richart Kelsey, William Clinger, Jonathan  Rees, Michael Sperber, R. Kent Dybvig, Matthew Flatt,  and Anton van Stratten.  Revised 7 Report on the Algorithmic Language Scheme, July 2013.  Edited by Shinn,  Cowan, and Gleckler. Available at trac.sacrideo.us/wg/  wiki/R7RSHomePage/.
 
@@ -1020,13 +908,7 @@ edition, 2015.
 
 [SF80] Marvin H. Solomon and Raphael A. Finkel. A note  on enumerating binary trees. Journal of the ACM, 27(1):3–  5, January 1980.
 
-```
-[SF88] Michael L. Scott and Raphael A. Finkel. 
-A simple mechanism for type security across compilation 
-units. 
-IEEE Transactions on Software Engineering, SE–  
-14(8):1238–1239, August 1988.
-```
+[SF88] Michael L. Scott and Raphael A. Finkel.  A simple mechanism for type security across compilation  units.  IEEE Transactions on Software Engineering, SE–   14(8):1238–1239, August 1988.
 
 [Sch03] Sven-Bodo Scholz. Single assignment C—Effcient  support for high-level array operations in a functional  setting. Journal of Functional Programming, 13(6):1005–  1059, 2003.
 
@@ -1048,12 +930,7 @@ ers and Automata, pages 19–46. Polytechnic Institute of  Brooklyn Press, New Y
 
 ino. Expert F# 3.0. Apress, Berkeley, CA, 2013.
 
-```
-[SSA13] Eric Schkufza, Rahul Sharma, and Alex Aiken. 
-Stochastic superoptimization. In Proceedings of the Eighteenth International Conference on Architectural Support 
-for Programming Languages and Operating Systems, pages  
-305–316, Houston, TX, March 2013.
-```
+[SSA13] Eric Schkufza, Rahul Sharma, and Alex Aiken.  Stochastic superoptimization. In Proceedings of the Eighteenth International Conference on Architectural Support  for Programming Languages and Operating Systems, pages   305–316, Houston, TX, March 2013.
 
 [SH92] A. S. M. Sajeev and A. John Hurst. Programming  persistence in χ. IEEE Computer, 25(9):57–66, September  1992.
 
@@ -1099,13 +976,7 @@ tax and Semantics of Programming Languages: A Laboratory Based Approach.  Addiso
 
 [Sun04] Håkan Sundell. Efficient and Practical Non-Blocking  Data Structures. Ph. D. dissertation, Department of Computing Science, Chalmers University of Technology and  Göteborg University, Göteborg, Sweden, 2004. Available  as cs.chalmers.se/~tsigas/papers/Haakan-Thesis.pdf .
 
-```
-[SR13] Mehran Sahami and Steve Roach, editors. Computer 
-Science Curricula 2013: Curriculum Guidelines for Undergraduate Degree Programs in Computer Science. Joint  Task  
-Force on Computing Curricula, Association for Computing Machinery (ACM) and the IEEE Computer Society, December 2013. 
-Available as acm.org/education/ 
-CS2013-final-report.pdf .
-```
+[SR13] Mehran Sahami and Steve Roach, editors. Computer  Science Curricula 2013: Curriculum Guidelines for Undergraduate Degree Programs in Computer Science. Joint  Task   Force on Computing Curricula, Association for Computing Machinery (ACM) and the IEEE Computer Society, December 2013.  Available as acm.org/education/  CS2013-final-report.pdf .
 
 [Sun06] Sun Microsystems.  Strongtalk: Smalltalk with a  need for speed. strongtalk.org, 2006.
 
@@ -1121,11 +992,7 @@ col specifcation version 2.  Internet Request for Comments #1831, August 1995. A
 
 [SZBH86] Daniel C. Swinehart, Polle T. Zellweger, Richard J.  Beach, and Robert B. Hagmann. A structural view of the
 
-```
-[UW08] Jeffrey D. Ullman and Jennifer Widom. 
-A First  
-Course in Database Systems. Pearson/Prentice-Hall, Upper Saddle River, NJ, third edition, 2008.
-```
+[UW08] Jeffrey D. Ullman and Jennifer Widom.  A First   Course in Database Systems. Pearson/Prentice-Hall, Upper Saddle River, NJ, third edition, 2008.
 
 Cedar programming environment. ACM Transactions on  Programming Languages and Systems, 8(4):419–490, October 1986.
 
@@ -1153,12 +1020,7 @@ actions on Programming Languages and Systems, 8(3):273–  291, July 1986.
 
 [TML13] Kevin Tatroe, Peter MacIntyre, and Rasmus Ler­
 
-```
-C. H. A. Koster, M. Sintzoff, C. H. Lindsey, L. G. L T. 
-Meertens, and R. G. Fisker. Revised report on the algorithmic language ALGOL 68. Acta Informatica, 5(1–3):1–  
-236, 1975. Also ACM SIGPLAN Notices, 12(5):1–70, May 
-1977.
-```
+C. H. A. Koster, M. Sintzoff, C. H. Lindsey, L. G. L T.  Meertens, and R. G. Fisker. Revised report on the algorithmic language ALGOL 68. Acta Informatica, 5(1–3):1–   236, 1975. Also ACM SIGPLAN Notices, 12(5):1–70, May  1977.
 
 dorf. Programming PHP. O’Reilly Media, Sebastopol, CA,  third edition, 2013.
 
@@ -1184,12 +1046,7 @@ guages.  ACM SIGPLAN Notices, 33(8):23–27, August  1998.
 
 [TWGM07] Fuad Tabba, Cong Wang, James R. Good­
 
-```
-man, and Mark Moir. 
-NZTM: Nonblocking zeroindirection transactional memory. In Second ACM SIGPLAN Workshop on Transactional Computing, Portland,  
-OR, August 2007. Available as cs.rochester.edu/meetings/ 
-TRANSACT07/papers/tabba.pdf .
-```
+man, and Mark Moir.  NZTM: Nonblocking zeroindirection transactional memory. In Second ACM SIGPLAN Workshop on Transactional Computing, Portland,   OR, August 2007. Available as cs.rochester.edu/meetings/  TRANSACT07/papers/tabba.pdf .
 
 [Web89] Fred Webb. Fortran story—The real scoop. Sub­
 
@@ -1201,11 +1058,7 @@ mitted to alt.folklore.computers, 1989. Quoted by  Mark Brader in the ACM RISKS 
 
 gust 1990. Expanded version of the keynote address from  OOPSLA ’89.
 
-```
-[US91] David Ungar and Randall B. Smith. SELF: The  power  
-of simplicity. Lisp and Symbolic Computation, 4(3):187– 
-205, July 1991.
-```
+[US91] David Ungar and Randall B. Smith. SELF: The  power   of simplicity. Lisp and Symbolic Computation, 4(3):187–  205, July 1991.
 
 [Wet78] Horst Wettstein. The problem of nested monitor  calls revisited. ACM Operating Systems Review, 12(1):19–  23, January 1978.
 
@@ -1255,12 +1108,7 @@ grams. Prentice-Hall, Englewood Cliffs, NJ, 1976.
 
 [WMWM87] Janet H. Walker, David A. Moon, Daniel L.  Weinreb, and Mike McMahon.  The Symbolics Genera  programming environment. IEEE Software, 4(6):36–45,  November 1987.
 
-```
-[Wir80] Niklaus Wirth. 
-The module: A system structuring facility in high-level programming languages. In Jeffrey M. Tobias, editor, Language Design and Programming 
-Methodology, volume  79  of  Lecture Notes in Computer Science, pages 1–24. Springer-Verlag, Berlin, West Germany, 
-1980. Proceedings of a symposium held at Sydney, Australia, September 1979.
-```
+[Wir80] Niklaus Wirth.  The module: A system structuring facility in high-level programming languages. In Jeffrey M. Tobias, editor, Language Design and Programming  Methodology, volume  79  of  Lecture Notes in Computer Science, pages 1–24. Springer-Verlag, Berlin, West Germany,  1980. Proceedings of a symposium held at Sydney, Australia, September 1979.
 
 [Wol96] Michael Wolfe. High Performance Compilers for Par­
 
@@ -1274,11 +1122,7 @@ allel Computing.  Addison-Wesley, Redwood City, CA,  1996.
 
 sign to computer construction.  Communications of the  ACM, 28(2):159–164, February 1985. The 1984 Turing  Award lecture.
 
-```
-[Wir85b] Niklaus Wirth. Programming in Modula-2. Texts  
-and Monographs in Computer Science. Springer-Verlag, 
-New York, NY, third, corrected edition, 1985.
-```
+[Wir85b] Niklaus Wirth. Programming in Modula-2. Texts   and Monographs in Computer Science. Springer-Verlag,  New York, NY, third, corrected edition, 1985.
 
 [Wor06b] World Wide Web Consortium.  Extensible  Stylesheet Language (XSL) Version 1.1, December 2006.  Available at w3.org/TR/xsl/.
 

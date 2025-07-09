@@ -1,6 +1,6 @@
 # Preface
 
-## Preface
+Preface
 
 A course in computer programming provides the typical student’s frst exposure to the feld of computer science. Most students in such a course will have  used computers all their lives, for social networking, email, games, web browsing, word processing, and a host of other tasks, but it is not until they write their  frst programs that they begin to appreciate how applications work. After gaining  a certain level of facility as programmers (presumably with the help of a good  course in data structures and algorithms), the natural next step is to wonder how  programming languages work. This book provides an explanation. It aims, quite  simply, to be the most comprehensive and accurate languages text available, in a  style that is engaging and accessible to the typical undergraduate. This aim refects my conviction that students will understand more, and enjoy the material  more, if we explain what is really going on.
 
@@ -18,27 +18,15 @@ Programming languages are the medium through which programmers precisely describ
 
 The frst three editions of Programming Language Pragmatics (PLP) had the  good fortune of riding the trend toward integrated understanding. This fourth  edition continues and strengthens the “systems perspective” while preserving the  central focus on programming language design.
 
-```
-At its core, PLP is a book about how programming languages work. Rather  
-than enumerate the details of many different languages, it focuses on concepts 
-that underlie all the languages the student is likely to encounter, illustrating those 
-concepts with a variety of concrete examples, and exploring the tradeoffs that explain why different languages were designed in different ways. Similarly, rather 
-than explain how to build a compiler or interpreter (a task few programmers will 
-undertake in its entirety), PLP focuses on what a compiler does to an input program, and why. Language design and implementation are thus explored together, 
-with an emphasis on the ways in which they interact.
-```
+At its core, PLP is a book about how programming languages work. Rather   than enumerate the details of many different languages, it focuses on concepts  that underlie all the languages the student is likely to encounter, illustrating those  concepts with a variety of concrete examples, and exploring the tradeoffs that explain why different languages were designed in different ways. Similarly, rather  than explain how to build a compiler or interpreter (a task few programmers will  undertake in its entirety), PLP focuses on what a compiler does to an input program, and why. Language design and implementation are thus explored together,  with an emphasis on the ways in which they interact.
 
 Changes in the Fourth Edition
 
 In comparison to the third edition, PLP-4e includes
 
-* New chapters devoted to type systems and composite types, in place of the
-  older single chapter on types
+1. New chapters devoted to type systems and composite types, in place of the  older single chapter on types
 
-* Updated treatment of functional programming, with extensive coverage of
-  OCaml
-* Numerous other refections of changes in the feld
-* Improvements inspired by instructor feedback or a fresh consideration of fa­
+2. Updated treatment of functional programming, with extensive coverage of  OCaml  3. Numerous other refections of changes in the feld  4. Improvements inspired by instructor feedback or a fresh consideration of fa­
 
 miliar topics
 
@@ -74,11 +62,7 @@ Examples in PLP-4e are intimately woven into the fow of the presentation. To  ma
 
 Exercise Plan
 
-```
-Review questions appear throughout the text at roughly  10-page  intervals,  at  the  
-ends of major sections. These are based directly on the preceding material, and 
-have short, straightforward answers.
-```
+Review questions appear throughout the text at roughly  10-page  intervals,  at  the   ends of major sections. These are based directly on the preceding material, and  have short, straightforward answers.
 
 More detailed questions appear at the end of each chapter. These are divided  into Exercises and Explorations. The former are generally more challenging than  the per-section review questions, and should be suitable for homework or brief  projects. The latter are more open-ended, requiring web or library research, substantial time commitment, or the development of subjective opinion. Solutions  to many of the exercises (but not the explorations) are available to registered instructors from a password-protected web site: visit textbooks.elsevier.com/web/  9780124104099.
 

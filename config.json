@@ -4,15 +4,6 @@
     "footer": 0.08
   },
   "regex": {
-    "caption": "^(Figure|Fig\\.?|Table|Chart|图|表)\\s+[\\d\\.\\-A-Za-z]+",
-    "keyword_heading": "^\\s*(Introduction|Conclusion|Summary|Abstract|References|Appendix)\\s*$"
-  },
-  "fonts": {
-    "monospace_keywords": ["mono", "courier"]
-  },
-  "heading_detection": {
-    "font_size_multiplier": 1.4,
-    "min_heading_level_for_text_match": 3,
-    "shallow_heading_level": 2
+    "caption": "^(Figure|Fig\\.?|Table|Chart|图|表)\\s+[\\d\\.\\-A-Za-z]+"
   }
 }

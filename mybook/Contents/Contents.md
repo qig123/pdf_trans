@@ -1,6 +1,6 @@
 # Contents
 
-## Contents
+Contents
 
 Foreword  xxiii
 

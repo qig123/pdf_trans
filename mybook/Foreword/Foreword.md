@@ -1,6 +1,6 @@
 # Foreword
 
-## Foreword
+Foreword
 
 Programming languages are universally accepted as one of the core subjects that  every computer scientist must master. The reason is clear: these languages are  the main notation we use for developing products and for communicating new  ideas.  They have infuenced the feld by enabling the development of those  multimillion-line programs that shaped the information age. Their success is  owed to the long-standing effort of the computer science community in the creation of new languages and in the development of strategies for their implementation. The large number of computer scientists mentioned in the footnotes and  bibliographic notes in this book by Michael Scott is a clear manifestation of the  magnitude of this effort as is the sheer number and diversity of topics it contains.
 

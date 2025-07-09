@@ -1,6 +1,6 @@
 # C: Numbered Examples
 
-## C Numbered Examples
+C Numbered Examples
 
 Chapter 1: Introduction
 
@@ -76,45 +76,7 @@ Action Routines
 
 The Binding of Referencing Environments
 
-```
-3.30 
-Deep and shallow binding 
-152 
-3.31 
-Binding rules with static scoping 
-154 
-3.32 
-Returning a frst-class subroutine in 
-Scheme 
-156 
-3.33 
-An object closure in Java 
-157 
-3.34 
-Delegates in C# 
-158 
-3.35 
-Delegates and unlimited extent 
-158 
-3.36 
-Function objects in C++ 
-158 
-3.37 
-A lambda expression in C# 
-159 
-3.38 
-Variety of lambda syntax 
-159 
-3.39 
-A simple lambda expression in C++11 
-160 
-3.40 
-Variable capture in C++ lambda expressions 
-161 
-3.41 
-Lambda expressions in Java 8 
-162
-```
+3.30  Deep and shallow binding  152  3.31  Binding rules with static scoping  154  3.32  Returning a frst-class subroutine in  Scheme  156  3.33  An object closure in Java  157  3.34  Delegates in C#  158  3.35  Delegates and unlimited extent  158  3.36  Function objects in C++  158  3.37  A lambda expression in C#  159  3.38  Variety of lambda syntax  159  3.39  A simple lambda expression in C++11  160  3.40  Variable capture in C++ lambda expressions  161  3.41  Lambda expressions in Java 8  162
 
 4.12  Top-down action routines to build a  syntax tree  198  4.13  Recursive descent and action routines  199
 
@@ -236,51 +198,7 @@ Parametric Polymorphism
 
 297  297
 
-```
-7.44 
-Finding the minimum in OCaml or 
-Haskell 
-331 
-7.45 
-Implicit polymorphism in Scheme 
-332 
-7.46 
-Duck typing in Ruby 
-332 
-7.47 
-Generic min function in Ada 
-333 
-7.48 
-Generic queues in C++ 
-333 
-7.49 
-Generic parameters 
-333 
-7.50 
-with constraints in Ada 
-336 
-7.51 
-Generic sorting routine in Java 
-336 
-7.52 
-Generic sorting routine in C# 
-337 
-7.53 
-Generic sorting routine in C++ 
-337 
-7.54 
-Generic class instance in C++ 
-338 
-7.55 
-Generic subroutine instance in Ada 
-338 
-7.56 
-Implicit instantiation in C++ 
-338 
-7.58 
-Generic arbiter class in C++ 
-C·119
-```
+7.44  Finding the minimum in OCaml or  Haskell  331  7.45  Implicit polymorphism in Scheme  332  7.46  Duck typing in Ruby  332  7.47  Generic min function in Ada  333  7.48  Generic queues in C++  333  7.49  Generic parameters  333  7.50  with constraints in Ada  336  7.51  Generic sorting routine in Java  336  7.52  Generic sorting routine in C#  337  7.53  Generic sorting routine in C++  337  7.54  Generic class instance in C++  338  7.55  Generic subroutine instance in Ada  338  7.56  Implicit instantiation in C++  338  7.58  Generic arbiter class in C++  C·119
 
 298
 
@@ -296,52 +214,7 @@ void (trivial) type  Making do without void  Option types in OCaml  Option types
 
 7.12
 
-```
-7.59 
-Template function bodies moved to a .c 
-fle 
-C·121 
-7.60 
-extern templates in C++11 
-C·122 
-7.61 
-Instantiation-time errors in C++ templates 
-C·122 
-7.62 
-Generic Arbiter class in Java 
-C·124 
-7.63 
-Wildcards and bounds on Java generic 
-parameters 
-C·125 
-7.64 
-Type erasure and implicit casts 
-C·126 
-7.65 
-Unchecked warnings in Java 
-C·127 
-7.66 
-Java generics and built-in types 
-C·127 
-7.67 
-Sharing generic implementations in C# 
-C·128 
-7.68 
-C# generics and built-in types 
-C·128 
-7.69 
-Generic Arbiter class in C# 
-C·128 
-7.70 
-Contravariance in the Arbiter interface 
-C·128 
-7.71 
-Covariance 
-C·130 
-7.72 
-Chooser as a delegate 
-C·130
-```
+7.59  Template function bodies moved to a .c  fle  C·121  7.60  extern templates in C++11  C·122  7.61  Instantiation-time errors in C++ templates  C·122  7.62  Generic Arbiter class in Java  C·124  7.63  Wildcards and bounds on Java generic  parameters  C·125  7.64  Type erasure and implicit casts  C·126  7.65  Unchecked warnings in Java  C·127  7.66  Java generics and built-in types  C·127  7.67  Sharing generic implementations in C#  C·128  7.68  C# generics and built-in types  C·128  7.69  Generic Arbiter class in C#  C·128  7.70  Contravariance in the Arbiter interface  C·128  7.71  Covariance  C·130  7.72  Chooser as a delegate  C·130
 
 8.17  Array slice operations  362  8.18  Local arrays of dynamic shape in C  365  8.19  Stack allocation of elaborated arrays  365  8.20  Elaborated arrays in Fortran 90  366  8.21  Dynamic strings in Java and C#  367  8.22  Row-major vs column-major array layout  368  8.23  Array layout and cache performance  368  8.24  Contiguous vs row-pointer array layout  370  8.25  Indexing a contiguous array  371  8.26  Static and dynamic portions of an array  index  372  8.27  Indexing complex structures  373  8.28  Indexing a row-pointer array  374
 
@@ -363,71 +236,7 @@ Records (Structures)
 
 Pointers and Recursive Types
 
-```
-8.1 
-A C struct 
-352 
-8.2 
-Accessing record felds 
-352 
-8.3 
-Nested records 
-352 
-8.4 
-OCaml records and tuples 
-353 
-8.5 
-Memory layout for a record type 
-353 
-8.6 
-Nested records as values 
-354 
-8.7 
-Nested records as references 
-354 
-8.8 
-Layout of packed types 
-354 
-8.9 
-Assignment and comparison of records 
-355 
-8.10 
-Minimizing holes by sorting felds 
-356 
-8.11 
-A union in C 
-357 
-8.12 
-Motivation for variant records 
-358 
-8.59 
-Nested structs and  unions in  traditional C 
-C·136 
-8.60 
-A variant record in Pascal 
-C·137 
-8.61 
-Anonymous unions in C11 and C++11 
-C·137 
-8.62 
-Breaking type safety with unions 
-C·138 
-8.63 
-Type-safe unions in OCaml 
-C·139 
-8.64 
-Ada variants and tags (discriminants) 
-C·140 
-8.65 
-A discriminated subtype in Ada 
-C·141 
-8.66 
-Discriminated array in Ada 
-C·141 
-8.67 
-Derived types as an alternative to unions 
-C·142
-```
+8.1  A C struct  352  8.2  Accessing record felds  352  8.3  Nested records  352  8.4  OCaml records and tuples  353  8.5  Memory layout for a record type  353  8.6  Nested records as values  354  8.7  Nested records as references  354  8.8  Layout of packed types  354  8.9  Assignment and comparison of records  355  8.10  Minimizing holes by sorting felds  356  8.11  A union in C  357  8.12  Motivation for variant records  358  8.59  Nested structs and  unions in  traditional C  C·136  8.60  A variant record in Pascal  C·137  8.61  Anonymous unions in C11 and C++11  C·137  8.62  Breaking type safety with unions  C·138  8.63  Type-safe unions in OCaml  C·139  8.64  Ada variants and tags (discriminants)  C·140  8.65  A discriminated subtype in Ada  C·141  8.66  Discriminated array in Ada  C·141  8.67  Derived types as an alternative to unions  C·142
 
 8.33  Tree type in OCaml  379  8.34  Tree type in Lisp  379  8.35  Mutually recursive types in OCaml  380  8.36  Tree types in Ada and C  382  8.37  Allocating heap nodes  382  8.38  Object-oriented allocation of heap nodes  382  8.39  Pointer-based tree  382  8.40  Pointer dereferencing  382  8.41  Implicit dereferencing in Ada  383  8.42  Pointer dereferencing in OCaml  383  8.43  Assignment in Lisp  384  8.44  Array names and pointers in C  384  8.45  Pointer comparison and subtraction in C  386  8.46  Pointer and array declarations in C  386  8.47  Arrays as parameters in C  387  8.48  sizeof in C  387  8.49  Explicit storage reclamation  388  8.50  Dangling reference to a stack variable in  C++  388  8.51  Dangling reference to a heap variable in  C++  388  8.68  Dangling reference detection with  tombstones  C·144  8.69  Dangling reference detection with locks  and keys  C·146  8.52  Reference counts and circular structures  391  8.53  Heap tracing with pointer reversal  394
 
@@ -435,72 +244,7 @@ Arrays
 
 8.13  Array declarations  359  8.14  Multidimensional arrays  360  8.15  Multidimensional vs built-up arrays  360  8.16  Arrays of arrays in C  361
 
-```
-9.14 
-const parameters in C 
-426 
-9.15 
-Reference parameters in C++ 
-428 
-9.16 
-References as aliases in C++ 
-428 
-9.17 
-Simplifying code with an in-line alias 
-428 
-9.18 
-Returning a reference from a function 
-429 
-9.19 
-R-value references in C++11 
-430 
-9.20 
-Subroutines as parameters in Ada 
-431 
-9.21 
-First-class subroutines in Scheme 
-431 
-9.22 
-First-class subroutines in OCaml 
-432 
-9.23 
-Subroutine pointers in C and C++ 
-432 
-9.64 
-Jensen’s device 
-C·180 
-9.24 
-Default parameters in Ada 
-433 
-9.25 
-Named parameters in Ada 
-435 
-9.26 
-Self-documentation with named parameters 
-436 
-9.27 
-Variable number of arguments in C 
-436 
-9.28 
-Variable number of arguments in Java 
-437 
-9.29 
-Variable number of arguments in C# 
-438 
-9.30 
-return statement 
-438 
-9.31 
-Incremental computation of a return 
-value 
-438 
-9.32 
-Explicitly named return values in Go 
-439 
-9.33 
-Multivalue returns 
-439
-```
+9.14  const parameters in C  426  9.15  Reference parameters in C++  428  9.16  References as aliases in C++  428  9.17  Simplifying code with an in-line alias  428  9.18  Returning a reference from a function  429  9.19  R-value references in C++11  430  9.20  Subroutines as parameters in Ada  431  9.21  First-class subroutines in Scheme  431  9.22  First-class subroutines in OCaml  432  9.23  Subroutine pointers in C and C++  432  9.64  Jensen’s device  C·180  9.24  Default parameters in Ada  433  9.25  Named parameters in Ada  435  9.26  Self-documentation with named parameters  436  9.27  Variable number of arguments in C  436  9.28  Variable number of arguments in Java  437  9.29  Variable number of arguments in C#  438  9.30  return statement  438  9.31  Incremental computation of a return  value  438  9.32  Explicitly named return values in Go  439  9.33  Multivalue returns  439
 
 Lists
 
@@ -546,252 +290,29 @@ Initialization and Finalization
 
 9.70  Initialization of a coroutine-based traffc  simulation  C·187  9.71  Traversing a street segment in the traffc  simulation  C·188  9.72  Scheduling a coroutine for future  execution  C·188  9.73  Queueing cars at a traffc light  C·188  9.74  Waiting at a light  C·189  9.75  Sleeping in anticipation of future execution  C·189
 
-```
-10.25 
-Naming constructors in Eiffel 
-496 
-10.26 
-Metaclasses in Smalltalk 
-497 
-10.27 
-Declarations and constructors in C++ 
-498 
-10.28 
-Copy constructors 
-499 
-10.29 
-Temporary objects 
-499 
-10.30 
-Return value optimization 
-500 
-10.31 
-Eiffel constructors and expanded objects 
-501 
-10.32 
-Specifcation of base class constructor 
-arguments 
-502 
-10.33 
-Specifcation of member constructor 
-arguments 
-502 
-10.34 
-Constructor forwarding 
-503 
-10.35 
-Invocation of base class constructor in 
-Java 
-503 
-10.36 
-Reclaiming space with destructors 
-504
-```
+10.25  Naming constructors in Eiffel  496  10.26  Metaclasses in Smalltalk  497  10.27  Declarations and constructors in C++  498  10.28  Copy constructors  499  10.29  Temporary objects  499  10.30  Return value optimization  500  10.31  Eiffel constructors and expanded objects  501  10.32  Specifcation of base class constructor  arguments  502  10.33  Specifcation of member constructor  arguments  502  10.34  Constructor forwarding  503  10.35  Invocation of base class constructor in  Java  503  10.36  Reclaiming space with destructors  504
 
 Events
 
-```
-9.50 
-Signal trampoline 
-457 
-9.51 
-An event handler in C# 
-459 
-9.52 
-An anonymous delegate handler 
-459 
-9.53 
-An event handler in Java 
-460 
-9.54 
-An anonymous inner class handler 
-460 
-9.55 
-Handling an event with a lambda 
-expression 
-460
-```
+9.50  Signal trampoline  457  9.51  An event handler in C#  459  9.52  An anonymous delegate handler  459  9.53  An event handler in Java  460  9.54  An anonymous inner class handler  460  9.55  Handling an event with a lambda  expression  460
 
 Dynamic Method Binding
 
-```
-10.37 
-Derived class objects in a base class 
-context 
-505 
-10.38 
-Static and dynamic method binding 
-506 
-10.39 
-The need for dynamic binding 
-507 
-10.40 
-Virtual methods in C++ and C# 
-508 
-10.41 
-Class-wide types in Ada 95 
-508 
-10.42 
-Abstract methods in Java and C# 
-508 
-10.43 
-Abstract methods in C++ 
-509 
-10.44 
-Vtables 
-509 
-10.45 
-Implementation of a virtual method call 
-509 
-10.46 
-Implementation of single inheritance 
-510 
-10.47 
-Casts in C++ 
-511 
-10.48 
-Reverse assignment in Eiffel and C# 
-511 
-10.49 
-Virtual methods in an object closure 
-513 
-10.50 
-Encapsulating arguments 
-514
-```
+10.37  Derived class objects in a base class  context  505  10.38  Static and dynamic method binding  506  10.39  The need for dynamic binding  507  10.40  Virtual methods in C++ and C#  508  10.41  Class-wide types in Ada 95  508  10.42  Abstract methods in Java and C#  508  10.43  Abstract methods in C++  509  10.44  Vtables  509  10.45  Implementation of a virtual method call  509  10.46  Implementation of single inheritance  510  10.47  Casts in C++  511  10.48  Reverse assignment in Eiffel and C#  511  10.49  Virtual methods in an object closure  513  10.50  Encapsulating arguments  514
 
 Chapter 10: Data Abstraction and Object  Orientation
 
 Object-Oriented Programming
 
-```
-10.1 
-list_node class in C++ 
-473 
-10.2 
-list class that uses list_node 
-473 
-10.3 
-Declaration of in-line (expanded) objects 
-475 
-10.4 
-Constructor arguments 
-475 
-10.5 
-Method declaration without defnition 
-476 
-10.6 
-Separate method defnition 
-477 
-10.7 
-property and indexer methods in C# 
-477 
-10.8 
-queue class derived from list 
-478 
-10.9 
-Hiding members of a base class 
-479 
-10.10 
-Redefning a method in a derived class 
-479 
-10.11 
-Accessing base class members 
-480 
-10.12 
-Renaming methods in Eiffel 
-480 
-10.13 
-A queue that contains a list 
-480 
-10.14 
-Base class for general-purpose lists 
-481 
-10.15 
-The problem with type-specifc extensions 
-482 
-10.16 
-How do you name an unknown type? 
-483 
-10.17 
-Generic lists in C++ 
-483
-```
+10.1  list_node class in C++  473  10.2  list class that uses list_node  473  10.3  Declaration of in-line (expanded) objects  475  10.4  Constructor arguments  475  10.5  Method declaration without defnition  476  10.6  Separate method defnition  477  10.7  property and indexer methods in C#  477  10.8  queue class derived from list  478  10.9  Hiding members of a base class  479  10.10  Redefning a method in a derived class  479  10.11  Accessing base class members  480  10.12  Renaming methods in Eiffel  480  10.13  A queue that contains a list  480  10.14  Base class for general-purpose lists  481  10.15  The problem with type-specifc extensions  482  10.16  How do you name an unknown type?  483  10.17  Generic lists in C++  483
 
 Mix-In Inheritance
 
-```
-10.51 
-The motivation for interfaces 
-516 
-10.52 
-Mixing interfaces into a derived class 
-516 
-10.53 
-Compile-time implementation of mix-in 
-inheritance 
-517 
-10.54 
-Use of default methods 
-520 
-10.55 
-Implementation of default methods 
-520 
-10.56 
-Deriving from two base classes 
-521 
-10.57 
-Deriving from two base classes (reprise) 
-C·194 
-10.58 
-(Nonrepeated) multiple inheritance 
-C·194 
-10.59 
-Method invocation with multiple inheritance 
-C·195 
-10.60 
-this correction 
-C·196 
-10.61 
-Methods found in more than one base 
-class 
-C·197 
-10.62 
-Overriding an ambiguous method 
-C·197 
-10.63 
-Repeated multiple inheritance 
-C·198 
-10.64 
-Shared inheritance in C++ 
-C·199
-```
+10.51  The motivation for interfaces  516  10.52  Mixing interfaces into a derived class  516  10.53  Compile-time implementation of mix-in  inheritance  517  10.54  Use of default methods  520  10.55  Implementation of default methods  520  10.56  Deriving from two base classes  521  10.57  Deriving from two base classes (reprise)  C·194  10.58  (Nonrepeated) multiple inheritance  C·194  10.59  Method invocation with multiple inheritance  C·195  10.60  this correction  C·196  10.61  Methods found in more than one base  class  C·197  10.62  Overriding an ambiguous method  C·197  10.63  Repeated multiple inheritance  C·198  10.64  Shared inheritance in C++  C·199
 
 Encapsulation and Inheritance
 
-```
-10.18 
-Data hiding in Ada 
-486 
-10.19 
-The hidden this parameter 
-487 
-10.20 
-Hiding inherited methods 
-488 
-10.21 
-protected base class in C++ 
-488 
-10.22 
-Inner classes in Java 
-490 
-10.23 
-List and queue abstractions in Ada 2005 
-491 
-10.24 
-Extension methods in C# 
-494
-```
+10.18  Data hiding in Ada  486  10.19  The hidden this parameter  487  10.20  Hiding inherited methods  488  10.21  protected base class in C++  488  10.22  Inner classes in Java  490  10.23  List and queue abstractions in Ada 2005  491  10.24  Extension methods in C#  494
 
 C·199  C·200
 
@@ -903,60 +424,9 @@ Scripting the World Wide Web
 
 14.29  Remote monitoring with a CGI script  728  14.30  Adder web form with a CGI script  728  14.31  Remote monitoring with a PHP script  731  14.32  A fragmented PHP script  731
 
-```
-14.74 
-Inheritance in Perl 
-759 
-14.75 
-Inheritance via use base 
-759 
-14.76 
-Prototypes in JavaScript 
-760 
-14.77 
-Overriding instance methods in JavaScript 
-761 
-14.78 
-Inheritance in JavaScript 
-761 
-14.79 
-Constructors in Python and Ruby 
-762 
-14.80 
-Naming class members in Python and 
-Ruby 
-762
-```
+14.74  Inheritance in Perl  759  14.75  Inheritance via use base  759  14.76  Prototypes in JavaScript  760  14.77  Overriding instance methods in JavaScript  761  14.78  Inheritance in JavaScript  761  14.79  Constructors in Python and Ruby  762  14.80  Naming class members in Python and  Ruby  762
 
-```
-14.33 
-Adder web form  with  a  PHP script  
-732  
-14.34 
-Self-posting Adder web form 
-732 
-14.35 
-Adder web form in JavaScript 
-734 
-14.36 
-Embedding an applet in a web page 
-735 
-14.81 
-Content versus presentation in HTML 
-C·258 
-14.82 
-Well-formed XHTML 
-C·259 
-14.83 
-XHTML to display a favorite quote 
-C·261 
-14.84 
-XPath names for XHTML elements 
-C·262 
-14.85 
-Creating a reference list with XSLT 
-C·262
-```
+14.33  Adder web form  with  a  PHP script   732   14.34  Self-posting Adder web form  732  14.35  Adder web form in JavaScript  734  14.36  Embedding an applet in a web page  735  14.81  Content versus presentation in HTML  C·258  14.82  Well-formed XHTML  C·259  14.83  XHTML to display a favorite quote  C·261  14.84  XPath names for XHTML elements  C·262  14.85  Creating a reference list with XSLT  C·262
 
 Chapter 15: Building a Runnable Program
 
@@ -964,123 +434,7 @@ Innovative Features
 
 Back-End Compiler Structure
 
-```
-14.37 
-Scoping rules in Python 
-740 
-14.38 
-Superassignment in R 
-740 
-14.39 
-Static and dynamic scoping in Perl 
-741 
-14.40 
-Accessing globals in Perl 
-742 
-14.41 
-Basic operations in POSIX REs 
-744 
-14.42 
-Extra quantifers in POSIX REs 
-744 
-14.43 
-Zero-length assertions 
-744 
-14.44 
-Character classes 
-744 
-14.45 
-The dot (.) character 
-745 
-14.46 
-Negation and quoting in character classes 
-745 
-14.47 
-Predefned POSIX character classes 
-745 
-14.48 
-RE matching in Perl 
-745 
-14.49 
-Negating a match in Perl 
-746 
-14.50 
-RE substitution in Perl 
-746 
-14.51 
-Trailing modifers on RE matches 
-746 
-14.52 
-Greedy and minimal matching 
-748 
-14.53 
-Minimal matching of HTML headers 
-748 
-14.54 
-Variable interpolation in extended REs 
-748 
-14.55 
-Variable capture in extended REs 
-749 
-14.56 
-Backreferences in extended REs 
-750 
-14.57 
-Dissecting a foating-point literal 
-750 
-14.58 
-Implicit capture of prefx, match, and 
-suffx 
-750 
-14.59 
-Coercion in Ruby and Perl 
-751 
-14.60 
-Coercion and context in Perl 
-751 
-14.61 
-Explicit conversion in Ruby 
-752 
-14.62 
-Perl arrays 
-753 
-14.63 
-Perl hashes 
-753 
-14.64 
-Arrays and hashes in Python and Ruby 
-754 
-14.65 
-Array access methods in Ruby 
-755 
-14.66 
-Tuples in Python 
-755 
-14.67 
-Sets in Python 
-755 
-14.68 
-Confated types in PHP, Tcl, and 
-JavaScript 
-755 
-14.69 
-Multidimensional arrays in Python and 
-other languages 
-755 
-14.70 
-Scalar and list context in Perl 
-756 
-14.71 
-Using wantarray to determine calling 
-context 
-757 
-14.72 
-A simple class in Perl 
-757 
-14.73 
-Invoking methods in Perl 
-758
-```
+14.37  Scoping rules in Python  740  14.38  Superassignment in R  740  14.39  Static and dynamic scoping in Perl  741  14.40  Accessing globals in Perl  742  14.41  Basic operations in POSIX REs  744  14.42  Extra quantifers in POSIX REs  744  14.43  Zero-length assertions  744  14.44  Character classes  744  14.45  The dot (.) character  745  14.46  Negation and quoting in character classes  745  14.47  Predefned POSIX character classes  745  14.48  RE matching in Perl  745  14.49  Negating a match in Perl  746  14.50  RE substitution in Perl  746  14.51  Trailing modifers on RE matches  746  14.52  Greedy and minimal matching  748  14.53  Minimal matching of HTML headers  748  14.54  Variable interpolation in extended REs  748  14.55  Variable capture in extended REs  749  14.56  Backreferences in extended REs  750  14.57  Dissecting a foating-point literal  750  14.58  Implicit capture of prefx, match, and  suffx  750  14.59  Coercion in Ruby and Perl  751  14.60  Coercion and context in Perl  751  14.61  Explicit conversion in Ruby  752  14.62  Perl arrays  753  14.63  Perl hashes  753  14.64  Arrays and hashes in Python and Ruby  754  14.65  Array access methods in Ruby  755  14.66  Tuples in Python  755  14.67  Sets in Python  755  14.68  Confated types in PHP, Tcl, and  JavaScript  755  14.69  Multidimensional arrays in Python and  other languages  755  14.70  Scalar and list context in Perl  756  14.71  Using wantarray to determine calling  context  757  14.72  A simple class in Perl  757  14.73  Invoking methods in Perl  758
 
 15.1  Phases of compilation  776  15.2  GCD program abstract syntax tree  (reprise)  776
 
@@ -1134,30 +488,7 @@ Inspection/Introspection
 
 16.18
 
-```
-Finding the concrete type of a reference 
-variable 
-What not to do with refection 
-Java class-naming conventions 
-Getting information on a particular class 
-Listing the methods of a Java class 
-Calling a method with refection 
-Refection facilities in Ruby 
-User-defned annotations in Java 
-User-defned annotations in C# 
-javadoc 
-Intercomponent communication 
-Attributes for LINQ 
-The Java Modeling Language 
-Java annotation processors 
-Setting a breakpoint 
-Hardware breakpoints 
-Setting a watchpoint 
-Statistical sampling 
-Call graph profling 
-Finding basic blocks with low IPC 
-Haswell performance counters
-```
+Finding the concrete type of a reference  variable  What not to do with refection  Java class-naming conventions  Getting information on a particular class  Listing the methods of a Java class  Calling a method with refection  Refection facilities in Ruby  User-defned annotations in Java  User-defned annotations in C#  javadoc  Intercomponent communication  Attributes for LINQ  The Java Modeling Language  Java annotation processors  Setting a breakpoint  Hardware breakpoints  Setting a watchpoint  Statistical sampling  Call graph profling  Finding basic blocks with low IPC  Haswell performance counters
 
 837  838  838  839  839  840  841  842  842  842  843  843  844  845  847  847  847  848  848  849  849
 

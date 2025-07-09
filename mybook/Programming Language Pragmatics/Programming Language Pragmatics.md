@@ -1,6 +1,6 @@
 # Programming Language Pragmatics
 
-## Programming Language Pragmatics
+Programming Language Pragmatics
 
 FOURTH EDITION
 

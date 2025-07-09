@@ -5,21 +5,7 @@
 
 Ada : Originally intended to be the standard language for all software commis­
 
-```
-sioned by the U.S. Department of Defense [Ame83], now standardized by the 
-ISO [Int12b]. Prototypes designed by teams at several sites; fnal ’83 language 
-developed by a team at Honeywell’s Systems and Research Center in Minneapolis and Alsys Corp. in France, led by Jean Ichbiah. A very large language, 
-descended largely from Pascal. Design rationale articulated in a remarkably 
-clear companion document [IBFW91]. Ada 95 was a revision developed under government contract by a team at Intermetrics, Inc. It fxed several subtle problems in the earlier language, and added objects, shared-memory synchronization, and many other features. Ada 2005 and Ada 2012 add a host of 
-additional features; for a summary see ada2012.org/comparison.html. Freely  
-available implementation (gnat) distributed as part of the GNU compiler collection (gcc). Additional resources at adaic.org/ and ada-europe.org/. 
-Algol 60 : The original block-structured language. The defnition by Naur et al. 
-[NBB+63] is considered a landmark of clarity and conciseness. It includes the 
-original use of Backus-Naur Form (BNF). 
-Algol 68 : A large and relatively complex successor to Algol 60, designed by a 
-committee led by A. van Wijngaarden. Includes (among other things) structures and unions, expression-based syntax, reference parameters, a reference 
-model of variables, and concurrency. The offcial defnition [vMP+75] uses
-```
+sioned by the U.S. Department of Defense [Ame83], now standardized by the  ISO [Int12b]. Prototypes designed by teams at several sites; fnal ’83 language  developed by a team at Honeywell’s Systems and Research Center in Minneapolis and Alsys Corp. in France, led by Jean Ichbiah. A very large language,  descended largely from Pascal. Design rationale articulated in a remarkably  clear companion document [IBFW91]. Ada 95 was a revision developed under government contract by a team at Intermetrics, Inc. It fxed several subtle problems in the earlier language, and added objects, shared-memory synchronization, and many other features. Ada 2005 and Ada 2012 add a host of  additional features; for a summary see ada2012.org/comparison.html. Freely   available implementation (gnat) distributed as part of the GNU compiler collection (gcc). Additional resources at adaic.org/ and ada-europe.org/.  Algol 60 : The original block-structured language. The defnition by Naur et al.  [NBB+63] is considered a landmark of clarity and conciseness. It includes the  original use of Backus-Naur Form (BNF).  Algol 68 : A large and relatively complex successor to Algol 60, designed by a  committee led by A. van Wijngaarden. Includes (among other things) structures and unions, expression-based syntax, reference parameters, a reference  model of variables, and concurrency. The offcial defnition [vMP+75] uses
 
 Fortran I  Fortran II  Cobol
 
@@ -51,41 +37,7 @@ Pascal
 
 unconventional terminology and is very diffcult to read; other sources (e.g.,  Pagan’s book [Pag76]) are more accessible.  Algol W : A smaller, simpler alternative to Algol 68, proposed by Niklaus Wirth  and C. A. R. Hoare [WH66, Sit72]. The precursor to Pascal. Introduced the  case statement.  APL : Designed by Kenneth Iverson in the late 1950s and early 1960s, primar­
 
-```
-ily for the manipulation of numeric arrays. Functional. Extremely concise. 
-Powerful set of operators. Employs an extended character set. Intended for 
-interactive use. Original syntax [Ive62] was nonlinear; implementations generally use a revised syntax due to a team at IBM [IBM87]. On-line resources at 
-sigapl.org/. 
-Basic : Simple imperative language, originally intended for interactive use. 
-Original version developed by John Kemeny and Thomas Kurtz of Dartmouth 
-College in the early 1960s. Dozens of dialects exist. Microsoft’s Visual Basic, 
-which bears little resemblance to the original, is the most widely used today 
-(resources available at msdn.microsoft.com/en-us/library/sh9ywfdk.aspx). Minimal subset defned by ANSI standard [Ame78]. 
-C : One of the most successful imperative languages. 
-Originally defned by 
-Brian Kernighan and Dennis Ritchie of Bell Labs as part of the development 
-of Unix [KR88]. Concise syntax. Unusual declaration syntax. Intended for 
-systems programming. Weak type checking. No dynamic semantic checks. 
-Standardized by ANSI/ISO in 1990 [Ame90]. Extensions for international 
-character sets adopted in 1994. 
-More extensive changes adopted in 1999 
-and 2011 [Int99, Int11]. Popular open-source implementations include gcc 
-(gnu.org/software/gcc/) and  clang/llvm (clang.llvm.org/). 
-C# : Object-oriented language originally designed by Anders Hejlsberg, Scott 
-Wiltamuth, and associates at Microsoft Corporation in the late 1990s and early 
-2000s [HTWG11, Mic12, ECM06a]. Versions 1 and 2 standardized by ECMA 
-and the ISO [ECM06a]; subsequent versions defned directly by Microsoft. 
-Serves as the principal language for the .NET platform, a runtime and middleware system for multilanguage distributed computing. Includes most of Java’s 
-features, plus many from C++ and Visual Basic, including both reference and 
-value types, both contiguous and row-pointer arrays, both virtual and nonvirtual methods, operator overloading, delegates, generics, local type inference, 
-an “unsafe” superset with pointers, and the ability to invoke methods of dynamically typed objects across language boundaries. Commercial resources at 
-msdn.microsoft.com/en-us/vstudio/hh388566.aspx. Freely available implementation at mono-project.com/docs/about-mono/languages/csharp/. 
-C++ : The frst object-oriented successor to C to gain widespread adoption. Still 
-widely considered the one most suited to “industrial strength” computing. 
-Originally designed by Bjarne Stroustrup of Bell Labs (now at Texas A & M 
-University). A large language. Standardized by the ISO in 1998; major revision in 2011; updated in 2014. Includes (among other things) generalized 
-reference types, both static and dynamic method binding, extensive facili­
-```
+ily for the manipulation of numeric arrays. Functional. Extremely concise.  Powerful set of operators. Employs an extended character set. Intended for  interactive use. Original syntax [Ive62] was nonlinear; implementations generally use a revised syntax due to a team at IBM [IBM87]. On-line resources at  sigapl.org/.  Basic : Simple imperative language, originally intended for interactive use.  Original version developed by John Kemeny and Thomas Kurtz of Dartmouth  College in the early 1960s. Dozens of dialects exist. Microsoft’s Visual Basic,  which bears little resemblance to the original, is the most widely used today  (resources available at msdn.microsoft.com/en-us/library/sh9ywfdk.aspx). Minimal subset defned by ANSI standard [Ame78].  C : One of the most successful imperative languages.  Originally defned by  Brian Kernighan and Dennis Ritchie of Bell Labs as part of the development  of Unix [KR88]. Concise syntax. Unusual declaration syntax. Intended for  systems programming. Weak type checking. No dynamic semantic checks.  Standardized by ANSI/ISO in 1990 [Ame90]. Extensions for international  character sets adopted in 1994.  More extensive changes adopted in 1999  and 2011 [Int99, Int11]. Popular open-source implementations include gcc  (gnu.org/software/gcc/) and  clang/llvm (clang.llvm.org/).  C# : Object-oriented language originally designed by Anders Hejlsberg, Scott  Wiltamuth, and associates at Microsoft Corporation in the late 1990s and early  2000s [HTWG11, Mic12, ECM06a]. Versions 1 and 2 standardized by ECMA  and the ISO [ECM06a]; subsequent versions defned directly by Microsoft.  Serves as the principal language for the .NET platform, a runtime and middleware system for multilanguage distributed computing. Includes most of Java’s  features, plus many from C++ and Visual Basic, including both reference and  value types, both contiguous and row-pointer arrays, both virtual and nonvirtual methods, operator overloading, delegates, generics, local type inference,  an “unsafe” superset with pointers, and the ability to invoke methods of dynamically typed objects across language boundaries. Commercial resources at  msdn.microsoft.com/en-us/vstudio/hh388566.aspx. Freely available implementation at mono-project.com/docs/about-mono/languages/csharp/.  C++ : The frst object-oriented successor to C to gain widespread adoption. Still  widely considered the one most suited to “industrial strength” computing.  Originally designed by Bjarne Stroustrup of Bell Labs (now at Texas A & M  University). A large language. Standardized by the ISO in 1998; major revision in 2011; updated in 2014. Includes (among other things) generalized  reference types, both static and dynamic method binding, extensive facili­
 
 ties for overloading and coercion, multiple inheritance, and Turing-complete  generics. No automatic garbage collection. Many texts exist; aside from the  ISO standard [Int14b], Stroustrup’s is the most comprehensive [Str13]. Freely  available implementations included in the gcc and clang/llvm distributions  (see C). Stroustrup’s own resource page is at stroustrup.com/C++.html.  Caml and OCaml : Caml is a dialect of ML developed by Guy Cousineau and  colleagues at INRIA (the French National research institute) beginning in the  late 1980s. Evolved into Objective Caml (OCaml) around 1996, under the  leadership of Xavier Leroy; the revised language adds modules and object orientation. Regarded by many as “more practical” than SML (the other principal  ML dialect), OCaml is widely used in industry. See also F#. On-line resources  at caml.inria.fr/.  Cedar : See Mesa and Cedar.  Cilk : Concurrent extension of C and C++ developed by Charles Leiserson and  associates at MIT beginning in the mid 1990s, and commercialized by Cilk  Arts, Inc. in 2006; acquired by Intel in 2009. Extensions to C are deliberately  minimal: a function can be spawned as a separate task; completion of subtasks  can be awaited en masse with sync; tasks can synchronize with each other  to a limited degree with inlets. Implementation employs a novel, provably  effcient work-stealing scheduler. On-line resources at supertech.csail.mit.edu/  cilk/ and /software.intel.com/en-us/intel-cilk-plus.  CLOS : The Common Lisp Object System [Kee89; Sei05, Chaps. 16–17]. A set  of object-oriented extensions to Common Lisp, incorporated into the ANSI  standard language (see Common Lisp).  Clu : Developed by Barbara Liskov and associates at MIT in the late 1970s  [LG86]. Designed to provide an unusually powerful set of features for data  abstraction [LSAS77]. Also includes iterators and exception handling. Documentation and freely available implementations at pmg.csail.mit.edu/CLU.  html.  Cobol : Originally developed by the U.S. Department of Defense in the late  1950s and early 1960s by a team led by Grace Murray Hopper. Long the most  widely used programming language in the world. Standardized by ANSI in  1968; revised in 1974 and 1985. Intended principally for business data processing. Introduced the concept of structures. Elaborate I/O facilities. Cobol 2002  and 2014 [Int14a] add a variety of modern language features, including object  orientation.  Common Lisp : Large, widely used dialect of Lisp (see also Lisp). Includes  (among other things) static scoping, an extensive type system, exception handling, and object-oriented features (see CLOS). For years the standard reference was the book by Guy Steele, Jr. [Ste90]. Subsequently standardized by  ANSI [Ame96b]; recent text by Seibel [Sei05] Abridged hypertext version of  the standard available at lispworks.com/documentation/HyperSpec/Front/index.  htm.
 
@@ -115,115 +67,13 @@ tation for message-based communication using guarded commands and synchronizatio
 
 cessor to Fortran, Cobol, and Algol [Bee70]. Never managed to displace its  predecessors; kept alive largely through IBM corporate infuence.
 
-```
-Postscript : A stack-based language for the description of graphics and print 
-operations [Ado90]. Developed and marketed by Adobe Systems, Inc. Based 
-in part on Forth [Bro87]. Generated by many word processors and drawing 
-programs. Most professional-quality printers contain a Postscript interpreter. 
-Prolog : The most widely used logic programming language. Developed in the 
-early 1970s by Alain Colmeraurer and Philippe Roussel of the University of 
-Aix–Marseille in France and Robert Kowalski and associates at the University 
-of Edinburgh in Scotland. Many dialects exist. Partially standardized in 1995 
-[Int95]. Numerous implementations, both free and commercial, are available; 
-popular freely available versions include GNU Prolog (gprolog.org/) and SWIProlog (swi-prolog.org/). 
-Python : A general-purpose, object-oriented scripting language designed by 
-Guido van Rossum in the early 1990s. Uses indentation for syntactic grouping. Includes dynamic typing, nested functions with lexical scoping, lambda 
-expressions and higher order functions, true iterators, list comprehensions, array slices, refection, structured exception handling, multiple inheritance, and 
-modules and dynamic loading. On-line resources at python.org/. 
-R : Open-source scripting language intended primarily for statistical analysis. 
-Based on the proprietary S statistical programming language, originally developed by John Chambers and others at Bell Labs. Supports frst-class and higher 
-order functions, unlimited extent, call-by-need, multidimensional arrays and 
-slices, and an extensive library of statistical functions. On-line resources at 
-r-project.org/. 
-Ruby : An elegant, general-purpose, object-oriented scripting language de­
-```
+Postscript : A stack-based language for the description of graphics and print  operations [Ado90]. Developed and marketed by Adobe Systems, Inc. Based  in part on Forth [Bro87]. Generated by many word processors and drawing  programs. Most professional-quality printers contain a Postscript interpreter.  Prolog : The most widely used logic programming language. Developed in the  early 1970s by Alain Colmeraurer and Philippe Roussel of the University of  Aix–Marseille in France and Robert Kowalski and associates at the University  of Edinburgh in Scotland. Many dialects exist. Partially standardized in 1995  [Int95]. Numerous implementations, both free and commercial, are available;  popular freely available versions include GNU Prolog (gprolog.org/) and SWIProlog (swi-prolog.org/).  Python : A general-purpose, object-oriented scripting language designed by  Guido van Rossum in the early 1990s. Uses indentation for syntactic grouping. Includes dynamic typing, nested functions with lexical scoping, lambda  expressions and higher order functions, true iterators, list comprehensions, array slices, refection, structured exception handling, multiple inheritance, and  modules and dynamic loading. On-line resources at python.org/.  R : Open-source scripting language intended primarily for statistical analysis.  Based on the proprietary S statistical programming language, originally developed by John Chambers and others at Bell Labs. Supports frst-class and higher  order functions, unlimited extent, call-by-need, multidimensional arrays and  slices, and an extensive library of statistical functions. On-line resources at  r-project.org/.  Ruby : An elegant, general-purpose, object-oriented scripting language de­
 
-```
-signed by Yukihiro “Matz” Matsumoto, beginning in 1993. First released in 
-1995. Inspired by Ada, Eiffel, and Perl, with traces of Python, Lisp, Clu, and 
-Smalltalk. Includes dynamic typing, arbitrary precision arithmetic, true iterators, user-level threads, frst-class and higher order functions, continuations, 
-refection, Smalltalk-style messaging, mix-in inheritance, autoloading, structured exception handling, and support for the Tk windowing toolkit. The text 
-by Thomas and Hunt is a standard reference [TFH13]. On-line resources at 
-ruby-lang.org/. 
-Rust : A statically typed language for systems programming, initially developed 
-by Graydon Hoare and colleagues at Mozilla Research. Syntactically reminiscent of C, but with a strong emphasis on type safety, memory safety (without 
-automatic garbage collection), and concurrency. Includes local type inference, 
-Haskell-like type traits, generics, mix-in inheritance, pattern matching, and 
-inter-thread communication based on ownership transfer. Statically prohibits 
-both null and dangling pointers. On-line resources at rust-lang.org/. 
-Scala : Object-oriented functional language developed by Martin Odersky and 
-associates at the École Polytechnique Fédérale de Lausanne in Switzerland, 
-beginning in 2001. Intended for implementation on top of the Java Virtual 
-Machine, and motivated in part by perceived shorcomings in Java. Provides
-```
+signed by Yukihiro “Matz” Matsumoto, beginning in 1993. First released in  1995. Inspired by Ada, Eiffel, and Perl, with traces of Python, Lisp, Clu, and  Smalltalk. Includes dynamic typing, arbitrary precision arithmetic, true iterators, user-level threads, frst-class and higher order functions, continuations,  refection, Smalltalk-style messaging, mix-in inheritance, autoloading, structured exception handling, and support for the Tk windowing toolkit. The text  by Thomas and Hunt is a standard reference [TFH13]. On-line resources at  ruby-lang.org/.  Rust : A statically typed language for systems programming, initially developed  by Graydon Hoare and colleagues at Mozilla Research. Syntactically reminiscent of C, but with a strong emphasis on type safety, memory safety (without  automatic garbage collection), and concurrency. Includes local type inference,  Haskell-like type traits, generics, mix-in inheritance, pattern matching, and  inter-thread communication based on ownership transfer. Statically prohibits  both null and dangling pointers. On-line resources at rust-lang.org/.  Scala : Object-oriented functional language developed by Martin Odersky and  associates at the École Polytechnique Fédérale de Lausanne in Switzerland,  beginning in 2001. Intended for implementation on top of the Java Virtual  Machine, and motivated in part by perceived shorcomings in Java. Provides
 
-```
-arguably the most aggressive integration of functional features into an imperative language. Has frst-class and higher order functions, local type inference, lazy evaluation, pattern matching, currying, tail recursion, rich generics 
-(with covariance and contravariance), message-based concurrency, trait-based 
-inheritance (sort of a cross between classes and interfaces). Heavily used in 
-both industry and academia. Development funded by the European Research 
-Council. On-line resources at scala-lang.org/. 
-Scheme : A small, elegant dialect of Lisp (see also Lisp) developed in the 
-mid-1970s by Guy Steele and Gerald Sussman. Has static scoping and true 
-frst-class functions. Widely used for teaching. The sixth revised standard 
-(R6RS) [SDF+07], released in 2007, substantially increased the size of the language; in the wake of subsequent objections, the R7RS standard [SCG+13] 
-codifes a small core language similar to the R5RS version and a larger set of extensions. Earlier version standardized by the IEEE and ANSI [Ins91]. The book 
-by Abelson and Sussman [AS96], long used for introductory programming 
-classes at MIT and elsewhere, is a classic guide to fundamental programming 
-concepts, and to functional programming in particular. On-line resources at 
-community.schemewiki.org/. 
-Simula: Designed at the Norwegian Computing Center, Oslo, in the mid-1960s 
-by Ole-Johan Dahl, Bjørn Myhrhaug, and Kristen Nygaard [BDMN73, ND78]. 
-Extends Algol 60 with classes and coroutines. The name of the language refects 
-its suitability for discrete-event simulation (Section C 9.5.4). Free Simula-to-C 
-translator available at directory.fsf.org/project/cim/. 
-Single Assignment C (SAC) : A purely functional language designed for 
-high performance computing on array-based data [Sch03]. 
-Developed by 
-Sven-Bodo Scholz and associates at University of Hertfordshire and several 
-other institutions beginning in 1994. Similar in spirit to Sisal, but with syntax 
-based as heavily as possible on C. On-line resources at www.sac-home.org/. 
-Sisal : A functional language with “imperative-style” syntax. 
-Developed by 
-James McGraw and associates at Lawrence Livermore National Laboratory 
-in the early to mid-1980s [FCO90, Can92]. 
-Intended primarily for highperformance scientifc computing, with automatic parallelization. A descendant of the datafow language Val [McG82]. No longer under development at 
-LLNL; available open-source from sisal.sourceforge.net/. 
-Smalltalk : Considered by many to be the quintessential object-oriented lan­
-```
+arguably the most aggressive integration of functional features into an imperative language. Has frst-class and higher order functions, local type inference, lazy evaluation, pattern matching, currying, tail recursion, rich generics  (with covariance and contravariance), message-based concurrency, trait-based  inheritance (sort of a cross between classes and interfaces). Heavily used in  both industry and academia. Development funded by the European Research  Council. On-line resources at scala-lang.org/.  Scheme : A small, elegant dialect of Lisp (see also Lisp) developed in the  mid-1970s by Guy Steele and Gerald Sussman. Has static scoping and true  frst-class functions. Widely used for teaching. The sixth revised standard  (R6RS) [SDF+07], released in 2007, substantially increased the size of the language; in the wake of subsequent objections, the R7RS standard [SCG+13]  codifes a small core language similar to the R5RS version and a larger set of extensions. Earlier version standardized by the IEEE and ANSI [Ins91]. The book  by Abelson and Sussman [AS96], long used for introductory programming  classes at MIT and elsewhere, is a classic guide to fundamental programming  concepts, and to functional programming in particular. On-line resources at  community.schemewiki.org/.  Simula: Designed at the Norwegian Computing Center, Oslo, in the mid-1960s  by Ole-Johan Dahl, Bjørn Myhrhaug, and Kristen Nygaard [BDMN73, ND78].  Extends Algol 60 with classes and coroutines. The name of the language refects  its suitability for discrete-event simulation (Section C 9.5.4). Free Simula-to-C  translator available at directory.fsf.org/project/cim/.  Single Assignment C (SAC) : A purely functional language designed for  high performance computing on array-based data [Sch03].  Developed by  Sven-Bodo Scholz and associates at University of Hertfordshire and several  other institutions beginning in 1994. Similar in spirit to Sisal, but with syntax  based as heavily as possible on C. On-line resources at www.sac-home.org/.  Sisal : A functional language with “imperative-style” syntax.  Developed by  James McGraw and associates at Lawrence Livermore National Laboratory  in the early to mid-1980s [FCO90, Can92].  Intended primarily for highperformance scientifc computing, with automatic parallelization. A descendant of the datafow language Val [McG82]. No longer under development at  LLNL; available open-source from sisal.sourceforge.net/.  Smalltalk : Considered by many to be the quintessential object-oriented lan­
 
 guage. Developed by Alan Kay, Adele Goldberg, Dan Ingalls, and associates at  the Xerox Palo Alto Research Center throughout the 1970s, culminating in the  Smalltalk-80 language [GR89]. Anthropomorphic programming model based  on “messages” between active objects. On-line resources at smalltalk.org/.  SML : See ML.  Snobol : Developed by Ralph Griswold and associates at Bell Labs in the 1960s  [GPP71], culminating in SNOBOL4. Intended primarily for processing character strings. Included an extremely rich set of string-manipulating primitives
 
-```
-and a novel control-fow mechanism based on the notions of success and failure. On-line archive at snobol4.org/. 
-SR : Concurrent programming language developed by Greg Andrews and 
-colleagues at the University of Arizona in the 1980s [AO93]. 
-Integrated 
-not only sequential and concurrent programming but also shared memory, 
-semaphores, message passing, remote procedures, and rendezvous into a single conceptual framework and simple syntax. On-line archive at cs.arizona. 
-edu/sr/. 
-Swift : Dynamic object-oriented language developed by Apple as a successor to 
-Objective-C. Includes garbage collection, local type inference, array bounds 
-checking, associative arrays, tuples, frst class lambda expressions with unlimited extent, generics, and both value and reference variables of object type. 
-On-line resources at developer.apple.com/swift/. 
-Tcl/Tk : Tool command language (pronounced “tickle”). Scripting language 
-designed by John Ousterhout in the late 1980s [Ous94, WJH03]. Keywordbased syntax resembles Unix command-line invocations and switches; punctuation is relatively spare. Uses dynamic scoping. Supports refection, recursive 
-invocation of interpreter. Tk (pronounced “tee-kay”) is a set of Tcl commands 
-for graphical user interface (GUI) programming. Designed by Ousterhout as 
-an extension to Tcl, Tk has also been embedded in Ruby, Perl, and several other 
-languages. On-line resources at tcl.tk/. 
-Turing : Derived from Euclid by Richard Holt and associates at the University 
-of Toronto in the early 1980s [HMRC88]. Originally intended as a pedagogical 
-language, but could be used for a wide range of applications. Descendants, also 
-developed by Holt’s group, include Turing Plus and Object-Oriented Turing. 
-XSL : Extensible Stylesheet Language, standardized by the World Wide Web 
-Consortium. Serves as the standard stylesheet language for XML (Extensible 
-Markup Language), the standard for self-descriptive tree-structured data, of 
-which XHTML is a dialect. Includes three substandards: XSLT (XSL Transformations) [Wor14], which specifes how to translate from one dialect of XML 
-to another; XPath [Wor07], used to name elements of an XML document; and 
-XSL-FO (XSL Formatting Objects) [Wor06b], which specifes how to format 
-documents. XSLT, though highly specialized to the transformation of XML, is 
-a Turing complete programming language [Kep04]. Standards and additional 
-resources at w3.org/Style/XSL/.
-```
+and a novel control-fow mechanism based on the notions of success and failure. On-line archive at snobol4.org/.  SR : Concurrent programming language developed by Greg Andrews and  colleagues at the University of Arizona in the 1980s [AO93].  Integrated  not only sequential and concurrent programming but also shared memory,  semaphores, message passing, remote procedures, and rendezvous into a single conceptual framework and simple syntax. On-line archive at cs.arizona.  edu/sr/.  Swift : Dynamic object-oriented language developed by Apple as a successor to  Objective-C. Includes garbage collection, local type inference, array bounds  checking, associative arrays, tuples, frst class lambda expressions with unlimited extent, generics, and both value and reference variables of object type.  On-line resources at developer.apple.com/swift/.  Tcl/Tk : Tool command language (pronounced “tickle”). Scripting language  designed by John Ousterhout in the late 1980s [Ous94, WJH03]. Keywordbased syntax resembles Unix command-line invocations and switches; punctuation is relatively spare. Uses dynamic scoping. Supports refection, recursive  invocation of interpreter. Tk (pronounced “tee-kay”) is a set of Tcl commands  for graphical user interface (GUI) programming. Designed by Ousterhout as  an extension to Tcl, Tk has also been embedded in Ruby, Perl, and several other  languages. On-line resources at tcl.tk/.  Turing : Derived from Euclid by Richard Holt and associates at the University  of Toronto in the early 1980s [HMRC88]. Originally intended as a pedagogical  language, but could be used for a wide range of applications. Descendants, also  developed by Holt’s group, include Turing Plus and Object-Oriented Turing.  XSL : Extensible Stylesheet Language, standardized by the World Wide Web  Consortium. Serves as the standard stylesheet language for XML (Extensible  Markup Language), the standard for self-descriptive tree-structured data, of  which XHTML is a dialect. Includes three substandards: XSLT (XSL Transformations) [Wor14], which specifes how to translate from one dialect of XML  to another; XPath [Wor07], used to name elements of an XML document; and  XSL-FO (XSL Formatting Objects) [Wor06b], which specifes how to format  documents. XSLT, though highly specialized to the transformation of XML, is  a Turing complete programming language [Kep04]. Standards and additional  resources at w3.org/Style/XSL/.
 
