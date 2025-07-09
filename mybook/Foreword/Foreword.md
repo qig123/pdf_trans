@@ -1,6 +1,6 @@
 # Foreword
 
-**Foreword**
+Foreword
 
 Programming languages are universally accepted as one of the core subjects that every computer scientist must master. The reason is clear: these languages are the main notation we use for developing products and for communicating new ideas. They have inﬂuenced the ﬁeld by enabling the development of those multimillion-line programs that shaped the information age. Their success is owed to the long-standing effort of the computer science community in the cre- ation of new languages and in the development of strategies for their implemen- tation. The large number of computer scientists mentioned in the footnotes and bibliographic notes in this book by Michael Scott is a clear manifestation of the magnitude of this effort as is the sheer number and diversity of topics it contains.
 
@@ -16,7 +16,7 @@ The other usual component of implementation are the compiler components that car
 
 An important recent developmentin computing is the popularization of paral- lelism and the expectation that, in the foreseeable future, performance gains will mainly be the result of effectively exploiting this parallelism. The book responds to this development by presenting the reader with a range of topics in concurrent programming including mechanisms for synchronization, communication, and coordination across threads. This information will become increasingly impor- tant as parallelism consolidates as the norm in computing.
 
-Programming languages are the bridge between programmers and machines. It is in them that algorithms must be represented for execution. The study of pro- gramming languages design and implementation offers great educational value by requiring an understanding of the strategies used to connect the different as- pects of computing. By presenting such an extensive treatment of the subject, Michael Scott’s* Programming Language Pragmatics*, is a great contribution to the literature and a valuable source of information for computer scientists.
+Programming languages are the bridge between programmers and machines. It is in them that algorithms must be represented for execution. The study of pro- gramming languages design and implementation offers great educational value by requiring an understanding of the strategies used to connect the different as- pects of computing. By presenting such an extensive treatment of the subject, Michael Scott’s Programming Language Pragmatics, is a great contribution to the literature and a valuable source of information for computer scientists.
 
-*David Padua* Siebel Center for Computer Science University of Illinois at Urbana-Champaign
+David Padua Siebel Center for Computer Science University of Illinois at Urbana-Champaign
 

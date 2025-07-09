@@ -1,6 +1,8 @@
 # Copyright
 
-Morgan Kaufmann is an imprint of Elsevier 225 Wyman Street,Waltham, MA 02451, USA
+Morgan Kaufmann is an imprint of Elsevier
+
+## 225 Wyman Street,Waltham, MA 02451, USA
 
 Copyright © 2016, 2009, 2006, 1999 Elsevier Inc. All rights reserved.
 
@@ -10,7 +12,7 @@ No part of this publication may be reproduced or transmitted in any form or by a
 
 This book and the individual contributions contained in it are protected under copyright by the Publisher (other than as may be noted herein).
 
-**Notices**
+Notices
 
 Knowledge and best practice in this ﬁeld are constantly changing. As new research and experience broaden our understanding, changes in research methods, professional practices, or medical treatment may become necessary.
 
@@ -18,9 +20,9 @@ Practitioners and researchers must always rely on their own experience and knowl
 
 To the fullest extent of the law, neither the Publisher nor the authors, contributors, or editors, assume any liability for any injury and/or damage to persons or property as a matter of products liability, negligence or otherwise, or from any use or operation of any methods, products, instructions, or ideas contained in the material herein.
 
-**British Library Cataloguing in Publication Data** A catalogue record for this book is available from the British Library
+British Library Cataloguing in Publication Data A catalogue record for this book is available from the British Library
 
-**Library of Congress Cataloging-in-Publication Data** A catalog record for this book is available from the Library of Congress
+Library of Congress Cataloging-in-Publication Data A catalog record for this book is available from the Library of Congress
 
 For information on all MK publications visit our website at http://store.elsevier.com/
 

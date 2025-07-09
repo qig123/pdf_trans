@@ -59,62 +59,77 @@ def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, proc
     return None
 
 # --- 全新简化的Markdown格式推断函数 ---
-# 不再需要 analyze_page_fonts
 def get_markdown_from_block(block):
     """
     根据文本块的内容模式推断其Markdown格式。
-    不再依赖字体大小，主要依靠正则表达式。
+    新版: 通过正则预分割，解决内嵌标题不换行的问题。
     """
     if block['type'] != 0 or not block.get('lines'):
         return ""
 
-    # 组合文本块内的所有span，并处理加粗/斜体
-    full_text_parts = []
-    is_monospace_block = all(
-        ("mono" in span['font'].lower() or "courier" in span['font'].lower())
-        for line in block['lines'] for span in line['spans']
+    # 1. 将整个块的所有行和span组合成一个带格式的字符串
+    # 注意：我们暂时不处理加粗/斜体，因为这会干扰正则匹配。先获取纯文本。
+    full_text = "\n".join("".join(s['text'] for s in l['spans']) for l in block['lines'])
+    if not full_text.strip():
+        return ""
+
+    # 2. 预处理：使用正则表达式查找标题模式，并插入一个特殊的分隔符
+    # 我们查找的模式是一个换行符，后面跟着我们的标题正则
+    # \n(?=...) 是一个正向先行断言，它匹配一个换行符，条件是后面跟着我们的标题模式，但它不消耗标题本身
+    # 我们在换行符后面插入我们的特殊分隔符
+    split_marker = "<\r\n_SPLIT_HERE_\r\n>"
+    # 查找标题模式（前面必须是换行符或字符串开头）
+    # re.sub的回调函数lambda m: ... 让我们能动态地在匹配项前插入分隔符
+    processed_text = re.sub(
+        r'(?m)(^|(?<=\n))(\s*((\d+(\.\d+)*\.?)|([A-Z]\.[\d\.]*))\s+[A-Za-z].*)',
+        lambda m: f"{split_marker}{m.group(2)}",
+        full_text
     )
-
-    for line in block['lines']:
-        line_parts = []
-        for span in line['spans']:
-            text = span['text']
-            # 保留基本的加粗和斜体格式
-            if span['flags'] & 16: text = f"**{text}**" # Bold
-            if span['flags'] & 2: text = f"*{text}*"   # Italic
-            line_parts.append(text)
-        full_text_parts.append("".join(line_parts))
     
-    # 我们主要处理单行文本块作为标题，但也可以拼接多行后判断
-    full_text = "\n".join(full_text_parts).strip()
-    if not full_text: return ""
+    # 3. 根据分隔符将文本分割成子块
+    sub_blocks_text = processed_text.split(split_marker)
 
-    # --- 核心标题识别逻辑 ---
-    # 规则1: 如果文本匹配编号标题模式，且比较短，则视为H2标题 (##)
-    if TITLE_REGEX.match(full_text) and len(full_text) < 200:
-        # 将标题内的换行符替换为空格
-        return f"## {full_text.replace(chr(10), ' ')}\n\n"
+    # 4. 逐个处理子块
+    output_parts = []
+    for sub_text in sub_blocks_text:
+        sub_text = sub_text.strip()
+        if not sub_text:
+            continue
+
+        # --- 现在对每个干净的子块应用我们之前的简单规则 ---
         
-    # 规则2: 如果文本是常见的无编号标题（如 "Introduction"），也视为H2标题
-    if KEYWORD_HEADING_REGEX.match(full_text):
-        return f"## {full_text}\n\n"
+        # 规则A: 判断这个子块是不是标题
+        if (TITLE_REGEX.match(sub_text) and len(sub_text) < 200) or KEYWORD_HEADING_REGEX.match(sub_text):
+            # 是标题，给它H2格式。注意：这里我们失去了内部的加粗信息，但解决了换行。
+            # 这是一个权衡。为了保留加粗，需要更复杂的span级别的处理。
+            # 但根据你的要求“只要能换行就行”，这是最直接的。
+            output_parts.append(f"## {sub_text.replace(chr(10), ' ')}\n\n")
+            continue
 
-    # 规则3: 识别为代码块 (基于等宽字体)
-    if is_monospace_block and len(full_text.splitlines()) > 1:
-        return f"```\n{full_text}\n```\n\n"
+        # 规则B: 判断是不是代码块（对整个原始块判断）
+        is_monospace_block = all(
+            ("mono" in span['font'].lower() or "courier" in span['font'].lower())
+            for line in block['lines'] for span in line['spans'] if 'font' in span
+        )
+        if is_monospace_block and len(sub_text.splitlines()) > 1:
+            output_parts.append(f"```\n{sub_text}\n```\n\n")
+            continue
 
-    # 规则4: 识别为列表
-    list_match = re.match(r'^\s*([•*-]|\d+\.|[a-zA-Z]\))\s+', full_text)
-    if list_match:
-        lines = full_text.split('\n')
-        first_line = lines[0][list_match.end():].strip()
-        rest_of_lines = "\n".join(["  " + l.strip() for l in lines[1:]])
-        # 连续的列表项应该只隔一个换行
-        return f"* {first_line}\n{rest_of_lines}\n"
+        # 规则C: 判断是不是列表
+        list_match = re.match(r'^\s*([•*-]|\d+\.|[a-zA-Z]\))\s+', sub_text)
+        if list_match:
+            lines = sub_text.split('\n')
+            first_line = lines[0][list_match.end():].strip()
+            rest_of_lines = "\n".join(["  " + l.strip() for l in lines[1:]])
+            output_parts.append(f"* {first_line}\n{rest_of_lines}\n")
+            continue
+            
+        # 规则D: 默认作为段落
+        # 在这里，我们需要重新从原始block中找到这段文本对应的spans，以恢复格式
+        # 为了简单起见，我们先按无格式处理，这已经解决了核心问题
+        output_parts.append(sub_text.replace('\n', ' ') + "\n\n")
 
-    # 规则5: 默认作为普通段落
-    # 将段落内的换行符替换为空格，以形成连续的文本流
-    return full_text.replace('\n', ' ') + "\n\n"
+    return "".join(output_parts)
 
 
 # --- 主处理函数 (已更新) ---

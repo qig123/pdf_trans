@@ -1,4 +1,4 @@
 # Dedication
 
-*To family and friends.*
+To family and friends.
 
