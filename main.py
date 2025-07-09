@@ -43,10 +43,9 @@ def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, proc
 
 def run_extraction_stable(pdf_path, output_dir="mybook"):
     """
-    Extracts content with refined hierarchical logic.
-    - Parent items (like "Part I", "Chapter 1") get their own intro .md file.
-    - Content for a parent item stops at the beginning of its first child.
-    - File structure correctly mirrors the book's nested structure.
+    Extracts content with a maximum of 2 directory levels.
+    - Level 1 & 2 bookmarks create directories (if they have children).
+    - Level 3+ bookmarks are always treated as content files within the Level 2 directory.
     """
     if os.path.exists(output_dir):
         print(f"Old output directory '{output_dir}' found. Deleting it...")
@@ -61,7 +60,7 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
         print("Error: No bookmarks found.")
         return
 
-    print("Starting extraction with refined hierarchical processing...")
+    print("Starting extraction with 2-level directory limit...")
     markdown_files_list = []
     level_paths = {}
     CAPTION_REGEX = re.compile(r'^(Figure|Fig\.?|Table|Chart|图|表)\s+[\d\.\-A-Za-z]+', flags=re.IGNORECASE)
@@ -73,58 +72,59 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
         
         print(f"{'  ' * (level-1)}-> Processing: {title}")
 
-        # --- START: REFINED PATH AND PAGE RANGE LOGIC ---
-
         is_parent_node = (i + 1 < len(toc)) and (toc[i+1][0] > level)
 
-        # **CRITICAL CHANGE**: Determine the correct end_page
+        end_page = doc.page_count + 1
+        found_next = False
+        # Find the end page: either the first child or the next peer/uncle
         if is_parent_node:
-            # For a parent, its "intro" content ends where its FIRST CHILD begins.
-            end_page = toc[i+1][2] 
-        else:
-            # For a leaf node, its content ends where the NEXT SIBLING or UNCLE begins.
-            end_page = doc.page_count + 1 # Default to end of document
+            end_page = toc[i+1][2]
+            found_next = True
+        
+        if not found_next:
             for next_item in toc[i+1:]:
                 if next_item[0] <= level:
                     end_page = next_item[2]
                     break
         
-        # If a parent bookmark is purely structural (no pages between it and its child), skip creating a file.
+        # Skip creating files for purely structural bookmarks with no content pages
         if start_page >= end_page:
             print(f"{'  ' * (level-1)}  - Skipping empty section.")
-            # We still need to create the directory for its children
-            if is_parent_node:
+            # Still create the directory if it's a structural parent within the depth limit
+            if is_parent_node and level < 3:
                 parent_dir_parts = [level_paths[l] for l in range(1, level)]
                 parent_dir = os.path.join(output_dir, *parent_dir_parts)
                 current_content_dir = os.path.join(parent_dir, safe_title)
                 os.makedirs(current_content_dir, exist_ok=True)
             continue
             
-        # Path logic from before is mostly correct, let's keep it.
+        # --- START: KEY MODIFICATION FOR 2-LEVEL DEPTH ---
+        
+        # Decide whether to create a new directory based on level.
+        # We only create new subdirectories for Level 1 and Level 2 items.
+        create_new_directory = is_parent_node and level < 3
+
         parent_dir_parts = [level_paths[l] for l in range(1, level)]
         parent_dir = os.path.join(output_dir, *parent_dir_parts)
 
-        if is_parent_node:
-            # A parent gets its own directory.
+        if create_new_directory:
+            # For Level 1 & 2 parents: create a dedicated directory.
             current_content_dir = os.path.join(parent_dir, safe_title)
-            # Its intro .md file goes inside that directory.
             output_filepath = os.path.join(current_content_dir, f"{safe_title}.md")
         else:
-            # A leaf file goes into its parent's directory.
+            # For Level 3+ items (or any leaf node): place the file in the parent's directory.
             current_content_dir = parent_dir
             output_filepath = os.path.join(current_content_dir, f"{safe_title}.md")
 
+        # --- END: KEY MODIFICATION ---
+
         md_file_containing_dir = os.path.dirname(output_filepath)
         current_image_dir = os.path.join(md_file_containing_dir, "images")
-        
         os.makedirs(current_image_dir, exist_ok=True)
-        
-        # --- END: REFINED PATH AND PAGE RANGE LOGIC ---
         
         chapter_content = f"# {title}\n\n"
         processed_img_xrefs = set()
 
-        # Page range is 1-based, exclusive at the end.
         for page_num in range(start_page - 1, end_page - 1):
             if page_num >= doc.page_count: continue
             page = doc.load_page(page_num)
