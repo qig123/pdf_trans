@@ -59,7 +59,7 @@ def is_header_or_footer(block_bbox, page_rect):
     footer_boundary = page_rect.y1 - page_rect.height * footer_margin
     return block_bbox.y1 < header_boundary or block_bbox.y0 > footer_boundary
 
-def are_bboxes_close(rect1, rect2, max_gap=30):
+def are_bboxes_close(rect1, rect2, max_gap=40):
     """
     检查两个矩形边界框是否足够接近。
     如果它们之间的水平或垂直间隙小于 max_gap，则认为它们是接近的。
@@ -257,10 +257,12 @@ def get_markdown_from_block(block, true_headings=None):
 
 # --- Main Processing Function (Updated) ---
 # --- Main Processing Function (Updated and Corrected) ---
+# ==================== ↓↓↓ 最终版：带有“否决权”上下文检查的主函数 ↓↓↓ ====================
+# ==================== ↓↓↓ 最终版：支持合并子章节的完整主函数 ↓↓↓ ====================
 def run_extraction_stable(pdf_path, output_dir="mybook"):
     """
-    处理PDF文件，使用所有书签级别获取准确的标题白名单，
-    同时保持一个2级的目录结构。
+    处理PDF文件。根据配置，可以选择将子章节合并到父章节中，
+    并包含所有最新的修复和优化。
     """
     if os.path.exists(output_dir):
         print(f"Old output directory '{output_dir}' found. Deleting...")
@@ -274,28 +276,46 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
         print("Error: No bookmarks (TOC) found in the document.")
         return
 
-    # CORE CHANGE 1: 使用过滤后的TOC仅用于文件结构
-    file_structure_toc = [item for item in original_toc if item[0] <= CONFIG.get("extraction_options", {}).get("max_toc_level", 2)]
-    print(f"Processing {len(file_structure_toc)} bookmarks for file structure (from original {len(original_toc)}).")
-    
+    # --- 1. 新增：读取配置 ---
+    extraction_opts = CONFIG.get("extraction_options", {})
+    max_toc_level = extraction_opts.get("max_toc_level", 2)
+    merge_subchapters = extraction_opts.get("merge_subchapters_into_parent", False)
+
+    # --- 2. 核心修改：根据配置决定要处理的目录项 ---
+    if merge_subchapters:
+        # 如果要合并，我们只关心第1级目录。它们将成为我们唯一的处理单元。
+        file_structure_toc = [item for item in original_toc if item[0] == 1]
+        print("Info: Merging subchapters enabled. Processing level-1 chapters only.")
+    else:
+        # 保持原有行为，处理1级和2级目录。
+        file_structure_toc = [item for item in original_toc if item[0] <= max_toc_level]
+        print("Info: Merging subchapters disabled. Creating separate files for subchapters.")
+
     markdown_files_list = []
     level_paths = {}
 
-    # 遍历 file_structure_toc 来创建文件和文件夹
+    # 遍历我们决定要处理的目录项 (file_structure_toc)
     for i, item in enumerate(file_structure_toc):
         level, title, start_page = item
         safe_title = clean_filename(title)
         level_paths[level] = safe_title
         print(f"{'  ' * (level-1)}-> Processing Chapter/File: {title}")
 
-        # 确定当前章节的页面范围
+        # --- 3. 核心修改：更鲁棒地计算页面范围 ---
+        # 无论是否合并，都在原始TOC中寻找下一个同级或更高级的目录，以确定结束页
         end_page = doc.page_count + 1
-        for next_item in file_structure_toc[i+1:]:
-            if next_item[0] <= level:
-                end_page = next_item[2]
-                break
-        
-        # CORE CHANGE 2: 从完整的 original_toc 构建白名单
+        try:
+            current_item_index_in_original = original_toc.index(item)
+            for next_item in original_toc[current_item_index_in_original + 1:]:
+                if next_item[0] <= level:
+                    end_page = next_item[2]
+                    break
+        except ValueError:
+            # 如果在原始TOC中找不到，这是一个不太可能发生的边缘情况，但为了安全还是处理一下
+            print(f"Warning: Could not find '{title}' in original TOC for end-page calculation.")
+
+
+        # --- 标题白名单逻辑保持不变，它依然非常有用！---
         true_heading_whitelist = set()
         try:
             original_toc_index = original_toc.index(item)
@@ -320,13 +340,14 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
                 os.makedirs(current_content_dir, exist_ok=True)
             continue
         
+        # --- 文件和目录的创建逻辑保持不变，它足够健壮 ---
         parent_dir_parts = [level_paths[l] for l in range(1, level)]
         parent_dir = os.path.join(output_dir, *parent_dir_parts)
 
         if level == 1:
             current_content_dir = os.path.join(parent_dir, safe_title)
             output_filepath = os.path.join(current_content_dir, f"{safe_title}.md")
-        else:
+        else: # (仅在不合并时会进入此分支)
             current_content_dir = parent_dir
             output_filepath = os.path.join(current_content_dir, f"{safe_title}.md")
 
@@ -337,7 +358,7 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
         chapter_content = f"# {title}\n\n"
         processed_img_xrefs = set()
 
-        # ==================== ↓↓↓ 关键修复区：所有页面处理逻辑必须在此循环内 ↓↓↓ ====================
+        # --- 4. 内部页面处理循环：完全保留您现有的、经过验证的完美逻辑 ---
         for page_num in range(start_page - 1, end_page - 1):
             if page_num >= doc.page_count: continue
             page = doc.load_page(page_num)
@@ -348,7 +369,6 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
             page_content_parts = {}
             ignored_text_areas = []
 
-            # 图片和图注处理 (更新后的复杂情况处理逻辑)
             caption_blocks_indices = set()
             for idx, b in enumerate(blocks):
                 if b["type"] == 0 and "lines" in b:
@@ -356,50 +376,53 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
                     if CAPTION_REGEX.search(block_text.strip()):
                         caption_blocks_indices.add(idx)
 
-            # 现在，处理找到的图注块
             for idx in sorted(list(caption_blocks_indices)):
                 b = blocks[idx]
+                is_false_positive = False
+                for line in b["lines"]:
+                    line_text = "".join(s["text"] for s in line["spans"]).strip()
+                    match = re.search(r'\s*\([\d\.\-A-Za-z]+\)$', line_text)
+                    if match:
+                        preceding_text = line_text[:match.start()].strip()
+                        if len(preceding_text) > 5:
+                            is_false_positive = True
+                            break
+                if is_false_positive:
+                    print(f"Info: Vetoed potential false-positive caption on page {page_num+1}: '{line_text[:50]}...'")
+                    continue
+
                 full_caption = ' '.join(''.join(s["text"] for s in l["spans"]) for l in b["lines"]).replace('\n', ' ').strip()
-                # 从完整文本中提取干净的图注（移除图表内容）
                 caption_match = CAPTION_REGEX.search(full_caption)
                 clean_caption = caption_match.group(0).strip() if caption_match else full_caption
                 short_alt = ' '.join(clean_caption.split()[:5]) + "..."
-                
                 image_info = find_image_for_caption(doc, page, blocks, idx, current_image_dir, processed_img_xrefs)
-                
                 if image_info:
                     relative_path = os.path.join("images", quote(image_info["filename"]))
                     page_content_parts[idx] = f"![{short_alt}]({relative_path})\n*{clean_caption}*\n\n"
                     if image_info.get("bbox"): 
                         ignored_text_areas.append(image_info["bbox"])
-                        # 确保图注本身的文本块也被忽略
                         ignored_text_areas.append(fitz.Rect(b["bbox"]))
                 else:
                     page_content_parts[idx] = f"*{clean_caption}*\n\n"
-                
                 processed_block_indices.add(idx)
 
-            # 文本块处理
             for idx, b in enumerate(blocks):
                 if idx in processed_block_indices or b['type'] != 0: continue
                 block_bbox = fitz.Rect(b["bbox"])
                 if is_header_or_footer(block_bbox, page.rect): continue
                 if any(area.intersects(block_bbox) for area in ignored_text_areas): continue
-                
                 markdown_text = get_markdown_from_block(b, true_headings=true_heading_whitelist)
-                
                 if markdown_text:
                     page_content_parts[idx] = markdown_text
                 processed_block_indices.add(idx)
 
-            # 无图注图片处理 (逻辑不变)
             for img in page.get_images(full=True):
                 xref = img[0]
                 if xref not in processed_img_xrefs:
                     img_block_idx = -1
-                    for idx, b in enumerate(blocks):
-                        if b.get("type") == 1 and b.get("number") == xref:
-                            img_block_idx = idx
+                    for idx_b, block_img in enumerate(blocks):
+                        if block_img.get("type") == 1 and block_img.get("number") == xref:
+                            img_block_idx = idx_b
                             break
                     if img_block_idx != -1 and img_block_idx not in page_content_parts:
                         try:
@@ -414,18 +437,15 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
                         except Exception as e:
                             print(f"Warning: Could not process uncaptioned image xref {xref} on page {page_num+1}. Error: {e}")
 
-            # 按顺序组合页面内容
             for idx in sorted(page_content_parts.keys()):
                 chapter_content += page_content_parts[idx]
         
-        # ==================== ↑↑↑ 关键修复区结束 ↑↑↑ ====================
-
         chapter_content = re.sub(r'\n{3,}', '\n\n', chapter_content)
         with open(output_filepath, "w", encoding="utf-8") as f: f.write(chapter_content)
         relative_md_path = os.path.relpath(output_filepath, output_dir).replace(os.sep, '/')
         markdown_files_list.append(relative_md_path)
 
-    # 元数据生成 (逻辑不变)
+    # --- 5. 元数据生成：保持不变 ---
     metadata = doc.metadata
     book_title = metadata.get('title') or os.path.splitext(os.path.basename(pdf_path))[0]
     book_authors = [metadata.get('author')] if metadata.get('author') else ["Unknown Author"]

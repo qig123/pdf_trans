@@ -12,6 +12,7 @@
     "monospace_keywords": ["mono", "courier"]
   },
   "extraction_options": {
-    "max_toc_level": 2
+    "max_toc_level": 2,
+    "merge_subchapters_into_parent": true
   }
 }

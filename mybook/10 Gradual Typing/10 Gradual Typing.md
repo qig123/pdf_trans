@@ -177,8 +177,7 @@ This chapter just scratches the surface of gradual typing. The basic approach de
 ![Figure 10.18...](images/page_211_vector_cluster_390.png)
 *Figure 10.18*
 
-![(2015)...](images/page_211_vector_cluster_430.png)
-*(2015)*
+Wadler and Findler 2009) and space-efficient casts (Herman, Tomb, and Flana- gan 2007, 2010). The problem addressed by blame tracking is that when a cast on a higher-order value fails, it often does so at a point in the program that is far removed from the original cast. Blame tracking is a technique for propagating extra information through casts and proxies so that when a cast fails, the error message can point back to the original location of the cast in the source program. The problem addressed by space-efficient casts also relates to higher-order casts. It turns out that in partially typed programs, a function or tuple can flow through a great many casts at runtime. With the approach described in this chapter, each cast adds another lambda wrapper or a tuple proxy. Not only does this take up considerable space, but it also makes the function calls and tuple operations slow. For example, a partially typed version of quicksort could, in the worst case, build a chain of proxies of length O(n) around the tuple, changing the overall time com- plexity of the algorithm from O(n2) to O(n3)! Herman, Tomb, and Flanagan (2007) suggested a solution to this problem by representing casts using the coercion cal- culus of Henglein (1994), which prevents the creation of long chains of proxies by compressing them into a concise normal form. Siek, Thiemann, and Wadler (2015)
 
 give an algorithm for compressing coercions, and Kuhlenschmidt, Almahallawi, and Siek (2019) show how to implement these ideas in the Grift compiler:
 

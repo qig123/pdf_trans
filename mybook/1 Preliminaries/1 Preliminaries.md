@@ -191,9 +191,6 @@ The job of a compiler is to translate a program in one language into a program i
 ![(1.8)...](images/page_23_vector_cluster_344.png)
 *(1.8)*
 
-![(i)...](images/page_23_vector_cluster_353.png)
-*(i)*
-
 In the next section we see our first example of a compiler.
 
 ## 1.6 Example Compiler: A Partial Evaluator
