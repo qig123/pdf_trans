@@ -40,7 +40,7 @@ DESIGN & IMPLEMENTATION
 
 8.1 Struct tags and typedef in C and C++ One of the peculiarities of the C type system is that struct tags are not exactly type names. In Example 8.1, the name of the type is the two-word phrase struct element. We used this name to declare the element_yielded ﬁeld of the second struct in Example 8.3. To obtain a one-word name, one can say typedef struct element element_t, or even typedef struct element element: struct tags and typedef names have separate name spaces, so the same name can be used in each. C++ eliminates this idiosyncrasy by allowing the struct tag to be used as a type name without the struct preﬁx; in effect, it performs the typedef implicitly.
 
-![Figure 8.1 Likely layout...](images/page_350_vector_170.png)
+![Figure 8.1 Likely layout...](images/page_387_vector_170.png)
 *Figure 8.1 Likely layout in memory for objects of type element on a 32-bit machine. Align- ment restrictions lead to the shaded “holes.”*
 
 In a language with a value model of variables, nested records are naturally embedded in the parent record, where they function as large ﬁelds with word or double-word alignment. In a language with a reference model of variables, ﬁelds of record type are typically references to data in another location. The difference is a matter not only of memory layout, but also of semantics. We can see the difference in Figure 8.2. In C, with a value model of variables, data is laid out as EXAMPLE 8.6
@@ -61,7 +61,7 @@ Layout of packed types record type (or an array, set, or ﬁle type) should be p
 
 type element = record ... end; pragma Pack(element);
 
-![Figure 8.2 Layout of...](images/page_351_vector_264.png)
+![Figure 8.2 Layout of...](images/page_388_vector_264.png)
 *Figure 8.2 Layout of memory for a nested struct (class) in C (top) and Java (bottom). This layout reﬂects the fact that n is an embedded value in C, but a reference in Java. We have assumed here that integers and pointers have equal size.*
 
 When compiling with gcc, one uses an attribute:
@@ -76,7 +76,7 @@ my_element := copper;
 
 Ada also allows records to be compared for equality (if my_element = copper then ...). Many other languages (including C and its successors) support as- signment but not equality testing, though C++ allows the programmer to deﬁne the latter for individual record types. ■
 
-![Figure 8.3 Likely memory...](images/page_352_vector_155.png)
+![Figure 8.3 Likely memory...](images/page_389_vector_155.png)
 *Figure 8.3 Likely memory layout for packed element records. The atomic_number and atomic_weight ﬁelds are nonaligned, and can only be read or written (on most machines) via multi-instruction sequences.*
 
 For small records, both copies and comparisons can be performed in-line on a ﬁeld-by-ﬁeld basis. For longer records, we can save signiﬁcantly on code space by deferring to a library routine. A block_copy routine can take source address, destination address, and length as arguments, but the analogous block_compare routine would fail on records with different (garbage) data in the holes. One solution is to arrange for all holes to contain some predictable value (e.g., zero), but this requires code at every elaboration point. Another is to have the compiler generate a customized ﬁeld-by-ﬁeld comparison routine for every record type. Different routines would be called to compare records of different types. In addition to complicating comparisons, holes in records waste space. Pack- EXAMPLE 8.10
@@ -87,7 +87,7 @@ DESIGN & IMPLEMENTATION
 
 8.2 The order of record ﬁelds Issues of record ﬁeld order are intimately tied to implementation tradeoffs: Holes in records waste space, but alignment makes for faster access. If holes contain garbage we can’t compare records by looping over words or bytes, but zeroing out the holes would incur costs in time and code space. Predictable layout is important for mirroring hardware structures in “systems” languages, but reorganization may be advantageous in large records if we can group fre- quently accessed ﬁelds together, so they lie in the same cache line.
 
-![Figure 8.4 Rearranging record...](images/page_353_vector_156.png)
+![Figure 8.4 Rearranging record...](images/page_390_vector_156.png)
 *Figure 8.4 Rearranging record ﬁelds to minimize holes. By sorting ﬁelds according to the size of their alignment constraint, a compiler can minimize the space devoted to holes, while keeping the ﬁelds aligned.*
 
 that mimics the organization of memory-mapped control registers for a partic- ular Ethernet device. C and C++, which are designed in large part for systems programs, guarantee that the ﬁelds of a struct will be allocated in the order declared. The ﬁrst ﬁeld is guaranteed to have the coarsest alignment required by the hardware for any type (generally a four- or eight-byte boundary). Sub- sequent ﬁelds have the natural alignment for their type. Fortran 90 allows the programmer to specify that ﬁelds must not be reordered; in the absence of such a speciﬁcation the compiler can choose its own order. To accommodate systems programs, Ada, C, and C++ all allow the programmer to specify exactly how many bits to devote to each ﬁeld of a record. Where a “packed” directive is es- sentially a nonbinding indication of the programmer’s priorities, bit lengths on ﬁeld declarations are a binding speciﬁcation of assembly-level layout.
@@ -178,7 +178,7 @@ class directory { Hashtable table; // from standard library ... public directory
 
 Why the difference? In C++, operator[] can return a reference (an explicit l-value), which can be used on either side of an assignment (further informa- tion can be found under “References in C++” in Section 9.3.1). C# has no comparable l-value mechanism, so it needs separate methods to get and set the value of d["Jane Doe"].
 
-![Figure 8.5 Array slices...](images/page_358_vector_302.png)
+![Figure 8.5 Array slices...](images/page_395_vector_302.png)
 *Figure 8.5 Array slices (sections) in Fortran 90. Much like the values in the header of an enumeration-controlled loop (Section 6.5.1), a : b : c in a subscript indicates positions a, a + c, a + 2c, . . . through b. If a or b is omitted, the corresponding bound of the array is assumed. If c is omitted, 1 is assumed. It is even possible to use negative values of c in order to select positions in reverse order. The slashes in the second subscript of the lower right example delimit an explicit list of positions.*
 
 Slices and Array Operations
@@ -207,7 +207,7 @@ Subroutine parameters and local variables provide the simplest examples of dy- n
 
 3 The name “dope vector” presumably derives from the notion of “having the dope on (some- thing),” a colloquial expression that originated in horse racing: advance knowledge that a horse has been drugged (“doped”) is of signiﬁcant, if unethical, use in placing bets.
 
-![Figure 8.6 A dynamic...](images/page_361_vector_265.png)
+![Figure 8.6 A dynamic...](images/page_398_vector_265.png)
 *Figure 8.6 A dynamic local array in C. Function square multiplies a matrix by itself and replaces the original with the product. To do so it needs a scratch array of the same shape as the parameter. Note that the declarations of M and T both rely on parameter n.*
 
 known as conformant arrays. Among other things, they facilitate the construc- tion of linear algebra libraries, whose routines must typically work on arrays of arbitrary size. To implement such an array, the compiler arranges for the caller to pass both the data of the array and an appropriate dope vector. If the array is of dynamic shape in the caller’s context, the dope vector may already be available. If the array is of static shape in the caller’s context, an appropriate dope vector will need to be created prior to the call. Ada and C (though not C++) support dynamic shape for both parameters and local variables. Among other things, local arrays can be declared to match the EXAMPLE 8.18
@@ -216,7 +216,7 @@ Local arrays of dynamic shape in C shape of conformant array parameters, facilit
 
 Stack allocation of elaborated arrays ﬁxed at elaboration time. For such arrays it is still possible to place the space for the array in the stack frame of its subroutine, but an extra level of indirection is required (see Figure 8.7). In order to ensure that every local object can be found using a known offset from the frame pointer, we divide the stack frame into a ﬁxed-size part and a variable-size part. An object whose size is statically known goes in the ﬁxed-size part. An object whose size is not known until elaboration time goes in the variable-size part, and a pointer to it, together with a dope vec- tor, goes in the ﬁxed-size part. If the elaboration of the array is buried in a nested block, the compiler delays allocating space (i.e., changing the stack pointer) until the block is entered. It still allocates space for the pointer and the dope vector
 
-![Figure 8.7 Elaboration-time allocation...](images/page_362_vector_355.png)
+![Figure 8.7 Elaboration-time allocation...](images/page_399_vector_355.png)
 *Figure 8.7 Elaboration-time allocation of arrays. Here M is a square two-dimensional array whose bounds are determined by a parameter passed to foo at run time. The compiler arranges for a pointer to M and a dope vector to reside at static offsets from the frame pointer. M cannot be placed among the other local variables because it would prevent those higher in the frame from having static offsets. Additional variable-size arrays or records are easily accommodated.*
 
 among the local variables when the subroutine itself is entered. Records of dy- namic shape are handled in a similar way. ■ Fortran 90 allows speciﬁcation of the bounds of an array to be delayed until EXAMPLE 8.20
@@ -247,7 +247,7 @@ Array layout and cache performance and column-major layout of arrays. When code 
 
 4 Fran Allen (1932–) joined IBM’s T. J. Watson Research Center in 1957, and stayed for her entire professional career. Her seminal paper, Program Optimization [All69] helped launch the ﬁeld of code improvement. Her PTRAN (Parallel TRANslation) group, founded in the early 1980s, developed much of the theory of automatic parallelization. In 1989 Dr. Allen became the ﬁrst woman to be named an IBM Fellow. In 2006 she became the ﬁrst to receive the ACM Turing Award.
 
-![Figure 8.8 Row- and...](images/page_365_vector_245.png)
+![Figure 8.8 Row- and...](images/page_402_vector_245.png)
 *Figure 8.8 Row- and column-major memory layout for two-dimensional arrays. In row-major order, the elements of a row are contiguous in memory; in column-major order, the elements of a column are contiguous. The second cache line of each array is shaded, on the assumption that each element is an eight-byte ﬂoating-point number, that cache lines are 32 bytes long (a common size), and that the array begins at a cache line boundary. If the array is indexed from A[0,0] to A[9,9], then in the row-major case elements A[0,4] through A[0,7] share a cache line; in the column-major case elements A[4,0] through A[7,0] share a cache line.*
 
 access will result in a cache miss, dramatically reducing the performance of the code. In C, one should write
@@ -270,7 +270,7 @@ DESIGN & IMPLEMENTATION
 
 8.4 Array layout The layout of arrays in memory, like the ordering of record ﬁelds, is intimately tied to tradeoffs in design and implementation. While column-major layout appears to offer no advantages on modern machines, its continued use in For- tran means that programmers must be aware of the underlying implementa- tion in order to achieve good locality in nested loops. Row-pointer layout, likewise, has no performance advantage on modern machines (and a likely performance penalty, at least for numeric code), but it is a more natural ﬁt for the “reference to object” data organization of languages like Java. Its impacts on space consumption and locality may be positive or negative, depending on the details of individual applications.
 
-![Figure 8.9 Contiguous array...](images/page_367_vector_279.png)
+![Figure 8.9 Contiguous array...](images/page_404_vector_279.png)
 *Figure 8.9 Contiguous array allocation vs row pointers in C. The declaration on the left is a true two-dimensional array. The slashed boxes are NUL bytes; the shaded areas are holes. The declaration on the right is a ragged array of pointers to arrays of characters. The arrays of characters may be located anywhere in memory—next to each other or separated, and in any order. In both cases, we have omitted bounds in the declaration that can be deduced from the size of the initializer (aggregate). Both data structures permit individual characters to be accessed using double subscripts, but the memory layout (and corresponding address arithmetic) is quite different.*
 
 Address Calculations
@@ -289,7 +289,7 @@ S2 = (U3 −L3 + 1) × S3 S1 = (U2 −L2 + 1) × S2
 
 Here the size of a row (S2) is the size of an individual element (S3) times the number of elements in a row (assuming row-major layout). The size of a plane (S1) is the size of a row (S2) times the number of rows in a plane. The address of A[i, j, k] is then
 
-![Figure 8.10 Virtual location...](images/page_368_vector_247.png)
+![Figure 8.10 Virtual location...](images/page_405_vector_247.png)
 *Figure 8.10 Virtual location of an array with nonzero lower bounds. By computing the constant portions of an array index at compile time, we effectively index into an array whose starting address is offset in memory, but whose lower bounds are all zero.*
 
 address of A
@@ -384,14 +384,14 @@ Here a chr_tree is either an Empty leaf or a Node consisting of a character and 
 
 Tree type in Lisp our tree could be speciﬁed textually as ‚(#\R (#\X ()()) (#\Y (#\Z ()()) (#\W ()()))). Each level of parentheses brackets the elements of a list. In this case, the outermost such list contains three elements: the character R and nested
 
-![Figure 8.11 Implementation of...](images/page_376_vector_251.png)
+![Figure 8.11 Implementation of...](images/page_413_vector_251.png)
 *Figure 8.11 Implementation of a tree in ML. The abstract (conceptual) tree is shown at the lower left.*
 
 lists to represent the left and right subtrees. (The preﬁx #\ notation serves the same purpose as surrounding quotes in other languages.) Semantically, each list is a pair of references: one to the head and one to the remainder of the list. As we noted in Section 8.5.1, these semantics are almost always reﬂected in the im- plementation by a cons cell containing two pointers. A binary tree can thus be represented as a three-element (three cons cell) list, as shown in Figure 8.12. At the top level of the ﬁgure, the ﬁrst cons cell points to R; the second and third point to nested lists representing the left and right subtrees. Each block of mem- ory is tagged to indicate whether it is a cons cell or an atom. An atom is anything other than a cons cell; that is, an object of a built-in type (integer, real, character, string, etc.), or a user-deﬁned structure (record) or array. The uniformity of Lisp lists (everything is a cons cell or an atom) makes it easy to write polymorphic functions, though without the static type checking of ML. ■ If one programs in a purely functional style in ML or in Lisp, the data struc- tures created with recursive types turn out to be acyclic. New objects refer to old ones, but old ones neverchange, and thus neverpoint to new ones. Circular struc- tures are typically deﬁned by using the imperative features of the languages. (For an exception to this rule, see Exercise 8.21.) In ML, the imperative features in- clude an explicit notion of pointer, discussed brieﬂy under “Value Model” below. Even when writing in a functional style, one often ﬁnds a need for types that are mutually recursive. In a compiler, for example, it is likely that symbol table EXAMPLE 8.35
 
 Mutually recursive types in OCaml records and syntax tree nodes will need to refer to each other. A syntax tree node that represents a subroutine call will need to refer to the symbol table record that represents the subroutine. The symbol table record, for its part, will need to refer to the syntax tree node at the root of the subtree that represents the subroutine’s code. If types are declared one at a time, and if names must be declared before they can be used, then whichever mutually recursive type is declared ﬁrst will be
 
-![Figure 8.12 Implementation of...](images/page_377_vector_286.png)
+![Figure 8.12 Implementation of...](images/page_414_vector_286.png)
 *Figure 8.12 Implementation of a tree in Lisp. A diagonal slash through a box indicates a null pointer. The C and A tags serve to distinguish the two kinds of memory blocks: cons cells and blocks containing atoms.*
 
 unable to refer to the other. ML family languagesaddress this problem by allowing types to be declared together as a group. Using OCaml syntax,
@@ -434,7 +434,7 @@ Pointer-based tree our tree example is likely to be implemented as shown in Figu
 
 Pointer dereferencing dereferencing operator. In Pascal and Modula this operator took the form of a postﬁx “up-arrow”:
 
-![Figure 8.13 Typical implementation...](images/page_379_vector_176.png)
+![Figure 8.13 Typical implementation...](images/page_416_vector_176.png)
 *Figure 8.13 Typical implementation of a tree in a language with explicit pointers. As in Figure 8.12, a diagonal slash through a box indicates a null pointer.*
 
 my_ptr^.val := 'X';
@@ -589,7 +589,7 @@ returned by the new operation. When one pointer is assigned into another, the ru
 
 Reference counts and circular structures tion of a “useful object.” While it is deﬁnitely true that an object is useless if no references to it exist, it may also be useless when references do exist. As shown in Figure 8.14, reference counts may fail to collect circular structures. They work well only for structures that are guaranteed to be noncircular. Many language implementations use reference counts for variable-length strings; strings never contain references to anything else. Perl uses reference counts for all dynami- cally allocated data; the manual warns the programmer to break cycles manually when data aren’t needed anymore. Some purely functional languages may also be able to use reference counts safely in all cases, if the lack of an assignment state- ment prevents them from introducing circularity. Finally, reference counts can be used to reclaim tombstones. While it is certainly possible to create a circular structure with tombstones, the fact that the programmer is responsible for ex- plicit deallocation of heap objects implies that reference counts will fail to reclaim tombstones only when the programmer has failed to reclaim the objects to which they refer. ■
 
-![Figure 8.14 Reference counts...](images/page_388_vector_283.png)
+![Figure 8.14 Reference counts...](images/page_425_vector_283.png)
 *Figure 8.14 Reference counts and circular lists. The list shown here cannot be found via any program variable, but because it is circular, every cell contains a nonzero count.*
 
 Smart Pointers The general term smart pointer refers to a program-level ob- ject (implemented on top of the language proper) that mimics the behavior of a pointer, but with additional semantics. The most common use of smart pointers is to implement reference counting in a language that normally supports only manual storage reclamation. Other uses include bounds checking on pointer arithmetic, instrumentation for debugging or performance analysis, and track- ing of references to external objects—e.g., open ﬁles. Particularly rich support for smart pointers can be found in the C++ stan- dard library, whose unique_ptr, shared_ptr, and weak_ptr classes leverage operator overloading, constructors, destructors, and move semantics to simplify the otherwise difﬁcult task of manual reclamation. A unique_ptr is what its name implies—the only reference to an object. If the unique_ptr is destroyed (typically because the function in which it was declared returns), then the ob- ject to which it points is reclaimed by the pointer’s destructor, as suggested in Section 8.5.2. If one unique_ptr is assigned into another (or passed as a pa- rameter), the overloaded assignment operator or constructor transfers ownership of the pointed-to object by changing the old pointer to null. (Move seman- tics, which we will describe in more detail in under “References in C++” in Sec- tion 9.3.1, often allow the compiler to optimize away the cost of the ownership transfer.) The shared_ptr type implements a reference count for the pointed-to object, typically storing it in a hidden, tombstone-like intermediate object. Counts are incremented in shared_ptr constructors, decremented in destructors, and ad-
@@ -620,7 +620,7 @@ Stop-and-Copy In a language with variable-size heap blocks, the garbage col- lec
 
 7 In many language implementations, the stack and heap grow toward each other from opposite ends of memory (Section 15.4); if the heap is full, the stack can’t grow. In a system with virtual memory the distance between the two may theoretically be enormous, but the space that backs them up on disk is still limited, and shared between them.
 
-![Figure 8.15 Heap exploration...](images/page_391_vector_416.png)
+![Figure 8.15 Heap exploration...](images/page_428_vector_416.png)
 *Figure 8.15 Heap exploration via pointer reversal. The block currently under examination is indicated by the curr pointer. The previous block is indicated by the prev pointer. As the garbage collector moves from one block to the next, it changes the pointer it follows to refer back to the previous block. When it returns to a block it restores the pointer. Each reversed pointer must be marked (indicated with a shaded box), to distinguish it from other, forward pointers in the same block.*
 
 Many garbage collectors employ a technique known as stop-and-copy that achieves compaction while simultaneously eliminating Steps 1 and 3 in the stan- dard mark-and-sweep algorithm. Speciﬁcally, they divide the heap into two re- gions of equal size. All allocation happens in the ﬁrst half. When this half is (nearly) full, the collector begins its exploration of reachable data structures. Each reachable block is copied into contiguous locations in the second half of the heap, with no external fragmentation. The old version of the block, in the ﬁrst half of the heap, is overwritten with a “useful” ﬂag and a pointer to the new location. Any other pointer that refers to the same block (and is found later in the exploration) is set to point to the new location. When the collector ﬁnishes its exploration, all useful objects have been moved (and compacted) into the second

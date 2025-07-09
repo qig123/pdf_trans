@@ -198,7 +198,7 @@ DESIGN & IMPLEMENTATION
 
 Shell languages tend to be heavily string-oriented. Commands are strings, parsed into lists of words. Variables are string-valued. Variable expansion mechanisms allow the user to extract preﬁxes, sufﬁxes, or arbitrary substrings. Concatenation is indicated by simple juxtaposition. There are elaborate quoting conventions. Few more conventional languages have similar support for strings. At the same time, shell languages are clearly not intended for the sort of text manipulation commonly performed in editors like emacs or vim. Search and substitution, in particular, are missing, and many other tasks that editors accom- plish with a single keystroke—insertion, deletion, replacement, bracket match- ing, forward and backward motion—would be awkward to implement, or simply make no sense, in the context of the shell. For repetitive text manipulation it is natural to want to automate the editing process. Tools to accomplish this task constitute the second principal class of ancestors for modern scripting languages.
 
-![Figure 14.1 Script in...](images/page_654_vector_266.png)
+![Figure 14.1 Script in...](images/page_746_vector_266.png)
 *Figure 14.1 Script in sed to extract headers from an HTML ﬁle. The script assumes that opening and closing tags are properly matched, and that headers do not nest.*
 
 Sed
@@ -207,7 +207,7 @@ As a simple text processing example, consider the problem of extracting all head
 
 Extracting HTML headers with sed ers from a web page (an HTML ﬁle). These are strings delimited by <h1> ... </h1>, <h2> ... </h2>, and <h3> ... </h3> tags. Accomplishing this task in an editor like emacs, vim, or even Microsoft Word is straightforward but tedious: one must search for an opening tag, delete preceding text, search for a closing tag, mark the current position (as the starting point for the next deletion), and re- peat. A program to perform these tasks in sed, the Unix “stream editor,” appears in Figure 14.1. The code consists of a label and three commands, the ﬁrst two of which are compound. The ﬁrst compound command prints the ﬁrst header, if any, found in the portion of the input currently being examined (what sed calls the pattern space). The second compound command appends a new line to the pattern space whenever it already contains a header-opening tag. Both compound commands, and several of the subcommands, use regular expression patterns, de- limited by slashes. We will discuss these patterns further in Section 14.4.2. The third command (the lone d) simply deletes the pattern space. Because each com- pound command ends with a branch back to the top of the script, the second will execute only if the ﬁrst does not, and the delete will execute only if neither compound does. ■ The editor heritage of sed is clear in this example. Commands are generally one character long, and there are no variables—no state of any kind beyond the program counter and text that is being edited. These limitations make sed best suited to “one-line programs,” typically entered verbatim from the keyboard with the -e command-line switch. The following, for example, will read from standard EXAMPLE 14.19
 
-![Figure 14.2 Script in...](images/page_655_vector_255.png)
+![Figure 14.2 Script in...](images/page_747_vector_255.png)
 *Figure 14.2 Script in awk to extract headers from an HTML ﬁle. Unlike the sed script, this version prints interior lines incrementally. It again assumes that the input is well formed.*
 
 sed -e'/^[[:space:]]*$/d'
@@ -220,7 +220,7 @@ In an attempt to address the limitations of sed, Alfred Aho, Peter Weinberger, a
 
 Extracting HTML headers with awk pair appears in Figure 14.2. It performs essentially the same task as the sed script of Figure 14.1. Lines that contain no opening tag are ignored. In a line with an opening tag, we delete any text that precedes the header. We then print lines until we ﬁnd the closing tag, and repeat if there is another opening tag on the same line. We fall back into the interpreter’s main loop when we’re cleanly outside any header. Several conventions can be seen in this example. The current input line is available in the pseudovariable $0. The getline function reads into this variable
 
-![Figure 14.3 Script in...](images/page_656_vector_265.png)
+![Figure 14.3 Script in...](images/page_748_vector_265.png)
 *Figure 14.3 Script in awk to capitalize a title. The BEGIN block is executed before reading any input lines. The main block has no explicit pattern, so it is applied to every input line.*
 
 by default. The substr(s, a, b) function extracts the portion of string s start- ing at position a and with length b. If b is omitted, the extracted portion runs to the end of s. Conditions, like patterns, can use regular expressions; we can see an example in the do ... while loop. By default, regular expressions match against $0. ■ Perhaps the two most important innovations of awk are ﬁelds and associative arrays, neither of which appears in Figure 14.2. Like the shell, awk parses each input line into a series of words (ﬁelds). By default these are delimited by white space, though the user can change this behavior dynamically by assigning a regu- lar expression to the built-in variable FS (ﬁeld separator). The ﬁelds of the current input line are available in the pseudovariables $1, $2, .... The built-in variable NR gives the total number of ﬁelds. Awk is frequently used for ﬁeld-based one-line programs. The following, for example, will print the second word of every line of EXAMPLE 14.21
@@ -233,7 +233,7 @@ Associative arrays will be considered in more detail in Section 14.4.3. Brieﬂy
 
 Capitalizing a title in awk illustrate both ﬁelds and associative arrays with an example script (Figure 14.3) that capitalizes each line of its input as if it were a title. The script declines to modify “noise” words (articles, conjunctions, and short prepositions) unless they are the ﬁrst word of the title or of a subtitle, where a subtitle follows a word ending with a colon or a dash. The script also declines to modify words in which any letter other than the ﬁrst is already capitalized. ■
 
-![Figure 14.4 Script in...](images/page_657_vector_167.png)
+![Figure 14.4 Script in...](images/page_749_vector_167.png)
 *Figure 14.4 Script in Perl to extract headers from an HTML ﬁle. For simplicity we have again adopted the strategy of buffering entire headers, rather than printing them incrementally.*
 
 Perl
@@ -256,7 +256,7 @@ From their text-processing ancestors, scripting languages inherit a rich set of 
 
 “Force quit” script in Perl simple example, consider the (Unix-speciﬁc) “force quit” Perl script shown in Fig- ure 14.5. Invoked with a regular expression as argument, the script identiﬁes all of the user’s currently running processes whose name, process id, or command-line arguments match that regular expression. It prints the information for each, and prompts the user for an indication of whether the process should be killed. The second line of the code starts a subsidiary process to execute the Unix ps command. The command-line arguments cause ps to print the process id and name of all processes owned by the current user, together with their full command-line arguments. The pipe symbol (|) at the end of the command in- dicates that the output of ps is to be fed to the script through the PS ﬁle handle. The main while loop then iterates over the lines of this output. Within the loop, the if condition matches each line against $ARGV[0], the regular expression pro- vided on the script’s command line. It also compares the ﬁrst word of the line (the process id) against $$, the id of the Perl interpreter currently running the script. Scalar variables (which in Perl include strings) begin with a dollar sign ($). Arrays begin with an at sign (@). In the ﬁrst line of the while loop in Figure 14.5, the input line ($_, implicitly) is split into space-separated words, which are then assigned into the array @words. In the following line, $words[0] refers to the ﬁrst element of this array, a scalar. A single variable name may have different values when interpreted as a scalar, an array, a hash table, a subroutine, or a ﬁle
 
-![Figure 14.5 Script in...](images/page_660_vector_287.png)
+![Figure 14.5 Script in...](images/page_752_vector_287.png)
 *Figure 14.5 Script in Perl to “force quit” errant processes. Perl’s text processing features allow us to parse the output of ps, rather than ﬁltering it through an external tool like sed or awk.*
 
 handle. The choice of interpretation depends on the leading punctuation mark and on the context in which the name appears. We shall have more to say about context in Perl in Section 14.4.3. ■ Beyond the combination of shell and text-processing mechanisms, the typi- cal glue language provides an extensive library of built-in operations to access features of the underlying operating system, including ﬁles, directories, and I/O; processes and process groups; protection and authorization; interprocess com- munication and synchronization; timing and signals; and sockets, name service, and network communication. Just as text-processing mechanisms minimize the need to employ external tools like sed, awk, and grep, operating system builtins minimize the need for other external tools. At the same time, scripting languages have, over time, developed a rich set of features for internal computation. Most have signiﬁcantly better support for mathematics than is typically found in a shell. Several, including Scheme, Python, and Ruby, support arbitrary precision arithmetic. Most provide extensive support for higher-level types, including arrays, strings, tuples, lists, and hashes (associa- tive arrays). Several support classes and object orientation. Some support itera- tors, continuations, threads, reﬂection, and ﬁrst-class and higher-order functions. Some, including Perl, Python, and Ruby, support modules and dynamic loading, for “programming in the large.” These features serve to maximize the amount of code that can be written in the scripting language itself, and to minimize the need to escape to a more traditional, compiled language.
@@ -271,7 +271,7 @@ As noted in Section 14.1, Rexx is generally considered the ﬁrst of the general
 
 2 Rexx and Tcl have object-oriented extensions, named Object Rexx and Incr Tcl, respectively. Perl 5 includes some (rather awkward) object-oriented features; Perl 6 will have more uniform object support.
 
-![Figure 14.6 Script in...](images/page_662_vector_352.png)
+![Figure 14.6 Script in...](images/page_754_vector_352.png)
 *Figure 14.6 Script in Python 3 to “force quit” errant processes. Compare with Figure 14.5.*
 
 lazily, the places in the string at which the pattern appears. If no match is found, search returns None, the empty object, instead. In a condition, None is inter- preted as false, while a true match object is interpreted as true. The match object in turn supports a variety of methods, including group, which returns the sub- string corresponding to the ﬁrst match. The re.I ﬂag to search indicates case insensitivity. Note that group returns a string. Unlike Perl and Tcl, Python will not coerce this to an integer—hence the need for the explicit type conversion on the second line of the body of the for loop. As in Perl, the readline method does not remove the newline character at the end of an input line; we use the rstrip method to do this. The print function adds a newline to the end of its argument list unless given a different end string. Unless explicitly instructed to flush, it also tends to buffer its output, waiting to call the OS until it has a large amount of data; this needs to be defeated for interactive IO. The sleep and kill routines are available as library built-ins in Python, much as they are in Perl; there is no need to start a separate program. When given a signal number of 0, kill tests for process existence. Instead of returning a status code, however, as it does in Perl, Python’s kill throws an exception if the process does not exist. We use a try block to catch this exception in the expected case. ■
@@ -288,7 +288,7 @@ Method call syntax in Ruby guage, in the sense of Smalltalk: everything—even i
 
 3 Parentheses here are signiﬁcant. Inﬁx arithmetic follows conventional precedence rules, but method invocation proceeds from left to right. Likewise, parentheses can be omitted around ar- gument lists, but the method-selecting dot (.) groups more tightly than the argument-separating comma (,), so 2.send ’*’, 4.send ’+’, 5 evaluates to 18, not 13.
 
-![Figure 14.7 Script in...](images/page_664_vector_375.png)
+![Figure 14.7 Script in...](images/page_756_vector_375.png)
 *Figure 14.7 Script in Ruby to “force quit” errant processes. Compare with Figures 14.5 and 14.6.*
 
 method of object ps is an iterator that invokes the associated block (the code in braces beginning with |line|) once for every line of data. For those more com- fortable with traditional for loop syntax, the iterator can also be written
@@ -307,7 +307,7 @@ incorporate, or communicate with, an interpreter for a scripting language. provi
 
 With care, these mechanisms can be made independentof any particular scripting language. Microsoft’s Windows Script interface allows almost any language to be used to script the operating system, web server, and browser. GIMP, the widely used GNU Image Manipulation Program, has a comparably general interface: it comes with a built-in interpreter for a dialect of Scheme, and supports plug-ins (externally provided interpreter modules) for Perl and Tcl, among others. There is a tendency, of course, for user communities to converge on a favorite language, to facilitate sharing of code. Microsoft tools are usually scripted with PowerShell; GIMP with Scheme; Adobe tools with Visual Basic on the PC, or AppleScript on the Mac.
 
-![Figure 14.8 Emacs Lisp...](images/page_666_vector_309.png)
+![Figure 14.8 Emacs Lisp...](images/page_758_vector_309.png)
 *Figure 14.8 Emacs Lisp function to number the lines in a selected region of text.*
 
 One of the oldest existing extension mechanisms is that of the emacs text ed- itor, used to write this book. An enormous number of extension packages have been created for emacs; many of them are installed by default in the standard distribution. In fact much of what users consider the editor’s core functionality is actually provided by extensions; the truly built-in parts are comparatively small. The extension language for emacs is a dialect of Lisp called Emacs Lisp, or EXAMPLE 14.28
@@ -342,7 +342,7 @@ Much of the content of the World Wide Web—particularly the content that is vis
 
 4 The term “URI” is often used interchangeably with “URL” (uniform resource locator), but the World Wide Web Consortium distinguishes between the two. All URIs are hierarchical (multi- part) names. URLs are one kind of URIs; they use a naming scheme that indicates where to ﬁnd the resource. Other URIs can use other naming schemes.
 
-![Figure 14.9 A simple...](images/page_669_vector_234.png)
+![Figure 14.9 A simple...](images/page_761_vector_234.png)
 *Figure 14.9 A simple CGI script in Perl. If this script is named status.perl, and is installed in the server’s cgi-bin directory, then a user anywhere on the Internet can obtain summary statistics and a list of users currently logged into the server by typing hostname/cgi-bin/status.perl into a browser window.*
 
 efﬁcient if executed on the client’s machine. Examples include interactive anima- tion, error-checking of ﬁll-in forms, and a wide variety of other self-contained calculations.
@@ -355,7 +355,7 @@ Remote monitoring with a CGI script would like to be able to monitor the status 
 
 Adder web form with a CGI script appears in Figure 14.11. The form element in the HTML ﬁle speciﬁes the URI of the CGI script, which is invoked when the user hits the Submit button. Values previously entered into the input ﬁelds are passed to the script either as a trailing
 
-![Figure 14.10 Sample output...](images/page_670_vector_405.png)
+![Figure 14.10 Sample output...](images/page_762_vector_405.png)
 *Figure 14.10 Sample output from the script of Figure 14.9. HTML source appears at top; the rendered page is below.*
 
 part of the URI (for a get-type form) or on the standard input stream (for a post-type form, shown here).5 With either method, we can access the values using the param routine of the standard CGI Perl library, loaded at the beginning of our script. ■
@@ -366,12 +366,12 @@ Though widely used, CGI scripts have several disadvantages:
 
 5 One typically uses post type forms for one-time requests. A get type form appears a little clumsier, because arguments are visibly embedded in the URI, but this gives it the advantage of repeatability: it can be “bookmarked” by client browsers.
 
-![Figure 14.11 An interactive...](images/page_671_vector_453.png)
+![Figure 14.11 An interactive...](images/page_763_vector_453.png)
 *Figure 14.11 An interactive CGI form. Source for the original web page is shown at the upper left, with the rendered page to the right. The user has entered 12 and 34 in the text ﬁelds. When the Submit button is pressed, the client browser sends a request to the server for URI /cgi-bin/add.perl. The values 12 and 13 are contained within the request. The Perl script, shown in the middle, uses these values to generate a new web page, shown in HTML at the bottom left, with the rendered page to the right.*
 
 The web server must launch each script as a separate program, with potentially signiﬁcant overhead (though a CGI script compiled to native code can be very fast once running). Because the server has little control over the behavior of a script, scripts must generally be installed in a trusted directory by trusted system administrators; they cannot reside in arbitrary locations as ordinary pages do.
 
-![Figure 14.12 A simple...](images/page_672_vector_221.png)
+![Figure 14.12 A simple...](images/page_764_vector_221.png)
 *Figure 14.12 A simple PHP script embedded in a web page. When served by a PHP-enabled host, this page performs the equivalent of the CGI script of Figure 14.9.*
 
 The name of the script appears in the URI, typically preﬁxed with the name of the trusted directory, so static and dynamic pages look different to end users. Each script must generate not only dynamic content but also the HTML tags that are needed to format and display it. This extra “boilerplate” makes scripts more difﬁcult to write.
@@ -380,7 +380,7 @@ To address these disadvantages, most web servers provide a “module-loading” 
 
 Remote monitoring with a PHP script in this ﬁgure is standard HTML. PHP code is embedded between <?php and ?> delimiters. These delimiters are not themselves HTML; rather, they indicate a processing instruction that needs to be executed by the PHP interpreter to generate replacement text. The “boilerplate” parts of the page can thus appear verbatim; they need not be generated by print (Perl) or echo (PHP) commands. Note that the separate script fragments are part of a single program. The $host variable, for example, is set in the ﬁrst fragment and used again in the second. ■
 
-![Figure 14.13 A fragmented...](images/page_673_vector_265.png)
+![Figure 14.13 A fragmented...](images/page_765_vector_265.png)
 *Figure 14.13 A fragmented PHP script. The if and for statements work as one might expect, despite the intervening raw HTML. When requested by a browser, this page displays the numbers from 0 to 19, with odd numbers written in bold.*
 
 PHP scripts can even be broken into fragments in the middle of structured EXAMPLE 14.32
@@ -399,7 +399,7 @@ The PHP script itself is shown in the top half of Figure 14.14. Form values are 
 
 Self-posting Adder web form reside in an arbitrary web directory, including the one in which the Adder page resides. In fact, by checking to see how a page was requested, we can merge the form and the script into a single page, and let it service its own requests! We illustrate this option in the bottom half of Figure 14.14. ■
 
-![Figure 14.14 An interactive...](images/page_674_vector_531.png)
+![Figure 14.14 An interactive...](images/page_766_vector_531.png)
 *Figure 14.14 An interactive PHP web page. The script at top could be used in place of the script in the middle of Figure 14.11. The lower script in the current ﬁgure replaces both the web page at the top and the script in the middle of Figure 14.11. It checks to see if it has received a full set of arguments. If it hasn’t, it displays the ﬁll-in form; if it has, it displays results.*
 
 14.3.3 Client-Side Scripts
@@ -412,7 +412,7 @@ Adder web form in JavaScript client) the behavior of the Adder scripts of Figure
 
 As an alternative to requiring client-side scripts to interact with the DOM of a web page, many browsers support an embedding mechanism that allows a browser plug-in to assume responsibility for some rectangular region of the page, in which it can then display whatever it wants. In other words, plug-ins are less a matter of scripting the browser than of bypassing it entirely. Historically, plug-ins were
 
-![Figure 14.15 An interactive...](images/page_676_vector_352.png)
+![Figure 14.15 An interactive...](images/page_768_vector_352.png)
 *Figure 14.15 An interactive JavaScript web page. Source appears at left. The rendered version on the right shows the appearance of the page after the user has entered two values and hit the Calculate button, causing the output message to appear. By entering new values and clicking again, the user can calculate as many sums as desired. Each new calculation will replace the output message.*
 
 widely used for content—animations and video in particular—that were poorly supported by HTML. Programs designed to be run by a Java plug-in are commonly known as ap- plets. Consider, for example, an applet to display a clock with moving hands. EXAMPLE 14.36
@@ -469,7 +469,7 @@ What Is the Scope of an Undeclared Variable?
 
 In languages with static scoping, the lack of declarations raises an interesting question: when we access a variable x, how do we know if it is local, global, or (if scopes can nest) something in-between? Existing languages take several different approaches. In Perl, all variables are global unless explicitly declared. In PHP, they are local unless explicitly imported (and all imports are global, since scopes do not nest). Ruby, too, has only two real levels of scoping, but as we saw in Sec- tion 14.2.4, it distinguishes between them using preﬁx characters on names: foo is a local variable; $foo is a global variable; @foo is an instance variable of the cur- rent object (the one whose method is currently executing); @@foo is an instance
 
-![Figure 14.16 A program...](images/page_681_vector_222.png)
+![Figure 14.16 A program...](images/page_773_vector_222.png)
 *Figure 14.16 A program to illustrate scope rules in Python. There is one instance each of j and k, but two of i: one global and one local to outer. The scope of the latter is all of outer, not just the portion after the assignment. The global statement provides inner with access to the outermost i, so it can write it without deﬁning a new instance.*
 
 variable of the current object’s class (shared by all sibling instances). (Note: as we shall see in Section 14.4.3, Perl uses similar preﬁx characters to indicate type. These very different uses are a potential source of confusion for programmers who switch between the two languages.) Perhaps the most interesting scope-resolution rule is that of Python and R. In these languages, a variable that is written is assumed to be local, unless it is explic- itly imported. A variable that is only read in a given scope is found in the closest enclosing scope that contains a deﬁning write. Consider, for example, the Python EXAMPLE 14.37
@@ -480,7 +480,7 @@ Scoping rules in Python program of Figure 14.16. Here we have a set of nested su
 
 Note that while the tuple returned from middle (forwarded on by outer, and printed by the main program) has a 2 as its ﬁrst element, the global i still con- tains the 4 that was written by inner. Note also that while the write to i in outer appears textually after the read of i in middle, its scope extends over all of outer, including the body of middle. ■ Interestingly, there is no way in Python for a nested routine to write a variable that belongs to a surrounding but nonglobal scope. In Figure 14.16, inner could EXAMPLE 14.38
 
-![Figure 14.17 A program...](images/page_682_vector_278.png)
+![Figure 14.17 A program...](images/page_774_vector_278.png)
 *Figure 14.17 A program to illustrate scope rules in Perl. The my operator creates a statically scoped local variable; the local operator creates a new dynamically scoped instance of a global variable. The static scope extends from the point of declaration to the lexical end of the block; the dynamic scope extends from elaboration to the end of the block’s execution.*
 
 does provide this functionality. Rather than declare i to be global, R uses a “su- perassignment” operator. Where a normal assignment i <- 4 assigns the value 4 into a local variable i, the superassignment i <<- 4 assigns 4 into whatever i would be found under the normal rules of static (lexical) scoping. ■
@@ -593,7 +593,7 @@ DESIGN & IMPLEMENTATION
 
 14.9 Automata for regular expressions POSIX regular expressions are typically implemented using the constructions described in Section 2.2.1, which transform the RE into an NFA and then a DFA. Advanced REs of the sort provided by Perl are typically implemented via backtracking search in the obvious NFA. The NFA-to-DFA construction is usually not employed because it fails to preserve some of the advanced RE extensions (notably the capture mechanism described in Examples 14.55– 14.58) [CfWO12, pp. 241–246]. Some implementations use a DFA ﬁrst to de- termine whether there is a match, and then an NFA or backtracking search to actually effect the match. This strategy pays the price of the slower automaton only when it’s sure to be worthwhile.
 
-![Figure 14.18 Regular expression...](images/page_688_vector_346.png)
+![Figure 14.18 Regular expression...](images/page_780_vector_346.png)
 *Figure 14.18 Regular expression escape sequences in Perl. Sequences in the top portion of the table represent individual characters. Sequences in the middle are zero-width assertions. Sequences at the bottom are built-in character classes. Note that these are only examples: Perl assigns a meaning to almost every backslash-character sequence.*
 
 For matching in multiline strings, a trailing s allows a dot (.) to match an em- bedded newline (which it normally cannot). A trailing m allows $ and ^ to match immediately before and after such a newline, respectively. A trailing x causes Perl to ignore both comments and embedded white space in the pattern so that partic- ularly complicated expressions can be broken across multiple lines, documented, and indented. In the tradition of C and its relatives (Example 8.29), Perl allows nonprinting characters to be speciﬁed in REs using backslash escape sequences. Some of the most frequently used examples appear in the top portion of Figure 14.18. Perl also provides several zero-width assertions, in addition to the standard ^ and $. Examples are shown in the middle of the ﬁgure. The \A and \Z escapes differ from ^ and $ in that they continue to match only at the beginning and end of the string, respectively, even in multiline searches that use the modiﬁer m. Finally, Perl provides several built-in character classes, some of which are shown at the bottom of the ﬁgure. These can be used both inside and outside user-deﬁned (i.e., bracket-delimited) classes. Note that \b has different meanings inside and outside such classes.
@@ -800,7 +800,7 @@ Perl 5
 
 Object support in Perl 5 boils down to two main things: (1) a “blessing” mecha- nism that associates a reference with a package, and (2) special syntax for method calls that automatically passes an object reference or package name as the ini- tial argument to a function. While any reference can in principle be blessed, the usual convention is to use a hash, so that ﬁelds can be named as shown in Exam- ple 14.63.
 
-![Figure 14.19 Object-oriented programming...](images/page_699_vector_277.png)
+![Figure 14.19 Object-oriented programming...](images/page_791_vector_277.png)
 *Figure 14.19 Object-oriented programming in Perl. Blessing a reference (object) into package Integer allows Integer’s functions to serve as the object’s methods.*
 
 As a very simple example, consider the Perl code of Figure 14.19. Here we have EXAMPLE 14.72
@@ -845,7 +845,7 @@ document.write(c2.get() + "&nbsp;&nbsp;" + c3.get() + "<br>"); c2.set(4); c3.set
 
 This code will print
 
-![Figure 14.20 Object-oriented programming...](images/page_702_vector_201.png)
+![Figure 14.20 Object-oriented programming...](images/page_794_vector_201.png)
 *Figure 14.20 Object-oriented programming in JavaScript. The Integer function is used as a constructor. Assignments to members of its prototype object serve to establish methods. These will be available to any object created by Integer that doesn’t have corresponding members of its own.*
 
 Interestingly, the lack of a formal notion of class means that we can override EXAMPLE 14.77
@@ -910,7 +910,7 @@ lack of declarations, simple scoping rules, ﬂexible dynamic typing, easy acces
 
 14.2 Write shell scripts to (a) Replace blanks with underscores in the names of all ﬁles in the current directory. (b) Rename every ﬁle in the current directory by prepending to its name a textual representation of its modiﬁcation date. (c) Find all eps ﬁles in the ﬁle hierarchy below the current directory, and create any corresponding pdf ﬁles that are missing or out of date. (d) Print the names of all ﬁles in the ﬁle hierarchy below the current di- rectory for which a given predicate evaluates to true. Your (quoted) predicate should be speciﬁed on the command line using the syntax of the Unix test command, with one or more at signs (@) standing in for the name of the candidate ﬁle. 14.3 In Example 14.16 we used "$@" to refer to the parameters passed to ll. What would happen if we removed the quote marks? (Hint: Try this for ﬁles whose names contain spaces!) Read the man page for bash and learn the difference between $@ and $*. Create versions of ll that use $* or "$*" instead of "$@". Explain what’s going on. 14.4 (a) Extend the code in Figure 14.5, 14.6, or 14.7 to try to kill processes more gently. You’ll want to read the man page for the standard kill command. Use a TERM signal ﬁrst. If that doesn’t work, ask the user if you should resort to KILL. (b) Extend your solution to part (a) so that the script accepts an optional argument specifying the signal to be used. Alternatives to TERM and KILL include HUP, INT, QUIT, and ABRT. 14.5 Write a Perl, Python, or Ruby script that creates a simple concordance: a sorted list of signiﬁcant words appearing in an input document, with a sublist for each that indicates the lines on which the word occurs, with up to six words of surrounding context. Exclude from your list all common articles, conjunctions, prepositions, and pronouns. 14.6 Write Emacs Lisp scripts to (a) Insert today’s date into the current buffer at the insertion point (cur- rent cursor location). (b) Place quote marks (" ") around the word surrounding the insertion point. (c) Fix end-of-sentence spaces in the current buffer. Use the following heuristic: if a period, question mark, or exclamation point is followed by a single space (possibly with closing quote marks, parentheses, brackets, or braces in-between), then add an extra space, unless the character preceding the period, question mark, or exclamation point is a capital letter (in which case we assume it is an abbreviation).
 
-![Figure 14.21 Pascal’s triangle...](images/page_708_vector_254.png)
+![Figure 14.21 Pascal’s triangle...](images/page_800_vector_254.png)
 *Figure 14.21 Pascal’s triangle rendered in a web page (Exercise 14.8).*
 
 (d) Run the contents of the current buffer through your favorite spell checker, and create a new buffer containing a list of misspelled words. (e) Delete one misspelled word from the buffer created in (d), and place the cursor (insertion point) on top of the ﬁrst occurrence of that mis- spelled word in the current buffer. 14.7 Explain the circumstances under which it makes sense to realize an inter- active task on the Web as a CGI script, an embedded server-side script, or a client-side script. For each of these implementation choices, give three examples of tasks for which it is clearly the preferred approach. 14.8 (a) Write a web page with embedded PHP to print the ﬁrst 10 rows of Pascal’s triangle (see Example C 17.10 if you don’t know what this is). When rendered, your output should look like Figure 14.21. (b) Modify your page to create a self-posting form that accepts the num- ber of desired rows in an input ﬁeld. (c) Rewrite your page in JavaScript. 14.9 Create a ﬁll-in web form that uses a JavaScript implementation of the Luhn formula (Exercise 4.10) to check for typos in credit card numbers. (But don’t use real credit card numbers; homework exercises don’t tend to be very secure!) 14.10 (a) Modify the code of Figure 14.15 (Example 14.35) so that it replaces the form with its output, as the CGI and PHP versions of Figures 14.11 and 14.14 do. (b) Modify the CGI and PHP scripts of Figures 14.11 and 14.14 (Exam- ples 14.30 and 14.34) so they appear to append their output to the bottom of the form, as the JavaScript version of Figure 14.15 does.

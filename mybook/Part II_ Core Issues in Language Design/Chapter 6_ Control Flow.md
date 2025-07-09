@@ -86,7 +86,7 @@ Unless A, B, C, and D were all of type Boolean, which is unlikely, this code wou
 
 Common rules for associativity group to the right or to the left. Conventions here are somewhat more uniform across languages, but still display some variety. The basic arithmetic operators almost always associate left-to-right, so 9 - 3 - 2 is 4 and not 8. In Fortran, as noted above, the exponentiation operator (**) follows standard mathematical convention, and associates right-to-left, so 4**3**2 is 262144 and not 4096. In Ada, exponentiation does not associate: one must write either (4**3)**2 or
 
-![Figure 6.1 Operator precedence...](images/page_224_vector_480.png)
+![Figure 6.1 Operator precedence...](images/page_261_vector_480.png)
 *Figure 6.1 Operator precedence levels in Fortran, Pascal, C, and Ada. The operators at the top of the ﬁgure group most tightly.*
 
 4**(3**2); the language syntax does not allow the unparenthesized form. In languages that allow assignments inside expressions (an option we will consider more in Section 6.1.2), assignment associates right-to-left. Thus in C, a = b = a + c assigns a + c into b and then assigns the same value into a. ■ Haskell is unusual in allowing the programmer to specify both the associativity EXAMPLE 6.11
@@ -117,7 +117,7 @@ L-values in C say 2 + 3 = a, or even a = 2 + 3, if a is the name of a constant. 
 
 (f(a)+3)->b[c] = 2;
 
-![Figure 6.2 The value...](images/page_227_vector_163.png)
+![Figure 6.2 The value...](images/page_264_vector_163.png)
 *Figure 6.2 The value (left) and reference (right) models of variables. Under the reference model, it becomes important to distinguish between variables that refer to the same object and variables that refer to different objects whose values happen (at the moment) to be equal.*
 
 of ﬁeld b of the structure pointed at by the third array element after the one to which f’s return value points. ■ In C++ it is even possible for a function to return a reference to a structure, EXAMPLE 6.14
@@ -574,10 +574,10 @@ r1 := . . . –– calculate controlling expression if r1 ̸= 1 goto L1 clause A
 
 Rather than test its controlling expression sequentially against a series of pos- sible values, the case statement is meant to compute an address to which it jumps in a single instruction. The general form of the anticipated target code appears EXAMPLE 6.54
 
-![Figure 6.3 General form...](images/page_254_vector_256.png)
+![Figure 6.3 General form...](images/page_291_vector_256.png)
 *Figure 6.3 General form of target code generated for a ﬁve-arm case statement.*
 
-![Figure 6.4 Jump table...](images/page_254_vector_484.png)
+![Figure 6.4 Jump table...](images/page_291_vector_484.png)
 *Figure 6.4 Jump table to control branching in a case statement. This code replaces the last three lines of Figure 6.3.*
 
 The “code” at label T in that ﬁgure is in fact an array of addresses, known as a jump table. It contains one entry for each integer between the lowest and highest values, inclusive, found among the case statement labels. The code at L6 checks to make sure that the controlling expression is within the bounds of the array (if not, we should execute the others arm of the case statement). It then fetches the corresponding entry from the table and branches to it. ■
@@ -738,7 +738,7 @@ Simple iterator in Python FOR i := first TO last BY step DO ... END
 
 would be written as follows in Python:
 
-![Figure 6.5 Python iterator...](images/page_265_vector_244.png)
+![Figure 6.5 Python iterator...](images/page_302_vector_244.png)
 *Figure 6.5 Python iterator for preorder enumeration of the nodes of a binary tree. Because Python is dynamically typed, this code will work for any data that support the operations needed by insert, lookup, and so on (probably just <). In a statically typed language, the BinTree class would need to be generic.*
 
 for i in range(first, last, step): ...
@@ -771,7 +771,7 @@ DESIGN & IMPLEMENTATION
 
 6.9 “True” iterators and iterator objects While the iterator library mechanisms of C++ and Java are highly useful, it is worth emphasizing that they are not the functional equivalents of “true” iterators, as found in Clu, Python, Ruby, and C#. Their key limitation is the need to maintain all intermediate state in the form of explicit data structures, rather than in the program counter and local variables of a resumable execu- tion context.
 
-![Figure 6.6 Java code...](images/page_267_vector_408.png)
+![Figure 6.6 Java code...](images/page_304_vector_408.png)
 *Figure 6.6 Java code for preorder enumeration of the nodes of a binary tree. The nested TreeIterator class uses an explicit Stack object (borrowed from the standard library) to keep track of subtrees whose nodes have yet to be enumerated. Java generics, speciﬁed as <T> type arguments for BinTree, Stack, Iterator, and Iterable, allow next to return an object of the appropriate type, rather than the undifferentiated Object. The remove method is part of the Iterator interface, and must therefore be provided, if only as a placeholder.*
 
 This loop is syntactic sugar for

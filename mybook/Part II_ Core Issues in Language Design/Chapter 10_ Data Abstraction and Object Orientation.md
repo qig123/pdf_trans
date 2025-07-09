@@ -22,7 +22,7 @@ To create an empty list, one could then write
 
 class list_err { // exception public: const char *description; list_err(const char *s) {description = s;} };
 
-![Figure 10.1 A simple...](images/page_470_vector_606.png)
+![Figure 10.1 A simple...](images/page_507_vector_606.png)
 *Figure 10.1 A simple class for list nodes in C++. In this example we envision a list of integers.*
 
 Records to be inserted into a list are created in much the same way:
@@ -287,10 +287,10 @@ Smalltalk, Objective-C, Eiffel, C++, Java, and C# were all designed from the out
 
 List and queue abstractions in Ada 2005 Figure 10.2. To control access to the structure of types, we hide them inside Ada packages. The procedures initialize, finalize, enqueue, and dequeue of g_list.queue can convert their parameter self to a list_ptr, because queue is an extension of list. Package g_list.queue is said to be a child of package g_list because its name is preﬁxed with that of its parent. A child package in Ada is similar to a derived class in Eiffel or C++, except that it is still a manager, not a type. Like Eiffel, but unlike C++, Ada allows the body of a child package to see the private parts of the parent package. All of the list and queue subroutines in Figure 10.2 take an explicit ﬁrst param- eter. Ada 95 and CLOS do not use “object.method()” notation. Python and Ada 2005 do use this notation, but only as syntactic sugar: a call to A.B(C, D)
 
-![Figure 10.2 Generic list...](images/page_488_vector_525.png)
+![Figure 10.2 Generic list...](images/page_525_vector_525.png)
 *Figure 10.2 Generic list and queue abstractions in Ada 2005. The tagged types list and queue provide inheritance; the packages provide encapsulation. Declaring self to have type access XX (instead of XX_ptr) causes the compiler to recognize the subroutine as a method of the tagged type; ptr.method(args) is syntactic sugar for method(ptr,args) if ptr refers to an object of a tagged type. Function delete_node (next page) uses the Unchecked_Deallocation library package to create a type-speciﬁc routine for memory reclamation. The expression list_ptr(self) is a (type-safe) cast. (continued)*
 
-![Figure 10.2 (continued)...](images/page_489_vector_600.png)
+![Figure 10.2 (continued)...](images/page_526_vector_600.png)
 *Figure 10.2 (continued)*
 
 is interpreted as a call to B(A, C, D), where B is declared as a three-parameter subroutine. Arbitrary Ada code can pass an object of type queue to any routine that expects a list; as in Java, there is no way for a derived type to hide the public members of a base type. ■
@@ -577,10 +577,10 @@ Vtables a reference or pointer variable must contain sufﬁcient information to 
 
 Implementation of a virtual method call that m is the third method of class foo, and that f is a pointer to an object of class foo. Then the code to call f->m() looks something like this:
 
-![Figure 10.3 Implementation of...](images/page_506_vector_203.png)
+![Figure 10.3 Implementation of...](images/page_543_vector_203.png)
 *Figure 10.3 Implementation of virtual methods. The representation of object F begins with the address of the vtable for class foo. (All objects of this class will point to the same vtable.) The vtable itself consists of an array of addresses, one for the code of each virtual method of the class. The remainder of F consists of the representations of its ﬁelds.*
 
-![Figure 10.4 Implementation of...](images/page_506_vector_354.png)
+![Figure 10.4 Implementation of...](images/page_543_vector_354.png)
 *Figure 10.4 Implementation of single inheritance. As in Figure 10.3, the representation of object B begins with the address of its class’s vtable. The ﬁrst four entries in the table represent the same members as they do for foo, except that one—m—has been overridden and now contains the address of the code for a different subroutine. Additional ﬁelds of bar follow the ones inherited from foo in the representation of B; additional virtual methods follow the ones inherited from foo in the vtable of class bar.*
 
 r1 := f r2 := ∗r1 –– vtable address r2 := ∗(r2 + (3−1) × 4) –– assuming 4 = sizeof (address) call ∗r2
@@ -643,7 +643,7 @@ The bind routine (an automatically instantiated generic function) encapsulates i
 
 34. What is a class-wide type in Ada 95? 35. Explain the connection between dynamic method binding and polymor- phism.
 
-![Figure 10.5 Subroutine pointers...](images/page_511_vector_409.png)
+![Figure 10.5 Subroutine pointers...](images/page_548_vector_409.png)
 *Figure 10.5 Subroutine pointers and virtual methods. Class call_foo encapsulates a subrou- tine pointer and values to be passed to the subroutine. It exports a parameter-less subroutine that can be used to trigger the encapsulated call.*
 
 36. What is an abstract method (also called a pure virtual method in C++ and a deferred feature in Eiffel)? 37. What is reverse assignment? Why does it require a run-time check?
@@ -674,10 +674,10 @@ r2 := ∗r1 –– vtable address r3 := ∗r2 –– this correction r3 +:= r1 �
 
 Here we have assumed that the this correction occupies the ﬁrst four bytes of the vtable, and that the address of get_stored_name lies immediately af- ter it, in the table’s ﬁrst regular slot. We have also assumed that this should be passed in register r3, and that there are no other arguments. On a typi- cal modern machine this code is two instructions (a load and a subtraction)
 
-![Figure 10.6 Interface classes...](images/page_514_vector_594.png)
+![Figure 10.6 Interface classes...](images/page_551_vector_594.png)
 *Figure 10.6 Interface classes in Java. By implementing the sortable_object interface in named_widget and the graphable_object and storable_object interfaces in augmented_ widget, we obtain the ability to pass objects of those classes to and from such routines as sorted_list.insert, browser_window.add_to_window, and dictionary.insert.*
 
-![Figure 10.7 Implementation of...](images/page_515_vector_313.png)
+![Figure 10.7 Implementation of...](images/page_552_vector_313.png)
 *Figure 10.7 Implementation of mix-in inheritance. Objects of class augmented_widget con- tain four vtable addresses, one for the class itself (as in Figure 10.3), and three for the imple- mented interfaces. The view of the object that is passed to interface routines points directly at the relevant vtable pointer. The vtable then begins with a “this correction” offset, used to regenerate a pointer to the object itself.*
 
 longer than the code required with single inheritance. Once it executes, however, augmented_widget.get_stored_name will be running with exactly the param- eter it expects: a reference to an augmented_widget object. ■
@@ -762,7 +762,7 @@ Does the representation of a bar object contain one b ﬁeld or two? If two, are
 
 (a) Draw a picture of the layout in memory of the object created at line 15. Show all virtual function tables. (b) Give assembly-level pseudocode for the call to c.val at line 19. You may assume that the address of c is in register r1 immediately before the call, and that this same register should be used to pass the hidden this parameter. You may ignore the need to save and restore registers, and don’t worry about where to put the return value.
 
-![Figure 10.8 A simple...](images/page_524_vector_324.png)
+![Figure 10.8 A simple...](images/page_561_vector_324.png)
 *Figure 10.8 A simple program in Java.*
 
 (c) Give assembly-level pseudocode for the call to c.ping at line 17. Again, assume that the address of c is in register r1, that this is the same register that should be used to pass this, and that you don’t need to save or restore any registers. (d) Give assembly-levelpseudocode for the body of method Counter.ping (again ignoring register save/restore).

@@ -172,7 +172,7 @@ If the number of existing rules is very large, but the number of facts is small,
 
 Search tree exploration can be described in terms of a tree of subgoals, as shown in Figure 12.1. The Prolog interpreter (or program) explores this tree depth ﬁrst, from left to right. It starts at the beginning of the database, searching for a rule R whose head can be uniﬁed with the top-level goal. It then considers the terms in the body of R as subgoals, and attempts to satisfy them, recursively, left to right. If at any point a subgoal fails (cannot be satisﬁed), the interpreter returns to the previous subgoal and attempts to satisfy it in a different way (i.e., to unify it with the head of a different clause). ■
 
-![Figure 12.1 Backtracking search...](images/page_540_vector_331.png)
+![Figure 12.1 Backtracking search...](images/page_632_vector_331.png)
 *Figure 12.1 Backtracking search in Prolog. The tree of potential resolutions consists of alter- nating AND and OR levels. An AND level consists of subgoals from the right-hand side of a rule, all of which must be satisﬁed. An OR level consists of alternative database clauses whose head will unify with the subgoal above; one of these must be satisﬁed. The notation _C = _X is meant to indicate that while both C and X are uninstantiated, they have been associated with one another in such a way that if either receives a value in the future it will be shared by both.*
 
 The process of returning to previous goals is known as backtracking. It strongly resembles the control ﬂow of generators in Icon (Section C 6.5.4). Whenever a uniﬁcation operation is “undone” in order to pursue a different path through the search tree, variables that were given values or associated with one another as a result of that uniﬁcation are returned to their uninstantiated or unassociated state. In Figure 12.1, for example, the binding of X to seattle is broken when EXAMPLE 12.16
@@ -195,7 +195,7 @@ From a logical point of view, our database still deﬁnes the same relationships
 
 12.2.5 Extended Example: Tic-Tac-Toe
 
-![Figure 12.2 Inﬁnite regression...](images/page_542_vector_302.png)
+![Figure 12.2 Inﬁnite regression...](images/page_634_vector_302.png)
 *Figure 12.2 Inﬁnite regression in Prolog. In this ﬁgure even a simple query like ?- path(a, a) will never terminate: the interpreter will never ﬁnd the trivial branch.*
 
 a Prolog program and its ability to terminate. Ordering also allows the Prolog programmer to indicate that certain resolutions are preferred, and should be con- sidered before other, “fallback” options. Consider, for example, the problem of making a move in tic-tac-toe. (Tic-tac-toe is a game played on a 3 × 3 grid of squares. Two players, X and O, take turns placing markers in empty squares. A player wins if he or she places three markers in a row, horizontally, vertically, or diagonally.) Let us number the squares from 1 to 9 in row-major order. Further, let us use the Prolog fact x(n) to indicate that player X has placed a marker in square n, and o(m) to indicate that player O has placed a marker in square m. For simplicity, let us assume that the computer is player X, and that it is X’s turn to move. We should like to be able to issue a query ?- move(A) that will cause the Prolog interpreter to choose a good square A for the computer to occupy next. Clearly we need to be able to tell whether three given squares lie in a row. One way to express this is:
@@ -224,7 +224,7 @@ Our third choice is to create a “split”—a situation in which our opponent 
 
 split(A) :- x(B), x(C), different(B, C), line(A, B, D), line(A, C, E), empty(D), empty(E). same(A, A). different(A, B) :- \+(same(A, B)).
 
-![Figure 12.3 A “split”...](images/page_544_vector_172.png)
+![Figure 12.3 A “split”...](images/page_636_vector_172.png)
 *Figure 12.3 A “split” in tac-tac-toe. If X takes the bottom center square (square 8), no future move by O will be able to stop X from winning the game—O cannot block both the 2–5–8 line and the 7–8–9 line.*
 
 Here we have again relied on the built-in predicate \+. Our fourth choice is to build toward three in a row (i.e., to get two in a row) in such a way that the obvious blocking move won’t allow our opponent to build toward three in a row:
@@ -353,7 +353,7 @@ DESIGN & IMPLEMENTATION
 
 ordered_line(1, 2, 3). ordered_line(4, 5, 6). ordered_line(7, 8, 9). ordered_line(1, 4, 7). ordered_line(2, 5, 8). ordered_line(3, 6, 9). ordered_line(1, 5, 9). ordered_line(3, 5, 7). line(A, B, C) :- ordered_line(A, B, C). line(A, B, C) :- ordered_line(A, C, B). line(A, B, C) :- ordered_line(B, A, C). line(A, B, C) :- ordered_line(B, C, A). line(A, B, C) :- ordered_line(C, A, B). line(A, B, C) :- ordered_line(C, B, A).
 
-![Figure 12.4 Tic-tac-toe program...](images/page_550_vector_583.png)
+![Figure 12.4 Tic-tac-toe program...](images/page_642_vector_583.png)
 *Figure 12.4 Tic-tac-toe program in Prolog.*
 
 Individual terms in Prolog can be created, or their contents extracted, using EXAMPLE 12.30

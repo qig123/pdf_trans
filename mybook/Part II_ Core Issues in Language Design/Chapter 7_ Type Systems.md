@@ -462,7 +462,7 @@ DESIGN & IMPLEMENTATION
 
 7.7 Type classes for overloaded functions in Haskell In the OCaml code of Figure 7.1, parameters x, p, and q must support the equality operator (=). OCaml makes this easy by allowing anything to be compared for equality, and then checking at run time to make sure that the comparison actually makes sense. An attempt to compare two functions, for example, will result in a run-time error. This is unfortunate, given that most other type checking in OCaml (and in other ML-family languages) can happen at compile time. In a similar vein, OCaml provides a built-in deﬁnition of or- dering (<, >, <=, and >=) on almost all types, even when it doesn’t make sense, so that the programmer can create polymorphic functions like min, max, and sort, which require it. A function like average, which might plausibly work in a polymorphic fashion for all numeric types (presumably with roundoff for integers) cannot be deﬁned in OCaml: each numeric type has its own addition and division operations; there is no operator overloading. Haskell overcomes these limitations using the machinery of type classes. As mentioned in Example 3.28, these explicitly identify the types that support a particular overloaded function or set of functions. Elements of any type in the Ord class, for example, support the <, >, <=, and >= operations. Elements of any type in the Enum class are countable; Num types support addition, subtrac- tion, and multiplication; Fractional and Real types additionally support division. In the Haskell equivalent of the code in Figure 7.1, parameters x, p, and q would be inferred to belong to some type in the class Eq. Elements of an array passed to sort would be inferred to belong to some type in the class Ord. Type consistency in Haskell can thus be veriﬁed entirely at compile time: there is no need for run-time checks.
 
-![Figure 7.1 An OCaml...](images/page_326_vector_156.png)
+![Figure 7.1 An OCaml...](images/page_363_vector_156.png)
 *Figure 7.1 An OCaml program to illustrate checking for type consistency.*
 
 and takes, implicitly, the role of an explicit type parameter in a generic construct (Sections 7.3.1 and 10.1.1). Every instance of ‚a in a given call to = must repre- sent the same type, but instances of ‚a in different calls can be different. Starting with the type of =, an OCaml compiler can reason that the type of compare is ‚a -> ‚a -> ‚a -> string. Thus compare is polymorphic; it does not de- pend on the types of x, p, and q, so long as they are all the same. The key point to observe is that the programmer did not have to do anything special to make compare polymorphic: polymorphism is a natural consequence of ML-style type inference. ■
@@ -523,7 +523,7 @@ Generic queues in C++ abstractions whose instances hold a collection of other ob
 
 Generic parameters an example in Figure 7.3, where an integer parameter has been used to specify the
 
-![Figure 7.2 Overloading (left)...](images/page_330_vector_256.png)
+![Figure 7.2 Overloading (left)...](images/page_367_vector_256.png)
 *Figure 7.2 Overloading (left) versus generics (right) in Ada.*
 
 maximum length of the queue. In C++, this value must be a compile-time con- stant; in Ada, which supports dynamic-size arrays (Section 8.2.2), its evaluation can be delayed until elaboration time. ■
@@ -536,7 +536,7 @@ DESIGN & IMPLEMENTATION
 
 7.9 Generics in ML Perhaps surprisingly, given the implicit polymorphism that comes “for free” with type inference, both OCaml and SML provide explicit polymorphism— generics—as well, in the form of parameterized modules called functors. Un- like the implicit polymorphism, functors allow the OCaml or SML program- mer to indicate that a collection of functions and other values (i.e., the contents of a module) share a common set of generic parameters. This sharing is then enforced by the compiler. Moreover, any types exported by a functor invoca- tion (generic instantiation) are guaranteed to be distinct, even though their signatures (interfaces) are the same. As in Ada and C++, generic parameters in ML can be values as well as types. NB: While Haskell also provides something called a Functor (speciﬁcally, a type class that supports a mapping function), its use of the term has little in common with that of OCaml and SML.
 
-![Figure 7.3 Generic array-based...](images/page_331_vector_321.png)
+![Figure 7.3 Generic array-based...](images/page_368_vector_321.png)
 *Figure 7.3 Generic array-based queue in C++.*
 
 goes farther, and arranges to type-check each of these instances independently.) If several queues are instantiated with the same set of arguments, then the compiler may share the code of the enqueue and dequeue routines among them. A clever compiler may arrange to share the code for a queue of integers with the code for a queue of ﬂoating-point numbers, if the two types happen to have the same size, but this sort of optimization is not required, and the programmer should not be surprised if it doesn’t occur. Java, by contrast, guarantees that all instances of a given generic will share the same code at run time. In effect, if T is a generic type parameter in Java, then ob- jects of class T are treated as instances of the standard base class Object, except that the programmer does not have to insert explicit casts to use them as objects of class T, and the compiler guarantees, statically, that the elided casts will never fail. C# plots an intermediate course. Like C++, it will create specialized imple- mentations of a generic for different primitive or value types. Like Java, however, it requires that the generic code itself be demonstrably type safe, independent of the arguments provided in any particular instantiation. We will examine the tradeoffs among C++, Java, and C# generics in more detail in Section C 7.3.2.
@@ -599,7 +599,7 @@ we can perform the following calls without instantiating anything explicitly:
 
 sort(ints, 10); sort(reals, 50); sort(strings, 30);
 
-![Figure 7.4 Mechanisms for...](images/page_335_vector_294.png)
+![Figure 7.4 Mechanisms for...](images/page_372_vector_294.png)
 *Figure 7.4 Mechanisms for parametric polymorphism in Ada, C++, Java, C#, Lisp, and ML. Erasure and reiﬁcation are discussed in Section C 7.3.2.*
 
 In each case, the compiler will implicitly instantiate an appropriate version of the sort routine. Java and C# have similar conventions. To keep the language man- ageable, the rules for implicit instantiation in C++ are more restrictive than the rules for resolving overloaded subroutines in general. In particular, the compiler will not coerce a subroutine argument to match a type expression containing a generic parameter (Exercise C 7.26). ■ Figure 7.4 summarizes the features of Ada, C++, Java, and C# generics, and of the implicit parametric polymorphism of Lisp and ML. Further explanation of some of the details appears in Section C 7.3.2.

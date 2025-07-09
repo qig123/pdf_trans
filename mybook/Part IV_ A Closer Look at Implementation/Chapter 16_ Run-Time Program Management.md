@@ -68,7 +68,7 @@ Per-thread data A program running on the JVM begins with a single thread. Additi
 
 Heap In keeping with the type system of the Java language, a datum in the local variable array or the operand stack is always either a reference or a value of a built-in scalar type. Structured data (objects and arrays) must always lie in the
 
-![Figure 16.1 Content of...](images/page_756_vector_387.png)
+![Figure 16.1 Content of...](images/page_848_vector_387.png)
 *Figure 16.1 Content of the JVM constant pool for the program in Example 16.2. The “Asciz” entries (zero-terminated ASCII) contain null-terminated character-string names. Most other entries pair an indication of the kind of constant with a reference to one or more additional entries. This output was produced by Sun’s javap tool.*
 
 heap. They are allocated, dynamically, using the new and newarray instructions. They are reclaimed automatically via garbage collection. The choice of collection algorithm is left to the implementor of the JVM. To facilitate sharing among threads, the Java language provides the equivalent of monitors with a lock and a single, implicit condition variable per object, as described in Section 13.4.3. The JVM provides direct support for this style of synchronization. Each object in the heap has an associated mutual exclusion lock; in a typical implementation, the lock maintains a set of threads waiting for entry to the monitor. In addition, each object has an associated set of threads that are waiting for the monitor’s condition variable.4 Locks are acquired with the monitorenter instruction and released with the monitorexit instruction. Most
@@ -111,7 +111,7 @@ Veriﬁcation Safety was one of the principal concerns in the deﬁnition of the
 
 public void insert(int v) { node n = head;
 
-![Figure 16.2 Java source...](images/page_760_vector_564.png)
+![Figure 16.2 Java source...](images/page_852_vector_564.png)
 *Figure 16.2 Java source and bytecode for a list insertion method. Output on the right was produced by Oracle’s javac (compiler) and javap (disassembler) tools, with additional comments inserted by hand.*
 
 Other aspects of safety are guaranteed by the JVM during execution. Field access and method call instructions throw an exception if given a null reference. Similarly, array load and store instructions throw an exception if the index is not within the bounds of the array. When it ﬁrst loads a class ﬁle, the JVM checks the top-level structure of the ﬁle. Among other things, it veriﬁes that the ﬁle begins with the appropriate “magic number,” that the speciﬁed sizes of the various sections of the ﬁle are all within bounds, and that these sizes add up to the size of the overall ﬁle. When it links the class ﬁle into the rest of the program, the JVM checks additional constraints. It veriﬁes that all items in the constant pool are well formed, and that nothing inherits from a final class. More signiﬁcantly, it performs a host of checks on the bytecode of the class’s methods. Among other things, the bytecode veriﬁer ensures that every variable is initialized before it is read, that every operation is type-safe, and that the operand stacks of methods never overﬂow or under- ﬂow. All three of these checks require data ﬂow analysis to determine that desired properties (initialization status, types of slots in the local stack frame, depth of the operand stack) are the same on every possible path to a given point in the program. We will consider data ﬂow in more detail in Section C 17.4.
@@ -264,7 +264,7 @@ In a long-running program, a dynamic translator may revisit hot paths and opti- 
 
 The Dynamo dynamic optimizer namo project at HP Labs in the late 1990s. Dynamo was designed to transparently enhance the performance of applications for the PA-RISC instruction set. A sub- sequent version, DynamoRIO, was written for the x86. Dynamo’s key innovation was the concept of a partial execution trace: a hot path whose basic blocks can be reorganized, optimized, and cached as a linear sequence. An example of such a trace appears in Figure 16.3. Procedure print matching takes a set and a predicate as argument, and prints all elements of the set that match the predicate. At run time, Dynamo may discover that the procedure is frequently called with a particular predicate p that is almost never true. The hot path through the ﬂow graph (left side of the ﬁgure) can then be turned into the trace at the right. If print matching is sometimes called with a different predi- cate p, it will use a separate copy of the code. Branches out of the trace (in the
 
-![Figure 16.3 Creation of...](images/page_773_vector_360.png)
+![Figure 16.3 Creation of...](images/page_865_vector_360.png)
 *Figure 16.3 Creation of a partial execution trace. Procedure print matching (shown at top) is often called with a particular predicate, p, which is usually false. The control ﬂow graph (left, with hot blocks in bold and the hot path in grey) can be reorganized at run time to improve instruction-cache locality and to optimize across abstraction boundaries (right).*
 
 loop-termination and predicate-checking tests) jump either to other traces or, if appropriate ones have not yet been created, back into Dynamo. By identifying and optimizing traces, Dynamo is able to signiﬁcantly improve locality in the instruction cache, and to apply standard code improvement tech- niques across the boundaries between separately compiled modules and dynam- ically loaded libraries. In Figure 16.3, for example, it will perform register allo- cation jointly across print matchings and the predicate p. It can even perform instruction scheduling across basic blocks if it inserts appropriate compensating code on branches out of the trace. An instruction in block test2, for example, can be moved into the loop footer if a copy is placed on the branch to the right. Traces have proved to be a very powerful technique. They are used not only by dy- namic optimizers, but by dynamic translators like Rosetta as well, and by binary instrumentation tools like Pin (to be discussed in Section 16.2.3). ■
@@ -363,7 +363,7 @@ Given a Class object c, one can call c.getSuperclass() to obtain a Class object 
 
 Listing the methods of a Java class by) a given class. Also shown is output for AccessibleObject, the parent class of Method, Field, and Constructor. (The primary purpose of this class is to
 
-![Figure 16.4 Java reﬂection...](images/page_781_vector_407.png)
+![Figure 16.4 Java reﬂection...](images/page_873_vector_407.png)
 *Figure 16.4 Java reﬂection code to list the methods of a given class. Sample output is shown below below the code.*
 
 control whether the reﬂection interface can be used to override access control [private, protected] for the given object.) ■ One can even use reﬂection to call a method of an object whose class is not EXAMPLE 16.23
@@ -404,7 +404,7 @@ The C# equivalent of Figure 16.5 appears in Figure 16.6. Here user-deﬁned EXAM
 
 User-deﬁned annotations in C# annotations (known as attributes in C#) are classes, not interfaces, and the syntax for attaching an attribute to a declaration uses square brackets instead of an @ sign. ■ In effect, annotations (attributes) serve as compiler-supported comments, with well-deﬁned structure and an API that makes them accessible to automated perusal. As we have seen, they may be read by the compiler (as pragmas) or by reﬂective programs. They may also be read by independent tools. Such tools can be surprisingly versatile. An obvious use is the automated creation of documentation. Java annotations EXAMPLE 16.27
 
-![Figure 16.5 User-deﬁned annotations...](images/page_784_vector_374.png)
+![Figure 16.5 User-deﬁned annotations...](images/page_876_vector_374.png)
 *Figure 16.5 User-deﬁned annotations in Java. Retention is a built-in annotation for annota- tions. It indicates here that Documentation annotations should be saved in the class ﬁle pro- duced by the Java compiler, where they will be available to run-time reﬂection.*
 
 earlier javadoc tool, which produces HTML-formatted documentation based on structured comments in Java source code. The @Documented annotation, when attached to the declaration of a user-deﬁned annotation, indicates that javadoc should include the annotation when creating its reports. One can easily imagine more sophisticated documentation systems that tracked the version history and bug reports for a program over time. ■ The various communication technologies in .NET make extensive use of at- EXAMPLE 16.28
@@ -413,7 +413,7 @@ Intercomponent communication tributes to indicate which methods should be availa
 
 Attributes for LINQ ping between classes in a user program and tables in a relational database, allow-
 
-![Figure 16.6 User-deﬁned attributes...](images/page_785_vector_407.png)
+![Figure 16.6 User-deﬁned attributes...](images/page_877_vector_407.png)
 *Figure 16.6 User-deﬁned attributes in C#. This code is roughly equivalent to the Java version in Figure 16.5. AttributeUsage is a predeﬁned attribute indicating properties of the attribute to whose declaration it is attached.*
 
 ing an automatic tool to generate SQL queries that implement iterators and other language-level operations. ■ In an even more ambitious vein, independent tools can be used to modify or analyze programs based on annotations. One could imagine inserting logging code into certain annotated methods, or building a testing harness that called annotated methods with speciﬁed arguments and checked for expected results (Exercise 16.11). JML, the Java Modeling Language, allows the programmer to EXAMPLE 16.30
