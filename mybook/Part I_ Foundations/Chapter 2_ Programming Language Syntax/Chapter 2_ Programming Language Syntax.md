@@ -18,5 +18,3 @@ Here the “Kleene1 star” metasymbol (*) is used to indicate zero or more repe
 
 1 Stephen Kleene (1909–1994), a mathematician at the University of Wisconsin, was responsible for much of the early development of the theory of computation, including much of the material in Section C 2.4.
 
-43
-

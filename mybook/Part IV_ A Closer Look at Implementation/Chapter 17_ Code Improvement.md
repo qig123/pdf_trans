@@ -8,7 +8,3 @@ IN MORE DEPTH
 
 Chapter 17 can be found in its entirety on the companion site.
 
-857
-
-This page intentionally left blank
-

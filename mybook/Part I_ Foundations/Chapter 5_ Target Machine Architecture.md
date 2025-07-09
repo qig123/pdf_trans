@@ -8,10 +8,6 @@ IN MORE DEPTH
 
 Chapter 5 can be found in its entirety on the companion site. It provides a brief overview of those aspects of processor architecture and implementation of partic- ular importance to compiler writers, and may be worth reviewing even by readers who have seen the material before. Principal topics include data representation, instruction set architecture, the evolution of implementation techniques, and the challenges of compiling for modern processors. Examples are drawn largely from the x86, a legacy CISC (complex instruction set) architecture that dominates the desktop/laptop market, and the ARM, a more modern RISC (reduced instruction set) design that dominates the embedded, smart phone, and tablet markets.
 
-217
-
-218 Chapter 5 Target Machine Architecture
-
 DESIGN & IMPLEMENTATION
 
 5.1 Pseudo-assembly notation At various times throughout the remainder of this book, we shall need to con- sider sequences of machine instructions corresponding to some high-level lan- guage construct. Rather than present these sequences in the assembly language of some particular processor architecture, we will (in most cases) rely on a sim- ple notation designed to represent a generic RISC machine. The following is a brief example that sums the elements of an n-element ﬂoating-point vector, V, and places the results in s:
@@ -19,6 +15,4 @@ DESIGN & IMPLEMENTATION
 r1 = &V r2 := n f1 := 0 goto L2 L1: f2 := *r1 –– load f1 +:= f2 r1 +:= 8 –– ﬂoating-point numbers are 8 bytes long r2 −:= 1 L2: if r2 > 0 goto L1 s := f1
 
 The notation should in most cases be self-explanatory. It uses “assignment statements” and operators reminiscent of high-level languages, but each line of code corresponds to a single machine instruction, and registers are named explicitly (the names of integer registers begin with ‘r’; those of ﬂoating-point registers begin with ‘f’). Control ﬂow is based entirely on gotos and subroutine calls (not shown). Conditional tests assume that the hardware can perform a comparison and branch in a single instruction, where the comparison tests the contents of a register against a small constant or the contents of another register. Main memory in our notation can be accessed only by load and store in- structions, which look like assignments to or from a register, with no arith- metic. We do, however, assume the availability of displacement addressing, which allows us to access memory at some constant offset from the address held in a register. For example, to store register r1 to a local variable at an offset of 12 bytes from the frame pointer (fp) register, we could say *(fp−12) := r1.
-
-This page intentionally left blank
 

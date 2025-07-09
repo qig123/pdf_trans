@@ -42,8 +42,6 @@ Parsing
 
 2.20 Top-down and bottom-up parsing 70 2.21 Bounding space with a bottom-up grammar 72
 
-878 Appendix C Numbered Examples
-
 2.60 0n1n is not a regular language C·19 2.61 Separation of grammar classes C·20 2.62 Separation of language classes C·20
 
 2.22 Top-down grammar for a calculator language 73 2.23 Recursive descent parser for the calcula- tor language 75 2.24 Recursive descent parse of a “sum and average” program 75 2.25 Left recursion 79 2.26 Common preﬁxes 79 2.27 Eliminating left recursion 80 2.28 Left factoring 80 2.29 Parsing a “dangling else” 80 2.30 “Dangling else” program bug 81 2.31 End markers for structured statements 81 2.32 The need for elsif 82 2.33 Driver and table for top-down parsing 82 2.34 Table-driven parse of the “sum and average” program 83 2.35 Predict sets for the calculator language 84 2.36 Derivation of an id list 90 2.37 Bottom-up grammar for the calculator language 90 2.38 Bottom-up parse of the “sum and average” program 91 2.39 CFSM for the bottom-up calculator grammar 95 2.40 Epsilon productions in the bottom-up calculator grammar 95 2.41 CFSM with epsilon productions 101 2.42 A syntax error in C 102 2.43 Syntax error in C (reprise) C·1 2.44 The problem with panic mode C·1 2.45 Phrase-level recovery in recursive descent C·2 2.46 Cascading syntax errors C·3 2.47 Reducing cascading errors with context- speciﬁc look-ahead C·4 2.48 Recursive descent with full phrase-level recovery C·4 2.49 Exceptions in a recursive descent parser C·5 2.50 Error production for “; else” C·6 2.51 Insertion-only repair in FMQ C·8 2.52 FMQ with deletions C·8 2.53 Panic mode in yacc/bison C·11 2.54 Panic mode with statement terminators C·11 2.55 Phrase-level recovery in yacc/bison C·11
@@ -71,8 +69,6 @@ The Meaning of Names within a Scope
 Theoretical Foundations
 
 2.56 Formal DFA for d *( .d | d. ) d * C·14 2.57 Reconstructing a regular expression for the decimal string DFA C·15 2.58 A regular language with a large minimal DFA C·16 2.59 Exponential DFA blow-up C·16
-
-Appendix C Numbered Examples 879
 
 Action Routines
 
@@ -126,8 +122,6 @@ Instruction Set Architecture (ISA)
 
 5.8 An if statement in x86 assembler C·72 5.9 Compare and test instructions C·73 5.10 Conditional move C·73
 
-880 Appendix C Numbered Examples
-
 Architecture and Implementation
 
 6.34 Short-circuited expressions 243 6.35 Saving time with short-circuiting 243 6.36 Short-circuit pointer chasing 244 6.37 Short-circuiting and other errors 244 6.38 Optional short-circuiting 245
@@ -160,8 +154,6 @@ Iteration
 
 6.56 Fortran 90 do loop 262 6.57 Modula-2 for loop 262 6.58 Obvious translation of a for loop 262 6.59 for loop translation with test at the bottom 263 6.60 for loop translation with an iteration count 263 6.61 A “gotcha” in the naive loop translation 263 6.62 Changing the index in a for loop 265 6.63 Inspecting the index after a for loop 265 6.64 Combination (for) loop in C 267 6.65 C for loop with a local index 268 6.66 Simple iterator in Python 268 6.67 Python iterator for tree enumeration 269 6.68 Java iterator for tree enumeration 270 6.69 Iteration in C++11 270 6.70 Passing the “loop body” to an iterator in Scheme 272 6.71 Iteration with blocks in Smalltalk 272 6.72 Iterating with procs in Ruby 273 6.73 Imitating iterators in C 274
 
-Appendix C Numbered Examples 881
-
 6.89 Simple generator in Icon C·107 6.90 A generator inside an expression C·107 6.91 Generating in search of success C·108 6.92 Backtracking with multiple generators C·108 6.74 while loop in Algol-W 275 6.75 Post-test loop in Pascal and Modula 275 6.76 Post-test loop in C 275 6.77 break statement in C 276 6.78 Exiting a nested loop in Ada 276 6.79 Exiting a nested loop in Perl 276
 
 7.13 Emulating distinguished enum values in Java 309 7.14 Subranges in Pascal 309 7.15 Subranges in Ada 310 7.16 Space requirements of subrange type 310
@@ -185,8 +177,6 @@ Parametric Polymorphism
 Overview
 
 7.4 void (trivial) type 303 7.5 Making do without void 303 7.6 Option types in OCaml 303 7.7 Option types in Swift 304 7.8 Aggregates in Ada 304 7.9 Enumerations in Pascal 307 7.10 Enumerations as constants 308 7.11 Converting to and from enumeration type 308 7.12 Distinguished values for enums 308
-
-882 Appendix C Numbered Examples
 
 7.59 Template function bodies moved to a .c ﬁle C·121 7.60 extern templates in C++11 C·122 7.61 Instantiation-time errors in C++ tem- plates C·122 7.62 Generic Arbiter class in Java C·124 7.63 Wildcards and bounds on Java generic parameters C·125 7.64 Type erasure and implicit casts C·126 7.65 Unchecked warnings in Java C·127 7.66 Java generics and built-in types C·127 7.67 Sharing generic implementations in C# C·128 7.68 C# generics and built-in types C·128 7.69 Generic Arbiter class in C# C·128 7.70 Contravariance in the Arbiter interface C·128 7.71 Covariance C·130 7.72 Chooser as a delegate C·130
 
@@ -218,8 +208,6 @@ Arrays
 
 8.13 Array declarations 359 8.14 Multidimensional arrays 360 8.15 Multidimensional vs built-up arrays 360 8.16 Arrays of arrays in C 361
 
-Appendix C Numbered Examples 883
-
 Lists
 
 9.14 const parameters in C 426 9.15 Reference parameters in C++ 428 9.16 References as aliases in C++ 428 9.17 Simplifying code with an in-line alias 428 9.18 Returning a reference from a function 429 9.19 R-value references in C++11 430 9.20 Subroutines as parameters in Ada 431 9.21 First-class subroutines in Scheme 431 9.22 First-class subroutines in OCaml 432 9.23 Subroutine pointers in C and C++ 432 9.64 Jensen’s device C·180 9.24 Default parameters in Ada 433 9.25 Named parameters in Ada 435 9.26 Self-documentation with named parame- ters 436 9.27 Variable number of arguments in C 436 9.28 Variable number of arguments in Java 437 9.29 Variable number of arguments in C# 438 9.30 return statement 438 9.31 Incremental computation of a return value 438 9.32 Explicitly named return values in Go 439 9.33 Multivalue returns 439
@@ -248,8 +236,6 @@ Parameter Passing
 
 9.8 Inﬁx operators 422 9.9 Control abstraction in Lisp and Smalltalk 422 9.10 Passing an argument to a subroutine 423 9.11 Value and reference parameters 423 9.12 Call by value/result 424 9.13 Emulating call-by-reference in C 424
 
-884 Appendix C Numbered Examples
-
 Initialization and Finalization
 
 9.70 Initialization of a coroutine-based trafﬁc simulation C·187 9.71 Traversing a street segment in the trafﬁc simulation C·188 9.72 Scheduling a coroutine for future execution C·188 9.73 Queueing cars at a trafﬁc light C·188 9.74 Waiting at a light C·189 9.75 Sleeping in anticipation of future execu- tion C·189
@@ -277,8 +263,6 @@ Mix-In Inheritance
 Encapsulation and Inheritance
 
 10.18 Data hiding in Ada 486 10.19 The hidden this parameter 487 10.20 Hiding inherited methods 488 10.21 protected base class in C++ 488 10.22 Inner classes in Java 490 10.23 List and queue abstractions in Ada 2005 491 10.24 Extension methods in C# 494
-
-Appendix C Numbered Examples 885
 
 10.65 Replicated inheritance in Eiffel C·199 10.66 Using replicated inheritance C·200 10.67 Overriding methods with shared inheri- tance C·201 10.68 Implementation of shared inheritance C·201
 
@@ -310,8 +294,6 @@ A Bit of OCaml
 
 11.21 Interacting with the interpreter 551 11.22 Function call syntax 551 11.23 Function values 552 11.24 unit type 552 11.25 “Physical” and “structural” comparison 553 11.26 Outermost declarations 554 11.27 Nested declarations 555
 
-886 Appendix C Numbered Examples
-
 12.16 Backtracking and instantiation 599 12.17 Order of rule evaluation 600 12.18 Inﬁnite regression 600 12.19 Tic-tac-toe in Prolog 600 12.20 The cut 604 12.21 \+ and its implementation 605 12.22 Pruning unwanted answers with the cut 605 12.23 Using the cut for selection 605 12.24 Looping with fail 605 12.25 Looping with an unbounded generator 606 12.26 Character input with get 607 12.27 Prolog programs as data 607 12.28 Modifying the Prolog database 608 12.29 Tic-tac-toe (full game) 608 12.30 The functor predicate 608 12.31 Creating terms at run time 610 12.32 Pursuing a dynamic goal 611 12.33 Custom database perusal 611 12.34 Predicates as mathematical objects 612 12.39 Propositions C·226 12.40 Different ways to say things C·226 12.41 Conversion to clausal form C·227 12.42 Conversion to Prolog C·228 12.43 Disjunctive left-hand side C·228 12.44 Empty left-hand side C·229 12.45 Theorem proving as a search for contradiction C·229 12.46 Skolem constants C·230 12.47 Skolem functions C·230 12.48 Limitations of Skolemization C·230
 
 11.72 Simple curried function in OCaml 578 11.73 Shorthand notation for currying 579 11.74 Building fold_left in OCaml 579 11.75 Currying in OCaml vs Scheme 580 11.76 Declarative (nonconstructive) function deﬁnition 580 11.77 Functions as mappings C·212 11.78 Functions as sets C·212 11.79 Functions as powerset elements C·213 11.80 Function spaces C·213 11.81 Higher-order functions as sets C·213 11.82 Curried functions as sets C·213 11.83 Juxtaposition as function application C·214 11.84 Lambda calculus syntax C·214 11.85 Binding parameters with λ C·214 11.86 Free variables C·215 11.87 Naming functions for future reference C·215 11.88 Evaluation rules C·215 11.89 Delta reduction for arithmetic C·215 11.90 Eta reduction C·216 11.91 Reduction to simplest form C·216 11.92 Nonterminating applicative-order reduc- tion C·217 11.93 Booleans and conditionals C·218 11.94 Beta abstraction for recursion C·218 11.95 The ﬁxed-point combinator Y C·218 11.96 Lambda calculus list operators C·219 11.97 List operator identities C·219 11.98 Nesting of lambda expressions C·221 11.99 Paired arguments and currying C·221
@@ -342,8 +324,6 @@ Concurrent Programming Fundamentals
 
 13.6 General form of co-begin 638 13.7 Co-begin in OpenMP 639 13.8 A parallel loop in OpenMP 639 13.9 A parallel loop in C# 639 13.10 Forall in Fortran 95 640
 
-Appendix C Numbered Examples 887
-
 13.57 Datagram messages in Java C·238 13.58 Connection-based messages in Java C·238 13.59 Three main options for send semantics C·240 13.60 Buffering-dependent deadlock C·241 13.61 Acknowledgments C·242 13.62 Bounded buffer in Ada 83 C·245 13.63 Timeout and distributed termination C·246 13.64 Bounded buffer in Go C·246 13.65 Bounded buffer in Erlang C·247 13.66 Peeking at messages in Erlang C·247 13.67 An RPC server system C·251
 
 13.11 Reduction in OpenMP 641 13.12 Elaborated tasks in Ada 641 13.13 Co-begin vs fork/join 642 13.14 Task types in Ada 642 13.15 Thread creation in Java 2 643 13.16 Thread creation in C# 644 13.17 Thread pools in Java 5 645 13.18 Spawn and sync in Cilk 645 13.19 Modeling subroutines with fork/join 646 13.20 Multiplexing threads on processes 647 13.21 Cooperative multithreading on a unipro- cessor 648 13.22 A race condition in preemptive multi- threading 650 13.23 Disabling signals during context switch 651
@@ -369,8 +349,6 @@ Language-Level Constructs
 Scripting the World Wide Web
 
 14.29 Remote monitoring with a CGI script 728 14.30 Adder web form with a CGI script 728 14.31 Remote monitoring with a PHP script 731 14.32 A fragmented PHP script 731
-
-888 Appendix C Numbered Examples
 
 14.74 Inheritance in Perl 759 14.75 Inheritance via use base 759 14.76 Prototypes in JavaScript 760 14.77 Overriding instance methods in JavaScript 761 14.78 Inheritance in JavaScript 761 14.79 Constructors in Python and Ruby 762 14.80 Naming class members in Python and Ruby 762
 
@@ -408,10 +386,6 @@ Linking
 
 Chapter 16: Run-Time Program Management
 
-16.1 The CLI as a run-time system and virtual machine 807
-
-Appendix C Numbered Examples 889
-
 Chapter 17: Code Improvement
 
 Virtual Machines
@@ -427,6 +401,4 @@ Late Binding of Machine Code
 Inspection/Introspection
 
 16.18 Finding the concrete type of a reference variable 837 16.19 What not to do with reﬂection 838 16.20 Java class-naming conventions 838 16.21 Getting information on a particular class 839 16.22 Listing the methods of a Java class 839 16.23 Calling a method with reﬂection 840 16.24 Reﬂection facilities in Ruby 841 16.25 User-deﬁned annotations in Java 842 16.26 User-deﬁned annotations in C# 842 16.27 javadoc 842 16.28 Intercomponent communication 843 16.29 Attributes for LINQ 843 16.30 The Java Modeling Language 844 16.31 Java annotation processors 845 16.32 Setting a breakpoint 847 16.33 Hardware breakpoints 847 16.34 Setting a watchpoint 847 16.35 Statistical sampling 848 16.36 Call graph proﬁling 848 16.37 Finding basic blocks with low IPC 849 16.38 Haswell performance counters 849
-
-This page intentionally left blank
 

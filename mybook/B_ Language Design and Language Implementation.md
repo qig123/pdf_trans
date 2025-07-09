@@ -16,8 +16,6 @@ Chapter 3: Names, Scopes, and Bindings
 
 3.1 Binding time 117 3.2 Recursion in Fortran 119 3.3 Mutual recursion 131 3.4 Redeclarations 134 3.5 Modules and separate compilation 140 3.6 Dynamic scoping 143 3.7 Pointers in C and Fortran 146 3.8 User-deﬁned operators in OCaml 149 3.9 Binding rules and extent 156 3.10 Functions and function objects 161
 
-872 Appendix B Language Design and Language Implementation
-
 3.11 Generics as macros 163 3.12 Separate compilation C·41
 
 Chapter 4: Semantic Analysis
@@ -38,10 +36,6 @@ Chapter 7: Type Systems
 
 Chapter 8: Composite Types
 
-8.1 Struct tags and typedef in C and C++ 353 8.2 The order of record ﬁelds 356
-
-Appendix B Language Design and Language Implementation 873
-
 8.13 The placement of variant ﬁelds C·141 8.3 Is [ ] an operator? 361 8.4 Array layout 370 8.5 Lower bounds on array indices 373 8.6 Implementation of pointers 378 8.7 Stack smashing 385 8.8 Pointers and arrays 386 8.9 Garbage collection 390 8.10 What exactly is garbage? 393 8.11 Reference counts versus tracing 396 8.12 car and cdr 399
 
 Chapter 9: Subroutines and Control Abstraction
@@ -55,8 +49,6 @@ Chapter 10: Data Abstraction and Object Orientation
 Chapter 11: Functional Languages
 
 11.1 Iteration in functional programs 546 11.2 Equality and ordering in SML and Haskell 554 11.3 Type Equivalence in OCaml 560 11.4 Lazy evaluation 570 11.5 Monads 575 11.6 Higher-order functions 577 11.7 Side effects and compilation 582
-
-874 Appendix B Language Design and Language Implementation
 
 Chapter 12: Logic Languages
 
@@ -78,13 +70,9 @@ Chapter 16: Run-Time Program Management
 
 16.1 Run-time systems 808 16.2 Optimizing stack-based IF 812 16.3 Veriﬁcation of class ﬁles and bytecode 820
 
-Appendix B Language Design and Language Implementation 875
-
 16.7 Assuming a just-in-time compiler C·287 16.8 References and pointers C·290 16.4 Emulation and interpretation 830 16.5 Creating a sandbox via binary rewriting 835 16.6 DWARF 846
 
 Chapter 17: Code Improvement
 
 17.1 Peephole optimization C·303 17.2 Basic blocks C·304 17.3 Common subexpressions C·309 17.4 Pointer analysis C·310 17.5 Loop invariants C·324 17.6 Control ﬂow analysis C·325
-
-This page intentionally left blank
 

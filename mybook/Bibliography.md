@@ -38,12 +38,6 @@ Bibliography
 
 [AO93] Gregory R. Andrews and Ronald A. Olsson. The SR Programming Language: Concurrency in Practice. Ben- jamin/Cummings, Redwood City, CA, 1993.
 
-[App91] Andrew W. Appel. Compiling with Continuations. Cambridge University Press, Cambridge, England, 1991.
-
-891
-
-892 Bibliography
-
 [App97] Andrew W. Appel. Modern Compiler Implementa- tion. Cambridge University Press, Cambridge, England, 1997. Text available in ML, Java, and C versions. C version specialized by Maia Ginsburg; Java version (second edi- tion, 2002) specialized by Jens Palsberg.
 
 [Bac78] John W. Backus. Can programming be liberated from the von Neumann style? A functional style and its algebra of programs. Communications of the ACM, 21(8):613–641, August 1978. The 1977 Turing Award lec- ture.
@@ -87,10 +81,6 @@ Bibliography
 [Bec97] Leland L. Beck. System Software: An Introduction to Systems Programming. Addison-Wesley, Reading, MA, third edition, 1997.
 
 [BA08] Hans-J. Boehm and Sarita V. Adve. Foundations of the C++ concurrency memory model. In Proceedings of the SIGPLAN 2008 Conference on Programming Lan- guage Design and Implementation, pages 68–78, Tucson, ZA, June 2008.
-
-[Bee70] David Beech. A structural view of PL/I. ACM Com- puting Surveys, 2(1):33–64, March 1970.
-
-Bibliography 893
 
 [Bel05] Fabrice Bellard. QEMU, a fast and portable dynamic translator. In Proceedings of the USENIX 2005 Annual Technical Conference, pages 41–46, Anaheim, CA, April 2005.
 
@@ -141,10 +131,6 @@ ence on Programming Language Design and Implementa- tion, pages 261–268, Chica
 [BO11] Randal E Bryant and David O’Hallaron. Com- puter Systems: A Programmer’s Perspective. Prentice-Hall, Boston, MA, second edition, 2011.
 
 [Cai82] R. Cailliau. How to avoid getting SCHLONKED by Pascal. ACM SIGPLAN Notices, 17(12):31–40, December 1982.
-
-[Boe05] Hans-J. Boehm. Threads cannot be implemented as a library. In Proceedings of the SIGPLAN 2005 Confer-
-
-894 Bibliography
 
 [CM84] K. Mani Chandy and Jayadev Misra. The drinking philosophers problem. ACM Transactions on Program- ming Languages and Systems, 6(4):632–646, October 1984.
 
@@ -200,10 +186,6 @@ ence on Programming Language Design and Implementa- tion, pages 261–268, Chica
 
 [CLFL94] Jeffrey S. Chase, Henry M. Levy, Michael J. Fee- ley, and Edward D. Lazowska. Sharing and protection in a single-address-space operating system. ACM Transactions on Computer Systems, 12(4):271–307, November 1994.
 
-[DDH72] Ole-Johan Dahl, Edsger W. Dijkstra, and Charles Antony Richard Hoare. Structured Programming. A.P.I.C.
-
-Bibliography 895
-
 Studies in Data Processing #8. Academic Press, New York, NY, 1972.
 
 [Dol97] Julian Dolby. Automatic inline allocation of objects. In Proceedings of the SIGPLAN ’97 Conference on Program- ming Language Design and Implementation, pages 7–17, Las Vegas, NV, June 1997.
@@ -254,8 +236,6 @@ Studies in Data Processing #8. Academic Press, New York, NY, 1972.
 
 [ECM06b] ECMA International, Geneva, Switzerland. Eiffel: Analysis, Design and Programming Language, second edition, June 2006. ECMA-367. Available at
 
-896 Bibliography
-
 [Fie00] Roy Thomas Fielding. Architectural Styles and the Design of Network-based Software Architectures. Ph. D. dis- sertation, University of California, Irvine, 2000.
 
 ecma-international.org/publications/standards/Ecma-367. htm.
@@ -301,10 +281,6 @@ ecma-international.org/publications/standards/Ecma-367. htm.
 [FH95] Christopher W. Fraser and David R. Hanson. A Re- targetable C Compiler: Design and Implementation. Ben- jamin/Cummings, Redwood City, CA, 1995.
 
 [FHP92] Christopher W. Fraser, David R. Hanson, and Todd A. Proebsting. Engineering a simple, efﬁcient code generator generator. ACM Letters on Programming Lan- guages and Systems, 1(3):213–226, September 1992.
-
-[GBJ+12] Dick Grune, Henri E. Bal, Ceriel J. H. Jacobs, Koen G. Langendoen, and Kees van Reeuwijk. Modern
-
-Bibliography 897
 
 [Gol91] David Goldberg. What every computer scientist should know about ﬂoating-point arithmetic. ACM Com- puting Surveys, 23(1):5–48, March 1991.
 
@@ -352,8 +328,6 @@ Compiler Design. Springer-Verlag, New York, NY, second edition, 2012.
 
 [Gut77] John Guttag. Abstract data types and the develop- ment of data structures. Communications of the ACM, 20(6):396–404, June 1977.
 
-898 Bibliography
-
 [Hal85] Robert H. Halstead, Jr. Multilisp: A language for concurrent symbolic computation. ACM Transactions on Programming Languages and Systems, 7(4):501–538, Oc- tober 1985.
 
 ley/IEEE Computer Society Press, New York, NY, 1997. Available at columbia.edu/~hauben/netbook/.
@@ -397,10 +371,6 @@ ley/IEEE Computer Society Press, New York, NY, 1997. Available at columbia.edu/~
 [HGLS78] Richard C. Holt, G. Scott Graham, Edward D. La- zowska, and Mark A. Scott. Structured Concurrent Pro- gramming with Operating Systems Applications. Addison- Wesley Series in Computer Science. Addison-Wesley, Reading, MA, 1978.
 
 [HMU07] John E. Hopcroft, Rajeev Motwani, and Jeffrey D. Ullman. Introduction to Automata Theory, Languages, and Computation. Pearson/Addison-Wesley, Boston, MA, third edition, 2007.
-
-[HH97a] Michael Hauben and Ronda Hauben. Netizens: On the History and Impact of Usenet and the Internet. Wi-
-
-Bibliography 899
 
 [HO91] W. Wilson Ho and Ronald A. Olsson. An approach to genuine dynamic linking. Software—Practice and Ex- perience, 21(4):375–390, April 1991.
 
@@ -452,10 +422,6 @@ Programming Language. Cambridge University Press, Cambridge, England, 1991.
 
 [Hud89] Paul Hudak. Conception, evolution, and applica- tion of functional programming languages. ACM Com- puting Surveys, 21(3):359–411, September 1989.
 
-[IBFW91] Jean Ichbiah, John G. P. Barnes, Robert J. Firth, and Mike Woodger. Rationale for the Design of the Ada
-
-900 Bibliography
-
 [Int10] International Organization for Standardization, Geneva, Switzerland. Information Technology—Program- ming Languages—Fortran—Part 1: Base Language, 2010. ISO/IEC 1539-1:2010.
 
 [JGF96] Simon Peyton Jones, Andrew Gordon, and Sigbjorn Finne. Concurrent Haskell. In Proceedings of the Twenty- Third ACM Symposium on Principles of Programming Lan- guages, pages 295–308, St. Petersburg Beach, FL, January 1996.
@@ -499,8 +465,6 @@ Programming Language. Cambridge University Press, Cambridge, England, 1991.
 [JG89] Geraint Jones and Michael Goldsmith. Programming in occam2. Prentice-Hall International Series in Computer Science. Prentice-Hall, Englewood Cliffs, NJ, second edi- tion, 1989.
 
 [Kep04] Stephan Kepser. A simple proof for the Turing- completeness of XSLT and XQuery. In Proceedings, Ex- treme Markup Languages 2004, Montréal, Canada, August
-
-Bibliography 901
 
 [KWS97] Leonidas I. Kontothanassis, Robert Wisniewski, and Michael L. Scott. Scheduler-conscious synchroniza- tion. ACM Transactions on Computer Systems, 15(1):3–40, February 1997.
 
@@ -556,8 +520,6 @@ Bibliography 901
 
 [LL12] Kenneth C. Louden and Kenneth A. Lambert. Pro- gramming Languages: Principles and Practice. Cengage Learning, Boston, MA, third edition, 2012.
 
-902 Bibliography
-
 [Llo87] John W. Lloyd. Foundations of Logic Programming. Springer-Verlag, Berlin, West Germany, second edition, 1987.
 
 softwarepreservation.org/projects/LISP/book/LISP% 201.5%20Programmers%20Manual.pdf .
@@ -610,8 +572,6 @@ softwarepreservation.org/projects/LISP/book/LISP% 201.5%20Programmers%20Manual.p
 
 [MF08] Jacob Matthews and Robert Bruce Findler. An oper- ational semantics for Scheme. Journal of Functional Pro- gramming, 18(1):47–86, 2008.
 
-Bibliography 903
-
 Second ACM Symposium on Principles of Programming Languages, pages 378–391, Long Beach, CA, January 2005.
 
 [MGA92] Margaret Martonosi, Anoop Gupta, and Thomas Anderson. MemSpy: Analyzing memory system bottle- necks in programs. In Proceedings of the 1992 ACM SIG- METRICS Joint International Conference on Measurement and Modeling of Computer Systems, pages 1–12, Newport, RI, June 1992.
@@ -659,10 +619,6 @@ Second ACM Symposium on Principles of Programming Languages, pages 378–391, Lo
 [MOSS96] Stephan Murer, Stephen Omohundro, David Stoutamire, and Clemens Szyperski. Iteration abstraction in Sather. ACM Transactions on Programming Languages and Systems, 18(1):1–15, January 1996.
 
 [ND78] Kristen Nygaard and Ole-Johan Dahl. The devel- opment of the Simula languages. In HOPL I Proceedings [Wex78], pages 439–493.
-
-[MPA05] Jeremy Manson, William Pugh, and Sarita V. Adve. The Java memory model. In Proceedings of the Thirty-
-
-904 Bibliography
 
 [Nec97] George C. Necula. Proof-carrying code. In Con- ference Record of the Twenty-Fourth ACM Symposium on Principles of Programming Languages, pages 106–119, Paris, France, January 1997.
 
@@ -718,8 +674,6 @@ Second ACM Symposium on Principles of Programming Languages, pages 378–391, Lo
 
 [RS59] Michael O. Rabin and Dana S. Scott. Finite automata and their decision problems. IBM Journal of Research and Development, 3(2):114–125, 1959.
 
-Bibliography 905
-
 [RS70] Daniel J. Rosenkrantz and Richard E. Stearns. Prop- erties of deterministic top-down grammars. Information and Control, 17(3):226–256, October 1970.
 
 [SDB84] Mayer D. Schwartz, Norman M. Delisle, and Vi- mal S. Begwani. Incremental compilation in Magpie. In Proceedings of the SIGPLAN ’84 Symposium on Compiler Construction, pages 122–131, Montreal, Quebec, Canada, June 1984.
@@ -763,8 +717,6 @@ Bibliography 905
 [SG96] Daniel J. Scales and Kourosh Gharachorloo. Shasta: A low overhead, software-only approach for supporting ﬁne-grain shared memory. In Proceedings of the Seventh International Conference on Architectural Support for Pro- gramming Languages and Operating Systems, pages 174– 185, Cambridge, MA, October 1996.
 
 [Sco13] Michael L. Scott. Shared-Memory Synchronization. Synthesis Lectures on Computer Architecture. Morgan & Claypool Publishers, June 2013.
-
-906 Bibliography
 
 [SGC13] Don Syme, Adam Granicz, and Antonio Cistern- ino. Expert F# 3.0. Apress, Berkeley, CA, 2013.
 
@@ -815,10 +767,6 @@ ers and Automata, pages 19–46. Polytechnic Institute of Brooklyn Press, New Yo
 [SW94] James E. Smith and Shlomo Weiss. PowerPC 601 and Alpha 21064: A tale of two RISCs. IEEE Computer, 27(6):46–58, June 1994.
 
 [SS71] Dana S. Scott and Christopher Strachey. Toward a mathematical semantics for computer language. In Jerome Fox, editor, Proceedings, Symposium on Comput-
-
-[SZBH86] Daniel C. Swinehart, Polle T. Zellweger, Richard J. Beach, and Robert B. Hagmann. A structural view of the
-
-Bibliography 907
 
 [UW08] Jeffrey D. Ullman and Jennifer Widom. A First Course in Database Systems. Pearson/Prentice-Hall, Up- per Saddle River, NJ, third edition, 2008.
 
@@ -872,8 +820,6 @@ Cedar programming environment. ACM Transactions on Programming Languages and Sys
 
 [Wet78] Horst Wettstein. The problem of nested monitor calls revisited. ACM Operating Systems Review, 12(1):19– 23, January 1978.
 
-908 Bibliography
-
 [Wex78] Richard L. Wexelblat, editor. Proceedings of the ACM SIGPLAN History of Programming Languages (HOPL) Conference, ACM Monograph Series, 1981, Los Angeles, CA, June 1978. Academic Press, New York, NY.
 
 [Wir88a] Niklaus Wirth. From Modula to Oberon. Soft- ware—Practice and Experience, 18(7):661–670, July 1988.
@@ -924,8 +870,6 @@ Cedar programming environment. ACM Transactions on Programming Languages and Sys
 
 [Wor06b] World Wide Web Consortium. Extensible Stylesheet Language (XSL) Version 1.1, December 2006. Available at w3.org/TR/xsl/.
 
-Bibliography 909
-
 [You67] Daniel H. Younger. Recognition and parsing of context-free languages in time n3. Information and Con- trol, 10(2):189–208, February 1967.
 
 [Wor07] World Wide Web Consortium. XML Path Lan- guage (XPath) 2.0, January 2007. Available at w3.org/TR/ xpath20/.
@@ -943,6 +887,4 @@ Bibliography 909
 [ZRA+08] Qin Zhao, Rodric Rabbah, Saman Amarasinghe, Larry Rudolph, and Weng-Fai Wong. How to do a million watchpoints: Efﬁcient debugging using dynamic instru- mentation. In Proceedings of the Seventeenth International Conference on Compiler Construction, pages 147–162, Bu- dapest, Hungary, March 2008.
 
 [YA93] Jae-Heon Yang and James H. Anderson. Fast, scal- able synchronization with minimal hardware support (ex- tended abstract). In Proceedings of the Twelfth Annual ACM Symposium on Principles of Distributed Computing, pages 171–182, Ithaca, NY, August 1993.
-
-This page intentionally left blank
 

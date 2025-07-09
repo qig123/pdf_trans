@@ -10,5 +10,3 @@ The bulk of this text has focused, implicitly, on sequential programs: pro- gram
 
 In general, we use the word concurrent to characterize any system in which two or more tasks may be underway (at an unpredictable point in their execution) at the same time. Under this deﬁnition, coroutines are not concurrent, because at
 
-623
-

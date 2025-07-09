@@ -12,5 +12,3 @@ Errors captured by type information program. They prevent the programmer from ad
 
 1 Recall that unless otherwise noted we are using the term “object” informally to refer to anything that might have a name. Object-oriented languages, which we will study in Chapter 10, assign a narrower, more formal, meaning to the term.
 
-297
-

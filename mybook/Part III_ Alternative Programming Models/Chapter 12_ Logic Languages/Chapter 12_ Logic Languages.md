@@ -6,5 +6,3 @@ Having considered functional languages in some detail, we now turn to logic lang
 
 1 Axiomatic semantics models each statement or expression in the language as a predicate trans- former—an inference rule that takes a set of conditions known to be true initially and derives a new set of conditions guaranteed to be true after the construct has been evaluated. The study of formal semantics is beyond the scope of this book.
 
-591
-

@@ -10,10 +10,6 @@ Cutting across languages, this book presents a detailed discussion of control �
 
 Strategies to implement programming languages must be studied together with the design paradigms. A reason is that success of a language depends on the quality of its implementation. Also, the capabilities of these strategies some- times constraint the design of languages. The implementation of a language starts with parsing and lexical scanning needed to compute the syntactic structure of programs. Today’s parsing techniques, described in Part I, are among the most beautiful algorithms ever developed and are a great example of the use of mathe- matical objects to create practical instruments. They are worthwhile studying just
 
-xxiii
-
-xxiv Foreword
-
 as an intellectual achievement. They are of course of great practical value, and a good way to appreciate the greatness of these strategies is to go back to the ﬁrst Fortran compiler and study the ad hoc, albeit highly ingenious, strategy used to implement precedence of operators by the pioneers that built that compiler.
 
 The other usual component of implementation are the compiler components that carry out the translation from the high-level language representation to a lower level form suitable for execution by real or virtual machines. The transla- tion can be done ahead of time, during execution (just in time), or both. The book discusses these approaches and implementation strategies including the elegant mechanisms of translation driven by parsing. To produce highly efﬁ- cient code, translation routines apply strategies to avoid redundant computations, make efﬁcient use of the memory hierarchy, and take advantage of intra-processor parallelism. These, sometimes conﬂicting goals, are undertaken by the optimiza- tion components of compilers. Although this topic is typically outside the scope of a ﬁrst course on compilers, the book gives the reader access to a good overview of program optimization in Part IV.

@@ -48,12 +48,6 @@ statement, C 246 denotational semantics, 214 dereferencing, automatic, 383 elabo
 
 bottom-up evaluation, 199 and error recovery, C 8, C 11ff and management of attribute space,
 
-C 45ff
-
-911
-
-912 Index
-
 short-circuit evaluation, lack of, 288 void (trivial) type, 303 Algol 60, 246, 859
 
 visibility of class members, 491 address space organization, 790ff addresses
@@ -112,12 +106,6 @@ unchecked_conversion,319 unchecked pragma, 68; C 160 variables as values, 498 va
 
 if construct, 226, 288 nested subroutines, 127 own (static) variables, 127, 136 scope rules, 127, 134
 
-and code improvement, 386; C 309,
-
-C 312, C 322
-
-Index 913
-
 in Prolog, 597ff arithmetic, computer, C 65ff ARM architecture, 633, 834; C 80ff,
 
 ANTLR (parser generator), 72, 74; C 5 Apache Byte Code Engineering Library
@@ -173,14 +161,6 @@ decoration of; syntax tree, decoration of anonymous type. See type, anonymous an
 Institute anthropomorphism in object-oriented
 
 Code for Information Interchange)
-
-languages, 497, 522ff anti-dependence, C 92
-
-associativity; overﬂow; precedence
-
-.ascii assembler directive, 795
-
-914 Index
 
 L-attributed, 192ff noncircular, 190 and one-pass compilation, 193ff S-attributed, 188, 192ff semantic function, 185ff for syntax trees, 201ff translation scheme, 191 type checking example, 201ff well-deﬁned, 190 attribute stack, 200; C 45ff
 
@@ -239,8 +219,6 @@ Java axiom of choice, C 230 axiomatic semantics. See semantics,
 code generation example, 785ff copy rule, 185 decoration (annotation), 187ff error handling, 203
 
 axiomatic axioms, in logic programming, 592 Aycock, John, 854
-
-Index 915
 
 B
 
@@ -302,12 +280,6 @@ for debugging, 846 binary search, 259ff, 286, 290, 448 binary translation, 810, 
 
 307; C 86 binding, 3, 116ff, 118. See also binding
 
-rules; binding time; closure; names; scope
-
-Unicode), 306
-
-916 Index
-
 C
 
 branch instruction, 246; C 62, C 72ff,
@@ -361,8 +333,6 @@ BCEL), 839 byte order. See endian-ness bytecode, 835. See also Common
 of array, 363ff, 373 of loop, 262ff Bourne, Stephen R., 705, 771 boxing, 232ff, 286 Boyer, Robert S., 770 Bracha, Gilad, 349 branch delay, 419; C 90, C 329
 
 Language Infrastructure, Common Intermediate Language; Java Virtual Machine, bytecode; P-code Common Lisp, 827 Perl, 828
-
-Index 917
 
 tokens, 32, 45 type cast (conversion), 303, 318, 319 type checking, 40, 299, 313 type declarations, incomplete, 382 type pun, 319 type system, 353
 
@@ -424,8 +394,6 @@ decltype, 326 delete operation, 124, 388 deleted methods, 488 destructors, 388, 
 
 C 167ff subroutines as parameters, 155 switch statement, 260ff syntax errors, 102
 
-918 Index
-
 expression evaluation, 241 extension methods, 494 ﬁnalization of objects, 505 futures, 684 garbage collection, 124, 378, 390 generics, 333, 337ff, 485; C 128ff
 
 serialization of objects, 837 strings, 367, 376 structures, 351, 498 switch statement, 257, 261 synchronization, 674, 677 syntax trees, 826 Task Parallel Library (TPL), 626, 639,
@@ -486,10 +454,6 @@ Language Infrastructure scope rules, 132, 193 sealed class, 494 separate compila
 
 anonymous, 158, 172, 459 enum values, 309 events, 459 exception handling, 323, 441
 
-434, 446, 453, 807; C 96ff displays, 417
-
-Index 919
-
 CFSM. See characteristic ﬁnite-state
 
 architecture; x86 architecture; x86-64 architecture array access, 374 BCD operations, 307 philosophy of, C 78, C 100 register-memory architecture, C 71 class, 148, 183, 351, 405, 471, 488ff. See
@@ -548,10 +512,6 @@ dynamic scoping and, 144, 742 CFG. See context-free grammar CFL. See language, c
 
 computer), 217; C 70. See also 680x0 architecture; IBM 360/370 architecture; VAX
 
-ambiguity resolution, C 197 object initialization, 504
-
-920 Index
-
 Cocke, John, 69; C 105, C 355 code generation, 27, 32ff, 34ff, 181, 198,
 
 unsafe, 184, 824 code injection, C 176 code morphing, 830 coercion, 150, 213, 240, 312, 320ff, 703
@@ -605,8 +565,6 @@ decimal type, 307 formatted I/O, C 152
 C 286ff, C 288ff delegates, C 289 generics, C 290 history, 820
 
 goto statement, 7 history, 9 indexed ﬁles, C 151 records, 352
-
-Index 921
 
 dynamic scoping, 143 enumeration types, 307 in-line subroutines, 420 late binding, 118 parameter modes, 424 pointer arithmetic, 386 scanning and parsing, 105; C 20 semicolons, C 6 side effects, 582 subrange types, 310 variant records, C 141 and interpretation, 17ff, 38, 117 of interpreted languages, 702 just-in-time, 23, 421, 512, 776, 810,
 
@@ -674,12 +632,6 @@ in context-free grammars, 103 of lists, 283, 408 in regular expressions, 44ff, 5
 
 C 111ff communication semantics, C 241 comparison of records, 356
 
-242, 286, 419; C 166, C 297ff,
-
-C 302, C 309
-
-922 Index
-
 parsing and, 28 production in, 49 syntax and, 29 terminal in, 49 tree grammars and, 203 variable in, 49 context-free language, 103, 209; C 19ff context-sensitive grammar, 29 context-speciﬁc look-ahead (for syntax
 
 consensus in concurrent systems, 652 consequent, of Horn clause, 592 conservative code improvement. See
@@ -737,8 +689,6 @@ goto alternatives, 247ff control ﬂow analysis, C 325 control ﬂow graph, 776,
 predict-predict, 89 shift-reduce, 94 conformant array parameters, 364ff conjunctive normal form, C 228, C 234 cons cell, 380 ConScript Unicode Registry, 306
 
 edge splitting, C 319 control hazard in pipeline, C 89 conversion. See type conversion
-
-Index 923
 
 CUDA, 631, 643 Curry, Haskell B., 577, 590 currying of functions, 328, 577ff, 621,
 
@@ -809,12 +759,6 @@ HTML), C 259 CTS (Common Type System). See
 Common Language Infrastructure CTSS (Compatible Time Sharing
 
 number denotational semantics. See semantics,
-
-denotational
-
-System), 705
-
-924 Index
 
 for table-driven scanner, 66 DSSSL (SGML stylesheet language),
 
@@ -898,12 +842,6 @@ C 63, C 68 Driesen, Karel, 530 driver
 
 C 286, C 291 ECMAScript, 736, 864 École Polytechnique Fédérale de
 
-for LL(1) parser, 83 for SLR(1) parser, 99
-
-Lausanne (EPFL), 867
-
-Index 925
-
 call by move, C 250 emulation, 830
 
 termination, C 255 erroneous program, 33, 663; C 250 error productions, 103; C 6ff error reporting
@@ -972,12 +910,6 @@ implementation, 457 for interactive I/O, 456; C 148 Evey, R. James, 113 Excel, 1
 
 elsif keyword, 82 emacs, 16, 25, 725ff
 
-Emacs Lisp, 701, 725ff, 743 Emerald, 348
-
-send operation, C 240
-
-926 Index
-
 ordering within, 240ff, 646 referential transparency, 230, 581;
 
 of record, 352 Fifth Generation project, 620 de Figueiredo, Luiz Henrique, 864 ﬁlename expansion in bash, 706ff ﬁles, 401ff; C 148ff. See also I/O
@@ -1044,16 +976,6 @@ C 14ff ﬁnite element analysis, 655 Finkel, Raphael A., 289, 295 Firefox, 627 �
 
 initialization evaluation, 224ff
 
-associativity, 226ff precedence, 226ff
-
-in awk, 715 of object, 473
-
-FIRST and FOLLOW sets, 84ff, 88ff, 94ff;
-
-C 2ff, C 19ff, C 317ff
-
-Index 927
-
 FMQ algorithm, 113; C 7 folding, 576, 579
 
 implementation, 9, 19 internal ﬁles, C 156 multibyte characters, 47, 305 nested subroutines, 127 numeric types, 305ff operator functions, 148 parallel loops, 639 parallelism, 640, 683 parameter passing, 118, 423ff, 435ff,
@@ -1107,10 +1029,6 @@ C 106, C 155 and instruction scheduling, C 95 integer conversion, 317 mantissa, 
 goto statement, 7, 246, 265 history, 6, 9 I/O, C 149, C 156
 
 bison; emacs; flex; g++; gas; gcc; gdb; GENERIC; GIMP; GIMPLE; gnat; gpc; gprof; RTL
-
-if statement, 253
-
-928 Index
 
 garbage collection, 124, 378, 538ff higher-order functions, 439, 538,
 
@@ -1168,12 +1086,6 @@ circular structures, 391 vs tracing collection, 396 in scripting languages, 704 
 
 improvement), 777ff, 857;
 
-lazy evaluation, 569ff ﬁrst-class subroutines, 155ff, 538ff
-
-C 312ff global variable, 126
-
-Index 929
-
 See also programming environment greatest common divisor (GCD), 13ff,
 
 globbing, in shell languages, 706 glue language, 700, 701, 718ff GLUT (OpenGL Utility Toolkit), 459 gnat (GNU Ada Translator), 467, 782;
@@ -1215,12 +1127,6 @@ Hack, 348 handle, of a right-sentential form, 90 handler, for event, 457ff Hanso
 context-free grammar graph coloring and register allocation,
 
 C 344, C 355 graphical user interface (GUI), 456, 523,
-
-669, 701, 807; C 148ff, C 204.
-
-algorithms, 658
-
-930 Index
 
 of Unix tools, 744 Ho, W. Wilson, 806 Hoare, Charles Antony Richard (Tony),
 
@@ -1277,8 +1183,6 @@ IA-32 EL binary translator, 831 IA-64 (Itanium) architecture, 633, 830,
 117 counterintuitive, 646 language design and, xxvff, 3, 8
 
 mechanisms, 125ff, 166, 471 of scripting, 700ff of separate compilation, C 41
-
-Index 931
 
 cost, C 197 this correction, C 195ff in Perl, 759 repeated, 522; C 198ff
 
@@ -1356,12 +1260,6 @@ architecture Intel Corp., 22, 834; C 81, C 99. See also
 
 See also ﬁles; event handling; graphical user interface interactive, C 148ff
 
-x86 architecture; IA-64 (Itanium architecture)
-
-ambiguity, C 196
-
-932 Index
-
 bytecode. See Java Virtual Machine,
 
 objects, 472
@@ -1415,16 +1313,6 @@ architectural summary, 812 archive (.jar) ﬁles, 816; C 291 bytecode, 23, 211, 
 new operation, 297, 382 numeric types, 305 object closure, 157, 460, 491, 514
 
 boolean type, 234 boxing, 233
-
-vs Common Intermediate
-
-Language, C 291
-
-break statement, 276
-
-Object superclass, 323, 479
-
-Index 933
 
 L
 
@@ -1484,10 +1372,6 @@ binding time and, 116 extension, 16, 724ff families, 11ff formal, 103; C 14 free
 
 ksh, 705 Kurtz, Barry L., 215 Kurtz, Thomas, 861
 
-join operation, 638, 642ff
-
-934 Index
-
 arithmetic operators, 287 assignment, 384 binding of names, C 33 closures, 154
 
 glue, 718ff homoiconic, 547, 584, 608, 617 imperative, 11ff implementation. See also compilers
@@ -1531,10 +1415,6 @@ as composite type, 311 dotted notation, 399 and functional programming, 535,
 Unix address space layout, 792 dynamic linking, C 280 magic numbers, 712 Liskov, Barbara H., 137, 177, 295, 468,
 
 469, 862 Lisp, 7, 11, 590, 864. See also Common
-
-Lisp; Scheme aggregates, 304
-
-Index 935
 
 resolution and uniﬁcation, 595ff theoretical foundations, 612; C 226ff logical type. See type, Boolean logically controlled loop, 261, 275ff Lomet, David B., 410 long instruction word (LIW)
 
@@ -1594,8 +1474,6 @@ C, 436 magic numbers in Unix, 712, 816, 820 Mairson, Harry G., 349 make tool in 
 
 382; C 191 malware, 835 managed code, 810 manifest constants, 120
 
-936 Index
-
 merge function, in SSA form, C 313ff Mesa, 669ff, 865; C 204 message passing, 687; C 235ff. See also
 
 Manson, Jeremy, 696, 698 mantissa of ﬂoating-point number, C 67 Maple, 717, 756, 771 mapping. See associative array Marcotty, Michael, 215 Mariner 1 space probe, 64 mark-and-sweep garbage collection,
@@ -1646,10 +1524,6 @@ Miranda; OCaml; SML aggregates, 238, 400 arrays, 556 assignment, 383, 589
 
 C 76ff microprocessors, C 77ff Microsoft Corp., 9, 348, 530, 550, 861,
 
-863. See also Active Server
-
-Index 937
-
 separate compilation, C 36 subroutines as parameters, 155 Modula-3, 865
 
 semantics, 671ff signals as hints and absolutes, 671ff,
@@ -1699,8 +1573,6 @@ bounded buffer example, 670 condition variables, 670 vs conditional critical reg
 C 176 scheduling, 651 single-chip, 624, 625, 632; C 60,
 
 C 78ff, C 100 uniform v. nonuniform memory, 631 vector. See vector processor
-
-938 Index
 
 multithreading, 627ff
 
@@ -1776,10 +1648,6 @@ Backus-Naur Form Necula, George, 853 negation in Prolog, 615ff Nelson, Bruce, 69
 
 language binary translation, 828 executable, 790 relocatable, 790 Object Management Group, 530 object-based language, 529
 
-scanning, 64
-
-Index 939
-
 evaluation order, 567ff generics (functors), 334
 
 Mono, 783, 821; C 286 NetBeans, 25 ObjectWeb ASM bytecode
@@ -1846,10 +1714,6 @@ ML classes, 141 DFA example, 565ff equality testing, 329
 
 gdb, 845 HotSpot JVM, 812, 825 language design and, 8, 704, 764 Linux, 9
 
-constant, 308 orthogonality, 233ff, 302ff, 817
-
-940 Index
-
 in shell languages, 710 Parlog, 621, 686 Parnas, David L., 177, 698 Parrot virtual machine, 828 parse table
 
 by name, 282, 433, 569; C 180ff,
@@ -1910,10 +1774,6 @@ algorithm, 69 Earley’s algorithm, 69 operator precedence, 112 syntax-directed 
 
 parameters in Ada, 427ff of arrays in C, 386 by closure, 431ff by move, C 250
 
-See also recursive descent
-
-Index 941
-
 case of letters, 47 and CGI scripting, 728 coercion, 751 context, use of, 703, 719, 751ff, 756ff;
 
 attributes and, 200
@@ -1970,10 +1830,6 @@ arrays, 753 blessing mechanism, 757 bytecode, 828 canonical implementation, 703
 
 perlcc, 828 Perles, Micha A., 113 persistent ﬁles, 401; C 149ff Peterson, Gary L., 653, 698
 
-254
-
-942 Index
-
 in ML, 555 parametric, 302, 331ff
 
 PL/I, 866
@@ -2029,8 +1885,6 @@ postﬁx notation polling for communication, C 244 polyglot markup, in HTML, C 2
 branch prediction; instruction scheduling branches and, C 90 caches and, C 89ff pipes in scripting languages, 708ff
 
 327, 349, 380, 481ff, 535 ad hoc, 336 functional programming and, 538
-
-Index 943
 
 implementation, 23, 598ff, 613ff inﬁnite regression, 600ff, 619 instantiation, 593, 599, 616 lists, 596ff loops, 605 negation, 615ff
 
@@ -2090,10 +1944,6 @@ fail predicate, 605 failure-directed search, 614 functors, 593, 610ff generator,
 
 control abstraction procedure, 411. See also subroutine processes, 635, 647
 
-ptrace, 846
-
-944 Index
-
 ragged array, 370 Ragsdale, Susann, 806 Rajwar, Ravi, 698 Randell, Brian, 468 random number, pseudo, 252, 572;
 
 public base class, 479 public member of class, 476 Pugh, William, 698 pumping lemma, 113 push-down automaton. See automaton,
@@ -2145,10 +1995,6 @@ references, 430 Rabin, Michael O., 113
 538 iteration and, 277ff mutual, 131
 
 Alonzo Church and, 537 race condition, 626, 639, 640, 650ff, 653,
-
-664, 683
-
-Index 945
 
 in Prolog, 611 regex library package, 743 register, C 61
 
@@ -2212,12 +2058,6 @@ also pattern matching advanced, 743 basic, 743 capture of substrings, 717, 746, 
 
 C 291ff in Java, 838ff pitfalls, 838
 
-postﬁx notation
-
-769
-
-946 Index
-
 rule, in Prolog, 593 run-time system, 807ff. See also
 
 Rubin, Frank, 295 Ruby, 7, 12, 700, 722ff, 731, 867
@@ -2271,10 +2111,6 @@ C 337ff row-pointer layout (of arrays), 369ff RPC. See remote procedure call RPG
 constraints, 335 objects, 472 Option types, 304 threads, 451 traits (interfaces), 509, 516, 520 type inference, 325 scalability in parallel systems, 643, 679
 
 751ff unlimited extent, 739 variables as references, 498, 752, 757
-
-782, 806; C 274ff
-
-Index 947
 
 hole in, 128, 132 implementation, 128, 144, 412;
 
@@ -2332,10 +2168,6 @@ iteration, 272
 
 for-each, 546ff inexact constants, 106
 
-lambda expression, 159, 541, 577
-
-948 Index
-
 vs functionality, 737 Java Virtual Machine, 813 JavaScript, 737 and reﬂection, 838 stack smashing, 385 taint mode, 853 sed, 700, 713ff, 866
 
 dangling reference, 389, 833 disabling, 182 in linker, 803 reverse assignment, 511 safety vs performance, 181, 241 subrange values, 310, 325ff; C 326 type conversion, 316ff, 320, 511 uninitialized variable, 239, 287, 833 variant records, C 141 static, 181 semantic error
@@ -2391,14 +2223,6 @@ semantic error dynamic, 144, 181ff, 410; C 32
 and binary rewriting, 850 code injection, C 176 Common Language Infrastructure,
 
 arithmetic overﬂow, 243, 318 array subscript, 364, 373, 833;
-
-grammar axiomatic, 182, 215, 290, 591
-
-C 288, C 291
-
-C 326
-
-Index 949
 
 SGML (standard generalized markup
 
@@ -2466,10 +2290,6 @@ compilation, 582 Skolem, Thoralf, C 227
 
 as composite type, 311 implementation, 376 in Python, 755
 
-Skolemization, C 227, C 230ff slice of an array, 360ff, 718; C 343
-
-950 Index
-
 spreadsheet, 12 SQL, 12, 24, 620, 625, 844 SR, 869
 
 equality tests and ordering, 554 generics (functors), 334
@@ -2527,10 +2347,6 @@ C 104 transactions, 680ff spilling of registers. See register spilling spin lock
 stall standard input and output, 708 Standard ML. See SML standardization, 8 Stanford University, 10, 468; C 105 Stansifer, Ryan D., 590 start symbol of CFG, 49 statement
 
 and preemption, 693 two-level, 690 spin-then-yield lock, 664ff spinning. See synchronization,
-
-busy-wait
-
-Index 951
 
 strict name equivalence, 315 strictness analysis, 582 strings, 311, 375ff
 
@@ -2595,14 +2411,6 @@ subroutines frame pointer, 120, 121, 412 generic. See generic subroutine or
 586 and Unix tools, 744 strength reduction, C 302, C 325 strict language, 569
 
 module impact on code generation and
-
-switch statement. See case/switch
-
-improvement, 476; C 96ff
-
-statement
-
-952 Index
 
 semantic analysis and, 180ff semantic errors and, 203ff syntax tree, concrete. See parse tree syntax-directed translation, 69 synthesized attribute. See attribute,
 
@@ -2674,8 +2482,6 @@ C 119ff. See also generic subroutine or module variadic, 348
 
 array access in Ruby, 755 array subscripts, 360, 385 deﬁnition, 148
 
-Index 953
-
 transparency, C 249 transputer, INMOS, 866 trap instruction, 847 TreadMarks, 698 tree grammar, 202ff, 781
 
 timeout in message passing, C 246 timing window, 651. See also race
@@ -2746,8 +2552,6 @@ attribute ﬂow; attribute grammar ad hoc, 198. See also action routine Transmet
 
 608ff Tichy, Walter F., 806 tiling, of arrays/loops, C 337
 
-954 Index
-
 in ML, 326ff, 328ff with separate compilation, 799ff static, 299 strong, 299
 
 type variable, 329 typeglobs in Perl, 754 TypeScript, 348 typestate, 347
@@ -2805,8 +2609,6 @@ polymorphism; type checking deﬁnition and point of view, 300ff orthogonality, 
 Urbana-Champaign, 418 University of Rochester, v University of Toronto, 869 University of Wisconsin–Madison, v Unix, 20. See also Linux
 
 scripting languages and, 118, 703 vs static, 300 gradual, 348 linking and, 799ff
-
-Index 955
 
 Smalltalk, 854 virtual machine monitor (VMM),
 
@@ -2871,8 +2673,6 @@ also Common Language Infrastructure; Java Virtual Machine vs interpretation, 17,
 initialization and, 495, 498ff l-value, 230, 311, 319, 323, 384; C 48 r-value, 230, 384; C 48 and references, 224, 230ff van Rossum, Guido, 720, 867 van Wijngaarden, A., 859
 
 C 225 Weinberger, Peter, 714 Weiser, Mark, 410 Weiss, Shlomo, C 105
-
-956 Index
 
 Welsh, Jim, 348 Wettstein, H., 693 while loop. See loop,
 

@@ -6,5 +6,3 @@ In the introduction to Chapter 3, we deﬁned abstraction as a process by which 
 
 1 The distinction betweencontrol and data abstraction is somewhat fuzzy, because the latter usually encapsulates not only information but also the operations that access and modify that informa- tion. Put another way, most data abstractions include control abstraction.
 
-411
-

@@ -14,6 +14,30 @@ def clean_filename(name):
     name = name.strip(' .')
     return (name[:100] if len(name) > 100 else name) or "untitled"
 
+def is_header_or_footer(block_bbox, page_rect, header_margin=0.12, footer_margin=0.12):
+    """
+    Checks if a text block is likely a header or footer based on its position.
+
+    :param block_bbox: The bounding box of the text block (fitz.Rect).
+    :param page_rect: The bounding box of the entire page (fitz.Rect).
+    :param header_margin: Percentage of page height to consider as header area (e.g., 0.12 = top 12%).
+    :param footer_margin: Percentage of page height to consider as footer area (e.g., 0.12 = bottom 12%).
+    :return: True if the block is in the header or footer area, False otherwise.
+    """
+    # Calculate the y-coordinates for the header and footer boundaries
+    header_boundary = page_rect.y0 + page_rect.height * header_margin
+    footer_boundary = page_rect.y1 - page_rect.height * footer_margin
+
+    # Check if the entire block is above the header boundary
+    if block_bbox.y1 < header_boundary:
+        return True
+    
+    # Check if the entire block is below the footer boundary
+    if block_bbox.y0 > footer_boundary:
+        return True
+        
+    return False
+
 def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, processed_blocks):
     """
     Helper function to find and save the image associated with a caption.
@@ -150,13 +174,18 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
                 
                 page_content_parts[idx] = content
 
-            # 2. Second pass: Process all text blocks, skipping those in image areas
+           # 2. Second pass: Process all text blocks, skipping those in image areas AND headers/footers
             for idx, b in enumerate(blocks):
                 if b["type"] == 0 and idx not in caption_blocks_indices: # Is a text block and not a caption
                     block_bbox = fitz.Rect(b["bbox"])
+                    
+                    # --- START: NEW HEADER/FOOTER CHECK ---
+                    if is_header_or_footer(block_bbox, page.rect):
+                        continue # Skip this block if it's a header or footer
+                    # --- END: NEW HEADER/FOOTER CHECK ---
+
                     is_in_image = False
                     for area in ignored_text_areas:
-                        # If the block significantly overlaps with a known image area, ignore it
                         if area.intersects(block_bbox):
                             is_in_image = True
                             break

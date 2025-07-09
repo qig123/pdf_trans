@@ -32,8 +32,6 @@ Preface xxv I FOUNDATIONS 3
 
 2.1 Specifying Syntax: Regular Expressions and Context-Free Grammars 44 2.1.1 Tokens and Regular Expressions 45 2.1.2 Context-Free Grammars 48 2.1.3 Derivations and Parse Trees 50
 
-x Contents
-
 2.2 Scanning 54 2.2.1 Generating a Finite Automaton 56 2.2.2 Scanner Code 61 2.2.3 Table-Driven Scanning 65 2.2.4 Lexical Errors 65 2.2.5 Pragmas 67
 
 2.3 Parsing 69 2.3.1 Recursive Descent 73 2.3.2 Writing an LL(1) Grammar 79 2.3.3 Table-Driven Top-Down Parsing 82 2.3.4 Bottom-Up Parsing 89 2.3.5 Syntax Errors C 1 . 102
@@ -57,8 +55,6 @@ x Contents
 3.3 Scope Rules 125 3.3.1 Static Scoping 126 3.3.2 Nested Subroutines 127 3.3.3 Declaration Order 130 3.3.4 Modules 135 3.3.5 Module Types and Classes 139 3.3.6 Dynamic Scoping 142
 
 3.4 Implementing Scope C 26 . 144 3.4.1 Symbol Tables C 26 3.4.2 Association Lists and Central Reference Tables C 31
-
-Contents xi
 
 3.5 The Meaning of Names within a Scope 145 3.5.1 Aliases 145 3.5.2 Overloading 147
 
@@ -102,10 +98,6 @@ Contents xi
 
 5.1 The Memory Hierarchy C 61
 
-5.2 Data Representation C 63
-
-xii Contents
-
 5.2.1 Integer Arithmetic C 65 5.2.2 Floating-Point Arithmetic C 67
 
 5.3 Instruction Set Architecture (ISA) C 70 5.3.1 Addressing Modes C 71 5.3.2 Conditions and Branches C 72
@@ -131,10 +123,6 @@ xii Contents
 6.3 Sequencing 252
 
 6.4 Selection 253 6.4.1 Short-Circuited Conditions 254 6.4.2 Case/Switch Statements 256
-
-6.5 Iteration 261
-
-Contents xiii
 
 6.5.1 Enumeration-Controlled Loops 262 6.5.2 Combination Loops 266 6.5.3 Iterators 268 6.5.4 Generators in Icon C 107 . 274 6.5.5 Logically Controlled Loops 275
 
@@ -170,10 +158,6 @@ Contents xiii
 
 8 Composite Types 351
 
-8.1 Records (Structures) 351
-
-xiv Contents
-
 8.1.1 Syntax and Operations 352 8.1.2 Memory Layout and Its Impact 353 8.1.3 Variant Records (Unions) C 136 . 357
 
 8.2 Arrays 359 8.2.1 Syntax and Operations 359 8.2.2 Dimensions, Bounds, and Allocation 363 8.2.3 Memory Layout 368
@@ -204,10 +188,6 @@ xiv Contents
 
 9.3 Parameter Passing 422 9.3.1 Parameter Modes 423 9.3.2 Call by Name C 180 . 433 9.3.3 Special-Purpose Parameters 433 9.3.4 Function Returns 438
 
-9.4 Exception Handling 440
-
-Contents xv
-
 9.4.1 Deﬁning Exceptions 444 9.4.2 Exception Propagation 445 9.4.3 Implementation of Exceptions 447
 
 9.5 Coroutines 450 9.5.1 Stack Allocation 453 9.5.2 Transfer 454 9.5.3 Implementation of Iterators C 183 . 456 9.5.4 Discrete Event Simulation C 187 . 456
@@ -233,8 +213,6 @@ Contents xv
 10.4 Dynamic Method Binding 505 10.4.1 Virtual and Nonvirtual Methods 508 10.4.2 Abstract Classes 508 10.4.3 Member Lookup 509 10.4.4 Object Closures 513
 
 10.5 Mix-In Inheritance 516 10.5.1 Implementation 517 10.5.2 Extensions 519
-
-xvi Contents
 
 10.6 True Multiple Inheritance C 194 . 521 10.6.1 Semantic Ambiguities C 196 10.6.2 Replicated Inheritance C 200 10.6.3 Shared Inheritance C 201
 
@@ -263,8 +241,6 @@ xvi Contents
 11.6 Higher-Order Functions 576
 
 11.7 Theoretical Foundations C 212 . 580 11.7.1 Lambda Calculus C 214
-
-Contents xvii
 
 11.7.2 Control Flow C 217 11.7.3 Structures C 219
 
@@ -300,10 +276,6 @@ Contents xvii
 
 13.1 Background and Motivation 624 13.1.1 The Case for Multithreaded Programs 627 13.1.2 Multiprocessor Architecture 631
 
-13.2 Concurrent Programming Fundamentals 635
-
-xviii Contents
-
 13.2.1 Communication and Synchronization 635 13.2.2 Languages and Libraries 637 13.2.3 Thread Creation Syntax 638 13.2.4 Implementation of Threads 647
 
 13.3 Implementing Synchronization 652 13.3.1 Busy-Wait Synchronization 653 13.3.2 Nonblocking Algorithms 657 13.3.3 Memory Consistency 659 13.3.4 Scheduler Implementation 663 13.3.5 Semaphores 667
@@ -327,8 +299,6 @@ xviii Contents
 14.2 Problem Domains 704 14.2.1 Shell (Command) Languages 705 14.2.2 Text Processing and Report Generation 712 14.2.3 Mathematics and Statistics 717 14.2.4 “Glue” Languages and General-Purpose Scripting 718 14.2.5 Extension Languages 724
 
 14.3 Scripting the World Wide Web 727 14.3.1 CGI Scripts 728 14.3.2 Embedded Server-Side Scripts 729
-
-Contents xix
 
 14.3.3 Client-Side Scripts 734 14.3.4 Java Applets and Other Embedded Elements 734 14.3.5 XSLT C 258 . 736
 
@@ -357,8 +327,6 @@ Contents xix
 15.6 Linking 797 15.6.1 Relocation and Name Resolution 798 15.6.2 Type Checking 799
 
 15.7 Dynamic Linking C 279 . 800 15.7.1 Position-Independent Code C 280 15.7.2 Fully Dynamic (Lazy) Linking C 282
-
-xx Contents
 
 15.8 Summary and Concluding Remarks 802
 
@@ -396,10 +364,6 @@ xx Contents
 
 17.5 Loop Improvement I C 323 17.5.1 Loop Invariants C 323 17.5.2 Induction Variables C 325
 
-17.6 Instruction Scheduling C 328
-
-Contents xxi
-
 17.7 Loop Improvement II C 332 17.7.1 Loop Unrolling and Software Pipelining C 332 17.7.2 Loop Reordering C 337
 
 17.8 Register Allocation C 344
@@ -421,6 +385,4 @@ C Numbered Examples 877
 Bibliography 891
 
 Index 911
-
-This page intentionally left blank
 
