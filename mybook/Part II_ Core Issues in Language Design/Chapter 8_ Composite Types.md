@@ -163,6 +163,8 @@ Most languages refer to an element of an array by appending a subscript—usuall
 
 Array declarations the syntax that would be used to declare a scalar. In C:
 
+char upper[26];
+
 In Fortran:
 
 ```
@@ -305,6 +307,8 @@ deallocate (mat)
 ! implementation is now free to reclaim mat's space
 ```
 
+Execution of an allocate statement can be treated like the elaboration of a dy- namic shape array in a nested block. Execution of a deallocate statement can
+
 be treated like the end of the nested block (restoring the previous stack pointer) if there are no other arrays beyond the speciﬁed one in the stack. Alternatively, dynamic shape arrays can be allocated in the heap, as described in the following subsection. ■
 
 Heap Allocation
@@ -401,6 +405,8 @@ As written, this computation involves three multiplications and six additions/su
 −[(L1 × S1) + (L2 × S2) + (L3 × S3)]
 
 The bracketed expression in this formula is a compile-time constant (assuming the bounds of A are statically known). If A is a global variable, then the address of A is statically known as well, and can be incorporated in the bracketed expression. If A is a local variable of a subroutine (with static shape), then the address of A can be decomposed into a static offset (included in the bracketed expression) plus the contents of the frame pointer at run time. We can think of the address of A plus the bracketed expression as calculating the location of an imaginary array whose [i, j, k]th element coincides with that of A, but whose lower bound in each dimension is zero. This imaginary array is illustrated in Figure 8.10. ■ If i, j, and/or k is known at compile time, then additional portions of the cal- EXAMPLE 8.26
+
+Static and dynamic portions of an array index culation of the address of A[i, j, k] will move from the dynamic to the static part of
 
 the formula shown above. If all of the subscripts are known, then the entire ad- dress can be calculated statically. Conversely, if any of the bounds of the array are not known at compile time, then portions of the calculation will move from the static to the dynamic part of the formula. For example, if L1 is not known until run time, but k is known to be 3 at compile time, then the calculation becomes
 
@@ -871,6 +877,8 @@ A list is deﬁned recursively as either the empty list or a pair consisting of 
 
 Lists in ML and Lisp
 
+9 Recall that objects are self-descriptive in Lisp. The only type checking occurs when a function “deliberately” inspects an argument to see whether it is a list or an atom of some particular type.
+
 approaches lead to different implementations. An ML list is usually a chain of blocks, each of which contains an element and a pointer to the next block. A Lisp list is a chain of cons cells, each of which contains two pointers, one to the element and one to the next cons cell (see Figures 8.11 and 8.12). For historical reasons, the two pointers in a cons cell are known as the car and the cdr; they represent the head of the list and the remaining elements, respectively. In both semantics (homogeneity vs heterogeneity) and implementation (chained blocks vs cons cells), Clu resembles ML, while Python and Prolog (to be discussed in Section 12.2) resemble Lisp. ■ Both ML and Lisp provide convenient notation for lists. In the OCaml dialect EXAMPLE 8.55
 
 List notation of ML, a list is enclosed in square brackets, with elements separated by semi- colons: [a; b; c; d]. A Lisp list is enclosed in parentheses, with elements sep- arated by white space: (a b c d). In both cases, the notation represents a proper list—one whose innermost pair consists of the ﬁnal element and the empty list. In Lisp, it is also possible to construct an improper list, whose ﬁnal pair contains two elements. (Strictly speaking, such a list does not conform to the standard re- cursive deﬁnition.) Lisp systems provide a more general, but cumbersome dotted list notation that captures both proper and improper lists. A dotted list is either an atom (possibly null) or a pair consisting of two dotted lists separated by a pe- riod and enclosed in parentheses. The dotted list (a . (b . (c . (d . null)))) is the same as (a b c d). The list (a . (b . (c . d))) is improper; its ﬁnal cons cell contains a pointer to d in the second position, where a pointer to a list is normally required. ■ Both ML and Lisp provide a wealth of built-in polymorphic functions to ma- nipulate arbitrary lists. Because programs are lists in Lisp, Lisp must distin- guish between lists that are to be evaluated and lists that are to be left “as is,”
@@ -914,6 +922,8 @@ We could of course create an equivalent list with a series of appropriate functi
 Input/output (I/O) facilities allow a program to communicate with the outside world. In discussing this communication, it is customary to distinguish between interactive I/O and I/O with ﬁles. Interactive I/O generally implies communica- tion with human users or physical devices, which work in parallel with the run- ning program, and whose input to the program may depend on earlier output from the program (e.g., prompts). Files generally refer to off-line storage imple- mented by the operating system. Files may be further categorized into those that are temporary and those that are persistent. Temporary ﬁles exist for the duration of a single program run; their purpose is to store information that is too large to ﬁt in the memory available to the program. Persistent ﬁles allow a program to read data that existed before the program began running, and to write data that will continue to exist after the program has ended. I/O is one of the most difﬁcult aspects of a language to design, and one that displays the least commonality from one language to the next. Some languages provide built-in file data types and special syntactic constructs for I/O. Others relegate I/O entirely to library packages, which export a (usually opaque) file type and a variety of input and output subroutines. The principal advantage of language integration is the ability to employ non-subroutine-call syntax, and to perform operations (e.g., type checking on subroutine calls with varying numbers of parameters) that may not otherwise be available to library routines. A purely library-based approach to I/O, on the other hand, may keep a substantial amount of “clutter” out of the language deﬁnition.
 
 IN MORE DEPTH
+
+An overview of language-level I/O mechanisms can be found on the companion site. After a brief introduction to interactive and ﬁle-based I/O, we focus mainly on the common case of text ﬁles. The data in a text ﬁle are stored in character
 
 form, but may be converted to and from internal types during read and write operations. As examples, we consider the text I/O facilities of Fortran, Ada, C, and C++.
 
@@ -1044,6 +1054,8 @@ quicksort (a : l) = quicksort [...] ++ [a] ++ quicksort [...]
 ```
 
 The ++ operator denotes list concatenation (similar to @ in ML). The : operator is equivalent to ML’s :: or Lisp’s cons. Show how to express the two elided expressions as list comprehensions.
+
+8.23–8.31 In More Depth.
 
 ## 8.10 Explorations
 

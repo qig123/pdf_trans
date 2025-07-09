@@ -67,6 +67,8 @@ Thread 1 . . . Thread 2 r1 := zero count . . . r1 := r1 + 1 r1 := zero count zer
 
 If the instructions interleave roughly as shown, both threads may load the same value of zero count, both may increment it by one, and both may store the (only one greater) value back into zero count. The result may be less than what we expect. In general, a race condition occurs whenever two or more threads are “racing” toward points in the code at which they touch some common object, and the behavior of the system depends on which thread gets there ﬁrst. In this particular example, the store of zero count in Thread 1 is racing with the load in Thread 2.
 
+1 Ideally, we might like the compiler to ﬁgure this out automatically, but the problem of indepen- dence is undecidable in the general case.
+
 If Thread 1 gets there ﬁrst, we will get the “right” result; if Thread 2 gets there ﬁrst, we won’t. ■ The most common purpose of synchronization is to make some sequence of instructions, known as a critical section, appear to be atomic—to happen “all at once” from the point of view of every other thread. In our example, the critical section is a load, an increment, and a store. The most common way to make the sequence atomic is with a mutual exclusion lock, which we acquire before the ﬁrst instruction of the sequence and release after the last. We will study locks in Sections 13.3.1 and 13.3.5. In Sections 13.3.2 and 13.4.4 we will also consider mechanisms that achieve atomicity without locks. At lower levels of abstraction, expert programmers may need to understand hardware and run-time systems in sufﬁcient detail to implement synchronization mechanisms. This chapter should convey a sense of the issues, but a full treatment at this level is beyond the scope of the current text.
 
 ## 13.1.1 The Case for Multithreaded Programs
@@ -187,6 +189,8 @@ The usual semantics of a compound statement (sometimes delimited with EXAMPLE 13
 
 General form of co-begin begin... end) call for sequential execution of the constituent statements. A co- begin construct calls instead for concurrent execution:
 
+co-begin –– all n statements run concurrently
+
 stmt 1 stmt 2 . . . stmt n end
 
 Each statement can itself be a sequential or parallel compound, or (commonly) a subroutine call. ■ Co-begin was the principal means of creating threads in Algol-68. It appears EXAMPLE 13.7
@@ -292,6 +296,8 @@ begin
 end T;
 ```
 
+The programmer may then declare variables of type access T (pointer to T), and may create new tasks via dynamic allocation:
+
 pt : access T := new T;
 
 The new operation is a fork: it creates a new thread and starts it executing. There is no explicit join operation in Ada, though parent and child tasks can always syn- chronize with one another explicitly if desired (e.g., immediately before the child completes its execution). As with launch-at-elaboration, control will wait auto- matically at the end of any scope in which task types are declared for all threads using the scope to terminate. ■ Any information an Ada task needs in order to do its job must be communi- cated through shared variables or through explicit messages sent after the task has started execution. Most systems, by contrast, allow parameters to be passed to a thread at start-up time. In Java one obtains a thread by constructing an object of EXAMPLE 13.15
@@ -377,6 +383,10 @@ Multiplexing threads on processes language implementations adopt an intermediate
 
 ![Figure 13.7 illustrates the...](images/page_681_vector_576.png)
 *Figure 13.7 illustrates the data structures employed by a simple scheduler. At any EXAMPLE 13.21*
+
+particular time, a thread is either blocked (i.e., for synchronization) or runnable. A runnable thread may actually be running on some process or it may be awaiting
+
+Cooperative multithreading on a uniprocessor
 
 ![Figure 13.7 Data structures...](images/page_682_vector_226.png)
 *Figure 13.7 Data structures of a simple scheduler. A designated current thread is running. Threads on the ready list are runnable. Other threads are blocked, waiting for various conditions to become true. If threads run on top of more than one OS-level process, each such process will have its own current thread variable. If a thread makes a call into the operating system, its process may block in the kernel.*
@@ -805,6 +815,8 @@ atomic { –– your code here }
 
 Bounded buffer with transactions buffer would be very similar to that of Figure 13.18. We would simply replace
 
+region buffer when full slots < SIZE region buffer when full slots > 0 ... and ...
+
 with
 
 atomic atomic if full slots = SIZE then retry and if full slots = 0 then retry ... ...
@@ -820,6 +832,8 @@ There is a surprising amount of variety among software TM systems. We outline on
 Translation of an atomic block following:
 
 loop valid time := clock read set := write map := ∅ try –– your code here commit() break except when abort –– continue loop
+
+In the body of the transaction (your code here), reads and writes of a location with address x are replaced with calls to read(x) and write(x, v), using the code
 
 ![Figure 13.19 Possible pseudocode...](images/page_715_vector_374.png)
 *Figure 13.19 Possible pseudocode for a software TM system. The read and write routines are used to replace ordinary loads and stores within the body of the transaction. The validate routine is called from both read and commit. It attempts to verify that no previously read value has since been overwritten and, if successful, updates valid time. Various fence instructions (not shown) may be needed if the underlying hardware is not sequentially consistent.*

@@ -18,6 +18,9 @@ Changes in the Fourth Edition
 
 In comparison to the third edition, PLP-4e includes
 
+* New chapters devoted to type systems and composite types, in place of the
+  older single chapter on types
+
 * Updated treatment of functional programming, with extensive coverage of
   OCaml
 * Numerous other reﬂections of changes in the ﬁeld

@@ -32,6 +32,9 @@ Creation and destruction of objects Creation and destruction of bindings Deactiv
 
 The period of time between the creation and the destruction of a name-to- object binding is called the binding’s lifetime. Similarly, the time between the creation and destruction of an object is the object’s lifetime. These lifetimes need not necessarily coincide. In particular, an object may retain its value and the po- tential to be accessed even when a given name can no longer be used to access it. When a variable is passed to a subroutine by reference, for example (as it typically is in Fortran or with ‘&’ parameters in C++), the binding between the parame- ter name and the variable that was passed has a lifetime shorter than that of the variable itself. It is also possible, though generally a sign of a program bug, for a name-to-object binding to have a lifetime longer than that of the object. This can happen, for example, if an object created via the C++ new operator is passed as a & parameter and then deallocated (delete-ed) before the subroutine returns. A binding to an object that is no longer live is called a dangling reference. Dangling references will be discussed further in Sections 3.6 and 8.5.2. Object lifetimes generally correspond to one of three principal storage alloca- tion mechanisms, used to manage the object’s space:
 
+* Static objects are given an absolute address that is retained throughout the
+  program’s execution.
+
 * Stack objects are allocated and deallocated in last-in, ﬁrst-out order, usually in
   conjunction with subroutine calls and returns.
 * Heap objects may be allocated and deallocated at arbitrary times. They require
@@ -70,6 +73,8 @@ subroutines, active or not. A stack may therefore require substantially less mem
 A heap is a region of storage in which subblocks can be allocated and deallocated at arbitrary times.2 Heaps are required for the dynamically allocated pieces of linked data structures, and for objects such as fully general character strings, lists, and sets, whose size may change as a result of an assignment statement or other update operation. There are many possible strategies to manage space in a heap. We review the major alternatives here; details can be found in any data-structures textbook. The principal concerns are speed and space, and as usual there are tradeoffs between them. Space concerns can be further subdivided into issues of internal and ex- ternal fragmentation. Internal fragmentation occurs when a storage-management algorithm allocates a block that is larger than required to hold a given object; the extra space is then unused. External fragmentation occurs when the blocks that EXAMPLE 3.3
 
 External fragmentation in the heap have been assigned to active objects are scattered through the heap in such a way that the remaining, unused space is composed of multiple blocks: there may be quite a lot of free space, but no one piece of it may be large enough to satisfy some future request (see Figure 3.2). ■ Many storage-management algorithms maintain a single linked list—the free list—of heap blocks not currently in use. Initially the list consists of a single block comprising the entire heap. At each allocation request the algorithm searches the list for a block of appropriate size. With a ﬁrst ﬁt algorithm we select the ﬁrst block on the list that is large enough to satisfy the request. With a best ﬁt algorithm we search the entire list to ﬁnd the smallest block that is large enough to satisfy the
+
+2 Unfortunately, the term “heap” is also used for the common tree-based implementation of a priority queue. These two uses of the term have nothing to do with one another.
 
 request. In either case, if the chosen block is signiﬁcantly larger than required, then we divide it into two and return the unneeded portion to the free list as a smaller block. (If the unneeded portion is below some minimum threshold in size, we may leave it in the allocated block as internal fragmentation.) When a block is deallocated and returned to the free list, we check to see whether either or both of the physically adjacent blocks are free; if so, we coalesce them. Intuitively, one would expect a best ﬁt algorithm to do a better job of reserving large blocks for large requests. At the same time, it has higher allocation cost than a ﬁrst ﬁt algorithm, because it must always search the entire list, and it tends to result in a larger number of very small “left-over” blocks. Which approach—ﬁrst ﬁt or best ﬁt—results in lower external fragmentation depends on the distribution of size requests. In any algorithm that maintains a single free list, the cost of allocation is lin- ear in the number of free blocks. To reduce this cost to a constant, some stor- age management algorithms maintain separate free lists for blocks of different sizes. Each request is rounded up to the next standard size (at the cost of inter- nal fragmentation) and allocated from the appropriate list. In effect, the heap is divided into “pools,” one for each standard size. The division may be static or dynamic. Two common mechanisms for dynamic pool adjustment are known as the buddy system and the Fibonacci heap. In the buddy system, the standard block sizes are powers of two. If a block of size 2k is needed, but none is available, a block of size 2k+1 is split in two. One of the halves is used to satisfy the request; the other is placed on the kth free list. When a block is deallocated, it is coa- lesced with its “buddy”—the other half of the split that created it—if that buddy is free. Fibonacci heaps are similar, but use Fibonacci numbers for the standard sizes, instead of powers of two. The algorithm is slightly more complex, but leads to slightly lower internal fragmentation, because the Fibonacci sequence grows more slowly than 2k. The problem with external fragmentation is that the ability of the heap to sat- isfy requests may degrade over time. Multiple free lists may help, by clustering small blocks in relatively close physical proximity, but they do not eliminate the problem. It is always possible to devise a sequence of requests that cannot be satisﬁed, even though the total space required is less than the size of the heap. If memory is partitioned among size pools statically, one need only exceed the maxi- mum number of requests of a given size. If pools are dynamically readjusted, one can “checkerboard” the heap by allocating a large number of small blocks and then deallocating every other one, in order of physical address, leaving an alter- nating pattern of small free and allocated blocks. To eliminate external fragmen- tation, we must be prepared to compact the heap, by moving already-allocated blocks. This task is complicated by the need to ﬁnd and update all outstanding references to a block that is being moved. We will discuss compaction further in Section 8.5.3.
 
@@ -130,6 +135,8 @@ Access to Nonlocal Objects
 We have already seen (Section 3.2.2) that the compiler can arrange for a frame pointer register to point to the frame of the currently executing subroutine at run
 
 4 This code is not contrived; it was extracted from an implementation (originally in Pascal) of the FMQ error repair algorithm described in Section C 2.3.5.
+
+5 The C++ :: operator is also used to name members (ﬁelds or methods) of a base class that are hidden by members of a derived class; we will consider this use in Section 10.2.2.
 
 ![Figure 3.4 Example of...](images/page_162_vector_393.png)
 *Figure 3.4 Example of nested subroutines, shown in pseudocode. Vertical bars indicate the scope of each name, for a language in which declarations are visible throughout their subroutine. Note the hole in the scope of the outer X.*
@@ -383,6 +390,8 @@ In more complex programs, it may make sense for a module to export several relat
 
 ## 3.3.5 Module Types and Classes
 
+An alternative solution to the multiple instance problem appeared in Eu- clid, which treated each module as a type, rather than a simple encapsulation
+
 construct. Given a module type, the programmer could declare an arbitrary number of similar module objects. As it turns out, the classes of modern object- oriented languages are an extension of module types. Access to a module instance typically looks like access to an object, and we can illustrate the ideas in any object-oriented language. For our C++ pseudorandom number example, the EXAMPLE 3.16
 
 A pseudorandom number generator type syntax
@@ -415,6 +424,8 @@ as an argument. Conceptually, there is a dedicated rand_int routine for every ge
 Object Orientation
 
 The difference between module types and classes is a powerful pair of features found together in the latter but not the former—namely, inheritance and dynamic method dispatch.8 Inheritance allows new classes to be deﬁned as extensions or reﬁnements of existing classes. Dynamic method dispatch allows a reﬁned class to override the deﬁnition of an operation in its parent class, and for the choice among deﬁnitions to be made at run time, on the basis of whether a particular object belongs to the child class or merely to the parent. Inheritance facilitates a programming style in which all or most operations are thought of as belonging to objects, and in which new objects can inherit many of their operations from existing objects, without the need to rewrite code. Classes have their roots in Simula-67, and were further developed in Smalltalk. They ap- pear in many modern languages, including Eiffel, OCaml, C++, Java, C#, and sev- eral scripting languages, notably Python and Ruby. Inheritance mechanisms can also be found in certain languages that are not usually considered object-oriented, including Modula-3, Ada 95, and Oberon. We will examine inheritance, dynamic dispatch, and their impact on scope rules in Chapter 10 and in Section 14.4.4.
+
+8 A few languages—notablymembers of the ML family—havemodule types with inheritance—but still without dynamic method dispatch. Modules in most languages are missing both features.
 
 Module types and classes (ignoring issues related to inheritance) require only simple changes to the scope rules deﬁned for modules in Section 3.3.4. Every instance A of a module type or class (e.g., every rand_gen) has a separate copy of the module or class’s variables. These variables are then visible when executing one of A’s operations. They may also be indirectly visible to the operations of some other instance B if A is passed as a parameter to one of those operations. This rule makes it possible in most object-oriented languages to construct binary (or more-ary) operations that can manipulate the variables (ﬁelds) of more than one instance of a class.
 
@@ -513,6 +524,8 @@ Overloaded enumeration constants in Ada slightly more sophisticated form of over
 Resolving ambiguous overloads programmer to provide appropriate context explicitly. In Ada, for example, one can say
 
 print(month'(oct));
+
+In Modula-3 and C#, every use of an enumeration constant must be preﬁxed with a type name, even when there is no chance of ambiguity:
 
 ![Figure 3.12 Simple example...](images/page_181_vector_245.png)
 *Figure 3.12 Simple example of overloading in C++. In each case the compiler can tell which function is intended by the number and types of arguments.*
@@ -731,6 +744,8 @@ IntFunc h = PlusY(2);
 
 Here y has unlimited extent! The compiler arranges to allocate it in the heap, and to refer to it indirectly through a hidden pointer, included in the closure. This implementation incurs the cost of dynamic storage allocation (and eventual garbage collection) only when it is needed; local variables remain in the stack in the common case. ■ Object closures are sufﬁciently important that some languages support them with special syntax. In C++, an object of a class that overrides operator() can EXAMPLE 3.36
 
+Function objects in C++ be called as if it were a function:
+
 ```
 class int_func {
 public:
@@ -788,6 +803,8 @@ fun i j -> if i > j then i else j
 # Ruby
 ```
 
+Each of these expressions evaluates to the larger of two parameters.
+
 In Scheme and OCaml, which are predominately functional languages, a lambda expression simply is a function, and can be called in the same way as any other function:
 
 ```
@@ -822,6 +839,8 @@ for_each(V.begin(), V.end(),
 [](int e){ if (e < 50) cout << e << " "; }
 );
 ```
+
+Here for_each is a standard library routine that applies its third parameter—a function—to every element of a collection in the range speciﬁed by its ﬁrst two
 
 parameters. In our example, the function is denoted by a lambda expression, introduced by the empty square brackets. The compiler turns the lambda expres- sion into an anonymous function, which is then passed to for_each via C++’s usual mechanism—a simple pointer to the code. ■ Suppose, however, that we wanted to print all elements less than k, where k is EXAMPLE 3.40
 
@@ -863,6 +882,8 @@ The key to the simpler syntax is that Comparator is a functional interface, and 
 ## 3.7 Macro Expansion
 
 Prior to the development of high-level programming languages, assembly lan- guage programmers could ﬁnd themselves writing highly repetitive code. To ease the burden, many assemblers provided sophisticated macro expansion facilities. Consider the task of loading an element of a two-dimensional array from memory EXAMPLE 3.42
+
+A simple assembly macro into a register. As we shall see in Section 8.2.3, this operation can easily require
 
 half a dozen instructions, with details depending on the hardware instruction set; the size of the array elements; and whether the indices are constants, values in memory, or values in registers. In many early assemblers, one could deﬁne a macro that would replace an expression like ld2d(target reg, array name, row, col- umn, row size, element size) with the appropriate multi-instruction sequence. In a numeric program containing hundreds or thousands of array access operations, this macro could prove extremely useful. ■ When C was created in the early 1970s, it was natural to include a macro pre- EXAMPLE 3.43
 
@@ -941,6 +962,11 @@ The number of built-in functions (math, type queries, etc.) The variable declara
   5.
   b : integer := a
 
+  6.
+  procedure inner()
+  7.
+  print a, b
+
   8.
   a : integer := 3
 
@@ -973,6 +999,8 @@ procedure R(m : integer) write integer(x) x /:= 2 –– integer division if x >
 –– body of B x := a × a R(1)
 
 –– body of main B(3) write integer(g)
+
+(a) What does this program print?
 
 ![Figure 3.16 List management...](images/page_202_vector_397.png)
 *Figure 3.16 List management routines for Exercise 3.7.*
@@ -1071,6 +1099,8 @@ What does this program print? What would it print if Scheme used dynamic scoping
 ## 3.14 Consider the following pseudocode:
 
 x : integer –– global
+
+procedure set x(n : integer) x := n
 
 procedure print x() write integer(x)
 

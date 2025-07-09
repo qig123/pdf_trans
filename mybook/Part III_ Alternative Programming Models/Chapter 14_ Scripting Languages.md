@@ -65,6 +65,8 @@ Much of the most rapid change in programming languages today is occurring in scr
 
 ## 14.2 Problem Domains
 
+Some general-purpose languages—Scheme and Visual Basic, for example—are widely used for scripting. Conversely, some scripting languages, including Perl,
+
 Python, and Ruby, are intended by their designers for general-purpose use, with features intended to support “programming in the large”: modules, separate compilation, reﬂection, program development environments, and so on. For the most part, however, scripting languages tend to see their principal use in well- deﬁned problem domains. We consider some of these in the following subsec- tions.
 
 ## 14.2.1 Shell (Command) Languages
@@ -138,6 +140,8 @@ This invocation of the standard tr command converts all newline characters to sp
 
 Redirection of stderr and stdout works silently. If it encounters an error, however, it prints a message to stdout and quits. This violation of convention (the message should go to stderr) is harmless when the command is invoked from the keyboard. If it is embedded in a script, however, and the output of the script is directed to a ﬁle, the error mes- sage may end up in the ﬁle instead of on the screen, and go unnoticed by the user. With bash we can type
 
+ps2pdf my_fig.eps 1>&2
+
 Here 1>&2 means “make ps2pdf send ﬁle 1 (stdout) to the same place that the surrounding context would normally send ﬁle 2 (stderr).” ■ Finally, like most shells, bash allows the user to provide the input to a com- EXAMPLE 14.10
 
 Heredocs (in-line input) mand in-line:
@@ -178,6 +182,8 @@ echo $single $double
 ```
 
 will print “$foo bar”. ■ Several other bracketing constructs in bash group the text inside, for various purposes. Command lists enclosed in parentheses are passed to a subshell for EXAMPLE 14.13
+
+Subshells evaluation. If the opening parenthesis is preceded by a dollar sign, the output of the nested command list is expanded into the surrounding context:
 
 for fig in $(cat my_figs); do ps2pdf ${fig}.eps; done
 
@@ -229,6 +235,9 @@ Specifying the full path name is a safety feature: it anticipates the possibilit
   What IBM creation is generally considered the ﬁrst general-purpose scripting
   language?
 
+  5.
+  What is the most popular language for server-side web scripting?
+
   6.
   How does the notion of context in Perl differ from coercion?
 
@@ -257,6 +266,8 @@ Sed
 As a simple text processing example, consider the problem of extracting all head- EXAMPLE 14.18
 
 Extracting HTML headers with sed ers from a web page (an HTML ﬁle). These are strings delimited by <h1> ... </h1>, <h2> ... </h2>, and <h3> ... </h3> tags. Accomplishing this task in an editor like emacs, vim, or even Microsoft Word is straightforward but tedious: one must search for an opening tag, delete preceding text, search for a closing tag, mark the current position (as the starting point for the next deletion), and re- peat. A program to perform these tasks in sed, the Unix “stream editor,” appears in Figure 14.1. The code consists of a label and three commands, the ﬁrst two of which are compound. The ﬁrst compound command prints the ﬁrst header, if any, found in the portion of the input currently being examined (what sed calls the pattern space). The second compound command appends a new line to the pattern space whenever it already contains a header-opening tag. Both compound commands, and several of the subcommands, use regular expression patterns, de- limited by slashes. We will discuss these patterns further in Section 14.4.2. The third command (the lone d) simply deletes the pattern space. Because each com- pound command ends with a branch back to the top of the script, the second will execute only if the ﬁrst does not, and the delete will execute only if neither compound does. ■ The editor heritage of sed is clear in this example. Commands are generally one character long, and there are no variables—no state of any kind beyond the program counter and text that is being edited. These limitations make sed best suited to “one-line programs,” typically entered verbatim from the keyboard with the -e command-line switch. The following, for example, will read from standard EXAMPLE 14.19
+
+One-line scripts in sed input, delete blank lines, and (implicitly) print the nonblank lines to standard output:
 
 ![Figure 14.2 Script in...](images/page_747_vector_255.png)
 *Figure 14.2 Script in awk to extract headers from an HTML ﬁle. Unlike the sed script, this version prints interior lines incrementally. It again assumes that the input is well formed.*
@@ -526,6 +537,8 @@ XML can be used to create specialized markup languages for a very wide range of 
 
 In Section 14.1.1, we listed several common characteristics of scripting languages:
 
+* Both batch and interactive use
+
 * Economy of expression
 * Lack of declarations; simple scoping rules
 * Flexible dynamic typing
@@ -556,6 +569,8 @@ Scoping rules in Python program of Figure 14.16. Here we have a set of nested su
 ```
 
 Note that while the tuple returned from middle (forwarded on by outer, and printed by the main program) has a 2 as its ﬁrst element, the global i still con- tains the 4 that was written by inner. Note also that while the write to i in outer appears textually after the read of i in middle, its scope extends over all of outer, including the body of middle. ■ Interestingly, there is no way in Python for a nested routine to write a variable that belongs to a surrounding but nonglobal scope. In Figure 14.16, inner could EXAMPLE 14.38
+
+Superassignment in R not be modiﬁed to write outer’s i. R provides an alternative mechanism that
 
 ![Figure 14.17 A program...](images/page_774_vector_278.png)
 *Figure 14.17 A program to illustrate scope rules in Perl. The my operator creates a statically scoped local variable; the local operator creates a new dynamically scoped instance of a global variable. The static scope extends from the point of declaration to the lexical end of the block; the dynamic scope extends from elaboration to the end of the block’s execution.*
@@ -661,6 +676,8 @@ if ($foo =~ /^ba.*s+/) ...
 ```
 
 The string to be matched against can also be left unspeciﬁed, in which case Perl uses the pseudovariable $_ by default:
+
+6 Strictly speaking, ] and } don’t require a protective backslash unless there is a preceding un- matched (and unprotected) [ or {, respectively.
 
 ```
 $_ = "albatross";
@@ -858,6 +875,8 @@ print $a + 3 . "\n";
 
 prints 43 and 7. ■ In general, Perl (and likewise Rexx and Tcl) takes the position that program- mers should check for the errors they care about, and in the absence of such checks the program should do something reasonable. Perl is willing, for example, EXAMPLE 14.60
 
+Coercion and context in Perl to accept the following (though it prints a warning if run with the -w compile- time switch):
+
 ```
 $a[3] = "1";
 # (array @a was previously undefined)
@@ -983,6 +1002,10 @@ O = X ^ Y
 
 Conﬂated types in PHP, Tcl, and JavaScript tween arrays and hashes. An array is simply a hash for which the programmer chooses to use numeric keys. JavaScript employs a similar simpliﬁcation, unify- ing arrays, hashes, and objects. The usual obj.attr notation to access a mem- ber of an object (what JavaScript calls a property) is simply syntactic sugar for obj["attr"]. So objects are hashes, and arrays are objects with integer property names. ■ Higher-dimensional types are straightforward to create in most scripting lan- guages: one can deﬁne arrays of (references to) hashes, hashes of (references to) arrays, and so on. Alternatively, one can create a “ﬂattened” implementation by EXAMPLE 14.69
 
+using composite objects as keys in a hash. Tuples in Python work particularly well:
+
+Multidimensional arrays in Python and other languages
+
 ```
 matrix = {}
 # empty dictionary (hash)
@@ -1006,6 +1029,8 @@ $time = gmtime();
 
 Perl’s standard gmtime() library function will return the time as a character string, along the lines of "Wed May 6 04:36:30 2015". On the other hand, if we write
 
+@time_arry = gmtime();
+
 the same function will return (30, 36, 4, 6, 4, 115, 3, 125, 0), a nine- element array indicating seconds, minutes, hours, day of month, month of year (with January = 0), year (counting from 1900), day of week (with Sunday = 0), day of year, and (as a 0/1 Boolean value) an indication of whether it’s a leap year. ■ So how does gmtime know what to do? By calling the built-in function EXAMPLE 14.71
 
 Using wantarray to determine calling context wantarray. This returns true if the current function was called in a list context, and false if it was called in a scalar context. By convention, functions typically indicate an error by returning the empty array when called in a list context, and the undeﬁned value (undef) when called in a scalar context:
@@ -1019,6 +1044,8 @@ Though not an object-oriented language, Perl 5 has features that allow one to pr
 Perl 5
 
 Object support in Perl 5 boils down to two main things: (1) a “blessing” mecha- nism that associates a reference with a package, and (2) special syntax for method calls that automatically passes an object reference or package name as the ini- tial argument to a function. While any reference can in principle be blessed, the usual convention is to use a hash, so that ﬁelds can be named as shown in Exam- ple 14.63.
+
+7 More extensive features, currently under design for Perl 6, will not be covered here.
 
 ![Figure 14.19 Object-oriented programming...](images/page_791_vector_277.png)
 *Figure 14.19 Object-oriented programming in Perl. Blessing a reference (object) into package Integer allows Integer’s functions to serve as the object’s methods.*
@@ -1104,6 +1131,8 @@ document.write(c2.get() + "&nbsp;&nbsp;" + c3.get() + "<br>");
 ```
 
 This code will print
+
+3 0 4 5 ■
 
 ![Figure 14.20 Object-oriented programming...](images/page_794_vector_201.png)
 *Figure 14.20 Object-oriented programming in JavaScript. The Integer function is used as a constructor. Assignments to members of its prototype object serve to establish methods. These will be available to any object created by Integer that doesn’t have corresponding members of its own.*
@@ -1204,6 +1233,8 @@ DESIGN & IMPLEMENTATION
 lack of declarations, simple scoping rules, ﬂexible dynamic typing, easy access to other programs, sophisticated pattern matching and string manipulation, and high-level data types. We began our chapter by tracing the historical development of scripting, start- ing with the command interpreter, or shell programs of the mid-1970s, and the text processing and report generation tools that followed soon thereafter. We looked in particular at the “Bourne-again” shell, bash, and the Unix tools sed and awk. We also mentioned such special-purpose domains as mathematics and statistics, where scripting languages are widely used for data analysis, visualiza- tion, modeling, and simulation. We then turned to the three domains that dom- inate scripting today: “glue” (coordination) applications, conﬁguration and ex- tension, and scripting of the World Wide Web. For many years, Perl was the most popular of the general-purpose “glue” lan- guages, but Python and Ruby have clearly overtaken it at this point. Several script- ing languages, including Python, Scheme, and Lua, are widely used to extend the functionality of complex applications. In addition, many commercial packages have their own proprietary extension languages. Web scripting comes in many forms. On the server side of an HTTP con- nection, the Common Gateway Interface (CGI) standard allows a URI to name a program that will be used to generate dynamic content. Alternatively, web- page-embedded scripts, often written in PHP, can be used to create dynamic con- tent in a way that is invisible to users. To reduce the load on servers, and to improve interactive responsiveness, scripts can also be executed within the client browser. JavaScript is the dominant notation in this domain; it uses the HTML Document Object Model (DOM) to manipulate web-page elements. For more demanding tasks, many browsers can be directed to run a Java applet, which takes full responsibility for some portion of the “screen real estate,” but this strategy comes with security concerns that are increasingly viewed as unacceptable. With the emergence of HTML5, most dynamic content—multimedia in particular— can be handled directly by the browser. At the same time, XML has emerged as the standard format for structured, presentation-independent information, with load-time transformation via XSL. Because of their rapid evolution, scripting languages have been able to take ad- vantage of many of the most powerful and elegant mechanisms described in pre- vious chapters, including ﬁrst-class and higher-order functions, unlimited extent, iterators, garbage collection, list comprehensions, and object orientation—not to mention extended regular expressions and such high-level data types as dictionar- ies, sets, and tuples. Given current trends, scripting languages are likely to become increasingly ubiquitous, and to remain a principal focus of language innovation.
 
 ## 14.6 Exercises
+
+## 14.1 Does ﬁlename “globbing” provide the expressive power of standard regu- lar expressions? Explain.
 
 14.2 Write shell scripts to (a) Replace blanks with underscores in the names of all ﬁles in the current directory. (b) Rename every ﬁle in the current directory by prepending to its name a textual representation of its modiﬁcation date. (c) Find all eps ﬁles in the ﬁle hierarchy below the current directory, and create any corresponding pdf ﬁles that are missing or out of date. (d) Print the names of all ﬁles in the ﬁle hierarchy below the current di- rectory for which a given predicate evaluates to true. Your (quoted) predicate should be speciﬁed on the command line using the syntax of the Unix test command, with one or more at signs (@) standing in for the name of the candidate ﬁle.
 
@@ -1308,6 +1339,8 @@ Explain why this doesn’t work. (Hint: Remember the difference between greedy a
 14.18 Consider the following regular expression in Perl: /^(?:((?:ab)+) |a((?:ba)*))$/. Describe, in English, the set of strings it will match. Show a natural NFA for this set, together with the minimal DFA. Describe the substrings that should be captured in each matching string. Based on this example, discuss the practicality of using DFAs to match strings in Perl. 14.19–14.21 In More Depth.
 
 ## 14.7 Explorations
+
+## 14.22 Learn about TEX [Knu86] and LATEX [Lam94], the typesetting system used to create this book. Explore the ways in which its specialized target
 
 domain—professional typesetting—inﬂuenced its design. Features you might wish to consider include dynamic scoping, the relatively impover- ished arithmetic and control-ﬂow facilities, and the use of macros as the fundamental control abstraction.
 

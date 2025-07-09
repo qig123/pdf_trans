@@ -126,6 +126,10 @@ Chapter 7: Type Systems
 
 Chapter 8: Composite Types
 
+## 8.1 Struct tags and typedef in C and C++ 353
+
+## 8.2 The order of record ﬁelds 356
+
 ## 8.13 The placement of variant ﬁelds C·141
 
 ## 8.3 Is [ ] an operator? 361

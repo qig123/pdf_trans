@@ -33,6 +33,8 @@ Though the syntactic and semantic details vary from language to language, these 
 
 ## 6.1 Expression Evaluation
 
+An expression generally consists of either a simple object (e.g., a literal constant, or a named variable or constant) or an operator or function applied to a col-
+
 lection of operands or arguments, each of which in turn is an expression. It is conventional to use the term operator for built-in functions that use special, simple syntax, and to use the term operand for an argument of an operator. In EXAMPLE 6.1
 
 A typical function call most imperative languages, function calls consist of a function name followed by a parenthesized, comma-separated list of arguments, as in
@@ -98,6 +100,8 @@ a + (((b * c)**d)**(e/f))
 
 or
 
+2 Most authors use the term “inﬁx” only for binary operators. Multiword operators may be called “mixﬁx,” or left unnamed.
+
 a + ((b * (c**(d**e)))/f)
 
 or yet some other option? (In Fortran, the answer is the last of the options shown.) ■ In any given language, the choice among alternative evaluation orders depends on the precedence and associativity of operators, concepts we introduced in Sec- tion 2.1.3. Issues of precedence and associativity do not arise in preﬁx or postﬁx notation. Precedence rules specify that certain operators, in the absence of parentheses, group “more tightly” than other operators. In most languages multiplication and EXAMPLE 6.8
@@ -142,6 +146,8 @@ In the ﬁrst statement, the right-hand side of the assignment refers to the val
 L-values in C say 2 + 3 = a, or even a = 2 + 3, if a is the name of a constant. By the same token, not all l-values are simple names; both l-values and r-values can be complicated expressions. In C one may write
 
 (f(a)+3)->b[c] = 2;
+
+In this expression f(a) returns a pointer to some element of an array of pointers to structures (records). The assignment places the value 2 into the c-th element
 
 ![Figure 6.2 The value...](images/page_264_vector_163.png)
 *Figure 6.2 The value (left) and reference (right) models of variables. Under the reference model, it becomes important to distinguish between variables that refer to the same object and variables that refer to different objects whose values happen (at the moment) to be equal.*
@@ -249,6 +255,8 @@ b.c[3].d = b.c[3].d * e;
 
 Such statements are not only cumbersome to write and to read (we must examine both sides of the assignment carefully to see if they really are the same), they also
 
+3 Historically, C lacked a separate Boolean type. C99 added _Bool, but it’s really just a 1-bit integer.
+
 result in redundant address calculations (or at least extra work to eliminate the redundancy in the code improvement phase of compilation). ■ If the address calculation has a side effect, then we may need to write a pair of EXAMPLE 6.21
 
 Side effects and updates statements instead. Consider the following code in C:
@@ -288,6 +296,8 @@ A[index_fn(i)]++;
 
 or
 
+++A[index_fn(i)];
+
 More signiﬁcantly, increment and decrement operators provide elegant syntax for code that uses an index or a pointer to traverse an array:
 
 ```
@@ -318,6 +328,8 @@ a, b = c, d;
 Here the comma in the right-hand side is not the sequencing operator of C. Rather, it serves to deﬁne an expression, or tuple, consisting of multiple r-values. The comma operator on the left-hand side produces a tuple of l-values. The effect of the assignment is to copy c into a and d into b.4 ■ While we could just as easily have written EXAMPLE 6.26
 
 Advantages of multiway assignment
+
+4 The syntax shown here is for Perl, Python, and Ruby. Clu uses := for assignment. ML requires parentheses around each tuple.
 
 a = c; b = d;
 
@@ -421,6 +433,8 @@ we know from associativity that f(b) will be subtracted from a before perform- i
 
 f(a, g(b), h(c))
 
+we do not know the order in which the arguments will be evaluated. ■ There are two main reasons why the order can be important:
+
 * Side effects: If f(b) may modify d, then the value of a - f(b) - c * d will
   EXAMPLE 6.29
 
@@ -493,6 +507,8 @@ Boolean expressions provide a special and important opportunity for code im- pro
 Short-circuited expressions (b < c). If a is greater than b, there is really no point in checking to see whether b is less than c; we know the overall expression must be false. Similarly, in the expression (a > b) or (b > c), if a is indeed greater than b there is no point in checking to see whether b is greater than c; we know the overall expression must be true. A compiler that performs short-circuit evaluation of Boolean expressions will generate code that skips the second half of both of these computations when the overall value can be determined from the ﬁrst half. ■ Short-circuit evaluation can save signiﬁcant amounts of time in certain situa- EXAMPLE 6.35
 
 Saving time with short-circuiting tions:
+
+if (very_unlikely_condition && very_expensive_function()) ... ■
 
 But time is not the only consideration, or even the most important. Short- EXAMPLE 6.36
 
@@ -802,6 +818,8 @@ r1 := . . . –– calculate controlling expression if r1 ̸= 1 goto L1 clause A
 
 Rather than test its controlling expression sequentially against a series of pos- sible values, the case statement is meant to compute an address to which it jumps in a single instruction. The general form of the anticipated target code appears EXAMPLE 6.54
 
+Jump tables in Figure 6.3. The elided calculation at label L6 can take any of several forms. The most common of these simply indexes into an array, as shown in Figure 6.4.
+
 ![Figure 6.3 General form...](images/page_291_vector_256.png)
 *Figure 6.3 General form of target code generated for a ﬁve-arm case statement.*
 
@@ -906,6 +924,8 @@ r1 := ﬁrst r2 := step r3 := max(⌊(last −ﬁrst + step)/step⌋, 0) –– 
 
 The use of the iteration count avoids the need to test the sign of step within the loop. Assuming we have been suitably careful in precomputing the count, it EXAMPLE 6.61
 
+A “gotcha” in the naive loop translation also avoids a problem we glossed over in the naive translations of Examples 6.58
+
 and 6.59: If last is near the maximum value representable by integers on our machine, naively adding step to the ﬁnal legitimate value of i may result in arith- metic overﬂow. The “wrapped” number may then appear to be smaller (much smaller!) than last, and we may have translated perfectly good source code into an inﬁnite loop. ■ Some processors, including the Power family, PA-RISC, and most CISC ma- chines, can decrement the iteration count, test it against zero, and conditionally branch, all in a single instruction. For many loops this results in very efﬁcient code.
 
 Semantic Complications
@@ -991,6 +1011,8 @@ Clu, Python, Ruby, and C# allow any container abstraction to provide an iterator
 Simple iterator in Python FOR i := first TO last BY step DO ... END
 
 would be written as follows in Python:
+
+7 Unfortunately, terminology is not consistent across languages. Euclid uses the term “generator” for what are called “iterator objects” here. Python uses it for what are called “true iterators” here.
 
 ![Figure 6.5 Python iterator...](images/page_302_vector_244.png)
 *Figure 6.5 Python iterator for preorder enumeration of the nodes of a binary tree. Because Python is dynamically typed, this code will work for any data that support the operations needed by insert, lookup, and so on (probably just <). In a statically typed language, the BinTree class would need to be generic.*
@@ -1099,6 +1121,8 @@ When a block, delimited by braces or do... end, follows the parameter list of a 
 
 sum = 0 (1..100).each { |i| sum += i } puts sum =⇒5050
 
+This code serves as the deﬁnition of conventional for-loop syntax, which is fur- ther syntactic sugar:
+
 ```
 sum = 0
 for i in (1..100) do
@@ -1133,6 +1157,8 @@ There are two principal differences between this code and the more structured al
 Icon generalizes the concept of iterators, providing a generator mechanism that causes any expression in which it is embedded to enumerate multiple values on demand.
 
 IN MORE DEPTH
+
+We consider Icon generators in more detail on the companion site. The language’s enumeration-controlled loop, the every loop, can contain not only a generator,
 
 but any expression that contains a generator. Generators can also be used in con- structs like if statements, which will execute their nested code if any generated value makes the condition true, automatically searching through all the possi- bilities. When generators are nested, Icon explores all possible combinations of generated values, and will even backtrack where necessary to undo unsuccessful control-ﬂow branches or assignments.
 
@@ -1169,6 +1195,8 @@ do {
 line = read_line(stdin);
 } while (line[0] != '$');
 ```
+
+■
 
 Mid-test Loops
 
@@ -1267,6 +1295,8 @@ int gcd(int a, int b) { /* assume a, b > 0 */ start: if (a == b) return a; else 
 
 Even for functions that are not tail-recursive, automatic, often simple trans- formations can produce tail-recursive code. The general case of the transforma- tion employs conversion to what is known as continuation-passing style [FWH01, Chaps. 7–8]. In effect, a recursive function can always avoid doing any work after returning from a recursive call by passing that work into the recursive call, in the form of a continuation. Some speciﬁc transformations (not based on continuation passing) are often employed by skilled users of functional languages. Consider, for example, the EXAMPLE 6.84
 
+By-hand creation of tail-recursive code recursive summation function above, written here in Scheme:
+
 ```
 (define summation
 (lambda (f low high)
@@ -1310,6 +1340,8 @@ Detractors of functional programming sometimes argue, incorrectly, that recur- s
 Naive recursive Fibonacci function are deﬁned by the mathematical recurrence
 
 Fn (non-negative integer n) ≡  1 if n = 0 or n = 1 Fn−1 + Fn−2 otherwise
+
+The naive way to implement this recurrence in Scheme is
 
 (define fib (lambda (n) (cond ((= n 0) 1) ((= n 1) 1) (#t (+ (fib (- n 1)) (fib (- n 2))))))) ; #t means 'true' in Scheme ■
 
@@ -1371,6 +1403,8 @@ The list will occupy only as much space as we have actually explored. More elab-
 Our ﬁnal category of control ﬂow is nondeterminacy. A nondeterministic con- struct is one in which the choice between alternatives (i.e., between control paths)
 
 10 More precisely, delay is a special form, rather than a function. Its argument is passed to it un- evaluated.
+
+11 Within the functional programming community, the term “lazy evaluation” is often used for any implementation that declines to evaluate unneeded function parameters; this includes both naive implementations of normal-order evaluation and the memoizing mechanism described here.
 
 is deliberately unspeciﬁed. We have already seen examples of nondeterminacy in the evaluation of expressions (Section 6.1.4): in most languages, operator or subroutine arguments may be evaluated in any order. Some languages, notably Algol 68 and various concurrent languages, provide more extensive nondetermin- istic mechanisms, which cover statements as well.
 

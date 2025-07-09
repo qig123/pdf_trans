@@ -36,6 +36,8 @@ rainy(Rochester)
 
 In the following section we consider Prolog in more detail. We return to formal logic, and to its relationship to Prolog, in Section C 12.3. ■
 
+2 Note that the word “head” is used for two different things in Prolog: the head of a Horn clause and the head of a list. The distinction between these is usually clear from context.
+
 ## 12.2 Prolog
 
 Much as an imperative or functional language interpreter evaluates expressions in the context of a referencing environment in which various functions and con- stants have been deﬁned, a Prolog interpreter runs in the context of a database of clauses (Horn clauses) that are assumed to be true.3 Each clause is composed of terms, which may be constants, variables, or structures. A constant is either an atom or a number. A structure can be thought of as either a logical predicate or a data structure. Atoms in Prolog are similar to symbols in Lisp. Lexically, an atom looks like EXAMPLE 12.4
@@ -100,6 +102,8 @@ snowy(X) :- rainy(X), cold(X).
 the query
 
 ?- snowy(C).
+
+will yield only one solution. ■
 
 ## 12.2.1 Resolution and Uniﬁcation
 
@@ -198,6 +202,8 @@ This example highlights the difference between functions and Prolog predi- cates
 
 The usual arithmetic operators are available in Prolog, but they play the role of predicates, not of functions. Thus +(2, 3), which may also be written 2 + 3, EXAMPLE 12.14
 
+Arithmetic and the is predicate is a two-argument structure, not a function call. In particular, it will not unify with 5:
+
 ```
 ?- (2 + 3) = 5.
 false.
@@ -253,6 +259,10 @@ path(X, X).
 From a logical point of view, our database still deﬁnes the same relationships. A Prolog interpreter, however, will no longer be able to ﬁnd answers. Even a simple query like ?- path(a, a) will never terminate. To see why, consider Figure 12.2. The interpreter ﬁrst uniﬁes path(a, a) with the left-hand side of path(X, Y) :- path(X, Z), edge(Z, Y). It then considers the goals on the right-hand side, the ﬁrst of which (path(X, Z)), uniﬁes with the left-hand side of the very same rule, leading to an inﬁnite regression. In effect, the Prolog interpreter gets lost in an inﬁnite branch of the search tree, and never discovers ﬁnite branches to the right. We could avoid this problem by exploring the tree in breadth-ﬁrst order, but that strategy was rejected by Prolog’s designers because of its expense: it can require substantially more space, and does not lend itself to a stack-based imple- mentation. ■
 
 ## 12.2.5 Extended Example: Tic-Tac-Toe
+
+In the previous subsection we saw how the order of clauses in the Prolog database, EXAMPLE 12.19
+
+Tic-tac-toe in Prolog and the order of terms within a right-hand side, can affect both the efﬁciency of
 
 ![Figure 12.2 Inﬁnite regression...](images/page_634_vector_302.png)
 *Figure 12.2 Inﬁnite regression in Prolog. In this ﬁgure even a simple query like ?- path(a, a) will never terminate: the interpreter will never ﬁnd the trivial branch.*
@@ -487,6 +497,8 @@ snowy(X) :- rainy(X), cold(X).
 ```
 
 ⎪ ⎪ ⎭ ≡’,’(rainy(rochester), ’,’(rainy(seattle), ’,’(cold(rochester), :-(snowy(X), ’,’(rainy(X), cold(X))))))
+
+4 Surprisingly, the ISO Prolog standard does not cover Unicode conformance.
 
 Here the single quotes around the preﬁx commas serve to distinguish them from the commas that separate the arguments of a predicate. ■ The structural nature of clauses and database contents implies that Prolog, like Scheme, is homoiconic: it can represent itself. It can also modify itself. A EXAMPLE 12.28
 
@@ -836,6 +848,8 @@ foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(
 foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(
 foo(foo(foo(foo(foo(foo(...
 ```
+
+What is going on here? Why does the interpreter fall into an inﬁnite loop? Can you think of any circumstances (presumably not requiring output) in
 
 which a structure like this one would be useful? If not, can you suggest how a Prolog interpreter might implement checks to forbid its creation? How expensive would those checks be? Would the cost in your opinion be justiﬁed?
 

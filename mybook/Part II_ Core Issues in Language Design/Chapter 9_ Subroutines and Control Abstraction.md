@@ -16,6 +16,8 @@ Layout of run-time stack (reprise) (Figure 3.1). Each routine, as it is called, 
 
 Offsets from frame pointer time, then the object is placed in a variable-size area at the top of the frame; its address and dope vector (descriptor) are stored in the ﬁxed-size portion of the frame, at a statically known offset from the frame pointer (Figure 8.7). If there are no variable-size objects, then every object within the frame has a statically known offset from the stack pointer, and the implementation may dispense with the frame pointer, freeing up a register for other use. If the size of an argument is not known at compile time, then the argument may be placed in a variable-size portion of the frame below the other arguments, with its address and dope vector at known offsets from the frame pointer. Alternatively, the caller may simply pass a temporary address and dope vector, counting on the called routine to copy the argument into the variable-size area at the top of the frame. ■ In a language with nested subroutines and static scoping (e.g., Ada, Common EXAMPLE 9.3
 
+Static and dynamic links Lisp, ML, Scheme, or Swift), objects that lie in surrounding subroutines, and
+
 ![Figure 9.1 Example of...](images/page_446_vector_295.png)
 *Figure 9.1 Example of subroutine nesting, taken from Figure 3.5. Within B, C, and D, all ﬁve routines are visible. Within A and E, routines A, B, and E are visible, but C and D are not. Given the calling sequence A, E, B, D, C, in that order, frames will be allocated on the stack as shown at right, with the indicated static and dynamic links.*
 
@@ -51,6 +53,8 @@ In its prologue, the callee
 * saves any callee-saves registers that may be overwritten by the current routine
   (including the static link and return address, if they were passed in registers)
 
+After the subroutine has completed, the epilogue
+
 ![Figure 9.2 A typical...](images/page_449_vector_326.png)
 *Figure 9.2 A typical stack frame. Though we draw it growing upward on the page, the stack actually grows downward toward lower addresses on most machines. Arguments are accessed at positive offsets from the fp. Local variables and temporaries are accessed at negative offsets from the fp. Arguments to be passed to called routines are assembled at the top of the frame, using positive offsets from the sp.*
 
@@ -68,6 +72,8 @@ Finally, the caller
 Special-Case Optimizations
 
 Many parts of the calling sequence, prologue, and epilogue can be omitted in common cases. If the hardware passes the return address in a register, then a leaf routine (a subroutine that makes no additional calls before returning)2 can simply
+
+2 A leaf routine is so named because it is a leaf of the subroutine call graph, a data structure men- tioned in Exercise 3.10.
 
 leave it there; it does not need to save it in the stack. Likewise it need not save the static link or any caller-saves registers. A subroutine with no local variables and nothing to save or restore may not even need a stack frame on a RISC machine. The simplest subroutines (e.g., li- brary routines to compute the standard mathematical functions) may not touch memory at all, except to fetch instructions: they may take their arguments in registers, compute entirely in (caller-saves) registers, call no other routines, and return their results in registers. As a result they may be extremely fast.
 
@@ -350,6 +356,8 @@ Subroutines as parameters in Ada 1. type int_func is access function (n : intege
 
 As discussed in Section 3.6.1, a closure needs to include both a code address and a referencing environment because, in a language with nested subroutines, we need to make sure that the environment available to f at line 6 is the same that would have been available to add_k if it had been called directly at line 14—in particular, that it includes the binding for k. ■ Subroutines are routinely passed as parameters (and returned as results) in functional languages. A list-based version of apply_to_A would look something EXAMPLE 9.21
 
+First-class subroutines in Scheme like this in Scheme (for the meanings of car, cdr, and cons, see Section 8.6):
+
 ```
 (define apply-to-L
 (lambda (f l)
@@ -384,6 +392,8 @@ In object-oriented languages, one can approximate the behavior of a subrou- tine
 Default (Optional) Parameters
 
 In Section 3.3.6, we noted that default parameters provide an attractive alternative to dynamic scope for changing the behavior of a subroutine. A default parameter is one that need not necessarily be provided by the caller; if it is missing, then a preestablished default value will be used instead. One common use of default parameters is in I/O library routines (described in Section C 8.7.3). In Ada, for example, the put routine for integers has the EXAMPLE 9.24
+
+Default parameters in Ada following declaration in the text_IO library package:
 
 ![Figure 9.3 Parameter-passing modes....](images/page_467_vector_296.png)
 *Figure 9.3 Parameter-passing modes. Column 1 indicates common names for modes. Column 2 indicates prominent languages that use the modes, or that introduced them. Column 3 indicates implementation via passing of values, references, or closures. Column 4 indicates whether the callee can read or write the formal parameter. Column 5 indicates whether changes to the formal parameter affect the actual parameter. Column 6 indicates whether changes to the formal or actual parameter, during the execution of the subroutine, may be visible through the other. ∗Behavior is undeﬁned if the program attempts to use an r-value argument after the call. †Changes to arguments passed by need in R will happen only on the ﬁrst use; changes in Haskell are not permitted.*
@@ -499,6 +509,8 @@ In addition to specifying a value, return causes the immediate termination of th
 rtn := expression ... return rtn ■
 
 Fortran separates termination of a subroutine from the speciﬁcation of return values: it speciﬁes the return value by assigning to the function name, and has a return statement that takes no arguments. Argument-bearing return statements and assignment to the function name EXAMPLE 9.31
+
+Incremental computation of a return value both force the programmer to employ a temporary variable in incremental com- putations. Here is an example in Ada:
 
 ```
 type int_array is array (integer range <>) of integer;

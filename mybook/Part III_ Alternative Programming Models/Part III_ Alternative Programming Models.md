@@ -46,6 +46,8 @@ the interpreter will print
 
 7
 
+If the user types
+
 7
 
 the interpreter will also print
@@ -79,6 +81,8 @@ Here the result is a three-element list. More commonly, quoting is speciﬁed wi
 '(+ 3 4) =⇒(+ 3 4) ■
 
 Though every expression has a type in Scheme, that type is generally not de- termined until run time. Most predeﬁned functions check dynamically to make EXAMPLE 11.4
+
+Dynamic typing sure that their arguments are of appropriate types. The expression
 
 (if (> a 0) (+ 2 3) (+ 2 "foo"))
 
@@ -163,6 +167,8 @@ Basic list operations most important are car, which returns the head of a list, 
 
 Also useful is the null? predicate, which determines whether its argument is the empty list. Recall that the notation ‚(2 3 4) indicates a proper list, in which the ﬁnal element is the empty list:
 
+(cdr '(2)) =⇒() (cons 2 3) =⇒(2 . 3) ; an improper list ■
+
 For fast access to arbitrary elements of a sequence, Scheme provides a vector type that is indexed by integers, like an array, and may have elements of hetero- geneous types, like a record. Interested readers are referred to the Scheme man- ual [SDF+07] for further information. Scheme also provides a wealth of numeric and logical (Boolean) functions and special forms. The language manual describes a hierarchy of ﬁve numeric types: integer, rational, real, complex, and number. The last two levels are op- tional: implementations may choose not to provide any numbers that are not real. Most but not all implementations employ arbitrary-precision representations of both integers and rationals, with the latter stored internally as (numerator, de- nominator) pairs.
 
 ## 11.3.3 Equality Testing and Searching
@@ -200,6 +206,8 @@ Assignment form set! and the functions set-car! and set-cdr!:
 The return values of the various varieties of set! are implementation-depen- dent. ■ Sequencing uses the special form begin: EXAMPLE 11.17
 
 Sequencing
+
+5 For clarity, the ﬁgures in Section C 3.4.2 elided the internal structure of the pairs.
 
 ```
 (begin
@@ -467,6 +475,8 @@ While lists have a natural recursive deﬁnition and dynamically variable length
 
 Array notation the square brackets:
 
+let five_primes = [| 2; 3; 5; 7; 11 |];;
+
 Array indexing always starts at zero. Elements are accessed using the .() opera- tor:
 
 five_primes.(2);; =⇒5
@@ -496,6 +506,8 @@ Tuple notation sented by the tuple ("Hg", 80, 200.592), representing the element
 fst ("Hg", 80);; =⇒"Hg" snd ("Hg", 80);; =⇒80 ■
 
 Records are much like tuples, but the component values (ﬁelds) are named, rather than positional. The language implementation must choose an order for the internal representation of a record, but this order is not visible to the pro- grammer. To introduce ﬁeld names to the compiler, each record type must be EXAMPLE 11.34
+
+Record notation declared:
 
 ```
 type element =
@@ -840,6 +852,8 @@ Stream-based program execution the form
 When it needs an input value, function my_prog forces evaluation of the car (head) of input, and passes the cdr (tail) on to the rest of the program. To drive execution, the language implementation repeatedly forces evaluation of the car of output, prints it, and repeats:
 
 (define driver (lambda (s) (if (null? s) '() ; nothing left (begin (display (car s)) (driver (cdr s)))))) (driver output) ■
+
+6 Recall that delay is a special form that creates a [memo, closure] pair; force is a function that returns the value in the memo, using the closure to calculate it ﬁrst if necessary.
 
 To make things concrete, suppose we want to write a purely functional pro- EXAMPLE 11.59
 
@@ -1322,6 +1336,8 @@ let rest = function
 | Promise (f) -> let (a, b) = f() in b;;
 ```
 
+Now given
+
 ```
 let rec next_int n = (n, Promise (fun() -> next_int (n + 1)));;
 let naturals = Promise (fun() -> next_int (1));;
@@ -1393,6 +1409,8 @@ rainy(Rochester)
 
 In the following section we consider Prolog in more detail. We return to formal logic, and to its relationship to Prolog, in Section C 12.3. ■
 
+2 Note that the word “head” is used for two different things in Prolog: the head of a Horn clause and the head of a list. The distinction between these is usually clear from context.
+
 ## 12.2 Prolog
 
 Much as an imperative or functional language interpreter evaluates expressions in the context of a referencing environment in which various functions and con- stants have been deﬁned, a Prolog interpreter runs in the context of a database of clauses (Horn clauses) that are assumed to be true.3 Each clause is composed of terms, which may be constants, variables, or structures. A constant is either an atom or a number. A structure can be thought of as either a logical predicate or a data structure. Atoms in Prolog are similar to symbols in Lisp. Lexically, an atom looks like EXAMPLE 12.4
@@ -1457,6 +1475,8 @@ snowy(X) :- rainy(X), cold(X).
 the query
 
 ?- snowy(C).
+
+will yield only one solution. ■
 
 ## 12.2.1 Resolution and Uniﬁcation
 
@@ -1555,6 +1575,8 @@ This example highlights the difference between functions and Prolog predi- cates
 
 The usual arithmetic operators are available in Prolog, but they play the role of predicates, not of functions. Thus +(2, 3), which may also be written 2 + 3, EXAMPLE 12.14
 
+Arithmetic and the is predicate is a two-argument structure, not a function call. In particular, it will not unify with 5:
+
 ```
 ?- (2 + 3) = 5.
 false.
@@ -1610,6 +1632,10 @@ path(X, X).
 From a logical point of view, our database still deﬁnes the same relationships. A Prolog interpreter, however, will no longer be able to ﬁnd answers. Even a simple query like ?- path(a, a) will never terminate. To see why, consider Figure 12.2. The interpreter ﬁrst uniﬁes path(a, a) with the left-hand side of path(X, Y) :- path(X, Z), edge(Z, Y). It then considers the goals on the right-hand side, the ﬁrst of which (path(X, Z)), uniﬁes with the left-hand side of the very same rule, leading to an inﬁnite regression. In effect, the Prolog interpreter gets lost in an inﬁnite branch of the search tree, and never discovers ﬁnite branches to the right. We could avoid this problem by exploring the tree in breadth-ﬁrst order, but that strategy was rejected by Prolog’s designers because of its expense: it can require substantially more space, and does not lend itself to a stack-based imple- mentation. ■
 
 ## 12.2.5 Extended Example: Tic-Tac-Toe
+
+In the previous subsection we saw how the order of clauses in the Prolog database, EXAMPLE 12.19
+
+Tic-tac-toe in Prolog and the order of terms within a right-hand side, can affect both the efﬁciency of
 
 ![Figure 12.2 Inﬁnite regression...](images/page_634_vector_302.png)
 *Figure 12.2 Inﬁnite regression in Prolog. In this ﬁgure even a simple query like ?- path(a, a) will never terminate: the interpreter will never ﬁnd the trivial branch.*
@@ -1844,6 +1870,8 @@ snowy(X) :- rainy(X), cold(X).
 ```
 
 ⎪ ⎪ ⎭ ≡’,’(rainy(rochester), ’,’(rainy(seattle), ’,’(cold(rochester), :-(snowy(X), ’,’(rainy(X), cold(X))))))
+
+4 Surprisingly, the ISO Prolog standard does not cover Unicode conformance.
 
 Here the single quotes around the preﬁx commas serve to distinguish them from the commas that separate the arguments of a predicate. ■ The structural nature of clauses and database contents implies that Prolog, like Scheme, is homoiconic: it can represent itself. It can also modify itself. A EXAMPLE 12.28
 
@@ -2194,6 +2222,8 @@ foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(
 foo(foo(foo(foo(foo(foo(...
 ```
 
+What is going on here? Why does the interpreter fall into an inﬁnite loop? Can you think of any circumstances (presumably not requiring output) in
+
 which a structure like this one would be useful? If not, can you suggest how a Prolog interpreter might implement checks to forbid its creation? How expensive would those checks be? Would the cost in your opinion be justiﬁed?
 
 12.19–12.21 In More Depth.
@@ -2284,6 +2314,8 @@ Consider now what may happen when two or more instances of this code run concurr
 Thread 1 . . . Thread 2 r1 := zero count . . . r1 := r1 + 1 r1 := zero count zero count := r1 r1 := r1 + 1 . . . zero count := r1 . . .
 
 If the instructions interleave roughly as shown, both threads may load the same value of zero count, both may increment it by one, and both may store the (only one greater) value back into zero count. The result may be less than what we expect. In general, a race condition occurs whenever two or more threads are “racing” toward points in the code at which they touch some common object, and the behavior of the system depends on which thread gets there ﬁrst. In this particular example, the store of zero count in Thread 1 is racing with the load in Thread 2.
+
+1 Ideally, we might like the compiler to ﬁgure this out automatically, but the problem of indepen- dence is undecidable in the general case.
 
 If Thread 1 gets there ﬁrst, we will get the “right” result; if Thread 2 gets there ﬁrst, we won’t. ■ The most common purpose of synchronization is to make some sequence of instructions, known as a critical section, appear to be atomic—to happen “all at once” from the point of view of every other thread. In our example, the critical section is a load, an increment, and a store. The most common way to make the sequence atomic is with a mutual exclusion lock, which we acquire before the ﬁrst instruction of the sequence and release after the last. We will study locks in Sections 13.3.1 and 13.3.5. In Sections 13.3.2 and 13.4.4 we will also consider mechanisms that achieve atomicity without locks. At lower levels of abstraction, expert programmers may need to understand hardware and run-time systems in sufﬁcient detail to implement synchronization mechanisms. This chapter should convey a sense of the issues, but a full treatment at this level is beyond the scope of the current text.
 
@@ -2405,6 +2437,8 @@ The usual semantics of a compound statement (sometimes delimited with EXAMPLE 13
 
 General form of co-begin begin... end) call for sequential execution of the constituent statements. A co- begin construct calls instead for concurrent execution:
 
+co-begin –– all n statements run concurrently
+
 stmt 1 stmt 2 . . . stmt n end
 
 Each statement can itself be a sequential or parallel compound, or (commonly) a subroutine call. ■ Co-begin was the principal means of creating threads in Algol-68. It appears EXAMPLE 13.7
@@ -2510,6 +2544,8 @@ begin
 end T;
 ```
 
+The programmer may then declare variables of type access T (pointer to T), and may create new tasks via dynamic allocation:
+
 pt : access T := new T;
 
 The new operation is a fork: it creates a new thread and starts it executing. There is no explicit join operation in Ada, though parent and child tasks can always syn- chronize with one another explicitly if desired (e.g., immediately before the child completes its execution). As with launch-at-elaboration, control will wait auto- matically at the end of any scope in which task types are declared for all threads using the scope to terminate. ■ Any information an Ada task needs in order to do its job must be communi- cated through shared variables or through explicit messages sent after the task has started execution. Most systems, by contrast, allow parameters to be passed to a thread at start-up time. In Java one obtains a thread by constructing an object of EXAMPLE 13.15
@@ -2595,6 +2631,10 @@ Multiplexing threads on processes language implementations adopt an intermediate
 
 ![Figure 13.7 illustrates the...](images/page_681_vector_576.png)
 *Figure 13.7 illustrates the data structures employed by a simple scheduler. At any EXAMPLE 13.21*
+
+particular time, a thread is either blocked (i.e., for synchronization) or runnable. A runnable thread may actually be running on some process or it may be awaiting
+
+Cooperative multithreading on a uniprocessor
 
 ![Figure 13.7 Data structures...](images/page_682_vector_226.png)
 *Figure 13.7 Data structures of a simple scheduler. A designated current thread is running. Threads on the ready list are runnable. Other threads are blocked, waiting for various conditions to become true. If threads run on top of more than one OS-level process, each such process will have its own current thread variable. If a thread makes a call into the operating system, its process may block in the kernel.*
@@ -3023,6 +3063,8 @@ atomic { –– your code here }
 
 Bounded buffer with transactions buffer would be very similar to that of Figure 13.18. We would simply replace
 
+region buffer when full slots < SIZE region buffer when full slots > 0 ... and ...
+
 with
 
 atomic atomic if full slots = SIZE then retry and if full slots = 0 then retry ... ...
@@ -3038,6 +3080,8 @@ There is a surprising amount of variety among software TM systems. We outline on
 Translation of an atomic block following:
 
 loop valid time := clock read set := write map := ∅ try –– your code here commit() break except when abort –– continue loop
+
+In the body of the transaction (your code here), reads and writes of a location with address x are replaced with calls to read(x) and write(x, v), using the code
 
 ![Figure 13.19 Possible pseudocode...](images/page_715_vector_374.png)
 *Figure 13.19 Possible pseudocode for a software TM system. The read and write routines are used to replace ordinary loads and stores within the body of the transaction. The validate routine is called from both read and commit. It attempts to verify that no previously read value has since been overwritten and, if successful, updates valid time. Various fence instructions (not shown) may be needed if the underlying hardware is not sequentially consistent.*
@@ -3341,6 +3385,8 @@ Much of the most rapid change in programming languages today is occurring in scr
 
 ## 14.2 Problem Domains
 
+Some general-purpose languages—Scheme and Visual Basic, for example—are widely used for scripting. Conversely, some scripting languages, including Perl,
+
 Python, and Ruby, are intended by their designers for general-purpose use, with features intended to support “programming in the large”: modules, separate compilation, reﬂection, program development environments, and so on. For the most part, however, scripting languages tend to see their principal use in well- deﬁned problem domains. We consider some of these in the following subsec- tions.
 
 ## 14.2.1 Shell (Command) Languages
@@ -3414,6 +3460,8 @@ This invocation of the standard tr command converts all newline characters to sp
 
 Redirection of stderr and stdout works silently. If it encounters an error, however, it prints a message to stdout and quits. This violation of convention (the message should go to stderr) is harmless when the command is invoked from the keyboard. If it is embedded in a script, however, and the output of the script is directed to a ﬁle, the error mes- sage may end up in the ﬁle instead of on the screen, and go unnoticed by the user. With bash we can type
 
+ps2pdf my_fig.eps 1>&2
+
 Here 1>&2 means “make ps2pdf send ﬁle 1 (stdout) to the same place that the surrounding context would normally send ﬁle 2 (stderr).” ■ Finally, like most shells, bash allows the user to provide the input to a com- EXAMPLE 14.10
 
 Heredocs (in-line input) mand in-line:
@@ -3454,6 +3502,8 @@ echo $single $double
 ```
 
 will print “$foo bar”. ■ Several other bracketing constructs in bash group the text inside, for various purposes. Command lists enclosed in parentheses are passed to a subshell for EXAMPLE 14.13
+
+Subshells evaluation. If the opening parenthesis is preceded by a dollar sign, the output of the nested command list is expanded into the surrounding context:
 
 for fig in $(cat my_figs); do ps2pdf ${fig}.eps; done
 
@@ -3505,6 +3555,9 @@ Specifying the full path name is a safety feature: it anticipates the possibilit
   What IBM creation is generally considered the ﬁrst general-purpose scripting
   language?
 
+  5.
+  What is the most popular language for server-side web scripting?
+
   6.
   How does the notion of context in Perl differ from coercion?
 
@@ -3533,6 +3586,8 @@ Sed
 As a simple text processing example, consider the problem of extracting all head- EXAMPLE 14.18
 
 Extracting HTML headers with sed ers from a web page (an HTML ﬁle). These are strings delimited by <h1> ... </h1>, <h2> ... </h2>, and <h3> ... </h3> tags. Accomplishing this task in an editor like emacs, vim, or even Microsoft Word is straightforward but tedious: one must search for an opening tag, delete preceding text, search for a closing tag, mark the current position (as the starting point for the next deletion), and re- peat. A program to perform these tasks in sed, the Unix “stream editor,” appears in Figure 14.1. The code consists of a label and three commands, the ﬁrst two of which are compound. The ﬁrst compound command prints the ﬁrst header, if any, found in the portion of the input currently being examined (what sed calls the pattern space). The second compound command appends a new line to the pattern space whenever it already contains a header-opening tag. Both compound commands, and several of the subcommands, use regular expression patterns, de- limited by slashes. We will discuss these patterns further in Section 14.4.2. The third command (the lone d) simply deletes the pattern space. Because each com- pound command ends with a branch back to the top of the script, the second will execute only if the ﬁrst does not, and the delete will execute only if neither compound does. ■ The editor heritage of sed is clear in this example. Commands are generally one character long, and there are no variables—no state of any kind beyond the program counter and text that is being edited. These limitations make sed best suited to “one-line programs,” typically entered verbatim from the keyboard with the -e command-line switch. The following, for example, will read from standard EXAMPLE 14.19
+
+One-line scripts in sed input, delete blank lines, and (implicitly) print the nonblank lines to standard output:
 
 ![Figure 14.2 Script in...](images/page_747_vector_255.png)
 *Figure 14.2 Script in awk to extract headers from an HTML ﬁle. Unlike the sed script, this version prints interior lines incrementally. It again assumes that the input is well formed.*
@@ -3802,6 +3857,8 @@ XML can be used to create specialized markup languages for a very wide range of 
 
 In Section 14.1.1, we listed several common characteristics of scripting languages:
 
+* Both batch and interactive use
+
 * Economy of expression
 * Lack of declarations; simple scoping rules
 * Flexible dynamic typing
@@ -3832,6 +3889,8 @@ Scoping rules in Python program of Figure 14.16. Here we have a set of nested su
 ```
 
 Note that while the tuple returned from middle (forwarded on by outer, and printed by the main program) has a 2 as its ﬁrst element, the global i still con- tains the 4 that was written by inner. Note also that while the write to i in outer appears textually after the read of i in middle, its scope extends over all of outer, including the body of middle. ■ Interestingly, there is no way in Python for a nested routine to write a variable that belongs to a surrounding but nonglobal scope. In Figure 14.16, inner could EXAMPLE 14.38
+
+Superassignment in R not be modiﬁed to write outer’s i. R provides an alternative mechanism that
 
 ![Figure 14.17 A program...](images/page_774_vector_278.png)
 *Figure 14.17 A program to illustrate scope rules in Perl. The my operator creates a statically scoped local variable; the local operator creates a new dynamically scoped instance of a global variable. The static scope extends from the point of declaration to the lexical end of the block; the dynamic scope extends from elaboration to the end of the block’s execution.*
@@ -3937,6 +3996,8 @@ if ($foo =~ /^ba.*s+/) ...
 ```
 
 The string to be matched against can also be left unspeciﬁed, in which case Perl uses the pseudovariable $_ by default:
+
+6 Strictly speaking, ] and } don’t require a protective backslash unless there is a preceding un- matched (and unprotected) [ or {, respectively.
 
 ```
 $_ = "albatross";
@@ -4134,6 +4195,8 @@ print $a + 3 . "\n";
 
 prints 43 and 7. ■ In general, Perl (and likewise Rexx and Tcl) takes the position that program- mers should check for the errors they care about, and in the absence of such checks the program should do something reasonable. Perl is willing, for example, EXAMPLE 14.60
 
+Coercion and context in Perl to accept the following (though it prints a warning if run with the -w compile- time switch):
+
 ```
 $a[3] = "1";
 # (array @a was previously undefined)
@@ -4259,6 +4322,10 @@ O = X ^ Y
 
 Conﬂated types in PHP, Tcl, and JavaScript tween arrays and hashes. An array is simply a hash for which the programmer chooses to use numeric keys. JavaScript employs a similar simpliﬁcation, unify- ing arrays, hashes, and objects. The usual obj.attr notation to access a mem- ber of an object (what JavaScript calls a property) is simply syntactic sugar for obj["attr"]. So objects are hashes, and arrays are objects with integer property names. ■ Higher-dimensional types are straightforward to create in most scripting lan- guages: one can deﬁne arrays of (references to) hashes, hashes of (references to) arrays, and so on. Alternatively, one can create a “ﬂattened” implementation by EXAMPLE 14.69
 
+using composite objects as keys in a hash. Tuples in Python work particularly well:
+
+Multidimensional arrays in Python and other languages
+
 ```
 matrix = {}
 # empty dictionary (hash)
@@ -4282,6 +4349,8 @@ $time = gmtime();
 
 Perl’s standard gmtime() library function will return the time as a character string, along the lines of "Wed May 6 04:36:30 2015". On the other hand, if we write
 
+@time_arry = gmtime();
+
 the same function will return (30, 36, 4, 6, 4, 115, 3, 125, 0), a nine- element array indicating seconds, minutes, hours, day of month, month of year (with January = 0), year (counting from 1900), day of week (with Sunday = 0), day of year, and (as a 0/1 Boolean value) an indication of whether it’s a leap year. ■ So how does gmtime know what to do? By calling the built-in function EXAMPLE 14.71
 
 Using wantarray to determine calling context wantarray. This returns true if the current function was called in a list context, and false if it was called in a scalar context. By convention, functions typically indicate an error by returning the empty array when called in a list context, and the undeﬁned value (undef) when called in a scalar context:
@@ -4295,6 +4364,8 @@ Though not an object-oriented language, Perl 5 has features that allow one to pr
 Perl 5
 
 Object support in Perl 5 boils down to two main things: (1) a “blessing” mecha- nism that associates a reference with a package, and (2) special syntax for method calls that automatically passes an object reference or package name as the ini- tial argument to a function. While any reference can in principle be blessed, the usual convention is to use a hash, so that ﬁelds can be named as shown in Exam- ple 14.63.
+
+7 More extensive features, currently under design for Perl 6, will not be covered here.
 
 ![Figure 14.19 Object-oriented programming...](images/page_791_vector_277.png)
 *Figure 14.19 Object-oriented programming in Perl. Blessing a reference (object) into package Integer allows Integer’s functions to serve as the object’s methods.*
@@ -4380,6 +4451,8 @@ document.write(c2.get() + "&nbsp;&nbsp;" + c3.get() + "<br>");
 ```
 
 This code will print
+
+3 0 4 5 ■
 
 ![Figure 14.20 Object-oriented programming...](images/page_794_vector_201.png)
 *Figure 14.20 Object-oriented programming in JavaScript. The Integer function is used as a constructor. Assignments to members of its prototype object serve to establish methods. These will be available to any object created by Integer that doesn’t have corresponding members of its own.*
@@ -4480,6 +4553,8 @@ DESIGN & IMPLEMENTATION
 lack of declarations, simple scoping rules, ﬂexible dynamic typing, easy access to other programs, sophisticated pattern matching and string manipulation, and high-level data types. We began our chapter by tracing the historical development of scripting, start- ing with the command interpreter, or shell programs of the mid-1970s, and the text processing and report generation tools that followed soon thereafter. We looked in particular at the “Bourne-again” shell, bash, and the Unix tools sed and awk. We also mentioned such special-purpose domains as mathematics and statistics, where scripting languages are widely used for data analysis, visualiza- tion, modeling, and simulation. We then turned to the three domains that dom- inate scripting today: “glue” (coordination) applications, conﬁguration and ex- tension, and scripting of the World Wide Web. For many years, Perl was the most popular of the general-purpose “glue” lan- guages, but Python and Ruby have clearly overtaken it at this point. Several script- ing languages, including Python, Scheme, and Lua, are widely used to extend the functionality of complex applications. In addition, many commercial packages have their own proprietary extension languages. Web scripting comes in many forms. On the server side of an HTTP con- nection, the Common Gateway Interface (CGI) standard allows a URI to name a program that will be used to generate dynamic content. Alternatively, web- page-embedded scripts, often written in PHP, can be used to create dynamic con- tent in a way that is invisible to users. To reduce the load on servers, and to improve interactive responsiveness, scripts can also be executed within the client browser. JavaScript is the dominant notation in this domain; it uses the HTML Document Object Model (DOM) to manipulate web-page elements. For more demanding tasks, many browsers can be directed to run a Java applet, which takes full responsibility for some portion of the “screen real estate,” but this strategy comes with security concerns that are increasingly viewed as unacceptable. With the emergence of HTML5, most dynamic content—multimedia in particular— can be handled directly by the browser. At the same time, XML has emerged as the standard format for structured, presentation-independent information, with load-time transformation via XSL. Because of their rapid evolution, scripting languages have been able to take ad- vantage of many of the most powerful and elegant mechanisms described in pre- vious chapters, including ﬁrst-class and higher-order functions, unlimited extent, iterators, garbage collection, list comprehensions, and object orientation—not to mention extended regular expressions and such high-level data types as dictionar- ies, sets, and tuples. Given current trends, scripting languages are likely to become increasingly ubiquitous, and to remain a principal focus of language innovation.
 
 ## 14.6 Exercises
+
+## 14.1 Does ﬁlename “globbing” provide the expressive power of standard regu- lar expressions? Explain.
 
 14.2 Write shell scripts to (a) Replace blanks with underscores in the names of all ﬁles in the current directory. (b) Rename every ﬁle in the current directory by prepending to its name a textual representation of its modiﬁcation date. (c) Find all eps ﬁles in the ﬁle hierarchy below the current directory, and create any corresponding pdf ﬁles that are missing or out of date. (d) Print the names of all ﬁles in the ﬁle hierarchy below the current di- rectory for which a given predicate evaluates to true. Your (quoted) predicate should be speciﬁed on the command line using the syntax of the Unix test command, with one or more at signs (@) standing in for the name of the candidate ﬁle.
 
@@ -4584,6 +4659,8 @@ Explain why this doesn’t work. (Hint: Remember the difference between greedy a
 14.18 Consider the following regular expression in Perl: /^(?:((?:ab)+) |a((?:ba)*))$/. Describe, in English, the set of strings it will match. Show a natural NFA for this set, together with the minimal DFA. Describe the substrings that should be captured in each matching string. Based on this example, discuss the practicality of using DFAs to match strings in Perl. 14.19–14.21 In More Depth.
 
 ## 14.7 Explorations
+
+## 14.22 Learn about TEX [Knu86] and LATEX [Lam94], the typesetting system used to create this book. Explore the ways in which its specialized target
 
 domain—professional typesetting—inﬂuenced its design. Features you might wish to consider include dynamic scoping, the relatively impover- ished arithmetic and control-ﬂow facilities, and the use of macros as the fundamental control abstraction.
 

@@ -37,6 +37,8 @@ Though the syntactic and semantic details vary from language to language, these 
 
 ## 6.1 Expression Evaluation
 
+An expression generally consists of either a simple object (e.g., a literal constant, or a named variable or constant) or an operator or function applied to a col-
+
 lection of operands or arguments, each of which in turn is an expression. It is conventional to use the term operator for built-in functions that use special, simple syntax, and to use the term operand for an argument of an operator. In EXAMPLE 6.1
 
 A typical function call most imperative languages, function calls consist of a function name followed by a parenthesized, comma-separated list of arguments, as in
@@ -102,6 +104,8 @@ a + (((b * c)**d)**(e/f))
 
 or
 
+2 Most authors use the term “inﬁx” only for binary operators. Multiword operators may be called “mixﬁx,” or left unnamed.
+
 a + ((b * (c**(d**e)))/f)
 
 or yet some other option? (In Fortran, the answer is the last of the options shown.) ■ In any given language, the choice among alternative evaluation orders depends on the precedence and associativity of operators, concepts we introduced in Sec- tion 2.1.3. Issues of precedence and associativity do not arise in preﬁx or postﬁx notation. Precedence rules specify that certain operators, in the absence of parentheses, group “more tightly” than other operators. In most languages multiplication and EXAMPLE 6.8
@@ -146,6 +150,8 @@ In the ﬁrst statement, the right-hand side of the assignment refers to the val
 L-values in C say 2 + 3 = a, or even a = 2 + 3, if a is the name of a constant. By the same token, not all l-values are simple names; both l-values and r-values can be complicated expressions. In C one may write
 
 (f(a)+3)->b[c] = 2;
+
+In this expression f(a) returns a pointer to some element of an array of pointers to structures (records). The assignment places the value 2 into the c-th element
 
 ![Figure 6.2 The value...](images/page_264_vector_163.png)
 *Figure 6.2 The value (left) and reference (right) models of variables. Under the reference model, it becomes important to distinguish between variables that refer to the same object and variables that refer to different objects whose values happen (at the moment) to be equal.*
@@ -253,6 +259,8 @@ b.c[3].d = b.c[3].d * e;
 
 Such statements are not only cumbersome to write and to read (we must examine both sides of the assignment carefully to see if they really are the same), they also
 
+3 Historically, C lacked a separate Boolean type. C99 added _Bool, but it’s really just a 1-bit integer.
+
 result in redundant address calculations (or at least extra work to eliminate the redundancy in the code improvement phase of compilation). ■ If the address calculation has a side effect, then we may need to write a pair of EXAMPLE 6.21
 
 Side effects and updates statements instead. Consider the following code in C:
@@ -292,6 +300,8 @@ A[index_fn(i)]++;
 
 or
 
+++A[index_fn(i)];
+
 More signiﬁcantly, increment and decrement operators provide elegant syntax for code that uses an index or a pointer to traverse an array:
 
 ```
@@ -322,6 +332,8 @@ a, b = c, d;
 Here the comma in the right-hand side is not the sequencing operator of C. Rather, it serves to deﬁne an expression, or tuple, consisting of multiple r-values. The comma operator on the left-hand side produces a tuple of l-values. The effect of the assignment is to copy c into a and d into b.4 ■ While we could just as easily have written EXAMPLE 6.26
 
 Advantages of multiway assignment
+
+4 The syntax shown here is for Perl, Python, and Ruby. Clu uses := for assignment. ML requires parentheses around each tuple.
 
 a = c; b = d;
 
@@ -425,6 +437,8 @@ we know from associativity that f(b) will be subtracted from a before perform- i
 
 f(a, g(b), h(c))
 
+we do not know the order in which the arguments will be evaluated. ■ There are two main reasons why the order can be important:
+
 * Side effects: If f(b) may modify d, then the value of a - f(b) - c * d will
   EXAMPLE 6.29
 
@@ -497,6 +511,8 @@ Boolean expressions provide a special and important opportunity for code im- pro
 Short-circuited expressions (b < c). If a is greater than b, there is really no point in checking to see whether b is less than c; we know the overall expression must be false. Similarly, in the expression (a > b) or (b > c), if a is indeed greater than b there is no point in checking to see whether b is greater than c; we know the overall expression must be true. A compiler that performs short-circuit evaluation of Boolean expressions will generate code that skips the second half of both of these computations when the overall value can be determined from the ﬁrst half. ■ Short-circuit evaluation can save signiﬁcant amounts of time in certain situa- EXAMPLE 6.35
 
 Saving time with short-circuiting tions:
+
+if (very_unlikely_condition && very_expensive_function()) ... ■
 
 But time is not the only consideration, or even the most important. Short- EXAMPLE 6.36
 
@@ -806,6 +822,8 @@ r1 := . . . –– calculate controlling expression if r1 ̸= 1 goto L1 clause A
 
 Rather than test its controlling expression sequentially against a series of pos- sible values, the case statement is meant to compute an address to which it jumps in a single instruction. The general form of the anticipated target code appears EXAMPLE 6.54
 
+Jump tables in Figure 6.3. The elided calculation at label L6 can take any of several forms. The most common of these simply indexes into an array, as shown in Figure 6.4.
+
 ![Figure 6.3 General form...](images/page_291_vector_256.png)
 *Figure 6.3 General form of target code generated for a ﬁve-arm case statement.*
 
@@ -910,6 +928,8 @@ r1 := ﬁrst r2 := step r3 := max(⌊(last −ﬁrst + step)/step⌋, 0) –– 
 
 The use of the iteration count avoids the need to test the sign of step within the loop. Assuming we have been suitably careful in precomputing the count, it EXAMPLE 6.61
 
+A “gotcha” in the naive loop translation also avoids a problem we glossed over in the naive translations of Examples 6.58
+
 and 6.59: If last is near the maximum value representable by integers on our machine, naively adding step to the ﬁnal legitimate value of i may result in arith- metic overﬂow. The “wrapped” number may then appear to be smaller (much smaller!) than last, and we may have translated perfectly good source code into an inﬁnite loop. ■ Some processors, including the Power family, PA-RISC, and most CISC ma- chines, can decrement the iteration count, test it against zero, and conditionally branch, all in a single instruction. For many loops this results in very efﬁcient code.
 
 Semantic Complications
@@ -995,6 +1015,8 @@ Clu, Python, Ruby, and C# allow any container abstraction to provide an iterator
 Simple iterator in Python FOR i := first TO last BY step DO ... END
 
 would be written as follows in Python:
+
+7 Unfortunately, terminology is not consistent across languages. Euclid uses the term “generator” for what are called “iterator objects” here. Python uses it for what are called “true iterators” here.
 
 ![Figure 6.5 Python iterator...](images/page_302_vector_244.png)
 *Figure 6.5 Python iterator for preorder enumeration of the nodes of a binary tree. Because Python is dynamically typed, this code will work for any data that support the operations needed by insert, lookup, and so on (probably just <). In a statically typed language, the BinTree class would need to be generic.*
@@ -1103,6 +1125,8 @@ When a block, delimited by braces or do... end, follows the parameter list of a 
 
 sum = 0 (1..100).each { |i| sum += i } puts sum =⇒5050
 
+This code serves as the deﬁnition of conventional for-loop syntax, which is fur- ther syntactic sugar:
+
 ```
 sum = 0
 for i in (1..100) do
@@ -1137,6 +1161,8 @@ There are two principal differences between this code and the more structured al
 Icon generalizes the concept of iterators, providing a generator mechanism that causes any expression in which it is embedded to enumerate multiple values on demand.
 
 IN MORE DEPTH
+
+We consider Icon generators in more detail on the companion site. The language’s enumeration-controlled loop, the every loop, can contain not only a generator,
 
 but any expression that contains a generator. Generators can also be used in con- structs like if statements, which will execute their nested code if any generated value makes the condition true, automatically searching through all the possi- bilities. When generators are nested, Icon explores all possible combinations of generated values, and will even backtrack where necessary to undo unsuccessful control-ﬂow branches or assignments.
 
@@ -1173,6 +1199,8 @@ do {
 line = read_line(stdin);
 } while (line[0] != '$');
 ```
+
+■
 
 Mid-test Loops
 
@@ -1271,6 +1299,8 @@ int gcd(int a, int b) { /* assume a, b > 0 */ start: if (a == b) return a; else 
 
 Even for functions that are not tail-recursive, automatic, often simple trans- formations can produce tail-recursive code. The general case of the transforma- tion employs conversion to what is known as continuation-passing style [FWH01, Chaps. 7–8]. In effect, a recursive function can always avoid doing any work after returning from a recursive call by passing that work into the recursive call, in the form of a continuation. Some speciﬁc transformations (not based on continuation passing) are often employed by skilled users of functional languages. Consider, for example, the EXAMPLE 6.84
 
+By-hand creation of tail-recursive code recursive summation function above, written here in Scheme:
+
 ```
 (define summation
 (lambda (f low high)
@@ -1314,6 +1344,8 @@ Detractors of functional programming sometimes argue, incorrectly, that recur- s
 Naive recursive Fibonacci function are deﬁned by the mathematical recurrence
 
 Fn (non-negative integer n) ≡  1 if n = 0 or n = 1 Fn−1 + Fn−2 otherwise
+
+The naive way to implement this recurrence in Scheme is
 
 (define fib (lambda (n) (cond ((= n 0) 1) ((= n 1) 1) (#t (+ (fib (- n 1)) (fib (- n 2))))))) ; #t means 'true' in Scheme ■
 
@@ -1375,6 +1407,8 @@ The list will occupy only as much space as we have actually explored. More elab-
 Our ﬁnal category of control ﬂow is nondeterminacy. A nondeterministic con- struct is one in which the choice between alternatives (i.e., between control paths)
 
 10 More precisely, delay is a special form, rather than a function. Its argument is passed to it un- evaluated.
+
+11 Within the functional programming community, the term “lazy evaluation” is often used for any implementation that declines to evaluate unneeded function parameters; this includes both naive implementations of normal-order evaluation and the memoizing mechanism described here.
 
 is deliberately unspeciﬁed. We have already seen examples of nondeterminacy in the evaluation of expressions (Section 6.1.4): in most languages, operator or subroutine arguments may be evaluated in any order. Some languages, notably Algol 68 and various concurrent languages, provide more extensive nondetermin- istic mechanisms, which cover statements as well.
 
@@ -1803,6 +1837,8 @@ enum arm_special_regs {fp = 7, sp = 13, lr = 14, pc = 15};
 
 (The intuition behind these values is explained in Sections C 5.4.5 and C 9.2.2.) In Ada this declaration would be written
 
+type arm_special_regs is (fp, sp, lr, pc); -- must be sorted for arm_special_regs use (fp => 7, sp => 13, lr => 14, pc => 15); ■
+
 In recent versions of Java one can obtain a similar effect by giving values an EXAMPLE 7.13
 
 Emulating distinguished enum values in Java extra ﬁeld (here named register):
@@ -1959,6 +1995,11 @@ One subtlety in the use of name equivalence arises in the simplest of type decla
 
 Alias types type new_type = old_type; (* Algol family syntax *)
 
+```
+typedef old_type new_type;
+/* C family syntax */
+```
+
 Here new_type is said to be an alias for old_type. Should we treat them as two names for the same type, or as names for two different types that happen to have the same internal structure? The “right” approach may vary from one program to another. ■ Users of any Unix-like system will be familiar with the notion of permission bits EXAMPLE 7.21
 
 Semantically equivalent alias types on ﬁles. These specify whether the ﬁle is readable, writable, and/or executable by its owner, group members, or others. Within the system libraries, the set of permissions for a ﬁle is represented as a value of type mode_t. In C, this type is commonly deﬁned as an alias for the predeﬁned 16-bit unsigned integer type:
@@ -1984,6 +2025,8 @@ A language in which aliased types are considered distinct is said to have strict
 
 Derived types and subtypes in Ada to indicate whether an alias represents a derived type or a subtype. A subtype is
 
+3 Ironically, it uses name equivalence for structs.
+
 compatible with its base (parent) type; a derived type is incompatible. (Subtypes of the same base type are also compatible with each other.) Our examples above would be written
 
 subtype mode_t is integer range 0..2**16-1; -- unsigned 16-bit integer ... type celsius_temp is new integer; type fahrenheit_temp is new integer; ■
@@ -2001,6 +2044,8 @@ In a language with static typing, there are many contexts in which values of a s
 Contexts that expect a given type a := expression
 
 we expect the right-hand side to have the same type as a. In the expression
+
+a + b
 
 the overloaded + symbol designates either integer or ﬂoating-point addition; we therefore expect either that a and b will both be integers, or that they will both be reals. In a call to a subroutine,
 
@@ -2275,6 +2320,8 @@ let circum r = r *. 2.0 *. 3.14159;;
 
 the compiler will infer that circum’s parameter is of type float, because it is combined with the ﬂoating-point constants 2.0 and 3.14159, using *., the ﬂoating-point multiplication operator (here the dot is part of the operator name; there is a separate integer multiplication operator, *). If we attempt to apply circum to an integer argument, the compiler will produce a type clash error mes- sage. ■ Though the language is usually compiled in production environments, the standard OCaml distribution also includes an interactive interpreter. The pro- grammer can interact with the interpreter “on line,” giving it input a line at a
 
+5 Multiple arguments are actually somewhat more complicated than suggested here, due to the fact that functions in OCaml are automatically curried; see Section 11.6 for more details.
+
 time. The interpreter processes this input incrementally, generating an interme- diate representation for each source code function, and producing any appropri- ate static error messages. This style of interaction blurs the traditional distinc- tion between interpretation and compilation. While the language implementa- tion remains active during program execution, it performs all possible semantic checks—everything that the production compiler would check—before evaluat- ing a given program fragment. In comparison to languages in which programmers must declare all types ex- plicitly, the type inference of ML-family languages has the advantage of brevity and convenience for interactive use. More important, it provides a powerful form of implicit parametric polymorphism more or less for free. While all uses of EXAMPLE 7.42
 
 Polymorphic functions objects in an OCaml program must be consistent, they do not have to be com- pletely speciﬁed. Consider the OCaml function shown in Figure 7.1. Here the equality test (=) is a built-in polymorphic function of type ‚a -> ‚a -> bool; that is, a function that takes two arguments of the same type and produces a Boolean result. The token ‚a is called a type variable; it stands for any type,
@@ -2355,6 +2402,8 @@ Duck typing in Ruby deﬁned method supported by collection classes. Assuming th
 ```
 
 For the ﬁnal call to min, we have provided, as a trailing block, an alternative deﬁ- nition of the comparison operator. ■ This operational style of checking (an object has an acceptable type if it sup- ports the requested method) is sometimes known as duck typing. It takes its name from the notion that “if it walks like a duck and quacks like a duck, then it must be a duck.” 6
+
+6 The origins of this “duck test” colloquialism are uncertain, but they go back at least as far as the early 20th century. Among other things, the test was widely cited in the 1940s and 50s as a means of identifying supposed Communist sympathizers.
 
 ## 7.3.1 Generic Subroutines and Classes
 
@@ -2847,6 +2896,8 @@ Most languages refer to an element of an array by appending a subscript—usuall
 
 Array declarations the syntax that would be used to declare a scalar. In C:
 
+char upper[26];
+
 In Fortran:
 
 ```
@@ -2989,6 +3040,8 @@ deallocate (mat)
 ! implementation is now free to reclaim mat's space
 ```
 
+Execution of an allocate statement can be treated like the elaboration of a dy- namic shape array in a nested block. Execution of a deallocate statement can
+
 be treated like the end of the nested block (restoring the previous stack pointer) if there are no other arrays beyond the speciﬁed one in the stack. Alternatively, dynamic shape arrays can be allocated in the heap, as described in the following subsection. ■
 
 Heap Allocation
@@ -3085,6 +3138,8 @@ As written, this computation involves three multiplications and six additions/su
 −[(L1 × S1) + (L2 × S2) + (L3 × S3)]
 
 The bracketed expression in this formula is a compile-time constant (assuming the bounds of A are statically known). If A is a global variable, then the address of A is statically known as well, and can be incorporated in the bracketed expression. If A is a local variable of a subroutine (with static shape), then the address of A can be decomposed into a static offset (included in the bracketed expression) plus the contents of the frame pointer at run time. We can think of the address of A plus the bracketed expression as calculating the location of an imaginary array whose [i, j, k]th element coincides with that of A, but whose lower bound in each dimension is zero. This imaginary array is illustrated in Figure 8.10. ■ If i, j, and/or k is known at compile time, then additional portions of the cal- EXAMPLE 8.26
+
+Static and dynamic portions of an array index culation of the address of A[i, j, k] will move from the dynamic to the static part of
 
 the formula shown above. If all of the subscripts are known, then the entire ad- dress can be calculated statically. Conversely, if any of the bounds of the array are not known at compile time, then portions of the calculation will move from the static to the dynamic part of the formula. For example, if L1 is not known until run time, but k is known to be 3 at compile time, then the calculation becomes
 
@@ -3555,6 +3610,8 @@ A list is deﬁned recursively as either the empty list or a pair consisting of 
 
 Lists in ML and Lisp
 
+9 Recall that objects are self-descriptive in Lisp. The only type checking occurs when a function “deliberately” inspects an argument to see whether it is a list or an atom of some particular type.
+
 approaches lead to different implementations. An ML list is usually a chain of blocks, each of which contains an element and a pointer to the next block. A Lisp list is a chain of cons cells, each of which contains two pointers, one to the element and one to the next cons cell (see Figures 8.11 and 8.12). For historical reasons, the two pointers in a cons cell are known as the car and the cdr; they represent the head of the list and the remaining elements, respectively. In both semantics (homogeneity vs heterogeneity) and implementation (chained blocks vs cons cells), Clu resembles ML, while Python and Prolog (to be discussed in Section 12.2) resemble Lisp. ■ Both ML and Lisp provide convenient notation for lists. In the OCaml dialect EXAMPLE 8.55
 
 List notation of ML, a list is enclosed in square brackets, with elements separated by semi- colons: [a; b; c; d]. A Lisp list is enclosed in parentheses, with elements sep- arated by white space: (a b c d). In both cases, the notation represents a proper list—one whose innermost pair consists of the ﬁnal element and the empty list. In Lisp, it is also possible to construct an improper list, whose ﬁnal pair contains two elements. (Strictly speaking, such a list does not conform to the standard re- cursive deﬁnition.) Lisp systems provide a more general, but cumbersome dotted list notation that captures both proper and improper lists. A dotted list is either an atom (possibly null) or a pair consisting of two dotted lists separated by a pe- riod and enclosed in parentheses. The dotted list (a . (b . (c . (d . null)))) is the same as (a b c d). The list (a . (b . (c . d))) is improper; its ﬁnal cons cell contains a pointer to d in the second position, where a pointer to a list is normally required. ■ Both ML and Lisp provide a wealth of built-in polymorphic functions to ma- nipulate arbitrary lists. Because programs are lists in Lisp, Lisp must distin- guish between lists that are to be evaluated and lists that are to be left “as is,”
@@ -3598,6 +3655,8 @@ We could of course create an equivalent list with a series of appropriate functi
 Input/output (I/O) facilities allow a program to communicate with the outside world. In discussing this communication, it is customary to distinguish between interactive I/O and I/O with ﬁles. Interactive I/O generally implies communica- tion with human users or physical devices, which work in parallel with the run- ning program, and whose input to the program may depend on earlier output from the program (e.g., prompts). Files generally refer to off-line storage imple- mented by the operating system. Files may be further categorized into those that are temporary and those that are persistent. Temporary ﬁles exist for the duration of a single program run; their purpose is to store information that is too large to ﬁt in the memory available to the program. Persistent ﬁles allow a program to read data that existed before the program began running, and to write data that will continue to exist after the program has ended. I/O is one of the most difﬁcult aspects of a language to design, and one that displays the least commonality from one language to the next. Some languages provide built-in file data types and special syntactic constructs for I/O. Others relegate I/O entirely to library packages, which export a (usually opaque) file type and a variety of input and output subroutines. The principal advantage of language integration is the ability to employ non-subroutine-call syntax, and to perform operations (e.g., type checking on subroutine calls with varying numbers of parameters) that may not otherwise be available to library routines. A purely library-based approach to I/O, on the other hand, may keep a substantial amount of “clutter” out of the language deﬁnition.
 
 IN MORE DEPTH
+
+An overview of language-level I/O mechanisms can be found on the companion site. After a brief introduction to interactive and ﬁle-based I/O, we focus mainly on the common case of text ﬁles. The data in a text ﬁle are stored in character
 
 form, but may be converted to and from internal types during read and write operations. As examples, we consider the text I/O facilities of Fortran, Ada, C, and C++.
 
@@ -3729,6 +3788,8 @@ quicksort (a : l) = quicksort [...] ++ [a] ++ quicksort [...]
 
 The ++ operator denotes list concatenation (similar to @ in ML). The : operator is equivalent to ML’s :: or Lisp’s cons. Show how to express the two elided expressions as list comprehensions.
 
+8.23–8.31 In More Depth.
+
 ## 8.10 Explorations
 
 8.32 If you have access to a compiler that provides optional dynamic semantic checks for out-of-bounds array subscripts, use of an inappropriate record variant, and/or dangling or uninitialized pointers, experiment with the cost of these checks. How much do they add to the execution time of programs that make a signiﬁcant number of checked accesses? Experiment with dif- ferent levels of optimization (code improvement) to see what effect each has on the overhead of checks.
@@ -3767,6 +3828,8 @@ Layout of run-time stack (reprise) (Figure 3.1). Each routine, as it is called, 
 
 Offsets from frame pointer time, then the object is placed in a variable-size area at the top of the frame; its address and dope vector (descriptor) are stored in the ﬁxed-size portion of the frame, at a statically known offset from the frame pointer (Figure 8.7). If there are no variable-size objects, then every object within the frame has a statically known offset from the stack pointer, and the implementation may dispense with the frame pointer, freeing up a register for other use. If the size of an argument is not known at compile time, then the argument may be placed in a variable-size portion of the frame below the other arguments, with its address and dope vector at known offsets from the frame pointer. Alternatively, the caller may simply pass a temporary address and dope vector, counting on the called routine to copy the argument into the variable-size area at the top of the frame. ■ In a language with nested subroutines and static scoping (e.g., Ada, Common EXAMPLE 9.3
 
+Static and dynamic links Lisp, ML, Scheme, or Swift), objects that lie in surrounding subroutines, and
+
 ![Figure 9.1 Example of...](images/page_446_vector_295.png)
 *Figure 9.1 Example of subroutine nesting, taken from Figure 3.5. Within B, C, and D, all ﬁve routines are visible. Within A and E, routines A, B, and E are visible, but C and D are not. Given the calling sequence A, E, B, D, C, in that order, frames will be allocated on the stack as shown at right, with the indicated static and dynamic links.*
 
@@ -3802,6 +3865,8 @@ In its prologue, the callee
 * saves any callee-saves registers that may be overwritten by the current routine
   (including the static link and return address, if they were passed in registers)
 
+After the subroutine has completed, the epilogue
+
 ![Figure 9.2 A typical...](images/page_449_vector_326.png)
 *Figure 9.2 A typical stack frame. Though we draw it growing upward on the page, the stack actually grows downward toward lower addresses on most machines. Arguments are accessed at positive offsets from the fp. Local variables and temporaries are accessed at negative offsets from the fp. Arguments to be passed to called routines are assembled at the top of the frame, using positive offsets from the sp.*
 
@@ -3819,6 +3884,8 @@ Finally, the caller
 Special-Case Optimizations
 
 Many parts of the calling sequence, prologue, and epilogue can be omitted in common cases. If the hardware passes the return address in a register, then a leaf routine (a subroutine that makes no additional calls before returning)2 can simply
+
+2 A leaf routine is so named because it is a leaf of the subroutine call graph, a data structure men- tioned in Exercise 3.10.
 
 leave it there; it does not need to save it in the stack. Likewise it need not save the static link or any caller-saves registers. A subroutine with no local variables and nothing to save or restore may not even need a stack frame on a RISC machine. The simplest subroutines (e.g., li- brary routines to compute the standard mathematical functions) may not touch memory at all, except to fetch instructions: they may take their arguments in registers, compute entirely in (caller-saves) registers, call no other routines, and return their results in registers. As a result they may be extremely fast.
 
@@ -4101,6 +4168,8 @@ Subroutines as parameters in Ada 1. type int_func is access function (n : intege
 
 As discussed in Section 3.6.1, a closure needs to include both a code address and a referencing environment because, in a language with nested subroutines, we need to make sure that the environment available to f at line 6 is the same that would have been available to add_k if it had been called directly at line 14—in particular, that it includes the binding for k. ■ Subroutines are routinely passed as parameters (and returned as results) in functional languages. A list-based version of apply_to_A would look something EXAMPLE 9.21
 
+First-class subroutines in Scheme like this in Scheme (for the meanings of car, cdr, and cons, see Section 8.6):
+
 ```
 (define apply-to-L
 (lambda (f l)
@@ -4135,6 +4204,8 @@ In object-oriented languages, one can approximate the behavior of a subrou- tine
 Default (Optional) Parameters
 
 In Section 3.3.6, we noted that default parameters provide an attractive alternative to dynamic scope for changing the behavior of a subroutine. A default parameter is one that need not necessarily be provided by the caller; if it is missing, then a preestablished default value will be used instead. One common use of default parameters is in I/O library routines (described in Section C 8.7.3). In Ada, for example, the put routine for integers has the EXAMPLE 9.24
+
+Default parameters in Ada following declaration in the text_IO library package:
 
 ![Figure 9.3 Parameter-passing modes....](images/page_467_vector_296.png)
 *Figure 9.3 Parameter-passing modes. Column 1 indicates common names for modes. Column 2 indicates prominent languages that use the modes, or that introduced them. Column 3 indicates implementation via passing of values, references, or closures. Column 4 indicates whether the callee can read or write the formal parameter. Column 5 indicates whether changes to the formal parameter affect the actual parameter. Column 6 indicates whether changes to the formal or actual parameter, during the execution of the subroutine, may be visible through the other. ∗Behavior is undeﬁned if the program attempts to use an r-value argument after the call. †Changes to arguments passed by need in R will happen only on the ﬁrst use; changes in Haskell are not permitted.*
@@ -4250,6 +4321,8 @@ In addition to specifying a value, return causes the immediate termination of th
 rtn := expression ... return rtn ■
 
 Fortran separates termination of a subroutine from the speciﬁcation of return values: it speciﬁes the return value by assigning to the function name, and has a return statement that takes no arguments. Argument-bearing return statements and assignment to the function name EXAMPLE 9.31
+
+Incremental computation of a return value both force the programmer to employ a temporary variable in incremental com- putations. Here is an example in Ada:
 
 ```
 type int_array is array (integer range <>) of integer;
@@ -4847,6 +4920,8 @@ Polak [LP80]. Clu’s exceptions are an interesting historical precursor; detail
 
 In Chapter 3 we presented several stages in the development of data ab- straction, with an emphasis on the scoping mechanisms that control the visibility of names. We began with global variables, whose lifetime spans program execu- tion. We then added local variables, whose lifetime is limited to the execution of a single subroutine; nested scopes, which allow subroutines themselves to be local; and static variables, whose lifetime spans execution, but whose names are visible only within a single scope. These were followed by modules, which allow a collec- tion of subroutines to share a set of static variables; module types, which allow the programmer to instantiate multiple instances of a given abstraction, and classes, which allow the programmer to deﬁne families of related abstractions. Ordinary modules encourage a “manager” style of programming, in which a module exports an abstract type. Module types and classes allow the module itself to be the abstract type. The distinction becomes apparent in two ways. First, the explicit create and destroy routines typically exported from a manager module are replaced by creation and destruction of an instance of the module type. Second, invocation of a routine in a particular module instance replaces invocation of a general routine that expects a variable of the exported type as argument. Classes build on the module-as-type approach by adding mechanisms for inheritance, which allows new abstractions to be deﬁned as reﬁnements or extensions to existing ones, and dynamic method binding, which allows a new version of an abstraction to display newly reﬁned behavior, even when used in a context that expects an earlier version. An instance of a class is known as an object; languages and programming techniques based on classes are said to be object-oriented.1 The stepwise evolution of data abstraction mechanisms presented in Chapter 3 is a useful way to organize ideas, but it does not completely reﬂect the historical development of language features. In particular, it would be inaccurate to sug- gest that object-oriented programming developed as an outgrowth of modules.
 
+1 In previous chapters we used the term “object” informally to refer to almost anything that can have a name. In this chapter we will use it only to refer to an instance of a class.
+
 Rather, all three of the fundamental concepts of object-oriented programming— encapsulation, inheritance, and dynamic method binding—have their roots in the Simula programming language, developed in the mid-1960s by Ole-Johan Dahl and Kristen Nygaard of the Norwegian Computing Center.2 In comparison to modern object-oriented languages, Simula was weak in the data hiding part of encapsulation, and it was in this area that Clu, Modula, Euclid, and related lan- guages made important contributions in the 1970s. At the same time, the ideas of inheritance and dynamic method binding were adopted and reﬁned in Smalltalk over the course of the 1970s. Smalltalk employed a distinctive “message-based” programming model, with dynamic typing and unusual terminologyand syntax. The dynamic typing tended to make implementations relatively slow, and delayed the reporting of errors. The language was also tightly integrated into a graphical programming environment, making it difﬁcult to port across systems. For these reasons, Smalltalk was less widely used than one might have expected, given the inﬂuence it had on subse- quent developments. Languages like Eiffel, C++, Ada 95, Fortran 2003, Java, and C# represented to a large extent a reintegration of the inheritance and dynamic method binding of Smalltalk with “mainstream” imperative syntax and seman- tics. In an alternative vein, Objective-C combined Smalltalk-style messaging and dynamic typing, in a relatively pure and unadulterated form, with traditional C syntax for intra-object operations. Object orientation has also become impor- tant in functional languages, as exempliﬁed by the Common Lisp Object System (CLOS [Kee89; Ste90, Chap. 28]) and the objects of OCaml. More recently, dynamically typed objects have gained new popularity in lan- guages like Python and Ruby, while statically typed objects continue to appear in languages like Scala and Go. Swift, the successor to Objective-C, follows the pattern of its predecessor (and of OCaml, in fact) in layering dynamically typed objects on top of an otherwise statically typed language. In Section 10.1 we provide an overview of object-oriented programming and of its three fundamental concepts. We consider encapsulation and data hiding in more detail in Section 10.2. We then consider object initialization and ﬁnaliza- tion in Section 10.3, and dynamic method binding in Section 10.4. In Section 10.6 (mostly on the companion site) we consider the subject of multiple inheritance, in which a class is deﬁned in terms of more than one existing class. As we shall see, multiple inheritance introduces some particularly thorny semantic and imple- mentation challenges. Finally, in Section 10.7, we revisit the deﬁnition of object orientation, considering the extent to which a language can or should model ev-
 
 2 Kristen Nygaard (1926–2002) was widely admired as a mathematician, computer language pi- oneer, and social activist. His career included positions with the Norwegian Defense Research Establishment, the Norwegian Operational Research Society, the Norwegian Computing Center, the Universities of Aarhus and Oslo, and a variety of labor, political, and social organizations. Ole-Johan Dahl (1931–2002) also held positions at the Norwegian Defense Research Establish- ment and the Norwegian Computing Center, and was the founding member of the Informatics department at Oslo. Together, Nygaard and Dahl shared the 2001 ACM Turing Award.
@@ -4885,6 +4960,8 @@ throw new list_err("attempt to delete nonempty list");
 ```
 
 To create an empty list, one could then write
+
+list* my_list_ptr = new list;
 
 ```
 class list_err {
@@ -5382,6 +5459,8 @@ Here public members of the base class act like protected members of the derived 
 
 Any class can limit the visibility of its members. Public members are visible anywhere the class declaration is in scope. Private members are visible only inside the class’s methods. Protected members are visible inside methods of the class or its descendants. (As an exception to the normal rules, a class can specify that certain other friend classes or subroutines should have access to its private members.) A derived class can restrict the visibility of members of a base class, but can never increase it.3 Private members of a base class are never visible in a derived
 
+3 A derived class can of course declare a new member with the same name as some existing member, but the two will then coexist, as discussed in Example 10.10.
+
 class. Protected and public members of a public base class are protected or public, respectively, in a derived class. Protected and public members of a protected base class are protected members of a derived class. Protected and public members of a private base class are private members of a derived class. A derived class that limits the visibility of members of a base class by declaring that base class protected or private can restore the visibility of individual members of the base class by inserting a using declaration in the protected or public portion of the derived class declaration. A derived class can make methods (though not ﬁelds) of a base class inaccessi- ble (to others and to itself) by explicitly delete-ing them.
 
 Other object-oriented languages take different approaches to visibility. Eif- fel is more ﬂexible than C++ in the patterns of visibility it can support, but it does not adhere to the ﬁrst of the C++ principles above. Derived classes in Eif- fel can both restrict and increase the visibility of members of base classes. Every method (called a feature in Eiffel) can specify its own export status. If the status is {NONE} then the member is effectively private (called secret in Eiffel). If the status is {ANY} then the member is effectively public (called generally available in Eiffel). In the general case the status can be an arbitrary list of class names, in which case the feature is said to be selectively available to those classes and their descendants only. Any feature inherited from a base class can be given a new status in a derived class. Java and C# follow C++ in the declaration of public, protected, and private members, but do not provide the protected and private designa- tions for base classes; a derived class can neither increase nor restrict the visibility of members of a base class. It can, however, hide a ﬁeld or override a method by deﬁning a new one with the same name; the lack of a scope resolution operator makes the old member inaccessible to users of the new class. In Java, the overrid- ing version of a method cannot have more restrictive visibility than the version in the base class. The protected keyword has a slightly different meaning in Java than it does in C++: a protected member of a Java class is visible not only within derived classes but also within the entire package (namespace) in which the class is de- clared. A class member with no explicit access modiﬁer in Java is visible through- out the package in which the class is declared, but not in any derived classes that reside in other packages. C# deﬁnes protected as C++ does, but provides an additional internal keyword that makes a member visible throughout the as- sembly in which the class appears. (An assembly is a collection of linked-together compilation units, comparable to a .jar ﬁle in Java.) Members of a C# class are private by default. In Smalltalk and Objective-C, the issue of member visibility never arises: the language allows code at run time to attempt a call of any method name in any object. If the method exists (with the right number of parameters), then the invocation proceeds; otherwise a run-time error results. There is no way in these languages to make a method available to some parts of a program but not to
@@ -5517,6 +5596,8 @@ y := rho * sin(theta)
 end
 ```
 
+-- other public methods
+
 feature {NONE}
 
 -- private methods
@@ -5596,6 +5677,11 @@ Here a and b are initialized with the zero-argument constructor, and the later u
 
 Temporary objects structed) applies not only to objects with names but also to temporary objects. The following, for example, entails a call to both the string(const char*) con- structor and the ~string() destructor:
 
+```
+cout << string("Hi, Mom").length();
+// prints 7
+```
+
 The destructor is called at the end of the output statement: the temporary object behaves as if its scope were just the line shown here. In a similar vein, the following entails not only two calls to the default string constructor (to initialize a and b) and a call to string::operator+(), but also a constructor call to initialize the temporary object returned by operator+()—the object whose length is then queried by the caller:
 
 ```
@@ -5624,6 +5710,8 @@ return rtn;
 Because we have used a named, non-temporary variable, the compiler may need to invoke a copy constructor to copy rtn into the location in the caller’s frame.4 It is also permitted, however (if other return statements don’t have conﬂicting needs), to construct rtn itself at the caller-speciﬁed location from the outset, and to elide the copy operation. This option is known as return value optimization. It turns out to signiﬁcantly improve the performance of many C++ programs. In Example 10.29, the value a + b was passed immediately to length(), allow- ing the compiler to use the same temporary object in the caller’s frame as both the return value from operator+() and the this argument for length(). In other programs the compiler may need to invoke a copy constructor after a function returns:
 
 foo c; ... c = f( args );
+
+4 The compiler may also use a move constructor (“R-value References,” Section 9.3.1), if available. To avoid excess confusion, we limit the discussion here to copy constructors.
 
 Here the location of c cannot be passed as the hidden parameter to f unless the compiler is able to prove that c’s value will not be used (via an alias, perhaps) during the call. The bottom line: returning an object from a function in C++ may entail zero, one, or two invocations of the return type’s copy constructor, de- pending on whether the compiler is able to optimize either or both of the return statement and the subsequent use in the caller. ■ While Eiffel has both dynamically allocated and expanded objects, its strategy EXAMPLE 10.31
 
@@ -5744,6 +5832,8 @@ In modern C++ code, storage management is often facilitated through the use of s
 ## 10.4 Dynamic Method Binding
 
 One of the principal consequences of inheritance/type extension is that a derived class D has all the members—data and subroutines—of its base class C. As long as D does not hide any of the publicly visible members of C (see Exercise 10.15), it makes sense to allow an object of class D to be used in any context that expects an object of class C: anything we might want to do to an object of class C we can also do to an object of class D. In other words, a derived class that does not hide any publicly visible members of its base class is a subtype of that base class. The ability to use a derived class in a context that expects its base class is called subtype polymorphism. If we imagine an administrative computing system for a EXAMPLE 10.37
+
+Derived class objects in a base class context university, we might derive classes student and professor from class person:
 
 ```
 class person { ...
@@ -5884,6 +5974,8 @@ With static method binding (as in Simula, C++, C#, or Ada 95), the compiler can 
 Vtables a reference or pointer variable must contain sufﬁcient information to allow the code generated by the compiler to ﬁnd the right version of the method at run time. The most common implementation represents each object with a record whose ﬁrst ﬁeld contains the address of a virtual method table (vtable) for the object’s class (see Figure 10.3). The vtable is an array whose ith entry indicates the address of the code for the object’s ith virtual method. All objects of a given concrete class share the same vtable. ■ Suppose that the this (self) pointer for methods is passed in register r1, EXAMPLE 10.45
 
 Implementation of a virtual method call that m is the third method of class foo, and that f is a pointer to an object of class foo. Then the code to call f->m() looks something like this:
+
+6 Terminology differs in other languages. In Eiffel, an interface is called a fully deferred class. In Scala, it’s called a trait.
 
 ![Figure 10.3 Implementation of...](images/page_543_vector_203.png)
 *Figure 10.3 Implementation of virtual methods. The representation of object F begins with the address of the vtable for class foo. (All objects of this class will point to the same vtable.) The vtable itself consists of an array of addresses, one for the code of each virtual method of the class. The remainder of F consists of the representations of its ﬁelds.*

@@ -178,6 +178,8 @@ Some compilers translate source ﬁles directly into object ﬁles acceptable to
 
 These are the principal tasks of an assembler. In the early days of computing, most programmers wrote in assembly lan- guage. To simplify the more tedious and repetitive aspects of assembly program- ming, assemblers often provided extensive macro expansion facilities. With the ubiquity of modern high-level languages, such programmer-centric features have largely disappeared. Almost all assembly language programs today are written by compilers. When passing assembly language directly from the compiler to the assembler, it EXAMPLE 15.10
 
+Assembly as a ﬁnal compiler pass makes sense to use some internal (records and linked lists) representation. At the
+
 ![Figure 15.8 Layout of...](images/page_826_vector_367.png)
 *Figure 15.8 Layout of 32-bit process address space in x86 Linux (not to scale). Double lines separate regions with potentially different access permissions.*
 
@@ -192,6 +194,8 @@ Internal data structures
 Assembler front end
 
 Assembler back end
+
+Object code
 
 The assembler front end simply translates textual source into internal symbolic form. By sharing the assembler back end, the compiler and assembler front end avoid duplication of effort. For debugging purposes, the compiler will generally have an option to dump a textual representation of the code it passes to the as- sembler. ■ An alternative organization has the compiler generate object code directly: EXAMPLE 15.11
 
@@ -293,6 +297,8 @@ In the early 1990s, most operating system vendors adopted dynamic linking in or-
 * What are the principal tasks of a linker?
 * How can a linker enforce type checking across compilation units?
 
+* What is the motivation for dynamic linking?
+
 ## 15.8 Summary and Concluding Remarks
 
 In this chapter we focused our attention on the back end of the compiler, and on code generation, assembly, and linking in particular. Compiler middle and back ends vary greatly in internal structure. We dis- cussed one plausible structure, in which semantic analysis is followed by, in order, intermediate code generation, machine-independent code improvement, target code generation, and machine-speciﬁc code improvement (including register al- location and instruction scheduling). The semantic analyzer passes a syntax tree to the intermediate code generator, which in turn passes a control ﬂow graph to the machine-independent code improver. Within the nodes of the control ﬂow graph, we suggested that code be represented by instructions in a pseudo-assembly lan- guage with an unlimited number of virtual registers. In order to delay discussion of code improvement to Chapter 17, we also presented a simpler back-end struc- ture in which code improvement is dropped, naive register allocation happens early, and intermediate and target code generation are merged into a single phase. This simpler structure provided the context for our discussion of code generation. We also discussed intermediate forms (IFs). These can be categorized in terms of their level, or degree of machine independence. On the companion site we con- sidered GIMPLE and RTL, the IFs of the Free Software Foundation GNU com- pilers. A well-deﬁned IF facilitates the construction of compiler families, in which front ends for one or more languages can be paired with back ends for many ma- chines. In many systems that compile for a virtual machine (to be discussed at greater length in Chapter 16), the compiler produces a stack-based medium-level IF. While not generally suitable for use inside the compiler, such an IF can be simple and very compact. Intermediate code generation is typically performed via ad hoc traversal of a syntax tree. Like semantic analysis, the process can be formalized in terms of attribute grammars. We presented part of a small example grammar and used it to generate code for the GCD program introduced in Chapter 1. We noted in passing that target code generation is often automated, in whole or in part, using a code generator generator that takes as input a formal description of the target machine and produces code that performs pattern matching on instruction sequences or trees. In our discussion of assembly and linking we described the format of relo- catable and executable object ﬁles, and discussed the notions of name resolution and relocation. We noted that while not all compilers include an explicit assem- bly phase, all compilation systems must make it possible to generate assembly code for debugging purposes, and must allow the programmer to write special- purpose routines in assembler. In compilers that use an assembler, the assembly phase is sometimes responsible for instruction scheduling and other low-level code improvement. The linker, for its part, supports separate compilation, by “gluing” together object ﬁles produced by multiple compilations. In many mod- ern systems, signiﬁcant portions of the linking task are delayed until load time
@@ -352,6 +358,8 @@ Standard compiler textbooks (e.g., those by Aho et al. [ALSU07], Cooper and Tor-
 
 Every nontrivial implementation of a high-level programming language makes extensive use of libraries. Some library routines are very simple: they may copy memory from one place to another, or perform arithmetic functions not directly supported by the hardware. Others are more sophisticated. Heap management routines, for example, maintain signiﬁcant amounts of internal state, as do li- braries for buffered or graphical I/O. In general, we use the term run-time system (or sometimes just runtime, with- out the hyphen) to refer to the set of libraries on which the language implemen- tation depends for correct operation. Some parts of the runtime, like heap man- agement, obtain all the information they need from subroutine arguments, and can easily be replaced with alternative implementations. Others, however, require more extensive knowledge of the compiler or the generated program. In simpler cases, this knowledge is really just a set of conventions (e.g., for the subroutine calling sequence) that the compiler and runtime both respect. In more complex cases, the compiler generates program-speciﬁc metadata that the runtime must inspect to do its job. A tracing garbage collector (Section 8.5.3), for example, de- pends on metadata identifying all the “root pointers” in the program (all global, static, and stack-based pointer or reference variables), together with the type of every reference and of every allocated block. Many examples of compiler/runtime integration have been discussed in previ- ous chapters; we review these in Sidebar 16.1. The length and complexity of the list generally means that the compiler and the run-time system must be developed together. Some languages (notably C) have very small run-time systems: most of the user-level code required to execute a given source program is either generated directly by the compiler or contained in language-independent libraries. Other languages have extensive run-time systems. C#, for example, is heavily dependent on a run-time system deﬁned by the Common Language Infrastructure (CLI) standard [Int12a]. Like any run-time system, the CLI depends on data generated by the com- EXAMPLE 16.1
 
+The CLI as a run-time system and virtual machine piler (e.g., type descriptors, lists of exception handlers, and certain content from the symbol table). It also makes extensive assumptions about the structure of
+
 DESIGN & IMPLEMENTATION
 
 ## 16.1 Run-time systems
@@ -384,6 +392,8 @@ A virtual machine (VM) provides a complete programming environment: its ap- plic
 
 1 In particular, the CLI deﬁnes the instruction set of compiler’s target language: the Common Intermediate Language (CIL) described in Section C 16.1.2.
 
+2 CLI is an ECMA and ISO standard. CLR—the Common Language Runtime—is Microsoft’s im- plementation of the CLI. It is part of the .NET framework.
+
 existing physical machine, or it may be an artiﬁcial instruction set designed to be easier to implement in software and to generate with a compiler. Other por- tions of the VM API may support I/O, scheduling, or other services provided by a library or by the operating system (OS) of a physical machine. In practice, virtual machines tend to be characterized as either system VMs or process VMs. A system VM faithfully emulates all the hardware facilities needed to run a standard OS, including both privileged and unprivileged instructions, memory-mapped I/O, virtual memory, and interrupt facilities. By contrast, a process VM provides the environment needed by a single user-level process: the unprivileged subset of the instruction set and a library-level interface to I/O and other services. System VMs are often managed by a virtual machine monitor (VMM) or hyper- visor, which multiplexes a single physical machine among a collection of “guest” operating systems, each of which runs in its own virtual machine. The ﬁrst widely available VMM was IBM’s CP/CMS, which debuted in 1967. Rather than build an operating system capable of supporting multiple users, IBM used the CP (“con- trol program”) VMM to create a collection of virtual machines, each of which ran a lightweight, single-user operating system (CMS). In recent years, VMMs have played a central role in the rise of cloud computing, by allowing a hosting center to share physical machines among a large number of (mutually isolated) guest OSes. The center can monitor and manage its workload more easily if customer workloads were running on bare hardware—it can even migrate running OSes from one machine to another, to balance load among customers or to clear ma- chines for hardware maintenance. System VMs are also increasingly popular on personal computers, where products like VMware Fusion and Parallels Desktop allow users to run programs on top of more than one OS at once. It is process VMs, however, that have had the greatest impact on program- ming language design and implementation. As with system VMs, the technology is decades old: the P-code VM described in Example 1.15, for example, dates from the early 1970s. Process VMs were originally conceived as a way to increase program portability and to quickly “bootstrap” languages on new hardware. The traditional downside was poor performance due to interpretation of the abstract instruction set. The tradeoff between portability and performance remained valid through the late 1990s, when early versions of Java were typically an order of mag- nitude slower than traditionally compiled languages like Fortran or C. With the introduction of just-in-time compilation, however, modern implementations of the Java Virtual Machine (JVM) and the Common Language Infrastructure (CLI) have come to rival the performance of traditional languages on native hardware. We will consider these systems in Sections 16.1.1 and 16.1.2. Both the JVM and the CLI use a stack-based intermediate form (IF): Java byte- code and CLI Common Intermediate Language (CIL), respectively. As described in Section 15.2.2, the lack of named operands means that stack-based IF can be very compact—a feature of particular importance for code (e.g., applets) dis- tributed over the Internet. At the same time, the need to compute everything in stack order means that intermediate results cannot generally be saved in registers
 
 and reused. In many cases, stack-based code for an expression will occupy fewer bytes, but specify more instructions, than corresponding code for a register-based machine.
@@ -410,6 +420,8 @@ Global data The method area is analogous to the code (“text”) segment of a t
 
 Constants for “Hello, world”
 
+3 Compilation of type-unsafe code, as in C, is problematic; we will return to this issue in Sec- tion C 16.1.2.
+
 ```
 class Hello {
 public static void main(String args[]) {
@@ -428,6 +440,8 @@ Heap In keeping with the type system of the Java language, a datum in the local 
 *Figure 16.1 Content of the JVM constant pool for the program in Example 16.2. The “Asciz” entries (zero-terminated ASCII) contain null-terminated character-string names. Most other entries pair an indication of the kind of constant with a reference to one or more additional entries. This output was produced by Sun’s javap tool.*
 
 heap. They are allocated, dynamically, using the new and newarray instructions. They are reclaimed automatically via garbage collection. The choice of collection algorithm is left to the implementor of the JVM. To facilitate sharing among threads, the Java language provides the equivalent of monitors with a lock and a single, implicit condition variable per object, as described in Section 13.4.3. The JVM provides direct support for this style of synchronization. Each object in the heap has an associated mutual exclusion lock; in a typical implementation, the lock maintains a set of threads waiting for entry to the monitor. In addition, each object has an associated set of threads that are waiting for the monitor’s condition variable.4 Locks are acquired with the monitorenter instruction and released with the monitorexit instruction. Most
+
+4 To save space, a JIT compiler will typically omit the monitor information for any object it can prove is never used for synchronization.
 
 JVMs insist that these calls appear in matching nested pairs, and that every lock acquired within a given method be released within the same method (any correct compiler for the Java language will follow these rules). Consistency of access to shared objects is governed by the Java memory model, which we considered brieﬂy in Section 13.3.3. Informally, each thread behaves as if it kept a private cache of the heap. When a thread releases a monitor or writes a volatile variable, the JVM must ensure that all previous updates to the thread’s cache have been written back to memory. When a thread enters a monitor or reads a volatile variable, the JVM must (in effect) clear the thread’s cache so that subsequent reads cause locations to be reloaded from memory. Of course, actual implementations don’t perform explicit write-backs or invalidations; they start with the memory model provided by the hardware’s cache coherence pro- tocol and use memory barrier (fence) instructions where needed to avoid unac- ceptable orderings.
 
@@ -496,6 +510,8 @@ DESIGN & IMPLEMENTATION
 
 ## 16.1.2 The Common Language Infrastructure
 
+As early as the mid-1980s, Microsoft recognized the need for interoperability among programming languages running on Windows platforms. In a series of
+
 product offerings spanning a decade and a half, the company developed increas- ingly sophisticated versions of its Component Object Model (COM), ﬁrst to com- municate with, then to call, and ﬁnally to share data with program components written in multiple languages. With the success of Java, it became clear by the mid to late 1990s that a sys- tem combining a JVM-style run-time system with the language interoperability of COM could have enormous technical and commercial potential. Microsoft’s .NET project set out to realize this potential. It includes a JVM-like virtual machine whose speciﬁcation—the Common Language Infrastructure (CLI)—is standardized by ECMA and the ISO. While development of the CLI has clearly been driven by Microsoft, other implementations—notablyfrom the open-source Mono project, led by Xamarin, Inc.—are available for non-Windows platforms.
 
 IN MORE DEPTH
@@ -542,6 +558,8 @@ Like a lazy linker (Section C 15.7.2), a JIT compiler may perform its work in- c
 
 Finally, JIT compilation affords the opportunity to perform certain kinds of code improvement that are usually not feasible in traditional compilers. It is cus- tomary, for example, for software vendors to ship a single compiled version of an
 
+5 While a JIT compiler could, in principle, operate on source code, we assume throughout this discussion that it works on a medium-level IF like Java bytecode or CIL.
+
 application for a given instruction set architecture, even though implementations of that architecture may differ in important ways, including pipeline width and depth; the number of physical (renaming) registers; and the number, size, and speed of the various levels of cache. A JIT compiler may be able to identify the processor implementation on which it is running, and generate code that is tuned for that speciﬁc implementation. More important, a JIT compiler may be able to in-line calls to dynamically linked library routines. This optimization is par- ticularly important in object-oriented programs, which tend to call many small methods. For such programs, dynamic in-lining can have a dramatic impact on performance.
 
 Dynamic Compilation
@@ -551,6 +569,8 @@ We have noted that a language implementation may choose to delay JIT compi- lati
 When is in-lining safe? the in-lining of methods from dynamically linked libraries. If foo is a static method of class C, then calls to C.foo can safely be in-lined. Similarly, if bar is a final method of class C (one that cannot be overridden), and o is an ob- ject of class C, then calls to o.bar can safely be in-lined. But what if bar is not final? The compiler can still in-line calls to o.bar if it can prove that o will never refer to an instance of a class derived from C (which might have a different implementation of bar). Sometimes this is easy:
 
 C o = new C( args ); o.bar(); // no question what type this is
+
+Other times it is not:
 
 ```
 static void f(C o) {
@@ -598,6 +618,8 @@ Expression<Func<int, int>> square_tree = x => x * x;
 Various methods of library class Expression can now be used to explore and manipulate the tree. When desired, the tree can be converted to CIL code:
 
 square_func = square_tree.Compile();
+
+These operations are roughly analogous to the following in Scheme:
 
 ```
 (let* ((square-tree '(lambda (x) (* x x)))
@@ -656,6 +678,8 @@ Where and When to Translate
 Most binary translators operate in user space, and limit themselves to the non- privileged subset of the machine’s instruction set. A few are built at a lower level. When Apple converted from the Motorola 680x0 processor to the PowerPC in EXAMPLE 16.9
 
 The Mac 68K emulator 1994, they built a 68K interpreter into the operating system. A subsequent re- lease the following year augmented the interpreter with a rudimentary binary translator that would cache frequently executed instruction sequences in a small (256KB) buffer. By placing the interpreter (emulator) in the lowest levels of the operating system, Apple was able to signiﬁcantly reduce its time to market: only the most performance-critical portions of the OS were rewritten for the PowerPC, leaving the rest as 68K code. Additional portions were rewritten over time. ■ In the late 1990s, Transmeta Corp. developed an unusual system capable of EXAMPLE 16.10
+
+The Transmeta Crusoe processor running unmodiﬁed x86 operating systems and applications by means of binary
 
 translation. Their Crusoe and Efﬁceon processors, sold from 2000 to 2005, ran proprietary “Code Morphing” software directly on top of a wide-instruction- word ISA (distantly related to the Itanium). This software, designed in conjunc- tion with the hardware, translated x86 code to native code on the ﬂy, and was entirely invisible to systems running above it. ■ Binary translators display even more diversity in their choice of what and when to translate. In the simplest case, translation is a one-time, off-line activity akin to conventional compilation. In the late 1980s, for example, Hewlett Packard Corp. EXAMPLE 16.11
 
@@ -871,6 +895,8 @@ The C# equivalent of Figure 16.5 appears in Figure 16.6. Here user-deﬁned EXAM
 
 User-deﬁned annotations in C# annotations (known as attributes in C#) are classes, not interfaces, and the syntax for attaching an attribute to a declaration uses square brackets instead of an @ sign. ■ In effect, annotations (attributes) serve as compiler-supported comments, with well-deﬁned structure and an API that makes them accessible to automated perusal. As we have seen, they may be read by the compiler (as pragmas) or by reﬂective programs. They may also be read by independent tools. Such tools can be surprisingly versatile. An obvious use is the automated creation of documentation. Java annotations EXAMPLE 16.27
 
+javadoc (ﬁrst introduced in Java 5) were inspired at least in part by experience with the
+
 ![Figure 16.5 User-deﬁned annotations...](images/page_876_vector_374.png)
 *Figure 16.5 User-deﬁned annotations in Java. Retention is a built-in annotation for annota- tions. It indicates here that Documentation annotations should be saved in the class ﬁle pro- duced by the Java compiler, where they will be available to run-time reﬂection.*
 
@@ -932,6 +958,8 @@ Haswell performance counters ample, has built-in counters for clock ticks (both 
 
 * Why is reﬂection more difﬁcult to implement in Java or C# than it is in Perl
   or Ruby?
+
+* What are annotations (Java) or attributes (C#)? What are they used for?
 
 * What are javadoc, apt, JML, and LINQ, and what do they have to do with
   annotation?

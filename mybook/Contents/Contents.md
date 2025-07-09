@@ -184,6 +184,8 @@ Preface xxv I FOUNDATIONS 3
 
 ## 5.1 The Memory Hierarchy C 61
 
+## 5.2 Data Representation C 63
+
 ## 5.2.1 Integer Arithmetic C 65
 
 ## 5.2.2 Floating-Point Arithmetic C 67
@@ -247,6 +249,8 @@ Preface xxv I FOUNDATIONS 3
 ## 6.4.1 Short-Circuited Conditions 254
 
 ## 6.4.2 Case/Switch Statements 256
+
+## 6.5 Iteration 261
 
 ## 6.5.1 Enumeration-Controlled Loops 262
 
@@ -313,6 +317,8 @@ Preface xxv I FOUNDATIONS 3
 ## 7.8 Bibliographic Notes 348
 
 8 Composite Types 351
+
+## 8.1 Records (Structures) 351
 
 ## 8.1.1 Syntax and Operations 352
 
@@ -381,6 +387,8 @@ Preface xxv I FOUNDATIONS 3
 ## 9.3.3 Special-Purpose Parameters 433
 
 ## 9.3.4 Function Returns 438
+
+## 9.4 Exception Handling 440
 
 ## 9.4.1 Deﬁning Exceptions 444
 
@@ -588,6 +596,8 @@ Preface xxv I FOUNDATIONS 3
 
 ## 13.1.2 Multiprocessor Architecture 631
 
+## 13.2 Concurrent Programming Fundamentals 635
+
 ## 13.2.1 Communication and Synchronization 635
 
 ## 13.2.2 Languages and Libraries 637
@@ -789,6 +799,8 @@ Preface xxv I FOUNDATIONS 3
 ## 17.5.1 Loop Invariants C 323
 
 ## 17.5.2 Induction Variables C 325
+
+## 17.6 Instruction Scheduling C 328
 
 ## 17.7 Loop Improvement II C 332
 

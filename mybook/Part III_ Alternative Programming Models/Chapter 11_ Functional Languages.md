@@ -42,6 +42,8 @@ the interpreter will print
 
 7
 
+If the user types
+
 7
 
 the interpreter will also print
@@ -75,6 +77,8 @@ Here the result is a three-element list. More commonly, quoting is speciﬁed wi
 '(+ 3 4) =⇒(+ 3 4) ■
 
 Though every expression has a type in Scheme, that type is generally not de- termined until run time. Most predeﬁned functions check dynamically to make EXAMPLE 11.4
+
+Dynamic typing sure that their arguments are of appropriate types. The expression
 
 (if (> a 0) (+ 2 3) (+ 2 "foo"))
 
@@ -159,6 +163,8 @@ Basic list operations most important are car, which returns the head of a list, 
 
 Also useful is the null? predicate, which determines whether its argument is the empty list. Recall that the notation ‚(2 3 4) indicates a proper list, in which the ﬁnal element is the empty list:
 
+(cdr '(2)) =⇒() (cons 2 3) =⇒(2 . 3) ; an improper list ■
+
 For fast access to arbitrary elements of a sequence, Scheme provides a vector type that is indexed by integers, like an array, and may have elements of hetero- geneous types, like a record. Interested readers are referred to the Scheme man- ual [SDF+07] for further information. Scheme also provides a wealth of numeric and logical (Boolean) functions and special forms. The language manual describes a hierarchy of ﬁve numeric types: integer, rational, real, complex, and number. The last two levels are op- tional: implementations may choose not to provide any numbers that are not real. Most but not all implementations employ arbitrary-precision representations of both integers and rationals, with the latter stored internally as (numerator, de- nominator) pairs.
 
 ## 11.3.3 Equality Testing and Searching
@@ -196,6 +202,8 @@ Assignment form set! and the functions set-car! and set-cdr!:
 The return values of the various varieties of set! are implementation-depen- dent. ■ Sequencing uses the special form begin: EXAMPLE 11.17
 
 Sequencing
+
+5 For clarity, the ﬁgures in Section C 3.4.2 elided the internal structure of the pairs.
 
 ```
 (begin
@@ -463,6 +471,8 @@ While lists have a natural recursive deﬁnition and dynamically variable length
 
 Array notation the square brackets:
 
+let five_primes = [| 2; 3; 5; 7; 11 |];;
+
 Array indexing always starts at zero. Elements are accessed using the .() opera- tor:
 
 five_primes.(2);; =⇒5
@@ -492,6 +502,8 @@ Tuple notation sented by the tuple ("Hg", 80, 200.592), representing the element
 fst ("Hg", 80);; =⇒"Hg" snd ("Hg", 80);; =⇒80 ■
 
 Records are much like tuples, but the component values (ﬁelds) are named, rather than positional. The language implementation must choose an order for the internal representation of a record, but this order is not visible to the pro- grammer. To introduce ﬁeld names to the compiler, each record type must be EXAMPLE 11.34
+
+Record notation declared:
 
 ```
 type element =
@@ -836,6 +848,8 @@ Stream-based program execution the form
 When it needs an input value, function my_prog forces evaluation of the car (head) of input, and passes the cdr (tail) on to the rest of the program. To drive execution, the language implementation repeatedly forces evaluation of the car of output, prints it, and repeats:
 
 (define driver (lambda (s) (if (null? s) '() ; nothing left (begin (display (car s)) (driver (cdr s)))))) (driver output) ■
+
+6 Recall that delay is a special form that creates a [memo, closure] pair; force is a function that returns the value in the memo, using the closure to calculate it ﬁrst if necessary.
 
 To make things concrete, suppose we want to write a purely functional pro- EXAMPLE 11.59
 
@@ -1317,6 +1331,8 @@ let rest = function
 | Pair (h, r) -> r
 | Promise (f) -> let (a, b) = f() in b;;
 ```
+
+Now given
 
 ```
 let rec next_int n = (n, Promise (fun() -> next_int (n + 1)));;

@@ -681,6 +681,8 @@ GCD program assembly code code generator traverses the symbol table to assign lo
 
 dence between Figures 1.6 and 1.7 generally apparent. A few hints: esp, ebp, eax, ebx, and edi are registers (special storage locations, limited in number, that can be accessed very quickly). -8(%ebp) refers to the memory location 8 bytes before the location whose address is in register ebp; in this program, ebp serves as a base from which we can ﬁnd variables i and j. The argument to a subroutine call instruction is passed by pushing it onto a stack, for which esp is the top-of- stack pointer. The return value comes back in register eax. Arithmetic operations overwrite their second argument with the result of the operation.11 ■
 
+11 As noted in footnote 1, these are GNU assembler conventions; Microsoft and Intel assemblers specify arguments in the opposite order.
+
 Often a code generator will save the symbol table for later use by a symbolic debugger, by including it in a nonexecutable part of the target code.
 
 ## 1.6.4 Code Improvement

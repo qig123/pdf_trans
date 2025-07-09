@@ -6,6 +6,21 @@ import shutil
 from urllib.parse import quote
 from datetime import datetime
 
+def load_config(path="config.json"):
+    """加载配置文件"""
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print(f"错误: 配置文件 '{path}' 未找到。请创建它。")
+        exit() # 或者返回一个默认配置
+    except json.JSONDecodeError:
+        print(f"错误: 配置文件 '{path}' 格式不正确。")
+        exit()
+
+# 在主函数或脚本开始时加载配置
+CONFIG = load_config()
+
 # --- 辅助函数 ---
 
 def clean_filename(name):
@@ -22,17 +37,15 @@ def clean_filename(name):
 # 旧版的问题: r'^\s*((\d+(\.\d+)*\.?)|...)' 会错误地匹配 "1. item", "2. item" 这样的列表。
 # 新版的核心改动: 使用 \d+\.\d+ 来要求至少有两级数字（如 "3.1"），从而避免与简单列表冲突。
 # [\d\.]* 允许匹配更深的层级如 "3.1.2"。
-TITLE_REGEX = re.compile(
-    # Matches patterns like "3.1", "3.2.1", "A.1", etc. followed by text.
-    # It now specifically AVOIDS matching simple lists like "1. text".
-    r'^\s*((\d+\.\d+[\d\.]*)|([A-Z]\.[\d\.]*))\s+[A-Za-z].*'
-)
+TITLE_REGEX = re.compile(CONFIG['regex']['title'])
+CAPTION_REGEX = re.compile(CONFIG['regex']['caption'], flags=re.IGNORECASE)
 
 # REGEX for un-numbered, but likely headings (like "Introduction", "Conclusion")
 KEYWORD_HEADING_REGEX = re.compile(r'^\s*(Introduction|Conclusion|Summary|Abstract|References|Appendix)\s*$', flags=re.IGNORECASE)
 
-
-def is_header_or_footer(block_bbox, page_rect, header_margin=0.12, footer_margin=0.12):
+header_margin = CONFIG['margins']['header']
+footer_margin = CONFIG['margins']['footer']
+def is_header_or_footer(block_bbox, page_rect, header_margin=0.08, footer_margin=0.08):
     """判断文本块是否位于页眉或页脚区域"""
     header_boundary = page_rect.y0 + page_rect.height * header_margin
     footer_boundary = page_rect.y1 - page_rect.height * footer_margin
@@ -97,8 +110,9 @@ def get_markdown_from_block(block):
             output_parts.append(f"## {sub_text.replace(chr(10), ' ')}\n\n")
             continue
 
+        mono_fonts = CONFIG['fonts']['monospace_keywords']
         is_monospace_block = all(
-            ("mono" in span['font'].lower() or "courier" in span['font'].lower())
+            any(keyword in span['font'].lower() for keyword in mono_fonts)
             for line in block['lines'] for span in line['spans'] if 'font' in span
         )
         if is_monospace_block and len(sub_text.splitlines()) > 1:
@@ -282,6 +296,7 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
 if __name__ == "__main__":
     pdf_file = "your_file.pdf"
     if os.path.exists(pdf_file):
+
         run_extraction_stable(pdf_file)
     else:
         print(f"错误: 文件 '{pdf_file}' 未找到。")

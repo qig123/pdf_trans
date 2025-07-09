@@ -192,6 +192,8 @@ enum arm_special_regs {fp = 7, sp = 13, lr = 14, pc = 15};
 
 (The intuition behind these values is explained in Sections C 5.4.5 and C 9.2.2.) In Ada this declaration would be written
 
+type arm_special_regs is (fp, sp, lr, pc); -- must be sorted for arm_special_regs use (fp => 7, sp => 13, lr => 14, pc => 15); ■
+
 In recent versions of Java one can obtain a similar effect by giving values an EXAMPLE 7.13
 
 Emulating distinguished enum values in Java extra ﬁeld (here named register):
@@ -348,6 +350,11 @@ One subtlety in the use of name equivalence arises in the simplest of type decla
 
 Alias types type new_type = old_type; (* Algol family syntax *)
 
+```
+typedef old_type new_type;
+/* C family syntax */
+```
+
 Here new_type is said to be an alias for old_type. Should we treat them as two names for the same type, or as names for two different types that happen to have the same internal structure? The “right” approach may vary from one program to another. ■ Users of any Unix-like system will be familiar with the notion of permission bits EXAMPLE 7.21
 
 Semantically equivalent alias types on ﬁles. These specify whether the ﬁle is readable, writable, and/or executable by its owner, group members, or others. Within the system libraries, the set of permissions for a ﬁle is represented as a value of type mode_t. In C, this type is commonly deﬁned as an alias for the predeﬁned 16-bit unsigned integer type:
@@ -373,6 +380,8 @@ A language in which aliased types are considered distinct is said to have strict
 
 Derived types and subtypes in Ada to indicate whether an alias represents a derived type or a subtype. A subtype is
 
+3 Ironically, it uses name equivalence for structs.
+
 compatible with its base (parent) type; a derived type is incompatible. (Subtypes of the same base type are also compatible with each other.) Our examples above would be written
 
 subtype mode_t is integer range 0..2**16-1; -- unsigned 16-bit integer ... type celsius_temp is new integer; type fahrenheit_temp is new integer; ■
@@ -390,6 +399,8 @@ In a language with static typing, there are many contexts in which values of a s
 Contexts that expect a given type a := expression
 
 we expect the right-hand side to have the same type as a. In the expression
+
+a + b
 
 the overloaded + symbol designates either integer or ﬂoating-point addition; we therefore expect either that a and b will both be integers, or that they will both be reals. In a call to a subroutine,
 
@@ -664,6 +675,8 @@ let circum r = r *. 2.0 *. 3.14159;;
 
 the compiler will infer that circum’s parameter is of type float, because it is combined with the ﬂoating-point constants 2.0 and 3.14159, using *., the ﬂoating-point multiplication operator (here the dot is part of the operator name; there is a separate integer multiplication operator, *). If we attempt to apply circum to an integer argument, the compiler will produce a type clash error mes- sage. ■ Though the language is usually compiled in production environments, the standard OCaml distribution also includes an interactive interpreter. The pro- grammer can interact with the interpreter “on line,” giving it input a line at a
 
+5 Multiple arguments are actually somewhat more complicated than suggested here, due to the fact that functions in OCaml are automatically curried; see Section 11.6 for more details.
+
 time. The interpreter processes this input incrementally, generating an interme- diate representation for each source code function, and producing any appropri- ate static error messages. This style of interaction blurs the traditional distinc- tion between interpretation and compilation. While the language implementa- tion remains active during program execution, it performs all possible semantic checks—everything that the production compiler would check—before evaluat- ing a given program fragment. In comparison to languages in which programmers must declare all types ex- plicitly, the type inference of ML-family languages has the advantage of brevity and convenience for interactive use. More important, it provides a powerful form of implicit parametric polymorphism more or less for free. While all uses of EXAMPLE 7.42
 
 Polymorphic functions objects in an OCaml program must be consistent, they do not have to be com- pletely speciﬁed. Consider the OCaml function shown in Figure 7.1. Here the equality test (=) is a built-in polymorphic function of type ‚a -> ‚a -> bool; that is, a function that takes two arguments of the same type and produces a Boolean result. The token ‚a is called a type variable; it stands for any type,
@@ -744,6 +757,8 @@ Duck typing in Ruby deﬁned method supported by collection classes. Assuming th
 ```
 
 For the ﬁnal call to min, we have provided, as a trailing block, an alternative deﬁ- nition of the comparison operator. ■ This operational style of checking (an object has an acceptable type if it sup- ports the requested method) is sometimes known as duck typing. It takes its name from the notion that “if it walks like a duck and quacks like a duck, then it must be a duck.” 6
+
+6 The origins of this “duck test” colloquialism are uncertain, but they go back at least as far as the early 20th century. Among other things, the test was widely cited in the 1940s and 50s as a means of identifying supposed Communist sympathizers.
 
 ## 7.3.1 Generic Subroutines and Classes
 

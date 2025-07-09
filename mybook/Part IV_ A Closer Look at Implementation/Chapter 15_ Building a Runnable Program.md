@@ -174,6 +174,8 @@ Some compilers translate source ﬁles directly into object ﬁles acceptable to
 
 These are the principal tasks of an assembler. In the early days of computing, most programmers wrote in assembly lan- guage. To simplify the more tedious and repetitive aspects of assembly program- ming, assemblers often provided extensive macro expansion facilities. With the ubiquity of modern high-level languages, such programmer-centric features have largely disappeared. Almost all assembly language programs today are written by compilers. When passing assembly language directly from the compiler to the assembler, it EXAMPLE 15.10
 
+Assembly as a ﬁnal compiler pass makes sense to use some internal (records and linked lists) representation. At the
+
 ![Figure 15.8 Layout of...](images/page_826_vector_367.png)
 *Figure 15.8 Layout of 32-bit process address space in x86 Linux (not to scale). Double lines separate regions with potentially different access permissions.*
 
@@ -188,6 +190,8 @@ Internal data structures
 Assembler front end
 
 Assembler back end
+
+Object code
 
 The assembler front end simply translates textual source into internal symbolic form. By sharing the assembler back end, the compiler and assembler front end avoid duplication of effort. For debugging purposes, the compiler will generally have an option to dump a textual representation of the code it passes to the as- sembler. ■ An alternative organization has the compiler generate object code directly: EXAMPLE 15.11
 
@@ -288,6 +292,8 @@ In the early 1990s, most operating system vendors adopted dynamic linking in or-
 
 * What are the principal tasks of a linker?
 * How can a linker enforce type checking across compilation units?
+
+* What is the motivation for dynamic linking?
 
 ## 15.8 Summary and Concluding Remarks
 

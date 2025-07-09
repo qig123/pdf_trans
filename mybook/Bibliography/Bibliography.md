@@ -40,6 +40,8 @@ L. Cox, Sandhya Dwarkadas, Pete Keleher, Honghui Lu, Ramakrish- nan Rajamony, We
 
 [AO93] Gregory R. Andrews and Ronald A. Olsson. The SR Programming Language: Concurrency in Practice. Ben- jamin/Cummings, Redwood City, CA, 1993.
 
+[App91] Andrew W. Appel. Compiling with Continuations. Cambridge University Press, Cambridge, England, 1991.
+
 [App97] Andrew W. Appel. Modern Compiler Implementa- tion. Cambridge University Press, Cambridge, England, 1997. Text available in ML, Java, and C versions. C version specialized by Maia Ginsburg; Java version (second edi- tion, 2002) specialized by Jens Palsberg.
 
 [Bac78] John W. Backus. Can programming be liberated from the von Neumann style? A functional style and its algebra of programs. Communications of the ACM, 21(8):613–641, August 1978. The 1977 Turing Award lec- ture.
@@ -83,6 +85,8 @@ L. Cox, Sandhya Dwarkadas, Pete Keleher, Honghui Lu, Ramakrish- nan Rajamony, We
 [Bec97] Leland L. Beck. System Software: An Introduction to Systems Programming. Addison-Wesley, Reading, MA, third edition, 1997.
 
 [BA08] Hans-J. Boehm and Sarita V. Adve. Foundations of the C++ concurrency memory model. In Proceedings of the SIGPLAN 2008 Conference on Programming Lan- guage Design and Implementation, pages 68–78, Tucson, ZA, June 2008.
+
+[Bee70] David Beech. A structural view of PL/I. ACM Com- puting Surveys, 2(1):33–64, March 1970.
 
 [Bel05] Fabrice Bellard. QEMU, a fast and portable dynamic translator. In Proceedings of the USENIX 2005 Annual Technical Conference, pages 41–46, Anaheim, CA, April 2005.
 
@@ -133,6 +137,8 @@ ence on Programming Language Design and Implementa- tion, pages 261–268, Chica
 [BO11] Randal E Bryant and David O’Hallaron. Com- puter Systems: A Programmer’s Perspective. Prentice-Hall, Boston, MA, second edition, 2011.
 
 [Cai82] R. Cailliau. How to avoid getting SCHLONKED by Pascal. ACM SIGPLAN Notices, 17(12):31–40, December 1982.
+
+[Boe05] Hans-J. Boehm. Threads cannot be implemented as a library. In Proceedings of the SIGPLAN 2005 Confer-
 
 [CM84] K. Mani Chandy and Jayadev Misra. The drinking philosophers problem. ACM Transactions on Program- ming Languages and Systems, 6(4):632–646, October 1984.
 
@@ -187,6 +193,8 @@ ence on Programming Language Design and Implementa- tion, pages 261–268, Chica
 [DB76] L. Peter Deutsch and Daniel G. Bobrow. An efﬁ- cient incremental automatic garbage collector. Commu- nications of the ACM, 19(9):522–526, September 1976.
 
 [CLFL94] Jeffrey S. Chase, Henry M. Levy, Michael J. Fee- ley, and Edward D. Lazowska. Sharing and protection in a single-address-space operating system. ACM Transactions on Computer Systems, 12(4):271–307, November 1994.
+
+[DDH72] Ole-Johan Dahl, Edsger W. Dijkstra, and Charles Antony Richard Hoare. Structured Programming. A.P.I.C.
 
 Studies in Data Processing #8. Academic Press, New York, NY, 1972.
 
@@ -284,6 +292,8 @@ ecma-international.org/publications/standards/Ecma-367. htm.
 
 [FHP92] Christopher W. Fraser, David R. Hanson, and Todd A. Proebsting. Engineering a simple, efﬁcient code generator generator. ACM Letters on Programming Lan- guages and Systems, 1(3):213–226, September 1992.
 
+[GBJ+12] Dick Grune, Henri E. Bal, Ceriel J. H. Jacobs, Koen G. Langendoen, and Kees van Reeuwijk. Modern
+
 [Gol91] David Goldberg. What every computer scientist should know about ﬂoating-point arithmetic. ACM Com- puting Surveys, 23(1):5–48, March 1991.
 
 Compiler Design. Springer-Verlag, New York, NY, second edition, 2012.
@@ -374,6 +384,8 @@ ley/IEEE Computer Society Press, New York, NY, 1997. Available at columbia.edu/~
 
 [HMU07] John E. Hopcroft, Rajeev Motwani, and Jeffrey D. Ullman. Introduction to Automata Theory, Languages, and Computation. Pearson/Addison-Wesley, Boston, MA, third edition, 2007.
 
+[HH97a] Michael Hauben and Ronda Hauben. Netizens: On the History and Impact of Usenet and the Internet. Wi-
+
 [HO91] W. Wilson Ho and Ronald A. Olsson. An approach to genuine dynamic linking. Software—Practice and Ex- perience, 21(4):375–390, April 1991.
 
 Programming Language. Cambridge University Press, Cambridge, England, 1991.
@@ -423,6 +435,8 @@ Programming Language. Cambridge University Press, Cambridge, England, 1991.
 [Int03b] International Organization for Standardization, Geneva, Switzerland. Information Technology—Portable Operating System Interface (POSIX), fourth edition, Au- gust 2003. ISO/IEC 9945-1:2003. Also IEEE standard 1003.1, 2004 Edition, and The Open Group Technical Standard Base Speciﬁcations, Issue 6. Available at pubs. opengroup.org/onlinepubs/009695399/.
 
 [Hud89] Paul Hudak. Conception, evolution, and applica- tion of functional programming languages. ACM Com- puting Surveys, 21(3):359–411, September 1989.
+
+[IBFW91] Jean Ichbiah, John G. P. Barnes, Robert J. Firth, and Mike Woodger. Rationale for the Design of the Ada
 
 [Int10] International Organization for Standardization, Geneva, Switzerland. Information Technology—Program- ming Languages—Fortran—Part 1: Base Language, 2010. ISO/IEC 1539-1:2010.
 
@@ -642,6 +656,8 @@ K. Samelson, B. Vauquois, J. H. Wegstein, A. van Wijn- gaarden, and M. Woodger. 
 
 [ND78] Kristen Nygaard and Ole-Johan Dahl. The devel- opment of the Simula languages. In HOPL I Proceedings [Wex78], pages 439–493.
 
+[MPA05] Jeremy Manson, William Pugh, and Sarita V. Adve. The Java memory model. In Proceedings of the Thirty-
+
 [Nec97] George C. Necula. Proof-carrying code. In Con- ference Record of the Twenty-Fourth ACM Symposium on Principles of Programming Languages, pages 106–119, Paris, France, January 1997.
 
 [Pey01] Simon Peyton Jones. Tackling the Awkward Squad: Monadic input/output, concurrency, exceptions, and foreign-language calls in Haskell. In Tony Hoare, Manfred Broy, and Ralf Steinbruggen, editors, Engineering Theories of Software Construction, pages 47–96. IOS Press, 2001. Originally presented at the Marktoberdorf Summer School, 2000. Revised and corrected version available as research. microsoft.com/~simonpj/papers/marktoberdorf/mark.pdf .
@@ -793,6 +809,8 @@ ers and Automata, pages 19–46. Polytechnic Institute of Brooklyn Press, New Yo
 [SW94] James E. Smith and Shlomo Weiss. PowerPC 601 and Alpha 21064: A tale of two RISCs. IEEE Computer, 27(6):46–58, June 1994.
 
 [SS71] Dana S. Scott and Christopher Strachey. Toward a mathematical semantics for computer language. In Jerome Fox, editor, Proceedings, Symposium on Comput-
+
+[SZBH86] Daniel C. Swinehart, Polle T. Zellweger, Richard J. Beach, and Robert B. Hagmann. A structural view of the
 
 [UW08] Jeffrey D. Ullman and Jennifer Widom. A First Course in Database Systems. Pearson/Prentice-Hall, Up- per Saddle River, NJ, third edition, 2008.
 
