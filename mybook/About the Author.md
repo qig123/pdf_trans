@@ -1,4 +1,8 @@
-About the Author
+# About the Author
+
+**About the Author**
+
+```
 Michael L. Scott is a professor and past chair of the Department of Computer Sci-
 ence at the University of Rochester. He received his Ph.D. in computer sciences in
 1985 from the University of Wisconsin–Madison. From 2014–2015 he was a Vis-
@@ -22,4 +26,5 @@ ence on Architectural Support for Programming Languages and Operating Sys-
 tems (ASPLOS). In 2001 he received the University of Rochester’s Robert and
 Pamela Goergen Award for Distinguished Achievement and Artistry in Under-
 graduate Teaching.
-This page intentionally left blank
+```
+
