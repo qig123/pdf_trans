@@ -9,5 +9,10 @@
   },
   "fonts": {
     "monospace_keywords": ["mono", "courier"]
+  },
+  "heading_detection": {
+    "font_size_multiplier": 1.2,
+    "min_heading_level_for_text_match": 3,
+    "shallow_heading_level": 2
   }
 }

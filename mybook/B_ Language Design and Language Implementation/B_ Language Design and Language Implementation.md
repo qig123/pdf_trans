@@ -1,8 +1,8 @@
 # B: Language Design and Language Implementation
 
-B Language Design and Language
+## B Language Design and Language
 
-Implementation
+## Implementation
 
 Throughout this text, we have had occasion to remark on the many connections  between language design and language implementation. Some of the more direct  connections have been highlighted in separate sidebars. We list those sidebars  here.
 

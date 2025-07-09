@@ -1,6 +1,6 @@
 # Part IV: A Closer Look at Implementation
 
-IV A Closer Look at Implementation
+## IV A Closer Look at Implementation
 
 In this, the fnal and shortest of the major parts of the text, we return our focus to implementation issues.
 
@@ -18,7 +18,7 @@ of machine code; and reflection mechanisms, which allow a program to reason abou
 
 The back-end compiler description in Chapter 15 is by necessity simplistic. Entire books  and courses are devoted to the fuller story, most of which focuses on the code improvement or  optimization techniques used to produce effcient code. Chapter 17 of the current text, contained entirely on the companion site, provides an overview of code improvement. Since most  programmers will never write the back end of a compiler, the goal of Chapter 17 is more to  convey a sense of what the compiler does than exactly how it does it. Programmers who understand this material will be in a better position to “work with” the compiler, knowing what  is possible, what to expect in common cases, and how to avoid programming idioms that are  hard to optimize. Topics include local and “global” (procedure-level) redundancy elimination,  data fow analysis, loop optimization, and register allocation.
 
-15 Building a Runnable Program
+## 15 Building a Runnable Program
 
 As noted in Section 1.6, the various phases of compilation are commonly  grouped into a front end responsible for the analysis of source code, a back end  responsible for the synthesis of target code, and often a “middle end” responsible  for language- and machine-independent code improvement. Chapters 2 and 4  discussed the work of the front end, culminating in the construction of a syntax  tree. The current chapter turns to the work of the back end, and specifcally to  code generation, assembly, and linking. We will continue with code improvement  in Chapter 17.
 
@@ -34,7 +34,7 @@ processors, source-to-source translators, and VLSI layout tools must scan, parse
 
 As we shall see in Section 15.2, different compilers may use different intermediate forms to represent a program internally. They may also differ dramatically  in the forms of code improvement they perform. A simple compiler, or one designed for speed of compilation rather than speed of target code execution (e.g.,  a “just-in-time” compiler) may not do much improvement at all. A just-in-time  or “load-and-go” compiler (one that compiles and then executes a program as a  single high-level operation, without writing the target code to a fle) may not use  a separate linker. In some compilers, much or all of the code generator may be  written automatically by a tool (a “code generator generator”) that takes a formal  description of the target machine as input.
 
-15.1.1 A Plausible Set of Phases
+## 15.1.1 A Plausible Set of Phases
 
 EXAMPLE 15.1  Figure 15.1 illustrates a plausible seven-phase structure for a conventional comPhases of compilation  piler. The frst three phases (scanning, parsing, and semantic analysis) are language dependent; the last two (target code generation and machine-specifc code  improvement) are machine dependent, and the middle two (intermediate code  generation and machine-independent code improvement) are (to frst approximation) dependent on neither the language nor the machine. The scanner and  parser drive a set of action routines that build a syntax tree. The semantic analyzer  traverses the tree, performing all static semantic checks and initializing various attributes (mainly symbol table pointers and indications of the need for dynamic  checks) of use to the back end.  ■  While certain code improvements can be performed on syntax trees, a less hierarchical representation of the program makes most code improvement easier.  Our example compiler therefore includes an explicit phase for intermediate code  generation. The code generator begins by grouping the nodes of the tree into  basic blocks, each of which consists of a maximal-length set of operations that  should execute sequentially at run time, with no branches in or out. It then creates a control flow graph in which the nodes are basic blocks and the arcs represent  interblock control fow. Within each basic block, operations are represented as  instructions for an idealized machine with an unlimited number of registers. We  will call these virtual registers. By allocating a new one for every computed value,  the compiler can avoid creating artifcial connections between otherwise independent computations too early in the compilation process.
 
@@ -114,13 +114,13 @@ null null
 ![Figure 15.2 Syntax tree and...](images/page_811_vector_315.png)
 *Figure 15.2  Syntax tree and symbol table for the GCD program. The only difference from Figure 1.6 is the addition of  explicit null nodes to indicate empty argument lists and to terminate statement lists.*
 
-It is worth noting that “global” code improvement typically considers only the  current subroutine, not the program as a whole. Much recent research in compiler technology has been aimed at “truly global” techniques, known as interprocedural code improvement. Since programmers are generally unwilling to give  up separate compilation (recompiling hundreds of thousands of lines of code is a  very time-consuming operation), a practical interprocedural code improver must  do much of its work at link time. One of the (many) challenges to be overcome  is to develop a division of labor and an intermediate representation that allow the  compiler to do as much work as possible during (separate) compilation, but leave  enough of the details undecided that the link-time code improver is able to do its  job.
+## It is worth noting that “global” code improvement typically considers only the  current subroutine, not the program as a whole. Much recent research in compiler technology has been aimed at “truly global” techniques, known as interprocedural code improvement. Since programmers are generally unwilling to give  up separate compilation (recompiling hundreds of thousands of lines of code is a  very time-consuming operation), a practical interprocedural code improver must  do much of its work at link time. One of the (many) challenges to be overcome  is to develop a division of labor and an intermediate representation that allow the  compiler to do as much work as possible during (separate) compilation, but leave  enough of the details undecided that the link-time code improver is able to do its  job.
 
-Following machine-independent code improvement, the next phase of compilation is target code generation. This phase strings the basic blocks together  into a linear program, translating each block into the instruction set of the target  machine and generating branch instructions (or “fall-throughs”) that correspond  to the arcs of the control fow graph. The output of this phase differs from real  assembly language primarily in its continued reliance on virtual registers. So long  as the pseudoinstructions of the intermediate form are reasonably close to those  of the target machine, this phase of compilation, though tedious, is more or less  straightforward.
+## Following machine-independent code improvement, the next phase of compilation is target code generation. This phase strings the basic blocks together  into a linear program, translating each block into the instruction set of the target  machine and generating branch instructions (or “fall-throughs”) that correspond  to the arcs of the control fow graph. The output of this phase differs from real  assembly language primarily in its continued reliance on virtual registers. So long  as the pseudoinstructions of the intermediate form are reasonably close to those  of the target machine, this phase of compilation, though tedious, is more or less  straightforward.
 
 call getint  i := rv  call getint  j := rv
 
-Start
+## Start
 
 v13 := i  a1 := v13  call putint
 
@@ -130,7 +130,7 @@ v1 := i  v2 := j  v3 := v1 =/ v2  test v3
 
 T
 
-End
+## End
 
 v4 := i  v5 := j  v6 := v4 > v5  test v6
 
@@ -145,11 +145,11 @@ null
 ![Figure 15.3 Control flow graph...](images/page_812_vector_455.png)
 *Figure 15.3  Control flow graph for the GCD program. Code within basic blocks is shown  in the pseudo-assembly notation introduced in Sidebar 5.1, with a different virtual register (here  named v1. . . v13) for every computed value. Registers a1 and rv are used to pass values to and  from subroutines.*
 
-To reduce programmer effort and increase the ease with which a compiler can  be ported to a new target machine, target code generators are sometimes generated automatically from a formal description of the machine. Automatically  generated code generators all rely on some sort of pattern-matching algorithm to  replace sequences of intermediate code instructions with equivalent sequences of  target machine instructions. References to several such algorithms can be found  in the Bibliographic Notes at the end of this chapter; details are beyond the scope  of this book.
+## To reduce programmer effort and increase the ease with which a compiler can  be ported to a new target machine, target code generators are sometimes generated automatically from a formal description of the machine. Automatically  generated code generators all rely on some sort of pattern-matching algorithm to  replace sequences of intermediate code instructions with equivalent sequences of  target machine instructions. References to several such algorithms can be found  in the Bibliographic Notes at the end of this chapter; details are beyond the scope  of this book.
 
 The fnal phase of our example compiler structure consists of register allocation and instruction scheduling, both of which can be thought of as machinespecifc code improvement. Register allocation requires that we map the unlimited virtual registers employed in earlier phases onto the bounded set of architectural registers available in the target machine. If there aren’t enough architectural  registers to go around, we may need to generate additional loads and stores to  multiplex a given architectural register among two or more virtual registers. Instruction scheduling (described in Sections C 5.5 and C 17.6) consists of reordering the instructions of each basic block in an attempt to fll the pipeline(s) of the  target machine.
 
-15.1.2 Phases and Passes
+## 15.1.2 Phases and Passes
 
 In Section 1.6 we defned a pass of compilation as a phase or sequence of phases  that is serialized with respect to the rest of compilation: it does not start until  previous phases have completed, and it fnishes before any subsequent phases  start. If desired, a pass may be written as a separate program, reading its input  from a fle and writing its output to a fle. Two-pass compilers are particularly  common. They may be divided between semantic analysis and intermediate code  generation or between intermediate code generation and machine-independent  code improvement. In either case, the frst pass is commonly referred to as the  “front end” and the second pass as the “back end.”
 
@@ -175,7 +175,7 @@ In a multilanguage compiler family, an IF that is independent of both source  la
 
 To be stored in a fle, an IF requires a linear representation. Sequences of threeaddress instructions are naturally linear. Tree-based IFs can be linearized via ordered traversal. Structures like control fow graphs can be linearized by replacing  pointers with indices relative to the beginning of the fle.
 
-15.2.1 GIMPLE and RTL
+## 15.2.1 GIMPLE and RTL
 
 Many readers will be familiar with the gcc compilers. Distributed as open source  by the Free Software Foundation, gcc is used very widely in both academia and  industry. The standard distribution includes front ends for C, C++, ObjectiveC, Ada, Fortran, Go, and Java. Front ends for additional languages, including  Cobol, Modula-2 and 3, Pascal and PL/I, are separately available. The C compiler  is the original, and the one most widely used (gcc originally stood for “GNU C  compiler”). There are back ends for dozens of processor architectures, including  all commercially signifcant options. There are also GNU implementations, not  based on gcc, for some two dozen additional languages.
 
@@ -191,7 +191,7 @@ introduced in 2005 as a more suitable form for machine-independent code improvem
 site.
 ```
 
-15.2.2 Stack-Based Intermediate Forms
+## 15.2.2 Stack-Based Intermediate Forms
 
 In situations where simplicity and brevity are paramount, designers often turn to  stack-based languages. Operations in a such a language pop arguments from—  and push results to—a common implicit stack. The lack of named operands  means that a stack-based language can be very compact. In certain HP calculators (Exercise 4.7), stack-based expression evaluation serves to minimize the  number of keystrokes required to enter equations. For embedded devices and  printers, stack-based evaluation in Forth and Postscript serves to reduce memory  and bandwidth requirements, respectively (see Sidebar 15.1).
 
@@ -269,10 +269,7 @@ call
 ![Figure 15.4 Stack-based versus three-address...](images/page_817_vector_336.png)
 *Figure 15.4  Stack-based versus three-address IF. Shown are two versions of code to compute  the area of a triangle using Heron’s formula. At left is a stylized version of Java bytecode or CLI  Common Intermediate Language. At right is corresponding pseudo-assembler for a machine  with three-address instructions. The bytecode requires a larger number of instructions, but  occupies less space.*
 
-```
-the push operation  and two to specify  the  sqrt routine). This gives us a total of 
-23 instructions in 25 bytes.
-```
+## the push operation  and two to specify  the  sqrt routine). This gives us a total of  23 instructions in 25 bytes.
 
 ```
 By contrast, three-address code for the same formula keeps a, b, c, and  s in 
@@ -315,7 +312,7 @@ Assembly language
 
 generates pure, linear assembly language; because we are not performing code  improvements that alter the program’s control fow, there is no need to represent  that fow explicitly in a control fow graph. We also adopt a much simpler register  allocation algorithm, which can operate directly on the syntax tree prior to code  generation, eliminating the need for virtual registers and the subsequent mapping  onto architectural registers. Finally, we drop instruction scheduling. The resulting compiler structure appears in Figure 15.5. Its code generation phase closely  resembles the intermediate code generation of Figure 15.1.  ■
 
-15.3.1 An Attribute Grammar Example
+## 15.3.1 An Attribute Grammar Example
 
 Like semantic analysis, intermediate code generation can be formalized in terms  of an attribute grammar, though it is most commonly implemented via handwritten ad hoc traversal of a syntax tree. We present an attribute grammar here  for the sake of clarity.
 
@@ -446,7 +443,7 @@ Storage allocation and other assembler directives will be discussed in more deta
 in Section 15.5.
 ```
 
-15.3.2 Register Allocation
+## 15.3.2 Register Allocation
 
 Evaluation of the rules of the attribute grammar itself consists of two main tasks.  In each subtree we frst determine the registers that will be used to hold various
 
@@ -524,19 +521,7 @@ goto exit
 
 techniques to improve it in Chapter 17. In the remaining sections of the current  chapter we will consider assembly and linking.  ■
 
-```
-3CHECK YOUR UNDERSTANDING 
-1.
-What
- is
- a
- code generator generator? Why  might  it  be  useful?  
-2.
-What
- is
- a
- basic block? A  control flow graph?
-```
+## 3CHECK YOUR UNDERSTANDING  1. What  is  a  code generator generator? Why  might  it  be  useful?   2. What  is  a  basic block? A  control flow graph?
 
   3.
   What
@@ -690,7 +675,7 @@ Assembler source
 
 This organization gives the compiler a bit more fexibility: operations normally performed by an assembler (e.g., assignment of addresses to variables) can  be performed earlier if desired. Because there is no separate assembly pass, the  overall translation to object code may be slightly faster. The stand-alone assembler can be relatively simple. If it is used only for small, special-purpose code  fragments, it probably doesn’t need to perform instruction scheduling or other  machine-specifc code improvement. Using a disassembler instead of an assembly language dump from the compiler ensures that what the programmer sees  corresponds precisely to what is in the object fle. If the compiler uses a fancier  assembler as a back end, then any program modifcations effected by the assembler will not be visible in the assembly language dumped by the compiler.  ■
 
-15.5.1 Emitting Instructions
+## 15.5.1 Emitting Instructions
 
 ```
 The most basic task of the assembler is to translate symbolic representations of 
@@ -767,7 +752,7 @@ operands. The related.ascii directive takes a single character string as argumen
 
 Symbol identification: The.globl name directive indicates that name should be  entered into the table of exported symbols.  Alignment: The.align n directive causes the subsequent output to be aligned at  an address evenly divisible by 2n .  ■
 
-15.5.2 Assigning Addresses to Names
+## 15.5.2 Assigning Addresses to Names
 
 Like compilers, assemblers commonly work in several phases. If the input is textual, an initial phase scans and parses the input, and builds an internal representation. In the most common organization there are two additional phases. The  frst identifes all internal and external (imported) symbols, assigning locations to  the internal ones. This phase is complicated by the fact that the length of some instructions (on a CISC machine) or the number of real instructions produced by a  pseudoinstruction (on a RISC machine) may depend on the number of signifcant  bits in an address. Given values for symbols, the fnal phase produces object code.
 
@@ -891,9 +876,9 @@ Y:
 ![Figure 15.9 Linking relocatable object...](images/page_831_vector_358.png)
 *Figure 15.9  Linking relocatable object files A and B to make an executable object file. For simplicity of presentation, A’s  code section has been placed at offset 0, with B’s code section immediately after, at offset 800 (addresses increase down the  page). To allow the operating system to establish different protections for the code and data segments, A’s data section has  been placed at the next page boundary (offset 3000), with B’s data section immediately after (offset 3500). External references  to M and X have been set to use the appropriate addresses. Internal references to L and Y have been updated by adding in  the starting addresses of B’s code and data sections, respectively.*
 
-15.6.1 Relocation and Name Resolution
+## 15.6.1 Relocation and Name Resolution
 
-Each relocatable object fle contains the information required for linking: the  import, export, and relocation tables. A static linker uses this information in a  two-phase process analogous to that described for assemblers in Section 15.5. In  the frst phase, the linker gathers all of the compilation units together, chooses an  order for them in memory, and notes the address at which each will consequently  lie. In the second phase, the linker processes each unit, replacing unresolved external references with appropriate addresses, and modifying instructions that need
+## Each relocatable object fle contains the information required for linking: the  import, export, and relocation tables. A static linker uses this information in a  two-phase process analogous to that described for assemblers in Section 15.5. In  the frst phase, the linker gathers all of the compilation units together, chooses an  order for them in memory, and notes the address at which each will consequently  lie. In the second phase, the linker processes each unit, replacing unresolved external references with appropriate addresses, and modifying instructions that need
 
 ```
 EXAMPLE 15.17 
@@ -907,7 +892,7 @@ compiled program fragments, most of which will not be needed by any particular
 
 application. Rather than link the entire library into every application, the linker  needs to search the library to identify the fragments that are referenced from the  main program. If these refer to additional fragments, then those must be included  also, recursively. Many systems support a special library format for relocatable  object fles. A library in this format may contain an arbitrary number of code and  data sections, together with an index that maps symbol names to the sections in  which they appear.
 
-15.6.2 Type Checking
+## 15.6.2 Type Checking
 
 ```
 Within a compilation unit, the compiler enforces static semantic rules. Across the 
@@ -969,7 +954,7 @@ IN MORE DEPTH
 
 In the early 1990s, most operating system vendors adopted dynamic linking in order to save space in memory and on disk. We consider this option in more detail  on the companion site. Each dynamically linked library resides in its own code  and data segments. Every program instance that uses a given library has a private copy of the library’s data segment, but shares a single system-wide read-only  copy of the library’s code segment. These segments may be linked to the remainder of the code when the program is loaded into memory, or they may be linked  incrementally on demand, during execution. In addition to saving space, dynamic linking allows a programmer or system administrator to install backwardcompatible updates to a library without rebuilding all existing executable object  fles: the next time it runs, each program will obtain the new version of the library  automatically.
 
-3CHECK YOUR UNDERSTANDING  14. What are the distinguishing characteristics of a relocatable object fle? An ex­
+## 3CHECK YOUR UNDERSTANDING  14. What are the distinguishing characteristics of a relocatable object fle? An ex­
 
 ecutable object fle?  15. Why do operating systems typically zero-fill pages used for uninitialized data?
 
@@ -1032,7 +1017,7 @@ one part  of a  large  system may  require that  other  parts  be recompiled.
 
 ### 15.9 Exercises
 
-15.1  If you were writing a two-pass compiler, why might you choose a highlevel IF as the link between the front end and the back end? Why might  you choose a medium-level IF?  15.2  Consider a language like Ada or Modula-2, in which a module M can be  divided into a specifcation (header) fle and an implementation (body)  fle for the purpose of separate compilation (Section 10.2.1). Should M’s  specifcation itself be separately compiled, or should the compiler simply  read it in the process of compiling M’s body and the bodies of other modules that use abstractions defned in M? If the specifcation is compiled,  what should the output consist of?  15.3  Many research compilers (e.g., for SR [AO93], Cedar [SZBH86], Lynx  [Sco91], and Modula-3 [Har92]) have used C as their IF. C is well documented and mostly machine independent, and C compilers are much  more widely available than alternative back ends. What are the disadvantages of generating C, and how might they be overcome?  15.4  List as many ways as you can think of in which the back end of a justin-time compiler might differ from that of a more conventional compiler.  What design goals dictate the differences?  15.5  Suppose that k (the number of temporary registers) in Figure 15.6 is 4 (this  is an artifcially small number for modern machines). Give an example of  an expression that will lead to register spilling under our naive register  allocation algorithm.
+## 15.1  If you were writing a two-pass compiler, why might you choose a highlevel IF as the link between the front end and the back end? Why might  you choose a medium-level IF?  15.2  Consider a language like Ada or Modula-2, in which a module M can be  divided into a specifcation (header) fle and an implementation (body)  fle for the purpose of separate compilation (Section 10.2.1). Should M’s  specifcation itself be separately compiled, or should the compiler simply  read it in the process of compiling M’s body and the bodies of other modules that use abstractions defned in M? If the specifcation is compiled,  what should the output consist of?  15.3  Many research compilers (e.g., for SR [AO93], Cedar [SZBH86], Lynx  [Sco91], and Modula-3 [Har92]) have used C as their IF. C is well documented and mostly machine independent, and C compilers are much  more widely available than alternative back ends. What are the disadvantages of generating C, and how might they be overcome?  15.4  List as many ways as you can think of in which the back end of a justin-time compiler might differ from that of a more conventional compiler.  What design goals dictate the differences?  15.5  Suppose that k (the number of temporary registers) in Figure 15.6 is 4 (this  is an artifcially small number for modern machines). Give an example of  an expression that will lead to register spilling under our naive register  allocation algorithm.
 
 program
 
@@ -1071,57 +1056,15 @@ call  null  Type  Scope
 ![Figure 15.10 Syntax tree and...](images/page_837_vector_338.png)
 *Figure 15.10  Syntax tree and symbol table for a program that computes the average of N real numbers. The children of  the for node are the index variable, the lower bound, the upper bound, and the body.*
 
-```
-15.6 
-Modify the attribute grammar of Figure 15.6 in such a way that it will generate the control fow graph of Figure 15.3 instead of the linear assembly 
-code of Figure 15.7. 
-15.7 
-Add productions and attribute rules to the grammar of Figure 15.6 to handle Ada-style for loops (described in Section 6.5.1). Using your modifed grammar,  hand-translate  the syntax tree of Figure 15.10  into  pseudoassembly notation. Keep the index variable and the upper loop bound in 
-registers. 
-15.8 
-One problem (of many) with the code we generated in Section 15.3 is that 
-it computes at run time the value of expressions that could have been computed at compile time. Modify the grammar of Figure 15.6 to perform a 
-simple form of constant folding: whenever both operands of an operator 
-are compile-time constants, we should compute the value at compile time 
-and then generate code that uses the value directly. Be sure to consider 
-how to handle overfow. 
-15.9 
-Modify the grammar of Figure 15.6 to generate jump code for Boolean 
-expressions, as described in Section 6.4.1. You should assume short-circuit 
-evaluation (Section 6.1.5).
-```
+## 15.6  Modify the attribute grammar of Figure 15.6 in such a way that it will generate the control fow graph of Figure 15.3 instead of the linear assembly  code of Figure 15.7.  15.7  Add productions and attribute rules to the grammar of Figure 15.6 to handle Ada-style for loops (described in Section 6.5.1). Using your modifed grammar,  hand-translate  the syntax tree of Figure 15.10  into  pseudoassembly notation. Keep the index variable and the upper loop bound in  registers.  15.8  One problem (of many) with the code we generated in Section 15.3 is that  it computes at run time the value of expressions that could have been computed at compile time. Modify the grammar of Figure 15.6 to perform a  simple form of constant folding: whenever both operands of an operator  are compile-time constants, we should compute the value at compile time  and then generate code that uses the value directly. Be sure to consider  how to handle overfow.  15.9  Modify the grammar of Figure 15.6 to generate jump code for Boolean  expressions, as described in Section 6.4.1. You should assume short-circuit  evaluation (Section 6.1.5).
 
-15.10  Our GCD program did not employ subroutines. Extend the grammar of  Figure 15.6 to handle procedures without parameters (feel free to adopt  any reasonable conventions on the structure of the syntax tree). Be sure to  generate appropriate prologue and epilogue code for each subroutine, and  to save and restore any needed temporary registers.  15.11  The grammar of Figure 15.6 assumes that all variables are global. In the  presence of subroutines, we should need to generate different code (with  fp-relative displacement mode addressing) to access local variables and  parameters. In a language with nested scopes we should need to dereference the static chain (or index into the display) to access objects that are  neither local nor global. Suppose that we are compiling a language with  nested subroutines, and are using a static chain. Modify the grammar of  Figure 15.6 to generate code to access objects correctly, regardless of scope.  You may fnd it useful to defne a to register subroutine that generates the  code to load a given object. Be sure to consider both l-values and r-values,  and parameters passed by both value and result.
+## 15.10  Our GCD program did not employ subroutines. Extend the grammar of  Figure 15.6 to handle procedures without parameters (feel free to adopt  any reasonable conventions on the structure of the syntax tree). Be sure to  generate appropriate prologue and epilogue code for each subroutine, and  to save and restore any needed temporary registers.  15.11  The grammar of Figure 15.6 assumes that all variables are global. In the  presence of subroutines, we should need to generate different code (with  fp-relative displacement mode addressing) to access local variables and  parameters. In a language with nested scopes we should need to dereference the static chain (or index into the display) to access objects that are  neither local nor global. Suppose that we are compiling a language with  nested subroutines, and are using a static chain. Modify the grammar of  Figure 15.6 to generate code to access objects correctly, regardless of scope.  You may fnd it useful to defne a to register subroutine that generates the  code to load a given object. Be sure to consider both l-values and r-values,  and parameters passed by both value and result.
 
 15.12–15.15 In More Depth.
 
 ### 15.10 Explorations
 
-```
-15.16 
-Investigate and describe the IF of the compiler you use most often. Can 
-you instruct the compiler to dump it to a fle which you can then inspect? 
-Are there tools other than the compiler phases that operate on the IF (e.g., 
-debuggers, code improvers, confguration managers, etc.)? Is the same IF 
-used by compilers for other languages or machines? 
-15.17 
-Implement Figure 15.6 in your favorite programming language. Defne 
-appropriate data structures to represent a syntax tree; then generate code 
-for some sample trees via ad hoc tree traversal. 
-15.18 
-Augment your solution to the previous exercise to handle various other 
-language features. Several interesting options have been mentioned in earlier exercises. Others include functions, frst-class subroutines, case statements, records, arrays (particularly those of dynamic size), and iterators. 
-15.19 
-Find out what tools are available on your favorite system to inspect the 
-content of object fles (on a Unix system, use nm or objdump). Consider 
-some program consisting of a modest number (three to six, say) of compilation units. Using the appropriate tool, list the imported and exported 
-symbols in each compilation unit. Then link the fles together. Draw an 
-address map showing the locations at which the various code and data 
-segments have been placed. Which instructions within the code segments 
-have been changed by relocation? 
-15.20 
-In your favorite C++ compiler, investigate the encoding of type information in the names of external symbols. Are there strange strings of char­
-```
+## 15.16  Investigate and describe the IF of the compiler you use most often. Can  you instruct the compiler to dump it to a fle which you can then inspect?  Are there tools other than the compiler phases that operate on the IF (e.g.,  debuggers, code improvers, confguration managers, etc.)? Is the same IF  used by compilers for other languages or machines?  15.17  Implement Figure 15.6 in your favorite programming language. Defne  appropriate data structures to represent a syntax tree; then generate code  for some sample trees via ad hoc tree traversal.  15.18  Augment your solution to the previous exercise to handle various other  language features. Several interesting options have been mentioned in earlier exercises. Others include functions, frst-class subroutines, case statements, records, arrays (particularly those of dynamic size), and iterators.  15.19  Find out what tools are available on your favorite system to inspect the  content of object fles (on a Unix system, use nm or objdump). Consider  some program consisting of a modest number (three to six, say) of compilation units. Using the appropriate tool, list the imported and exported  symbols in each compilation unit. Then link the fles together. Draw an  address map showing the locations at which the various code and data  segments have been placed. Which instructions within the code segments  have been changed by relocation?  15.20  In your favorite C++ compiler, investigate the encoding of type information in the names of external symbols. Are there strange strings of char­
 
 acters at the end of every name? If so, can you “reverse engineer” the  algorithm used to generate them? For hints, type “C++ name mangling”  into your favorite search engine.
 
@@ -1137,7 +1080,7 @@ Ganapathi, Fischer, and Hennessy [GFH82] and Henry and Damron [HD89]  provide ea
 
 Beck [Bec97] provides a good turn-of-the-century introduction to assemblers,  linkers, and software development tools. Gingell et al. describe the implementation of shared libraries for the SPARC architecture and the SunOS variant of  Unix [GLDW87].  Ho and Olsson describe a particularly ambitious dynamic  linker for Unix [HO91]. Tichy presents a compilation system that avoids unnecessary recompilations by tracking dependences at a granularity fner than the  source fle [Tic86].
 
-16 Run-Time Program Management
+## 16 Run-Time Program Management
 
 Every nontrivial implementation of a high-level programming language makes  extensive use of libraries. Some library routines are very simple: they may copy  memory from one place to another, or perform arithmetic functions not directly  supported by the hardware. Others are more sophisticated. Heap management  routines, for example, maintain signifcant amounts of internal state, as do libraries for buffered or graphical I/O.
 
@@ -1227,7 +1170,7 @@ Both the JVM and the CLI use a stack-based intermediate form (IF): Java bytecode
 
 and reused. In many cases, stack-based code for an expression will occupy fewer  bytes, but specify more instructions, than corresponding code for a register-based  machine.
 
-16.1.1 The Java Virtual Machine
+## 16.1.1 The Java Virtual Machine
 
 Development of the language that eventually became Java began in 1990–1991,  when Patrick Naughton, James Gosling, and Mike Sheridan of Sun Microsystems  began work on a programming system for embedded devices. An early version of  this system was up and running in 1992, at which time the language was known  as Oak. In 1994, after unsuccessful attempts to break into the market for cable  TV set-top boxes, the project was retargeted to web browsers, and the name was  changed to Java.
 
@@ -1701,7 +1644,7 @@ occurs to verify the last few properties of the code at the call site (i.e., tha
 refers to a method that really exists, and that the caller is allowed to call).
 ```
 
-16.1.2 The Common Language Infrastructure
+## 16.1.2 The Common Language Infrastructure
 
 As early as the mid-1980s, Microsoft recognized the need for interoperability  among programming languages running on Windows platforms. In a series of
 
@@ -1718,15 +1661,7 @@ the Common Intermediate Language (CIL—the CLI analogue of Java bytecode);
 and Portable Executable (PE) assemblies, the  CLI  analogue  of  .jar fles.
 ```
 
-```
-3CHECK YOUR UNDERSTANDING 
-1.
-What
- is
- a
- run-time system? How does it differ from a “mere” library? 
-2.  List  some of the  major  tasks  that  may  be performed  by  a  run-time system.
-```
+## 3CHECK YOUR UNDERSTANDING  1. What  is  a  run-time system? How does it differ from a “mere” library?  2.  List  some of the  major  tasks  that  may  be performed  by  a  run-time system.
 
   3.
   What
@@ -1764,7 +1699,7 @@ In the traditional conception (Example 1.7), compilation is a one-time activity,
 
 In some environments, however, it makes sense to bring compilation and execution closer together in time. A just-in-time (JIT) compiler translates a program from source or intermediate form into machine language immediately before each separate run of the program. We consider JIT compilation further in the  frst subsection below. We also consider language systems that may compile new  pieces of a program—or recompile old pieces—after the program begins its execution. In Sections 16.2.2 and 16.2.3, we consider binary translation and binary  rewriting systems, which perform compiler-like operations on programs without  access to source code. Finally, in Section 16.2.4, we consider systems that may  download program components from remote locations. All these systems serve  to delay the binding of a program to its machine code.
 
-16.2.1 Just-in-Time and Dynamic Compilation
+## 16.2.1 Just-in-Time and Dynamic Compilation
 
 To promote the Java language and virtual machine, Sun Microsystems coined the  slogan “write once, run anywhere”—the idea being that programs distributed  as Java bytecode could run on a very wide range of platforms. Source code, of  course, is also portable, but byte code is much more compact, and can be interpreted without additional preprocessing. Unfortunately, interpretation tends to  be expensive. Programs running on early Java implementations could be as much  as an order of magnitude slower than compiled code in other languages. Just-intime compilation is, to frst approximation, a technique to retain the portability of  bytecode while improving execution speed. Like both interpretation and dynamic  linking (Section 15.7), JIT compilation also benefts from the delayed discovery of  program components: program code is not bloated by copies of widely shared libraries, and new versions of libraries are obtained automatically when a program  that needs them is run.
 
@@ -1938,12 +1873,7 @@ If directed to produce machine code, perlcc generates a C program, which it  the
 
 Perl 6, still under development as of 2015, is intended to be JIT compiled. Its  virtual machine, called Parrot, is unusual in providing a large register set, rather  than a stack, for expression evaluation. Like Perl itself—but unlike the JVM and  CLR—Parrot allows variables to be treated as different types in different contexts.  Work is underway to target other scripting languages to Parrot, with the eventual  goal or providing interoperability similar to that of the .NET languages.  ■
 
-```
-3CHECK YOUR UNDERSTANDING 
-11. What  is  a  just-in-time (JIT) compiler? What are its potential advantages over 
-interpretation or conventional compilation? 
-12. Why might one prefer bytecode over source code as the input to a JIT com­
-```
+## 3CHECK YOUR UNDERSTANDING  11. What  is  a  just-in-time (JIT) compiler? What are its potential advantages over  interpretation or conventional compilation?  12. Why might one prefer bytecode over source code as the input to a JIT com­
 
 piler?
 
@@ -1960,7 +1890,7 @@ piler?
 
 tions of a lambda expression in C#.  18. Summarize the relationship between compilation and interpretation in Perl.
 
-16.2.2 Binary Translation
+## 16.2.2 Binary Translation
 
 Just-in-time and dynamic compilers assume the availability of source code or of  bytecode that retains all of the semantic information of the source. There are  times, however, when it can be useful to recompile object code. This process is  known as binary translation. It allows already-compiled programs to be run on  a machine with a different instruction set architecture. Some readers may recall
 
@@ -2061,7 +1991,7 @@ instrumentation tools like Pin (to be discussed in Section 16.2.3).
 ■
 ```
 
-16.2.3 Binary Rewriting
+## 16.2.3 Binary Rewriting
 
 While the goal of a binary optimizer is to improve the performance of a program  without altering its behavior, one can also imagine tools designed to change that  behavior. Binary rewriting is a general technique to modify existing executable  programs, typically to insert instrumentation of some kind. The most common  form of instrumentation collects profling information. One might count the  number of times that each subroutine is called, for example, or the number of  times that each loop iterates (Exercise 16.5). Such counts can be stored in a buffer  in memory, and dumped at the end of execution. Alternatively, one might log  all memory references. Such a log will generally need to be sent to a fle as the  program runs—it will be too long to ft in memory.
 
@@ -2093,7 +2023,7 @@ Indirect branches are handled with particular care. Based on run-time profling, 
 
 To reduce the need to save registers when calling analysis routines, and to facilitate in-line expansion of those routines, Pin performs its own register allocation  for the instructions of each trace, using similar allocations whenever possible for  traces that link to one another. In multithreaded programs, one register is statically reserved to point to a thread-specifc buffer, where registers can be spilled  when necessary. Condition codes are not saved across calls to analysis routines  unless their values are needed afterward. For routines that can be called anywhere within a basic block, Pin hunts for a location where the cost of saving and  restoring is minimized.
 
-16.2.4 Mobile Code and Sandboxing
+## 16.2.4 Mobile Code and Sandboxing
 
 Portability is one of the principal motivations for late binding of machine code.  Code that has been compiled for one machine architecture or operating system  cannot generally be run on another. Code in a byte code (Java bytecode, CIL) or  scripting language (JavaScript, Visual Basic), however, is compact and machine  independent: it can easily be moved over the Internet and run on almost any  platform. Such mobile code is increasingly common. Every major browser supports JavaScript; most enable the execution of Java applets as well. Visual Basic  macros are commonly embedded not only in pages meant for viewing with Internet Explorer, but also in Excel, Word, and Outlook documents distributed via  email. Cell phone apps may use mobile code to distribute games, productivity  tools, and interactive media that run within an existing process.
 
@@ -2113,10 +2043,7 @@ To protect against unwanted behavior, both accidental and malicious, mobile  cod
 
 Sandboxing mechanisms lie at the boundary between language implementation and operating systems. Traditionally, OS-provided virtual memory techniques might be used to limit access to memory, but this is generally too expensive  for many forms of mobile code. The two most common techniques today—both  of which rely on technology discussed in this chapter—are binary rewriting and  execution in an untrusting interpreter. Both cases are complicated by an inherent  tension between safety and utility: the less we allow untrusted code to do, the less  useful it can be. No single policy is likely to work in all cases. Applets may be  entirely safe if all they can do is manipulate the image in a window, but macros  embedded in a spreadsheet may not be able to do their job without changing the  user’s data. A major challenge for future work is to fnd a way to help users—  who cannot be expected to understand the technical details—to make informed  decisions about what and what not to allow in mobile code.
 
-```
-3CHECK YOUR UNDERSTANDING 
-19. What  is  binary translation? When and why is it needed?
-```
+## 3CHECK YOUR UNDERSTANDING  19. What  is  binary translation? When and why is it needed?
 
 ```
 20. Explain the tradeoffs between static and dynamic binary translation. 
@@ -2138,7 +2065,7 @@ namic optimization and rewriting?
 
 Symbol table metadata makes it easy for utility programs—just-in-time and dynamic compilers, optimizers, debuggers, proflers, and binary rewriters—to inspect a program and reason about its structure and types. We consider debuggers  and proflers in particular in Sections 16.3.2 and 16.3.3. There is no reason, however, why the use of metadata should be limited to outside tools, and indeed it is  not: Lisp has long allowed a program to reason about its own internal structure  and types (this sort of reasoning is sometimes called introspection). Java and C#  provide similar functionality through a reflection API that allows a program to  peruse its own metadata. Refection appears in several other languages as well,  including Prolog (Sidebar 12.2) and all the major scripting languages. In a dynamically typed language such as Lisp, refection is essential: it allows a library  or application function to type check its own arguments. In a statically typed  language, refection supports a variety of programming idioms that were not traditionally feasible.
 
-16.3.1 Reflection
+## 16.3.1 Reflection
 
 EXAMPLE 16.18  Trivially, refection can be useful when printing diagnostics. Suppose we are tryFinding the concrete type  ing to debug an old-style (nongeneric) queue in Java, and we want to trace the  of a reference variable  objects that move through it. In the dequeue method, just before returning an  object rtn of type Object, we might write
 
@@ -2475,7 +2402,7 @@ EXAMPLE 16.31
 
 Java annotation processors
 
-16.3.2 Symbolic Debugging
+## 16.3.2 Symbolic Debugging
 
 ```
 Most programmers are familiar with symbolic debuggers: they are built into most 
@@ -2569,7 +2496,7 @@ x’s page unwritable. The process will then take a segmentation fault on every 
 
 x, the debugger jumps to its command loop. Otherwise it performs the write on  the process’s behalf and asks the kernel to resume it.  ■  Unfortunately, the overhead of repeated context switches between the traced  process and the debugger dramatically impacts the performance of software  watchpoints: slowdowns of 1000× are not uncommon. Debuggers based on dynamic binary rewriting have the potential to support arbitrary numbers of watchpoints at speeds close to those admitted by hardware watchpoint registers. The  idea is straightforward: the traced program runs as partial execution traces in a  trace cache managed by the debugger. As it generates each trace, the debugger  adds instructions at every store, in-line, to check whether it writes to x’s address  and, if so, to jump back to the command loop.
 
-16.3.3 Performance Analysis
+## 16.3.3 Performance Analysis
 
 Before placing a debugged program into production use, one often wants to  understand—and if possible improve—its performance. Tools to profle and analyze programs are both numerous and varied—far too much so to even survey  them here. We focus therefore on the run-time technologies, described in this  chapter, that feature prominently in many analysis tools.
 
@@ -2608,10 +2535,7 @@ EXAMPLE 16.37  As an example of instrumentation, consider the task of identifyin
 
 EXAMPLE 16.38  to good effect by performance analysis tools. The Intel Haswell processor, for exHaswell performance  ample, has built-in counters for clock ticks (both total and when running) and  counters  instructions executed. It also has four general-purpose counters, which can be  confgured by the kernel to count any of more than 250 different kinds of events,  including branch mispredictions; TLB (address translation) misses; and various  kinds of cache misses, interrupts, executed instructions, and pipeline stalls. Finally, it has counters for the number of Joules of energy consumed by the processor cores, caches, and memory. Unfortunately, performance counters are generally a scarce resource (one might often wish for many more of them). Their  number, type, and mode of operation varies greatly from processor to processor;  direct access to them is usually available only in kernel mode; and operating systems do not always export that access to user-level programs with a convenient or  uniform interface. Tools to access the counters and interpret their values are available from most manufacturers—Intel among them. Portable tools are an active  topic of research.  ■
 
-```
-3CHECK YOUR UNDERSTANDING 
-27. What  is  reflection? What purposes does it serve?
-```
+## 3CHECK YOUR UNDERSTANDING  27. What  is  reflection? What purposes does it serve?
 
 * Describe an inappropriate use of refection.
 * Name an aspect of refection supported by the CLI but not by the JVM.
@@ -2653,21 +2577,7 @@ Many of these developments have served to blur the line between the compiler  an
 
 ### 16.5 Exercises
 
-```
-16.1 
-Write the formula of Example 15.4 as an expression tree (a syntax tree in 
-which each operator is represented by an internal node whose children 
-are its operands). Convert your tree to an expression DAG by merging 
-identical nodes. Comment on the redundancy in the tree and how it relates 
-to Figure 15.4. 
-16.2 
-We assumed in Example 15.4 and Figure 15.4 that a, b, c, and  s were 
-all among the frst few local variables of the current method, and could 
-be pushed onto or popped from the operand stack with a single one-byte 
-instruction. Suppose that this is not the case: that is, that the push and 
-pop instructions require three bytes each. How many bytes will now be 
-required for the code on the left side of Figure 15.4?
-```
+## 16.1  Write the formula of Example 15.4 as an expression tree (a syntax tree in  which each operator is represented by an internal node whose children  are its operands). Convert your tree to an expression DAG by merging  identical nodes. Comment on the redundancy in the tree and how it relates  to Figure 15.4.  16.2  We assumed in Example 15.4 and Figure 15.4 that a, b, c, and  s were  all among the frst few local variables of the current method, and could  be pushed onto or popped from the operand stack with a single one-byte  instruction. Suppose that this is not the case: that is, that the push and  pop instructions require three bytes each. How many bytes will now be  required for the code on the left side of Figure 15.4?
 
 Most stack-based languages, Java bytecode and CIL among them, provide a swap instruction that reverses the order of the top two values on the  stack, and a duplicate instruction that pushes a second copy of the value  currently at top of stack. Show how to use swap and duplicate to eliminate the pop and the pushes of s in the left side of Figure 15.4. Feel free to  exploit the associativity of multiplication. How many instructions is your  new sequence? How many bytes?  16.3  The speculative optimization of Example 16.5 could in principle be statically performed. Explain why a dynamic compiler might be able to do it  more effectively.  16.4  Perhaps the most common form of run-time instrumentation counts the  the number of times that each basic block is executed. Since basic blocks  are short, adding a load-increment-store instruction sequence to each  block can have a signifcant impact on run time.
 
@@ -2734,31 +2644,9 @@ Unlike more extensive refection mechanisms, typeid can be applied  only to (inst
 
 ### 16.6 Explorations
 
-16.18  Learn about the Java security policy mechanism. What aspects of program  behavior can the programmer enable/proscribe? How are such policies  enforced? What is the relationship (if any) between security policies and  the verifcation process described in Sidebar 16.3?  16.19  Learn about taint mode in Perl and Ruby. How does it compare to sandbox creation via binary rewriting, as described in Sidebar 16.5? What sorts  of security problems does it catch? What sorts of problems does it not  catch?  16.20  Learn about proof-carrying code, a technique in which the supplier of mobile code includes a proof of its safety, and the user simply verifes the  proof, rather than regenerating it (start with the work of Necula [Nec97]).  How does this technique compare to other forms of sandboxing? What  properties can it guarantee?
+## 16.18  Learn about the Java security policy mechanism. What aspects of program  behavior can the programmer enable/proscribe? How are such policies  enforced? What is the relationship (if any) between security policies and  the verifcation process described in Sidebar 16.3?  16.19  Learn about taint mode in Perl and Ruby. How does it compare to sandbox creation via binary rewriting, as described in Sidebar 16.5? What sorts  of security problems does it catch? What sorts of problems does it not  catch?  16.20  Learn about proof-carrying code, a technique in which the supplier of mobile code includes a proof of its safety, and the user simply verifes the  proof, rather than regenerating it (start with the work of Necula [Nec97]).  How does this technique compare to other forms of sandboxing? What  properties can it guarantee?
 
-```
-16.21 
-Investigate the MetaObject Protocol (MOP), which underlies the Common 
-Lisp Object System. How does it compare to the refection mechanisms of 
-Java and C#? What does it allow you to do that these other languages do 
-not? 
-16.22 
-When using a symbolic debugger and moving through a program with 
-breakpoints, one often discovers that one has gone “too far,” and must start 
-the program over from the beginning. This may mean losing all the effort 
-that had been put into reaching a particular point. Consider what it would 
-take to be able to run the program not only forward but backward as well. 
-Such a reverse execution facility might allow the user to narrow in on the 
-source of bugs much as one narrows the range in binary search. Consider 
-both the loss of information that happens when data is overridden and the 
-nondeterminism that arises in parallel and event-driven programs. 
-16.23 
-Download and experiment with one of the several available packages 
-for performance counter sampling in Linux (try sourceforge.net/projects/ 
-perfctr/, perfmon2.sourceforge.net/, or  www.intel.com/software/pcm). What 
-do these packages allow you to measure? How might you use the information? (Note: you may need to install a kernel patch to make the program 
-counters available to user-level code.)
-```
+## 16.21  Investigate the MetaObject Protocol (MOP), which underlies the Common  Lisp Object System. How does it compare to the refection mechanisms of  Java and C#? What does it allow you to do that these other languages do  not?  16.22  When using a symbolic debugger and moving through a program with  breakpoints, one often discovers that one has gone “too far,” and must start  the program over from the beginning. This may mean losing all the effort  that had been put into reaching a particular point. Consider what it would  take to be able to run the program not only forward but backward as well.  Such a reverse execution facility might allow the user to narrow in on the  source of bugs much as one narrows the range in binary search. Consider  both the loss of information that happens when data is overridden and the  nondeterminism that arises in parallel and event-driven programs.  16.23  Download and experiment with one of the several available packages  for performance counter sampling in Linux (try sourceforge.net/projects/  perfctr/, perfmon2.sourceforge.net/, or  www.intel.com/software/pcm). What  do these packages allow you to measure? How might you use the information? (Note: you may need to install a kernel patch to make the program  counters available to user-level code.)
 
 16.24–16.25 In More Depth.
 
@@ -2778,7 +2666,7 @@ Probably the best source of information on binary rewriting is the text by  Haze
 
 The DWARF standard is available from dwarfstd.org [DWA10]; Eager provides a gentler introduction [Eag12]. Ball and Larus [BL92] describe the minimal instrumentation required to profle the execution of basic blocks. Zhao  et al. [ZRA+08] describe the use of dynamic instrumentation (based on DynamoRIO) to implement watchpoints effciently.  Martonosi et al. [MGA92]  describe a performance analysis tool that builds on the idea outlined in Example 16.37.
 
-17 Code Improvement
+## 17 Code Improvement
 
 ```
 In Chapter 15 we discussed the generation, assembly, and linking of target 

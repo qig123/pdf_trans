@@ -1,14 +1,14 @@
 # C: Numbered Examples
 
-C Numbered Examples
+## C Numbered Examples
 
-Chapter 1: Introduction
+## Chapter 1: Introduction
 
 1.25  Interpreting the syntax tree  33  1.26  GCD program assembly code  34 5  1.27  GCD program optimization  36 5
 
 1.1  GCD program in x86 machine language  1.2  GCD program in x86 assembler
 
-Chapter 2: Programming Language Syntax
+## Chapter 2: Programming Language Syntax
 
 The Art of Language Design
 
@@ -48,7 +48,7 @@ Parsing  28  28  2.20  Top-down and bottom-up parsing  70  29  2.21  Bounding sp
 
 2.22  Top-down grammar for a calculator  language  73  2.23  Recursive descent parser for the calculator language  75  2.24  Recursive descent parse of a “sum and  average” program  75  2.25  Left recursion  79  2.26  Common prefxes  79  2.27  Eliminating left recursion  80  2.28  Left factoring  80  2.29  Parsing a “dangling else”  80 2.30  “Dangling else” program bug  81  2.31  End markers for structured statements  81  2.32  The need for elsif  82  2.33  Driver and table for top-down parsing  82  2.34  Table-driven parse of the “sum and  average” program  83  2.35  Predict sets for the calculator language  84  2.36  Derivation of an id list  90  2.37  Bottom-up grammar for the calculator  language  90  2.38  Bottom-up parse of the “sum and  average” program  91  2.39  CFSM for the bottom-up calculator  grammar  95  2.40  Epsilon productions in the bottom-up  calculator grammar  95  2.41  CFSM with epsilon productions  101  2.42  A syntax error in C  102  2.43  Syntax error in C (reprise)  C·1  2.44  The problem with panic mode  C·1  2.45  Phrase-level recovery in recursive  descent  C·2  2.46  Cascading syntax errors  C·3  2.47  Reducing cascading errors with contextspecifc look-ahead  C·4  2.48  Recursive descent with full phrase-level  recovery  C·4  2.49  Exceptions in a recursive descent parser  C·5  2.50  Error production for “; else”  C·6  2.51  Insertion-only repair in FMQ  C·8  2.52  FMQ with deletions  C·8  2.53  Panic mode in yacc/bison  C·11  2.54  Panic mode with statement terminators  C·11  2.55  Phrase-level recovery in yacc/bison  C·11
 
-Chapter 3: Names, Scopes, and Bindings
+## Chapter 3: Names, Scopes, and Bindings
 
 The Notion of Binding Time
 
@@ -134,13 +134,13 @@ Separate Compilation
 
 3.50  Namespaces in C++  C·39  3.51  Using names from another namespace  C·39  3.52  Packages in Java  C·40  3.53  Using names from another package  C·40  3.54  Multipart package names  C·41
 
-Chapter 4: Semantic Analysis
+## Chapter 4: Semantic Analysis
 
 The Role of the Semantic Analyzer
 
 4.1  Assertions in Java  182  4.2  Assertions in C  183
 
-Chapter 5: Target Machine Architecture
+## Chapter 5: Target Machine Architecture
 
 The Memory Hierarchy
 
@@ -176,7 +176,7 @@ Structured and Unstructured Flow
 
 6.39  Control fow with gotos in Fortran  246  6.40  Escaping a nested subroutine  247  6.41  Structured nonlocal transfers  248  6.42  Error checking with status codes  249  6.43  A simple Ruby continuation  250  6.44  Continuation reuse and unlimited extent  251
 
-Chapter 6: Control Flow
+## Chapter 6: Control Flow
 
 Sequencing
 
@@ -228,7 +228,7 @@ C·113
 
 C·113
 
-Chapter 7: Type Systems
+## Chapter 7: Type Systems
 
 7.1  Operations that leverage type information  7.2  Errors captured by type information  7.3  Types as a source of “may alias” information
 
@@ -357,7 +357,7 @@ Sets
 
 8.31  Set types in Pascal  376  8.32  Emulating a set with a map in Go  377
 
-Chapter 8: Composite Types
+## Chapter 8: Composite Types
 
 Records (Structures)
 
@@ -510,7 +510,7 @@ Lists
 
 Lists in ML and Lisp  List notation  Basic list operations in Lisp  Basic list operations in OCaml  List comprehensions  Files as a built-in type  The open operation  The close operation  Formatted output in Fortran  Labeled formats  Printing to standard output  Formatted output in Ada  Overloaded put routines  Formatted output in C  Text in format strings  Formatted input in C  Formatted output in C++  Stream manipulators  Array output in C++  Changing default format
 
-Chapter 9: Subroutines and Control  Abstraction
+## Chapter 9: Subroutines and Control  Abstraction
 
 Exception Handling
 
@@ -660,7 +660,7 @@ Encapsulating arguments
 514
 ```
 
-Chapter 10: Data Abstraction and Object  Orientation
+## Chapter 10: Data Abstraction and Object  Orientation
 
 Object-Oriented Programming
 
@@ -817,7 +817,7 @@ C·205  C·205  C·206  C·206  C·206  C·207
 
 10.72  10.73  10.74  10.75  10.76
 
-Chapter 11: Functional Languages
+## Chapter 11: Functional Languages
 
 Historical Origins
 
@@ -855,7 +855,7 @@ Functional Programming in Perspective
 
 Logic Programming in Perspective
 
-Chapter 12: Logic Languages
+## Chapter 12: Logic Languages
 
 12.35  Sorting incredibly slowly  613  12.36  Quicksort in Prolog  614  12.37  Negation as failure  615  12.38  Negation and instantiation  616
 
@@ -863,7 +863,7 @@ Logic Programming Concepts
 
 12.1  Horn clauses  592  12.2  Resolution  592  12.3  Unifcation  592
 
-Chapter 13: Concurrency
+## Chapter 13: Concurrency
 
 Background and Motivation
 
@@ -881,7 +881,7 @@ Concurrent Programming Fundamentals
 
 13.11  Reduction in OpenMP  641  13.12  Elaborated tasks in Ada  641  13.13  Co-begin vs fork/join  642  13.14  Task types in Ada  642  13.15  Thread creation in Java 2  643  13.16  Thread creation in C#  644  13.17  Thread pools in Java 5  645  13.18  Spawn and sync in Cilk  645  13.19  Modeling subroutines with fork/join  646  13.20  Multiplexing threads on processes  647  13.21  Cooperative multithreading on a uniprocessor  648  13.22  A race condition in preemptive multithreading  650  13.23  Disabling signals during context switch  651
 
-Chapter 14: Scripting Languages
+## Chapter 14: Scripting Languages
 
 What Is a Scripting Language?
 
@@ -958,7 +958,7 @@ Creating a reference list with XSLT
 C·262
 ```
 
-Chapter 15: Building a Runnable Program
+## Chapter 15: Building a Runnable Program
 
 Innovative Features
 
@@ -1104,11 +1104,11 @@ Linking
 
 15.17  Static linking  798  15.18  Checksumming headers for consistency  799  15.21  PIC under x86/Linux  C·280  15.22  PC-relative addressing on the x86  C·282  15.23  Dynamic linking in Linux on the x86  C·282
 
-Chapter 16: Run-Time Program  Management
+## Chapter 16: Run-Time Program  Management
 
 16.1  The CLI as a run-time system and virtual  machine  807
 
-Chapter 17: Code Improvement
+## Chapter 17: Code Improvement
 
 Virtual Machines
 

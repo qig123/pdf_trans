@@ -1,6 +1,6 @@
 # Bibliography
 
-Bibliography
+## Bibliography
 
 [AK02] Randy Allen and Ken Kennedy.  Optimizing Compilers for Modern Architectures: A Dependence-Based Approach. Morgan Kaufmann, San Francisco, CA, 2002.
 

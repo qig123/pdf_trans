@@ -1,6 +1,6 @@
 # Preface
 
-Preface
+## Preface
 
 A course in computer programming provides the typical student’s frst exposure to the feld of computer science. Most students in such a course will have  used computers all their lives, for social networking, email, games, web browsing, word processing, and a host of other tasks, but it is not until they write their  frst programs that they begin to appreciate how applications work. After gaining  a certain level of facility as programmers (presumably with the help of a good  course in data structures and algorithms), the natural next step is to wonder how  programming languages work. This book provides an explanation. It aims, quite  simply, to be the most comprehensive and accurate languages text available, in a  style that is engaging and accessible to the typical undergraduate. This aim refects my conviction that students will understand more, and enjoy the material  more, if we explain what is really going on.
 
