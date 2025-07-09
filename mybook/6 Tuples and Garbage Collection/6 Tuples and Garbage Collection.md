@@ -1,6 +1,14 @@
 # 6 Tuples and Garbage Collection
 
-![Figure 6.1...](images/page_111_vector_434.png)
+6
+
+## Tuples and Garbage Collection
+
+In this chapter we study the implementation of tuples, called vectors in Racket. A tuple is a fixed-length sequence of elements in which each element may have a differ- ent type. This language feature is the first to use the computer’s heap, because the lifetime of a tuple is indefinite; that is, a tuple lives forever from the programmer’s viewpoint. Of course, from an implementer’s viewpoint, it is important to reclaim the space associated with a tuple when it is no longer needed, which is why we also study garbage collection techniques in this chapter. Section 6.1 introduces the LTup language, including its interpreter and type checker. The LTup language extends the LWhile language (chapter 5) with tuples. Section 6.2 describes a garbage collection algorithm based on copying live tuples back and forth between two halves of the heap. The garbage collector requires coor- dination with the compiler so that it can find all the live tuples. Sections 6.3 through
+
+6.8 discuss the necessary changes and additions to the compiler passes, including a new compiler pass named expose_allocation.
+
+![Figure 6.1...](images/page_111_vector_cluster_434.png)
 *Figure 6.1*
 
 ```
@@ -13,10 +21,10 @@
 
 Tuples raise several interesting new issues. First, variable binding performs a shallow copy in dealing with tuples, which means that different variables can refer
 
-![Figure 6.1...](images/page_112_vector_267.png)
+![Figure 6.1...](images/page_112_vector_cluster_267.png)
 *Figure 6.1*
 
-![Figure 6.2...](images/page_112_vector_517.png)
+![Figure 6.2...](images/page_112_vector_cluster_517.png)
 *Figure 6.2*
 
 to the same tuple; that is, two variables can be aliases for the same entity. Consider the following example, in which t1 and t2 refer to the same tuple value and t3 refers to a different tuple value with equal elements. The result of the program is 42.
@@ -51,10 +59,10 @@ The mutation through t2 is visible in referencing the tuple from t1, so the resu
 
 From the perspective of programmer-observable behavior, tuples live forever. How- ever, if they really lived forever then many long-running programs would run out of memory. To solve this problem, the language’s runtime system performs automatic garbage collection. Figure 6.3 shows the definitional interpreter for the LTup language. We define the vector, vector-ref, vector-set!, and vector-length operations for LTup in terms of the corresponding operations in Racket. One subtle point is that the vector-set! operation returns the #<void> value. Figure 6.4 shows the type checker for LTup. The type of a tuple is a Vector type that contains a type for each of its elements. To create the s-expression for the Vector type, we use the unquote-splicing operator ,@ to insert the list t* without its usual start and end parentheses. The type of accessing the ith element of a tuple is the ith element type of the tuple’s type, if there is one. If not, an error is signaled. Note that the index i is required to be a constant integer (and not, for example, a call to read) so that the type checker can determine the element’s type given the tuple type. Regarding writing an element to a tuple, the element’s type must be equal to the ith element type of the tuple’s type. The result type is Void.
 
-![(super-new)...](images/page_114_vector_88.png)
+![(super-new)...](images/page_114_vector_cluster_88.png)
 *(super-new)*
 
-![Figure 6.3...](images/page_114_vector_423.png)
+![Figure 6.3...](images/page_114_vector_cluster_423.png)
 *Figure 6.3*
 
 ## 6.2 Garbage Collection
@@ -66,7 +74,7 @@ Unfortunately, it is impossible to know precisely which objects will be accessed
 * The term object as it is used in the context of object-oriented programming has a more specific
   meaning than the way in which we use the term here.
 
-![Figure 6.4...](images/page_115_vector_589.png)
+![Figure 6.4...](images/page_115_vector_cluster_589.png)
 *Figure 6.4*
 
 call stack. We define the live objects to be the objects that are reachable from the root set. Garbage collectors reclaim the space that is allocated to objects that are no longer live. That means that some objects may not get reclaimed as soon as they could be, but at least garbage collectors do not reclaim the space dedicated to objects that will be accessed in the future! The programmer can influence which objects get reclaimed by causing them to become unreachable. So the goal of the garbage collector is twofold:
@@ -78,12 +86,12 @@ call stack. We define the live objects to be the objects that are reachable from
 
 6.2.2 Graph Copying via Cheney’s Algorithm Let us take a closer look at the copying of the live objects. The allocated objects and pointers can be viewed as a graph, and we need to copy the part of the graph that is reachable from the root set. To make sure that we copy all the reachable vertices in the graph, we need an exhaustive graph traversal algorithm, such as depth-first search or breadth-first search (Moore 1959; Cormen et al. 2001). Recall that such algorithms take into account the possibility of cycles by marking which vertices have already been visited, so to ensure termination of the algorithm. These
 
-![Figure 6.5...](images/page_117_vector_429.png)
+![Figure 6.5...](images/page_117_vector_cluster_429.png)
 *Figure 6.5*
 
 search algorithms also use a data structure such as a stack or queue as a to-do list to keep track of the vertices that need to be visited. We use breadth-first search and a trick due to Cheney (1970) for simultaneously representing the queue and copying tuples into the ToSpace. Figure 6.6 shows several snapshots of the ToSpace as the copy progresses. The queue is represented by a chunk of contiguous memory at the beginning of the ToSpace, using two pointers to track the front and the back of the queue, called the scan pointer and the free pointer, respectively. The algorithm starts by copying all tuples that are immediately reachable from the root set into the ToSpace to form the initial queue. When we copy a tuple, we mark the old tuple to indicate that it has been visited. We discuss how this marking is accomplished in section 6.2.3. Note that any pointers inside the copied tuples in the queue still point back to the FromSpace. Once the initial queue has been created, the algorithm enters a loop in which it repeatedly processes the tuple at the front of the queue and pops
 
-![Figure 6.6...](images/page_118_vector_505.png)
+![Figure 6.6...](images/page_118_vector_cluster_505.png)
 *Figure 6.6*
 
 it off the queue. To process a tuple, the algorithm copies all the objects that are directly reachable from it to the ToSpace, placing them at the back of the queue. The algorithm then updates the pointers in the popped tuple so that they point to the newly copied objects. As shown in figure 6.6, in the first step we copy the tuple whose second element is 42 to the back of the queue. The other pointer goes to a tuple that has already been copied, so we do not need to copy it again, but we do need to update the pointer to the new location. This can be accomplished by storing a forwarding pointer to the
@@ -101,10 +109,10 @@ new location in the old tuple, when we initially copied the tuple into the ToSpa
 
 Dynamically typed languages, such as Racket, need to tag objects in any case, so option 1 is a natural choice for those languages. However, LTup is a statically typed language, so it would be unfortunate to require tags on every object, especially small and pervasive objects like integers and Booleans. Option 3 is the best-performing choice for statically typed languages, but it comes with a relatively high implemen- tation complexity. To keep this chapter within a reasonable scope of complexity, we recommend a combination of options 1 and 2, using separate strategies for the stack and the heap. Regarding the stack, we recommend using a separate stack for pointers, which we call the root stack (aka shadow stack) (Siebert 2001; Henderson 2002; Baker et al. 2009). That is, when a local variable needs to be spilled and is of type Vector, we put it on the root stack instead of putting it on the procedure call stack. Furthermore, we always spill tuple-typed variables if they are live during a call to the collector, thereby ensuring that no pointers are in registers during a collection. Figure 6.7 reproduces the example shown in figure 6.5 and contrasts it with the data layout using a root stack. The root stack contains the two pointers from the regular stack and also the pointer in the second register. The problem of distinguishing between pointers and other kinds of data also arises inside each tuple on the heap. We solve this problem by attaching a tag, an extra 64 bits, to each tuple. Figure 6.8 shows a zoomed-in view of the tags for two of the tuples in the example given in figure 6.5. Note that we have drawn the bits in a big-endian way, from right to left, with bit location 0 (the least significant bit) on the far right, which corresponds to the direction of the x86 shifting instructions salq (shift left) and sarq (shift right). Part of each tag is dedicated to specifying which elements of the tuple are pointers, the part labeled pointer mask. Within the pointer mask, a 1 bit indicates that there is a pointer, and a 0 bit indicates some other kind of data. The pointer mask starts at bit location 7. We limit tuples to
 
-![Figure 6.7...](images/page_120_vector_240.png)
+![Figure 6.7...](images/page_120_vector_cluster_240.png)
 *Figure 6.7*
 
-![Figure 6.8...](images/page_120_vector_426.png)
+![Figure 6.8...](images/page_120_vector_cluster_426.png)
 *Figure 6.8*
 
 a maximum size of fifty elements, so we need 50 bits for the pointer mask.2 The tag also contains two other pieces of information. The length of the tuple (number of elements) is stored in bits at locations 1 through 6. Finally, the bit at location 0 indicates whether the tuple has yet to be copied to the ToSpace. If the bit has value 1, then this tuple has not yet been copied. If the bit has value 0, then the entire tag is a forwarding pointer. (The lower 3 bits of a pointer are always zero in any case, because our tuples are 8-byte aligned.)
@@ -112,7 +120,7 @@ a maximum size of fifty elements, so we need 50 bits for the pointer mask.2 The 
 * A production-quality compiler would handle arbitrarily sized tuples and use a more complex
   approach.
 
-![Figure 6.9...](images/page_121_vector_182.png)
+![Figure 6.9...](images/page_121_vector_cluster_182.png)
 *Figure 6.9*
 
 6.2.4 Implementation of the Garbage Collector An implementation of the copying collector is provided in the runtime.c file. Figure 6.9 defines the interface to the garbage collector that is used by the com- piler. The initialize function creates the FromSpace, ToSpace, and root stack and should be called in the prelude of the main function. The arguments of initialize are the root stack size and the heap size. Both need to be multiples of sixty-four, and 16, 384 is a good choice for both. The initialize function puts the address of the beginning of the FromSpace into the global variable free_ptr. The global variable fromspace_end points to the address that is one past the last element of the FromSpace. We use half-open intervals to represent chunks of memory (Dijkstra 1982). The rootstack_begin variable points to the first element of the root stack. As long as there is room left in the FromSpace, your generated code can allo- cate tuples simply by moving the free_ptr forward. The amount of room left in the FromSpace is the difference between the fromspace_end and the free_ptr. The collect function should be called when there is not enough room left in the FromSpace for the next allocation. The collect function takes a pointer to the current top of the root stack (one past the last item that was pushed) and the number of bytes that need to be allocated. The collect function performs the copying collection and leaves the heap in a state such that there is enough room for the next allocation. The introduction of garbage collection has a nontrivial impact on our com- piler passes. We introduce a new compiler pass named expose_allocation that elaborates the code for allocating tuples. We also make significant changes to select_instructions, build_interference, allocate_registers, and prelude_and_conclusion and make minor changes in several more passes. The following program serves as our running example. It creates two tuples, one nested inside the other. Both tuples have length one. The program accesses the element in the inner tuple.
@@ -131,10 +139,10 @@ The (Collect n) form runs the garbage collector, requesting that there be n byte
 
 The sequencing of the initializing expressions e0, … , en−1 prior to the allocate is important because they may trigger garbage collection and we cannot have an allocated but uninitialized tuple on the heap during a collection.
 
-![Figure 6.10...](images/page_123_vector_324.png)
+![Figure 6.10...](images/page_123_vector_cluster_324.png)
 *Figure 6.10*
 
-![Figure 6.10...](images/page_123_vector_362.png)
+![Figure 6.10...](images/page_123_vector_cluster_362.png)
 *Figure 6.10*
 
 ## 6.4 Remove Complex Operands
@@ -145,10 +153,10 @@ The forms collect, allocate, and global_value should be treated as complex opera
 
 The output of explicate_control is a program in the intermediate language CTup, for which figure 6.12 shows the definition of the abstract syntax. The new expres- sions of CTup include allocate, vector-ref, and vector-set!, and global_value. CTup also includes the new collect statement. The explicate_control pass can treat these new forms much like the other forms that we’ve already encountered. The output of the explicate_control pass on the running example is shown on the left side of figure 6.15 in the next section.
 
-![Figure 6.11...](images/page_124_vector_234.png)
+![Figure 6.11...](images/page_124_vector_cluster_234.png)
 *Figure 6.11*
 
-![Figure 6.12...](images/page_124_vector_528.png)
+![Figure 6.12...](images/page_124_vector_cluster_528.png)
 *Figure 6.12*
 
 ## 6.6 Select Instructions and the x86Global Language
@@ -171,7 +179,7 @@ movq tup′, %rax movq rhs′, %rax movq %rax, 8(n + 1)(%rax)
 
 However, this sequence of instructions does not work because we’re trying to use rax for two different values (tup′ and rhs′) at the same time! The vector-length operation should be translated into a sequence of instruc- tions that read the tag of the tuple and extract the 6 bits that represent the tuple length, which are the bits starting at index 1 and going up to and including bit 6. The x86 instructions andq (for bitwise-and) and sarq (shift right) can be used to accomplish this. We compile the allocate form to operations on the free_ptr, as shown next. This approach is called inline allocation because it implements allocation without a function call by simply incrementing the allocation pointer. It is much more efficient than calling a function for each allocation. The address in the free_ptr is the next free address in the FromSpace, so we copy it into r11 and then move it forward by enough space for the tuple being allocated, which is 8(len + 1) bytes because each element is 8 bytes (64 bits) and we use 8 bytes for the tag. We then initialize the tag and finally copy the address in r11 to the left-hand side. Refer to figure 6.8 to see how the tag is organized. We recommend using the Racket operations bitwise-ior and arithmetic-shift to compute the tag during compilation. The type anno- tation in the allocate form is used to determine the pointer mask region of the
 
-![Figure 6.13...](images/page_126_vector_306.png)
+![Figure 6.13...](images/page_126_vector_cluster_306.png)
 *Figure 6.13*
 
 tag. The addressing mode free_ptr(%rip) essentially stands for the address of the free_ptr global variable using a special instruction-pointer-relative addressing mode of the x86-64 processor. In particular, the assembler computes the distance d between the address of free_ptr and where the rip would be at that moment and then changes the free_ptr(%rip) argument to d(%rip), which at runtime will compute the address of free_ptr.
@@ -182,12 +190,12 @@ The collect form is compiled to a call to the collect function in the runtime. T
 
 (collect bytes) =⇒ movq %r15, %rdi movq $bytes, %rsi callq collect
 
-![Figure 6.14...](images/page_127_vector_291.png)
+![Figure 6.14...](images/page_127_vector_cluster_291.png)
 *Figure 6.14*
 
 The definitions of the concrete and abstract syntax of the x86Global language are shown in figures 6.13 and 6.14. It differs from x86If with the addition of global variables and the instructions needed to compile tuple length: andq and sarq. Figure 6.15 shows the output of the select_instructions pass on the running example.
 
-![Figure 6.15...](images/page_128_vector_539.png)
+![Figure 6.15...](images/page_128_vector_cluster_539.png)
 *Figure 6.15*
 
 ## 6.7 Register Allocation
@@ -200,21 +208,21 @@ As discussed previously in this chapter, the garbage collector needs to access a
 
 The latter responsibility can be handled during construction of the interference graph, by adding interference edges between the call-live tuple-typed variables and all the callee-saved registers. (They already interfere with the caller-saved registers.) The type information for variables is in the Program form, so we recommend adding another parameter to the build_interference function to communicate this alist. The spilling of tuple-typed variables to the root stack can be handled after graph coloring, in choosing how to assign the colors (integers) to registers and stack loca- tions. The Program output of this pass changes to also record the number of spills to the root stack. Figure 6.16 shows the output of register allocation on the running example. The register allocator chose the below assignment of variables to locations. Many of the variables were assigned to register %rcx. Variables _3, _7, tmp0, and tmp4 were instead assigned to %rdx because they conflict with variables that were assigned to %rcx. Variable vecinit6 was spilled to the root stack because its type is (Vector Integer) and it is live during a call to collect.
 
-![Figure 6.17...](images/page_129_vector_504.png)
+![Figure 6.17...](images/page_129_vector_cluster_504.png)
 *Figure 6.17*
 
-![Figure 6.16...](images/page_130_vector_395.png)
+![Figure 6.16...](images/page_130_vector_cluster_395.png)
 *Figure 6.16*
 
 to accomplish this task because there is only one spill. In general, we have to clear as many words as there are spills of tuple-typed variables. The garbage collector tests each root to see if it is null prior to dereferencing it. Figure 6.18 gives an overview of all the passes needed for the compilation of LTup.
 
-![Figure 6.17...](images/page_131_vector_238.png)
+![Figure 6.17...](images/page_131_vector_cluster_238.png)
 *Figure 6.17*
 
-![Figure 6.18...](images/page_131_vector_502.png)
+![Figure 6.18...](images/page_131_vector_cluster_502.png)
 *Figure 6.18*
 
-![Figure 6.19...](images/page_132_vector_332.png)
+![Figure 6.19...](images/page_132_vector_cluster_332.png)
 *Figure 6.19*
 
 ## 6.9 Challenge: Simple Structures
@@ -236,7 +244,7 @@ Function-call syntax is also used to read a field of a structure. The function n
 (- (point-y pt1) (point-y pt2)))))
 ```
 
-![Figure 6.20...](images/page_133_vector_322.png)
+![Figure 6.20...](images/page_133_vector_cluster_322.png)
 *Figure 6.20*
 
 Similarly, to write to a field of a structure, use its set function, whose name starts with set-, followed by the structure name, then a dash, then the field name, and finally with an exclamation mark. The following example uses set-point-x! to change the x field from 7 to 42:
@@ -249,30 +257,30 @@ Similarly, to write to a field of a structure, use its set function, whose name 
 
 Exercise 6.1 Create a type checker for LStruct by extending the type checker for LTup. Extend your compiler with support for simple structures, compiling LStruct to x86 assembly code. Create five new test cases that use structures, and test your compiler.
 
-![Figure 6.21...](images/page_134_vector_289.png)
+![Figure 6.21...](images/page_134_vector_cluster_289.png)
 *Figure 6.21*
 
 ## 6.10 Challenge: Arrays
 
 In this chapter we have studied tuples, that is, heterogeneous sequences of elements whose length is determined at compile time. This challenge is also about sequences, but this time the length is determined at runtime and all the elements have the same type (they are homogeneous). We use the traditional term array for this latter kind of sequence. The Racket language does not distinguish between tuples and arrays; they are both represented by vectors. However, Typed Racket distinguishes between tuples and arrays: the Vector type is for tuples, and the Vectorof type is for arrays. Figure 6.21 presents the definition of the concrete syntax for LArray, and figure 6.22 presents the definition of the abstract syntax, extending LTup with the Vectorof type and the make-vector primitive operator for creating an array, whose argu- ments are the length of the array and an initial value for all the elements in the array. The vector-length, vector-ref, and vector-ref! operators that we defined for tuples become overloaded for use with arrays. We include integer multiplication in LArray because it is useful in many examples involving arrays such as computing the inner product of two arrays (figure 6.23). Figure 6.24 shows the definition of the type checker for LArray. The result type of make-vector is (Vectorof T), where T is the type of the initializing expression. The length expression is required to have type Integer. The type checking of the operators vector-length, vector-ref, and vector-set! is updated to handle the situation in which the vector has type Vectorof. In these cases we translate the operators to their vectorof form so that later passes can easily distinguish between operations on tuples versus arrays. We override the operator-types method to
 
-![Figure 6.22...](images/page_135_vector_311.png)
+![Figure 6.22...](images/page_135_vector_cluster_311.png)
 *Figure 6.22*
 
-![Figure 6.23...](images/page_135_vector_509.png)
+![Figure 6.23...](images/page_135_vector_cluster_509.png)
 *Figure 6.23*
 
 provide the type signature for multiplication: it takes two integers and returns an integer. The definition of the interpreter for LArray is shown in figure 6.25 . The make-vector operator is interpreted using Racket’s make-vector function, and multiplication is interpreted using fx*, which is multiplication for fixnum inte- gers. In the resolve pass (section 6.10.2) we translate array access operations into vectorof-ref and vectorof-set! operations, which we interpret using vector operations with additional bounds checks that signal a trapped-error.
 
-![Figure 6.24...](images/page_136_vector_542.png)
+![Figure 6.24...](images/page_136_vector_cluster_542.png)
 *Figure 6.24*
 
 6.10.1 Data Representation Just as with tuples, we store arrays on the heap, which means that the garbage collector will need to inspect arrays. An immediate thought is to use the same representation for arrays that we use for tuples. However, we limit tuples to a length of fifty so that their length and pointer mask can fit into the 64-bit tag at
 
-![(super-new)...](images/page_137_vector_88.png)
+![(super-new)...](images/page_137_vector_cluster_88.png)
 *(super-new)*
 
-![Figure 6.25...](images/page_137_vector_334.png)
+![Figure 6.25...](images/page_137_vector_cluster_334.png)
 *Figure 6.25*
 
 the beginning of each tuple (section 6.2.3). We intend arrays to allow millions of elements, so we need more bits to store the length. However, because arrays are homogeneous, we need only 1 bit for the pointer mask instead of 1 bit per array element. Finally, the garbage collector must be able to distinguish between tuples and arrays, so we need to reserve one bit for that purpose. We arrive at the following layout for the 64-bit tag at the beginning of an array:

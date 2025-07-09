@@ -1,6 +1,6 @@
 # References
 
-![Table A.1...](images/page_227_vector_65.png)
+![Table A.1...](images/page_227_vector_cluster_65.png)
 *Table A.1*
 
 Instruction Operation addq A, B A + B →B negq A −A →A subq A, B B −A →B imulq A, B A × B →B (B must be a register). callq L Pushes the return address and jumps to label L. callq *A Pushes the return address and jumps to the address in A. retq Pops the return address and jumps to it. popq A ∗rsp →A; rsp + 8 →rsp pushq A rsp −8 →rsp; A →∗rsp leaq A, B A →B (B must be a register.) cmpq A, B Compare A and B and set the flag register (B must not be an immediate). je L Jump to label L if the flag register matches the condition code of the instruction; otherwise go to the next instructions. The condition codes are e for equal, l for less, le for less or equal, g for greater, and ge for greater or equal.

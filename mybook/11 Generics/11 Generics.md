@@ -6,10 +6,14 @@ Generics
 
 This chapter studies the compilation of generics (aka parametric polymorphism), compiling the LGen subset of Typed Racket. Generics enable programmers to make code more reusable by parameterizing functions and data structures with respect to the types on which they operate. For example, figure 11.1 revisits the map example and this time gives it a more fitting type. This map function is parameterized with respect to the element type of the tuple. The type of map is the following generic type specified by the All type with parameter T:
 
-![Figure 11.1...](images/page_213_vector_623.png)
+(All (T) ((T -> T) (Vector T T) -> (Vector T T)))
+
+The idea is that map can be used at all choices of a type for parameter T. In the example shown in figure 11.1 we apply map to a tuple of integers, implicitly choosing Integer for T, but we could have just as well applied map to a tuple of Booleans. A monomorphic function is simply one that is not generic. We use the term instantiation for the process (within the language implementation) of turning a generic function into a monomorphic one, where the type parameters have been replaced by types. Figure 11.2 presents the definition of the concrete syntax of LGen, and figure 11.3 shows the definition of the abstract syntax. We add a second form for function definitions in which a type declaration comes before the define. In the abstract syntax, the return type in the Def is Any, but that should be ignored in favor of the return type in the type declaration. (The Any comes from using the same parser
+
+![Figure 11.1...](images/page_213_vector_cluster_623.png)
 *Figure 11.1*
 
-![Figure 11.2...](images/page_214_vector_314.png)
+![Figure 11.2...](images/page_214_vector_cluster_314.png)
 *Figure 11.2*
 
 as discussed in chapter 9.) The presence of a type declaration enables the use of an All type for a function, thereby making it generic. The grammar for types is extended to include the type of a generic (All) and type variables. By including the All type in the type nonterminal of the grammar we choose to make generics first class, which has interesting repercussions on the compiler.1 Many languages with generics, such as C++ (Stroustrup 1988) and Standard ML (Milner, Tofte, and Harper 1990), support only second-class generics, so it may be helpful to see an example of first-class generics in action. In figure 11.4 we define a function apply_twice whose parameter is a generic function. Indeed, because the grammar for type includes the All type, a generic function may also be returned from a function or stored inside a tuple. The body of apply_twice applies the generic function f to a Boolean and also to an integer, which would not be possible if f were not generic. The type checker for LGen shown in figure 11.5 has several new responsibilities (compared to Lλ) which we discuss in the following paragraphs. The type checking of a function application is extended to handle the case in which the operator expression is a generic function. In that case the type argu- ments are deduced by matching the types of the parameters with the types of the arguments. The match_types auxiliary function (figure 11.6) carries out this deduction by recursively descending through a parameter type param_ty and the
@@ -17,10 +21,10 @@ as discussed in chapter 9.) The presence of a type declaration enables the use o
 * The Python typing library does not include syntax for the All type. It is inferred for functions
   whose type annotations contain type variables.
 
-![Figure 11.3...](images/page_215_vector_339.png)
+![Figure 11.3...](images/page_215_vector_cluster_339.png)
 *Figure 11.3*
 
-![Figure 11.4...](images/page_215_vector_503.png)
+![Figure 11.4...](images/page_215_vector_cluster_503.png)
 *Figure 11.4*
 
 corresponding argument type arg_ty, making sure that they are equal except when there is a type parameter in the parameter type. Upon encountering a type param- eter for the first time, the algorithm deduces an association of the type parameter to the corresponding part of the argument type. If it is not the first time that the type parameter has been encountered, the algorithm looks up its deduced type and makes sure that it is equal to the corresponding part of the argument type. The return type of the application is the return type of the generic function with the type
@@ -35,13 +39,13 @@ is equivalent to
 
 Two generic types are equal if they differ only in the choice of the names of the type parameters. The definition of type equality shown in figure 11.6 renames the type parameters in one type to match the type parameters of the other type. The type checker also ensures that only defined type variables appear in type annotations. The check_well_formed function for which the definition is shown in figure 11.7 recursively inspects a type, making sure that each type variable has been defined.
 
-![Figure 11.5...](images/page_217_vector_626.png)
+![Figure 11.5...](images/page_217_vector_cluster_626.png)
 *Figure 11.5*
 
-![Figure 11.6...](images/page_218_vector_586.png)
+![Figure 11.6...](images/page_218_vector_cluster_586.png)
 *Figure 11.6*
 
-![Figure 11.7...](images/page_219_vector_313.png)
+![Figure 11.7...](images/page_219_vector_cluster_313.png)
 *Figure 11.7*
 
 ## 11.1 Compiling Generics
@@ -77,24 +81,26 @@ After erasure, the type of map is
 
 but we need to convert it to the instantiated type. This is easy to do in the language LCast with a single cast. In the example shown in figure 11.10, the instantiation of map has been compiled to a cast from the type of map to the instantiated type. The source and the target type of a cast must be consistent (figure 10.4), which indeed is the case because both the source and target are obtained from the same generic type of map, replacing the type parameters with Any in the former and with
 
-![Figure 11.8...](images/page_222_vector_388.png)
+![Figure 11.8...](images/page_222_vector_cluster_388.png)
 *Figure 11.8*
 
-![Figure 11.9...](images/page_222_vector_552.png)
+![Figure 11.9...](images/page_222_vector_cluster_552.png)
 *Figure 11.9*
 
 the deduced type arguments in the latter. (Recall that the Any type is consistent with any type.) To implement the erase_types pass, we first recommend defining a recursive function that translates types, named erase_type. It replaces type variables with Any as follows.
 
-![Figure 11.10...](images/page_223_vector_236.png)
+![Figure 11.10...](images/page_223_vector_cluster_236.png)
 *Figure 11.10*
+
+T ⇒ Any
 
 where Tt = (erase_type (substitute_type s T)), and s = (map cons xs ts). Finally, each generic function is translated to a regular function in which type erasure has been applied to all the type annotations and the body.
 
 Exercise 11.1 Implement a compiler for the polymorphic language LGen by extend- ing and adapting your compiler for L?. Create six new test programs that use polymorphic functions. Some of them should make use of first-class generics.
 
-![Figure 11.11...](images/page_223_vector_608.png)
+![Figure 11.11...](images/page_223_vector_cluster_608.png)
 *Figure 11.11*
 
-![Figure 11.11...](images/page_224_vector_390.png)
+![Figure 11.11...](images/page_224_vector_cluster_390.png)
 *Figure 11.11*
 

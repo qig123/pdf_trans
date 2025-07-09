@@ -14,10 +14,10 @@ Languages that allow expressions to produce different kinds of values are called
 
 The definitions of the concrete and abstract syntax of LDyn are shown in figures 9.1 and 9.2. There is no type checker for LDyn because it checks types only at runtime. The definitional interpreter for LDyn is presented in figure 9.3, and definitions of its auxiliary functions are shown in figure 9.4. Consider the match case for (Int n). Instead of simply returning the integer n (as in the interpreter for LVar in figure 2.4), the interpreter for LDyn creates a tagged value that combines an underlying value
 
-![Figure 9.1...](images/page_176_vector_311.png)
+![Figure 9.1...](images/page_176_vector_cluster_311.png)
 *Figure 9.1*
 
-![Figure 9.2...](images/page_176_vector_583.png)
+![Figure 9.2...](images/page_176_vector_cluster_583.png)
 *Figure 9.2*
 
 with a tag that identifies what kind of value it is. We define the following struct to represent tagged values:
@@ -42,13 +42,13 @@ tagof(Void) = 101
 
 This stealing of 3 bits comes at some price: integers are now restricted to the range −260 to 260 −1. The stealing does not adversely affect tuples and procedures because those values are addresses, and our addresses are 8-byte aligned so the rightmost 3 bits are unused; they are always 000. Thus, we do not lose information by overwriting the rightmost 3 bits with the tag, and we can simply zero out the tag to recover the original address. To make tagged values into first-class entities, we can give them a type called Any and define operations such as Inject and Project for creating and using them, yielding the statically typed LAny intermediate language. We describe how to compile LDyn to LAny in section 9.4; in the next section we describe the LAny language in greater detail.
 
-![Figure 9.3...](images/page_178_vector_608.png)
+![Figure 9.3...](images/page_178_vector_cluster_608.png)
 *Figure 9.3*
 
-![Figure 9.4...](images/page_179_vector_589.png)
+![Figure 9.4...](images/page_179_vector_cluster_589.png)
 *Figure 9.4*
 
-![Figure 9.5...](images/page_180_vector_399.png)
+![Figure 9.5...](images/page_180_vector_cluster_399.png)
 *Figure 9.5*
 
 ## 9.3 The LAny Language
@@ -57,22 +57,22 @@ The definition of the abstract syntax of LAny is given in figure 9.5. The (Injec
 
 The type checker for LAny is shown in figure 9.6 and it uses the auxiliary functions presented in figure 9.7. The interpreter for LAny is shown in figure 9.8 and its auxiliary functions are shown in figure 9.9.
 
-![Figure 9.6...](images/page_182_vector_617.png)
+![Figure 9.6...](images/page_182_vector_cluster_617.png)
 *Figure 9.6*
 
-![Figure 9.7...](images/page_183_vector_313.png)
+![Figure 9.7...](images/page_183_vector_cluster_313.png)
 *Figure 9.7*
 
-![(super-new)...](images/page_184_vector_88.png)
+![(super-new)...](images/page_184_vector_cluster_88.png)
 *(super-new)*
 
-![Figure 9.8...](images/page_184_vector_494.png)
+![Figure 9.8...](images/page_184_vector_cluster_494.png)
 *Figure 9.8*
 
-![Figure 9.9...](images/page_185_vector_362.png)
+![Figure 9.9...](images/page_185_vector_cluster_362.png)
 *Figure 9.9*
 
-![Figure 9.10...](images/page_186_vector_378.png)
+![Figure 9.10...](images/page_186_vector_cluster_378.png)
 *Figure 9.10*
 
 ## 9.4 Cast Insertion: Compiling LDyn to LAny
@@ -117,7 +117,7 @@ orq $tag, lhs′
 
 The instruction selection for tuples and procedures is different because there is no need to shift them to the left. The rightmost 3 bits are already zeros, so we simply combine the value and the tag using orq.
 
-![Figure 9.11...](images/page_189_vector_432.png)
+![Figure 9.11...](images/page_189_vector_cluster_432.png)
 *Figure 9.11*
 
 (Assign lhs (Prim 'make-any (list e (Int tag)))) ⇒ movq e′, lhs′
@@ -150,7 +150,7 @@ any-vector-ref This operation combines the effect of ValueOf with reading an ele
 
 (Assign lhs (Prim 'any-vector-ref (list e1 e2))) =⇒ movq ¬111, %r11 andq e′ 1, %r11 movq e′ 2, %rax addq $1, %rax imulq $8, %rax addq %rax, %r11 movq 0(%r11) lhs′
 
-There is an interesting interaction between tagged values and garbage collection that has an impact on register allocation. A variable of type Any might refer to a tuple, and therefore it might be a root that needs to be inspected and copied during garbage collection. Thus, we need to treat variables of type Any in a similar way to variables of tuple type for purposes of register allocation, with particular attention to the following:
+## 9.9 Register Allocation for LAny
 
 * If a variable of type Any is live during a function call, then it must be spilled. This
   can be accomplished by changing build_interference to mark all variables of
@@ -163,9 +163,9 @@ Another concern regarding the root stack is that the garbage collector needs to 
 
 Exercise 9.1 Expand your compiler to handle LDyn as outlined in this chapter. Create tests for LDyn by adapting ten of your previous test programs by removing type annotations. Add five more test programs that specifically rely on the language being dynamically typed. That is, they should not be legal programs in a statically typed language, but nevertheless they should be valid LDyn programs that run to completion without error.
 
-![Figure 9.12...](images/page_191_vector_440.png)
+![Figure 9.12...](images/page_191_vector_cluster_440.png)
 *Figure 9.12*
 
-![Figure 9.12...](images/page_192_vector_390.png)
+![Figure 9.12...](images/page_192_vector_cluster_390.png)
 *Figure 9.12*
 

@@ -25,19 +25,19 @@ The while loop consists of a condition and a body.1 The body is evaluated repeat
   inhabited by a single value #<void>, which corresponds to unit or () in the literature (Pierce
   2002).
 
-![Figure 5.1...](images/page_98_vector_234.png)
+![Figure 5.1...](images/page_98_vector_cluster_234.png)
 *Figure 5.1*
 
-![Figure 5.2...](images/page_98_vector_439.png)
+![Figure 5.2...](images/page_98_vector_cluster_439.png)
 *Figure 5.2*
 
-![Figure 5.1...](images/page_98_vector_503.png)
+![Figure 5.1...](images/page_98_vector_cluster_503.png)
 *Figure 5.1*
 
-![(super-new)...](images/page_99_vector_88.png)
+![(super-new)...](images/page_99_vector_cluster_88.png)
 *(super-new)*
 
-![Figure 5.3...](images/page_99_vector_371.png)
+![Figure 5.3...](images/page_99_vector_cluster_371.png)
 *Figure 5.3*
 
 is also #<void>. The (Begin es body) expression evaluates the subexpressions es for their effects and then evaluates and returns the result from body. The (Void) expression produces the #<void> value. The definition of the type checker for LWhile is shown in figure 5.4. The type checking of the SetBang expression requires the type of the variable and the right- hand side to agree. The result type is Void. For while, the condition must be a Boolean and the result type is Void. For Begin, the result type is the type of its last subexpression. At first glance, the translation of these language features to x86 seems straight- forward because the CIf intermediate language already supports all the ingredients that we need: assignment, goto, conditional branching, and sequencing. However, complications arise, which we discuss in the next section. After that we introduce the changes necessary to the existing passes.
@@ -46,7 +46,7 @@ is also #<void>. The (Begin es body) expression evaluates the subexpressions es 
 
 Up until this point, the programs generated in explicate_control were guaranteed to be acyclic. However, each while loop introduces a cycle. Does that matter? Indeed, it does. Recall that for register allocation, the compiler performs liveness
 
-![Figure 5.4...](images/page_100_vector_390.png)
+![Figure 5.4...](images/page_100_vector_cluster_390.png)
 *Figure 5.4*
 
 analysis to determine which variables can share the same register. To accomplish this, we analyzed the control-flow graph in reverse topological order (section 4.10.1), but topological order is well defined only for acyclic graphs. Let us return to the example of computing the sum of the first five posi- tive integers. Here is the program after instruction selection but before register allocation.
@@ -111,7 +111,7 @@ When a lattice contains only finitely long ascending chains, then every Kleene c
 
 * Technically speaking, we will be working with join semilattices.
 
-![Figure 5.5...](images/page_103_vector_324.png)
+![Figure 5.5...](images/page_103_vector_cluster_324.png)
 *Figure 5.5*
 
 The liveness analysis is indeed a monotone function and the lattice M has finitely long ascending chains because there are only a finite number of variables and blocks in the program. Thus we are guaranteed that iteratively applying liveness analysis to all blocks in the program will eventually produce the least fixed point solution. Next let us consider dataflow analysis in general and discuss the generic work list algorithm (figure 5.5). The algorithm has four parameters: the control-flow graph G, a function transfer that applies the analysis to one block, and the bottom and join operators for the lattice of abstract states. The analyze_dataflow function is formulated as a forward dataflow analysis; that is, the inputs to the transfer function come from the predecessor nodes in the control-flow graph. However, live- ness analysis is a backward dataflow analysis, so in that case one must supply the analyze_dataflow function with the transpose of the control-flow graph. The algorithm begins by creating the bottom mapping, represented by a hash table. It then pushes all the nodes in the control-flow graph onto the work list (a queue). The algorithm repeats the while loop as long as there are items in the work list. In each iteration, a node is popped from the work list and processed. The input for the node is computed by taking the join of the abstract states of all the predecessor nodes. The transfer function is then applied to obtain the output abstract state. If the output differs from the previous state for this block, the mapping for this block is updated and its successor nodes are pushed onto the work list.
@@ -182,7 +182,7 @@ The goal of this pass is to mark uses of mutable variables so that remove_comple
 
 By placing this pass after uniquify, we need not worry about variable shadowing, and our logic for Let can remain simple, as in this excerpt. The second step is to mark the occurrences of the mutable variables with the new GetBang AST node (get! in concrete syntax). The following is an excerpt of the uncover-get!-exp function, which takes two parameters: the set of mutable
 
-![Figure 5.6...](images/page_106_vector_222.png)
+![Figure 5.6...](images/page_106_vector_cluster_222.png)
 *Figure 5.6*
 
 variables set!-vars and the expression e to be processed. The case for (Var x) replaces it with (GetBang x) if it is a mutable variable or leaves it alone if not.
@@ -203,7 +203,7 @@ To wrap things up, define the uncover-get! function for processing a whole progr
 
 The new language forms, get!, set!, begin, and while are all complex expres- sions. The subexpressions of set!, begin, and while are allowed to be complex. Figure 5.6 defines the output language Lmon While of this pass. As usual, when a complex expression appears in a grammar position that needs to be atomic, such as the argument of a primitive operator, we must introduce a temporary variable and bind it to the complex expression. This approach applies, unchanged, to handle the new language forms. For example, in the following code there are two begin expressions appearing as arguments to the + operator. The output of rco_exp is then shown, in which the begin expressions have been bound to temporary variables. Recall that let expressions in Lmon While are allowed to have arbitrary expressions in their right-hand side expression, so it is fine to place begin there.
 
-![Figure 5.7...](images/page_107_vector_255.png)
+![Figure 5.7...](images/page_107_vector_cluster_255.png)
 *Figure 5.7*
 
 ```
@@ -262,7 +262,7 @@ As discussed in section 5.2, the presence of loops in LWhile means that the cont
 
 * The first parameter G should be passed the transpose of the control-flow graph.
 
-![Figure 5.8...](images/page_109_vector_301.png)
+![Figure 5.8...](images/page_109_vector_cluster_301.png)
 *Figure 5.8*
 
 * The second parameter transfer should be passed a function that applies liveness
@@ -277,6 +277,6 @@ As discussed in section 5.2, the presence of loops in LWhile means that the cont
   for the lattice of abstract states, that is, sets of locations. For liveness analysis,
   the bottom of the lattice is the empty set, and the join operator is set union.
 
-![Figure 5.8...](images/page_109_vector_477.png)
+![Figure 5.8...](images/page_109_vector_cluster_477.png)
 *Figure 5.8*
 

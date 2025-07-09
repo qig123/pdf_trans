@@ -59,15 +59,31 @@ def is_header_or_footer(block_bbox, page_rect):
     footer_boundary = page_rect.y1 - page_rect.height * footer_margin
     return block_bbox.y1 < header_boundary or block_bbox.y0 > footer_boundary
 
+def are_bboxes_close(rect1, rect2, max_gap=30):
+    """
+    检查两个矩形边界框是否足够接近。
+    如果它们之间的水平或垂直间隙小于 max_gap，则认为它们是接近的。
+    """
+    # 计算水平间隙
+    h_gap = max(0, rect1.x0 - rect2.x1, rect2.x0 - rect1.x1)
+    # 计算垂直间隙
+    v_gap = max(0, rect1.y0 - rect2.y1, rect2.y0 - rect1.y1)
+    
+    # 如果一个矩形在另一个的水平或垂直投影范围内，且另一个维度的间隙不大，则认为接近
+    return (h_gap < max_gap and v_gap < rect1.height + rect2.height + max_gap) or \
+           (v_gap < max_gap and h_gap < rect1.width + rect2.width + max_gap)
+
+
+
 # ==================== ↓↓↓ 新的、更智能的图片查找函数 ↓↓↓ ====================
 # ==================== ↓↓↓ 更健壮、更智能的图片查找函数 ↓↓↓ ====================
 # ==================== ↓↓↓ 最终版、兼容旧库的图片查找函数 ↓↓↓ ====================
+# ==================== ↓↓↓ 最终优化版：引入聚类算法的图片查找函数 ↓↓↓ ====================
 def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, processed_blocks):
     """
-    一个更智能的函数，用于定位和截取与图注关联的图片。
-    它能处理常规图片，也能处理由文本和矢量图形构成的复杂图表。
+    一个高度智能的函数，使用聚类算法来精确定位复杂图表的边界。
     """
-    # 1. 尝试查找紧邻的上一个“图片块”(type 1)
+    # (步骤 1: 查找常规图片 的代码保持不变)
     if caption_block_idx > 0:
         prev_block = blocks[caption_block_idx - 1]
         if prev_block["type"] == 1:
@@ -84,64 +100,84 @@ def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, proc
                 except Exception:
                     pass
 
-    # 2. 启动“智能截图”模式，处理矢量图/文本图
+    # (步骤 2: 智能截图模式 的代码进行优化)
     caption_block = blocks[caption_block_idx]
     caption_bbox = fitz.Rect(caption_block["bbox"])
-
-    # 初始搜索区域
-    search_area = fitz.Rect(
-        page.rect.x0, caption_bbox.y0 - page.rect.height * 0.5,
-        page.rect.x1, caption_bbox.y1
-    )
+    
+    # 缩小初始搜索范围，提高效率
+    search_area = fitz.Rect(page.rect.x0, caption_bbox.y0 - page.rect.height * 0.4, page.rect.x1, caption_bbox.y0)
     search_area.intersect(page.rect)
 
-    # 收集所有可能是图表组件的边界框
-    component_bboxes = []
-
-    # 查找此区域内的所有文本块
+    # 收集所有潜在的图表组件
+    potential_components = []
     potential_blocks = page.get_text("dict", clip=search_area)["blocks"]
     for block in potential_blocks:
         if block["type"] == 0:
             block_text = "".join("".join(s['text'] for s in l['spans']) for l in block['lines'])
-            # 过滤掉普通段落和图注自身
-            if len(block_text.split()) > 20 or fitz.Rect(block['bbox']) == caption_bbox:
-                continue
-            component_bboxes.append(fitz.Rect(block["bbox"]))
-
-    # 查找此区域内的所有矢量绘图
+            if len(block_text.split()) > 20: continue
+            potential_components.append(fitz.Rect(block["bbox"]))
+    
     drawings = page.get_drawings()
     for draw in drawings:
-        if draw['rect'].intersects(search_area):
-            if draw['rect'].width < page.rect.width * 0.9:
-                component_bboxes.append(draw['rect'])
+        if draw['rect'].intersects(search_area) and draw['rect'].width < page.rect.width * 0.9:
+            potential_components.append(draw['rect'])
 
-    if not component_bboxes:
+    if not potential_components:
         return None
 
-    # 更安全的边界框合并方法
-    final_image_bbox = fitz.Rect()
-    for bbox in component_bboxes:
-        final_image_bbox.include_rect(bbox)
+    # ↓↓↓ 核心优化：聚类算法，找到与图注最相关的组件集群 ↓↓↓
+    
+    # 1. 找到离图注最近的“种子”组件
+    try:
+        seed_component = min(potential_components, key=lambda r: abs(r.y1 - caption_bbox.y0))
+    except ValueError:
+        return None
 
-    # 确保合并后的边界框是有效的
+    # 2. 使用广度优先搜索（BFS）或类似的逻辑进行聚类
+    cluster = [seed_component]
+    to_process = [seed_component]
+    potential_components.remove(seed_component)
+    
+    head = 0
+    while head < len(to_process):
+        current_comp = to_process[head]
+        head += 1
+        
+        remaining_components = []
+        for other_comp in potential_components:
+            # 使用我们新的辅助函数来判断是否足够近
+            if are_bboxes_close(current_comp, other_comp, max_gap=40): # max_gap可以微调
+                cluster.append(other_comp)
+                to_process.append(other_comp)
+            else:
+                remaining_components.append(other_comp)
+        potential_components = remaining_components
+    
+    # 3. 计算最终集群的边界框
+    if not cluster:
+        return None
+        
+    final_image_bbox = fitz.Rect(cluster[0])
+    for bbox in cluster[1:]:
+        final_image_bbox.include_rect(bbox)
+        
+    # (后续代码保持不变，但现在 final_image_bbox 会非常精准)
     if final_image_bbox.is_empty or final_image_bbox.width == 0 or final_image_bbox.height == 0:
         return None
-
-    # ==================== ↓↓↓ 关键修复：兼容旧版 PyMuPDF ↓↓↓ ====================
-    # 为兼容旧版PyMuPDF，手动实现 'inflate' 的功能，即向外扩展边界
-    delta = 5
+        
+    # 手动实现 'inflate' 功能
+    delta = 8 # 可以给精准的框多一点边距
     final_image_bbox.x0 -= delta
     final_image_bbox.y0 -= delta
     final_image_bbox.x1 += delta
     final_image_bbox.y1 += delta
-    # ==================== ↑↑↑ 修复结束 ↑↑↑ ====================
     
-    final_image_bbox.intersect(page.rect) # 确保不超过页面
+    final_image_bbox.intersect(page.rect)
 
     if final_image_bbox.is_empty or final_image_bbox.height < 5:
         return None
 
-    filename = f"page_{page.number+1}_vector_{int(caption_bbox.y0)}.png"
+    filename = f"page_{page.number+1}_vector_cluster_{int(caption_bbox.y0)}.png"
     pix = page.get_pixmap(clip=final_image_bbox, dpi=200)
     pix.save(os.path.join(image_dir, filename))
 

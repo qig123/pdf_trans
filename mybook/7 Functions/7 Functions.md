@@ -14,24 +14,24 @@ The concrete syntax and abstract syntax for function definitions and function ap
 
 for a function whose n parameters have the types type1 through typen and whose return type is typeR. The main limitation of these functions (with respect to Racket functions) is that they are not lexically scoped. That is, the only external entities that can be referenced from inside a function body are other globally defined func- tions. The syntax of LFun prevents function definitions from being nested inside each other. The program shown in figure 7.3 is a representative example of defining and using functions in LFun. We define a function map that applies some other function f to both elements of a tuple and returns a new tuple containing the results. We also define a function inc. The program applies map to inc and (vector 0 41). The result is (vector 1 42), from which we return 42. The definitional interpreter for LFun is shown in figure 7.4. The case for the ProgramDefsExp AST is responsible for setting up the mutual recursion between
 
-![Figure 7.1...](images/page_142_vector_300.png)
+![Figure 7.1...](images/page_142_vector_cluster_300.png)
 *Figure 7.1*
 
-![Figure 7.2...](images/page_142_vector_583.png)
+![Figure 7.2...](images/page_142_vector_cluster_583.png)
 *Figure 7.2*
 
-![Figure 7.3...](images/page_143_vector_203.png)
+![Figure 7.3...](images/page_143_vector_cluster_203.png)
 *Figure 7.3*
 
 the top-level function definitions. We use the classic back-patching approach that uses mutable variables and makes two passes over the function definitions (Kelsey, Clinger, and Rees 1998). In the first pass we set up the top-level environment using a mutable cons cell for each function definition. Note that the lambda value for each function is incomplete; it does not yet include the environment. Once the top-level environment has been constructed, we iterate over it and update the lambda values to use the top-level environment. To interpret a function application, we match the result of the function expression to obtain a function value. We then extend the function’s environment with the mapping of parameters to argument values. Finally, we interpret the body of the function in this extended environment. The type checker for LFun is shown in figure 7.5. Similarly to the interpreter, the case for the ProgramDefsExp AST is responsible for setting up the mutual recursion between the top-level function definitions. We begin by creating a mapping env from every function name to its type. We then type check the program using this mapping. To check a function application, we match the type of the function expression to a function type and check that the types of the argument expressions are equal to the function’s parameter types. The type of the application as a whole is the return type from the function type.
 
-![(super-new)...](images/page_144_vector_88.png)
+![(super-new)...](images/page_144_vector_cluster_88.png)
 *(super-new)*
 
-![Figure 7.4...](images/page_144_vector_543.png)
+![Figure 7.4...](images/page_144_vector_cluster_543.png)
 *Figure 7.4*
 
-![Figure 7.5...](images/page_145_vector_617.png)
+![Figure 7.5...](images/page_145_vector_cluster_617.png)
 *Figure 7.5*
 
 ## 7.2 Functions in x86
@@ -56,7 +56,7 @@ rdi rsi rdx rcx r8 r9
 
 If there are more than six arguments, then the calling convention mandates using space on the frame of the caller for the rest of the arguments. However, to ease the implementation of efficient tail calls (section 7.2.2), we arrange never to need more than six arguments. The return value of the function is stored in register rax. Regarding frames and the procedure call stack, recall from section 2.2 that the stack grows down and each function call uses a chunk of space on the stack called a frame. The caller sets the stack pointer, register rsp, to the last data item in its frame. The callee must not change anything in the caller’s frame, that is, anything that is at or above the stack pointer. The callee is free to use locations that are below the stack pointer. Recall that we store variables of tuple type on the root stack. So, the prelude of a function needs to move the root stack pointer r15 up according to the number
 
-![Figure 7.6...](images/page_147_vector_324.png)
+![Figure 7.6...](images/page_147_vector_cluster_324.png)
 *Figure 7.6*
 
 of variables of tuple type and the conclusion needs to move the root stack pointer back down. Also, the prelude must initialize to 0 this frame’s slots in the root stack to signal to the garbage collector that those slots do not yet contain a valid pointer. Otherwise the garbage collector will interpret the garbage bits in those slots as memory addresses and try to traverse them, causing serious mayhem! Regarding the sharing of registers between different functions, recall from section 3.1 that the registers are divided into two groups, the caller-saved registers and the callee-saved registers. The caller should assume that all the caller-saved registers are overwritten with arbitrary values by the callee. For that reason we recommend in section 3.1 that variables that are live during a function call should not be assigned to caller-saved registers. On the flip side, if the callee wants to use a callee-saved register, the callee must save the contents of those registers on their stack frame and then put them back prior to returning to the caller. For that reason we recommend in section 3.1 that if the register allocator assigns a variable to a callee-saved register, then the prelude of the main function must save that register to the stack and the conclusion of main must restore it. This recommendation now generalizes to all functions. Recall that the base pointer, register rbp, is used as a point of reference within a frame, so that each local variable can be accessed at a fixed offset from the base pointer (section 2.2). Figure 7.6 shows the layout of the caller and callee frames.
@@ -103,18 +103,28 @@ where the body is transformed into body′ by replacing the occurrences of each 
 * The implementation this pass can be postponed to last because you can test the rest of the
   passes on functions with six or fewer parameters.
 
-![Figure 7.7...](images/page_150_vector_238.png)
+![Figure 7.7...](images/page_150_vector_cluster_238.png)
 *Figure 7.7*
 
-![Figure 7.8...](images/page_150_vector_591.png)
+(Var xi) ⇒(Prim 'vector-ref (list tup (Int k)))
+
+For function calls with too many arguments, the limit_functions pass trans- forms them in the following way:
+
+(e0 e1 … en) ⇒ (e0 e1 … e5 (vector e6 … en))
+
+## 7.6 Remove Complex Operands
+
+The primary decisions to make for this pass are whether to classify FunRef and Apply as either atomic or complex expressions. Recall that an atomic expression ends up as an immediate argument of an x86 instruction. Function application translates to a sequence of instructions, so Apply must be classified as a complex expression. On the other hand, the arguments of Apply should be atomic expres- sions. Regarding FunRef, as discussed previously, the function label needs to be converted to an address using the leaq instruction. Thus, even though FunRef seems rather simple, it needs to be classified as a complex expression so that we generate an assignment statement with a left-hand side that can serve as the target of the leaq. The output of this pass, Lmon FunRef (figure 7.7), extends Lmon Alloc (figure 6.11) with FunRef and Apply in the grammar for expressions and augments programs to include a list of function definitions.
+
+![Figure 7.8...](images/page_150_vector_cluster_591.png)
 *Figure 7.8*
 
-![Figure 7.8...](images/page_151_vector_323.png)
+![Figure 7.8...](images/page_151_vector_cluster_323.png)
 *Figure 7.8*
 
 becomes TailCall. We recommend defining a new auxiliary function for processing function definitions. This code is similar to the case for Program in Lmon Tup. The top- level explicate_control function that handles the ProgramDefs form of Lmon FunRef can apply this new function to all function definitions.
 
-![Figure 7.9...](images/page_152_vector_300.png)
+![Figure 7.9...](images/page_152_vector_cluster_300.png)
 *Figure 7.9*
 
 7.8 Select Instructions and the x86Def callq∗Language
@@ -127,7 +137,7 @@ Regarding function definitions, we need to remove the parameters and instead per
 
 (Def f '([x1 : T1] [x2 : T2] … ) Tr info B) ⇒ (Def f '() 'Integer info′ B′)
 
-![Figure 7.10...](images/page_153_vector_335.png)
+![Figure 7.10...](images/page_153_vector_cluster_335.png)
 *Figure 7.10*
 
 The basic blocks B′ are the same as B except that the start block is modified to add the instructions for moving from the argument registers to the parameter variables. So the start block of B shown on the left of the following is changed to the code on the right:
@@ -191,12 +201,12 @@ The output of this pass is x86callq∗, which differs from x86Def callq∗in tha
 
 Exercise 7.1 Expand your compiler to handle LFun as outlined in this chapter. Cre- ate eight new programs that use functions including examples that pass functions and return functions from other functions, recursive functions, functions that cre- ate tuples, and functions that make tail calls. Test your compiler on these new programs and all your previously created test programs.
 
-![Figure 7.11...](images/page_157_vector_354.png)
+![Figure 7.11...](images/page_157_vector_cluster_354.png)
 *Figure 7.11*
 
-![Figure 7.12...](images/page_157_vector_418.png)
+![Figure 7.12...](images/page_157_vector_cluster_418.png)
 *Figure 7.12*
 
-![Figure 7.12...](images/page_158_vector_496.png)
+![Figure 7.12...](images/page_158_vector_cluster_496.png)
 *Figure 7.12*
 
