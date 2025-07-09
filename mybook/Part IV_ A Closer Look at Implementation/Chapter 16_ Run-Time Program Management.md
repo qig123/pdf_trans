@@ -8,7 +8,7 @@ The CLI as a run-time system and virtual machine piler (e.g., type descriptors, 
 
 DESIGN & IMPLEMENTATION
 
-## 16.1 Run-time systems
+16.1 Run-time systems
 
 Many of the most interesting topics in language implementation revolve around the run-time system, and have been covered in previous chapters. To set the stage for virtual machines, we review those topics here.
 
@@ -32,7 +32,7 @@ Dynamic Linking (Section C 15.7). In any system with separate compilation, the c
 
 compiler-generated code (e.g., parameter-passing conventions, synchronization mechanisms, and the layout of run-time stacks). The coupling between compiler and runtime runs deeper than this, however: the CLI programming interface is so complete as to fully hide the underlying hardware.1 Such a runtime is known as a virtual machine. Some virtual machines—notably the Java Virtual Machine (JVM)—are language-speciﬁc. Others, including the CLI, are explicitly intended for use with multiple languages. In conjunction with developmentof their version of the CLI,2 Microsoft introduced the term managed code to referto programs that run on top of a virtual machine. ■ Virtual machines are part of a growing trend toward run-time management and manipulation of programs using compiler technology. This trend is the sub- ject of this chapter. We consider virtual machines in more detail in Section 16.1. To avoid the overhead of emulating a non-native instruction set, many virtual ma- chines use a just-in-time (JIT) compiler to translate their instruction set to that of the underlying hardware. Some may even invoke the compiler after the program is running, to compile newly discovered components or to optimize code based on dynamically discovered properties of the program, its input, or the underly- ing system. Using related technology, some language implementations perform binary translation to retarget programs compiled for one machine to run on an- other machine, or binary rewriting to instrument or optimize programs that have already been compiled for the current machine. We consider these various forms of late binding of machine code in Section 16.2. Finally, in Section 16.3, we con- sider run-time mechanisms to inspect or modify the state of a running program. Such mechanisms are needed by symbolic debuggers and by proﬁling and perfor- mance analysis tools. They may also support reﬂection, which allows a program to inspect and reason about its own state at run time.
 
-## 16.1 Virtual Machines
+16.1 Virtual Machines
 
 A virtual machine (VM) provides a complete programming environment: its ap- plication programming interface (API) includes everything required for correct execution of the programs that run above it. We typically reserve use of the term “VM” to environments whose level of abstraction is comparable to that of a com- puter implemented in hardware. (A Smalltalk or Python interpreter, for example, is usually not described as a virtual machine, because its level of abstraction is too high, but this is a subjective call.) Every virtual machine API includes an instruction set architecture (ISA) in which to express programs. This may be the same as the instruction set of some
 
@@ -44,7 +44,7 @@ existing physical machine, or it may be an artiﬁcial instruction set designed 
 
 and reused. In many cases, stack-based code for an expression will occupy fewer bytes, but specify more instructions, than corresponding code for a register-based machine.
 
-## 16.1.1 The Java Virtual Machine
+16.1.1 The Java Virtual Machine
 
 Development of the language that eventually became Java began in 1990–1991, when Patrick Naughton, James Gosling, and Mike Sheridan of Sun Microsystems began work on a programming system for embedded devices. An early version of this system was up and running in 1992, at which time the language was known as Oak. In 1994, after unsuccessful attempts to break into the market for cable TV set-top boxes, the project was retargeted to web browsers, and the name was changed to Java. The ﬁrst public release of Java occurred in 1995. At that time code in the JVM was entirely interpreted. A JIT compiler was added in 1998, with the release of Java 2. Though not standardized by any of the usual agencies (ANSI, ISO, ECMA), Java is sufﬁciently well deﬁned to admit a wide variety of compilers and JVMs. Oracle’s javac compiler and HotSpot JVM, released as open source in 2006, are by far the most widely used. The Jikes RVM (Research Virtual Machine) is a self-hosting JVM, written in Java itself, and widely used for VM research. Several companies have their own proprietary JVMs and class libraries, designed to provide a competitive edge on particular machines or in particular markets.
 
@@ -154,7 +154,7 @@ DESIGN & IMPLEMENTATION
 
 16.3 Veriﬁcation of class ﬁles and bytecode Java compilers are required to generate code that satisﬁes all the constraints de- ﬁned by the Java class ﬁle speciﬁcation. These include well-formedness of the internal data structures, type safety, deﬁnite assignment, and lack of underﬂow or overﬂow in the operand stack. A JVM, however, has no way to tell whether a given class ﬁle was generated by a correct compiler. To protect itself from potentially incorrect (or even malicious) class ﬁles, a JVM must verify that any code it runs follows all the rules. Under normal operation, this means that cer- tain checks (e.g., data ﬂow for deﬁnite assignment) are performed twice: once by the Java compiler, to provide compile-time error messages to the program- mer, and again by the JVM, to protect against buggy compilers or alternative sources of bytecode. To improve program start-up times and avoid unnecessary work, most JVMs delay the loading (and veriﬁcation) of class ﬁles until some method in that ﬁle is actually called (this is the Java equivalent of the lazy linking described in Section C 15.7.2). In order to effect this delay, the JVM must wait until a call occurs to verify the last few properties of the code at the call site (i.e., that it refers to a method that really exists, and that the caller is allowed to call).
 
-## 16.1.2 The Common Language Infrastructure
+16.1.2 The Common Language Infrastructure
 
 As early as the mid-1980s, Microsoft recognized the need for interoperability among programming languages running on Windows platforms. In a series of
 
@@ -190,11 +190,11 @@ We consider the CLI in more detail on the companion site. Among other things, we
 
 * Explain the validity checks performed on a class ﬁle at load time.
 
-## 16.2 Late Binding of Machine Code
+16.2 Late Binding of Machine Code
 
 In the traditional conception (Example 1.7), compilation is a one-time activity, sharply distinguished from program execution. The compiler produces a tar- get program, typically in machine language, which can subsequently be executed many times for many different inputs. In some environments, however, it makes sense to bring compilation and ex- ecution closer together in time. A just-in-time (JIT) compiler translates a pro- gram from source or intermediate form into machine language immediately be- fore each separate run of the program. We consider JIT compilation further in the ﬁrst subsection below. We also consider language systems that may compile new pieces of a program—or recompile old pieces—after the program begins its exe- cution. In Sections 16.2.2 and 16.2.3, we consider binary translation and binary rewriting systems, which perform compiler-like operations on programs without access to source code. Finally, in Section 16.2.4, we consider systems that may download program components from remote locations. All these systems serve to delay the binding of a program to its machine code.
 
-## 16.2.1 Just-in-Time and Dynamic Compilation
+16.2.1 Just-in-Time and Dynamic Compilation
 
 To promote the Java language and virtual machine, Sun Microsystems coined the slogan “write once, run anywhere”—the idea being that programs distributed as Java bytecode could run on a very wide range of platforms. Source code, of course, is also portable, but byte code is much more compact, and can be inter- preted without additional preprocessing. Unfortunately, interpretation tends to be expensive. Programs running on early Java implementations could be as much as an order of magnitude slower than compiled code in other languages. Just-in- time compilation is, to ﬁrst approximation, a technique to retain the portability of bytecode while improving execution speed. Like both interpretation and dynamic linking (Section 15.7), JIT compilation also beneﬁts from the delayed discovery of program components: program code is not bloated by copies of widely shared li- braries, and new versions of libraries are obtained automatically when a program that needs them is run. Because a JIT system compiles programs immediately prior to execution, it can add signiﬁcant delay to program start-up time. Implementors face a difﬁcult tradeoff: to maximize beneﬁts with respect to interpretation, the compiler should produce good code; to minimize start-up time, it should produce that code very quickly. In general, JIT compilers tend to focus on the simpler forms of target code improvement. Speciﬁcally, they often limit themselves to the so-called local improvements, which operate within individual control-ﬂow constructs. Im- provements at the global (whole method) and interprocedural (whole program) level may be expensive to consider.
 
@@ -313,7 +313,7 @@ Perl can also be directed, via library calls or the perlcc command-line script (
   tions of a lambda expression in C#.
 * Summarize the relationship between compilation and interpretation in Perl.
 
-## 16.2.2 Binary Translation
+16.2.2 Binary Translation
 
 Just-in-time and dynamic compilers assume the availability of source code or of bytecode that retains all of the semantic information of the source. There are times, however, when it can be useful to recompile object code. This process is known as binary translation. It allows already-compiled programs to be run on a machine with a different instruction set architecture. Some readers may recall
 
@@ -356,7 +356,7 @@ The Dynamo dynamic optimizer namo project at HP Labs in the late 1990s. Dynamo w
 
 loop-termination and predicate-checking tests) jump either to other traces or, if appropriate ones have not yet been created, back into Dynamo. By identifying and optimizing traces, Dynamo is able to signiﬁcantly improve locality in the instruction cache, and to apply standard code improvement tech- niques across the boundaries between separately compiled modules and dynam- ically loaded libraries. In Figure 16.3, for example, it will perform register allo- cation jointly across print matchings and the predicate p. It can even perform instruction scheduling across basic blocks if it inserts appropriate compensating code on branches out of the trace. An instruction in block test2, for example, can be moved into the loop footer if a copy is placed on the branch to the right. Traces have proved to be a very powerful technique. They are used not only by dy- namic optimizers, but by dynamic translators like Rosetta as well, and by binary instrumentation tools like Pin (to be discussed in Section 16.2.3). ■
 
-## 16.2.3 Binary Rewriting
+16.2.3 Binary Rewriting
 
 While the goal of a binary optimizer is to improve the performance of a program without altering its behavior, one can also imagine tools designed to change that behavior. Binary rewriting is a general technique to modify existing executable programs, typically to insert instrumentation of some kind. The most common form of instrumentation collects proﬁling information. One might count the number of times that each subroutine is called, for example, or the number of times that each loop iterates (Exercise 16.5). Such counts can be stored in a buffer in memory, and dumped at the end of execution. Alternatively, one might log all memory references. Such a log will generally need to be sent to a ﬁle as the program runs—it will be too long to ﬁt in memory. In addition to proﬁling, binary rewriting can be used to
 
@@ -372,7 +372,7 @@ An Example System: the Pin Binary Rewriter
 
 For modern processors, ATOM has been supplanted by Pin, a binary rewriter de- veloped by researchers at Intel in the early 2000s, and distributed as open source. Designed to be largely machine independent, Pin is available not only for the x86, x86-64, and Itanium, but also for ARM. Pin was directly inspired by ATOM, and has a similar programming interface. In particular, it retains the notions of instrumentation and analysis routines. It also borrows ideas from Dynamo and other dynamic translation tools. Most sig- niﬁcantly, it uses an extended version of Dynamo’s trace mechanism to instru- ment previously unmodiﬁed programs at run time; the on-disk representation of the program never changes. Pin can even be attached to an already-running application, much like the symbolic debuggers we will study in Section 16.3.2. Like Dynamo, Pin begins by writing an initial trace of basic blocks into a run- time trace cache. It ends the trace when it reaches an unconditional branch, a predeﬁned maximum number of conditional branches, or a predeﬁned maxi- mum number of instructions. As it writes, it inserts calls to analysis routines (or in-line versions of short routines) at appropriate places in the code. It also main- tains a mapping between original program addresses and addresses in the trace, so it can modify address-speciﬁc instructions accordingly. Once it has ﬁnished creating a trace, Pin simply jumps to its ﬁrst instruction. Conditional branches that exit the trace are set to link to other traces, or to jump back into Pin. Indirect branches are handled with particular care. Based on run-time pro- ﬁling, Pin maintains a set of predictions for the targets of such branches, sorted most likely ﬁrst. Each prediction consists of an address in the original program (which serves as a key) and an address to jump to in the trace cache. If none of the predictions match, Pin falls back to table lookup in its mapping between original and trace cache addresses. If match is still not found, Pin falls back on an instruction set interpreter, allowing it to handle even dynamically generated code. To reduce the need to save registers when calling analysis routines, and to facil- itate in-line expansion of those routines, Pin performs its own register allocation for the instructions of each trace, using similar allocations whenever possible for traces that link to one another. In multithreaded programs, one register is stat- ically reserved to point to a thread-speciﬁc buffer, where registers can be spilled when necessary. Condition codes are not saved across calls to analysis routines unless their values are needed afterward. For routines that can be called any- where within a basic block, Pin hunts for a location where the cost of saving and restoring is minimized.
 
-## 16.2.4 Mobile Code and Sandboxing
+16.2.4 Mobile Code and Sandboxing
 
 Portability is one of the principal motivations for late binding of machine code. Code that has been compiled for one machine architecture or operating system cannot generally be run on another. Code in a byte code (Java bytecode, CIL) or scripting language (JavaScript, Visual Basic), however, is compact and machine independent: it can easily be moved over the Internet and run on almost any platform. Such mobile code is increasingly common. Every major browser sup- ports JavaScript; most enable the execution of Java applets as well. Visual Basic macros are commonly embedded not only in pages meant for viewing with In- ternet Explorer, but also in Excel, Word, and Outlook documents distributed via email. Cell phone apps may use mobile code to distribute games, productivity tools, and interactive media that run within an existing process. In some sense, mobile code is nothing new: almost all our software comes from other sources; we download it over the Internet or perhaps install it from a DVD. Historically, this usage model has relied on trust (we assume that software from a well-known company will be safe) and on the very explicit and occasional nature of installation. What has changed in recent years is the desire to download code frequently, from potentially untrusted sources, and often without the conscious awareness of the user. Mobile code carries a variety of risks. It may access and reveal conﬁdential information (spyware). It may interfere with normal use of the computer in an- noying ways (adware). It may damage existing programs or data, or save copies of itself that run without the user’s intent (malware of various kinds). In particular
 
@@ -397,11 +397,11 @@ egregious cases, it may use the host machine as a “zombie” from which to lau
 * What is mobile code?
 * What is sandboxing? When and why is it needed? How can it be implemented?
 
-## 16.3 Inspection/Introspection
+16.3 Inspection/Introspection
 
 Symbol table metadata makes it easy for utility programs—just-in-time and dy- namic compilers, optimizers, debuggers, proﬁlers, and binary rewriters—to in- spect a program and reason about its structure and types. We consider debuggers and proﬁlers in particular in Sections 16.3.2 and 16.3.3. There is no reason, how- ever, why the use of metadata should be limited to outside tools, and indeed it is not: Lisp has long allowed a program to reason about its own internal structure and types (this sort of reasoning is sometimes called introspection). Java and C# provide similar functionality through a reﬂection API that allows a program to peruse its own metadata. Reﬂection appears in several other languages as well, including Prolog (Sidebar 12.2) and all the major scripting languages. In a dy- namically typed language such as Lisp, reﬂection is essential: it allows a library or application function to type check its own arguments. In a statically typed language, reﬂection supports a variety of programming idioms that were not tra- ditionally feasible.
 
-## 16.3.1 Reﬂection
+16.3.1 Reﬂection
 
 Trivially, reﬂection can be useful when printing diagnostics. Suppose we are try- EXAMPLE 16.18
 
@@ -535,7 +535,7 @@ User-deﬁned annotations in Java ure 16.5. If we run the program it will print
 
 author: Michael Scott date: July, 2015 revision:
 
-## 0.1 docString: Illustrates the use of annotations ■
+0.1 docString: Illustrates the use of annotations ■
 
 The C# equivalent of Figure 16.5 appears in Figure 16.6. Here user-deﬁned EXAMPLE 16.26
 
@@ -563,7 +563,7 @@ to verify that a program conforms to its speciﬁcations, either statically (whe
 
 Java annotation processors of annotation processing tools. The functionality of this tool was subsequently integrated into Sun’s Java 6 compiler. Its key enabling feature is a set of APIs (in javax.annotation.processing) that allow an annotation processor class to be added to a program in such a way that the compiler will run it at compile time. Using reﬂection, the class can peruse the static structure of the program (including annotations and full information on generics) in much the same way that traditional reﬂection mechanisms allow a running program to peruse its own types and structure. ■
 
-## 16.3.2 Symbolic Debugging
+16.3.2 Symbolic Debugging
 
 Most programmers are familiar with symbolic debuggers: they are built into most programming language interpreters, virtual machines, and integrated program development environments. They are also available as stand-alone tools, of which the best known is probably GNU’s gdb. The adjective symbolic refers to a debug- ger’s understanding of high-level language syntax—the symbols in the original program. Early debuggers understood assembly language only. In a typical debugging session, the user starts a program under the control of the debugger, or attaches the debugger to an already running program. The de- bugger then allows the user to perform two main kinds of operations. One kind inspects or modiﬁes program data; the other controls execution: starting, stop- ping, stepping, and establishing breakpoints and watchpoints. A breakpoint speci- ﬁes that execution should stop if it reaches a particular location in the source code. A watchpoint speciﬁes that execution should stop if a particular variable is read or written. Both breakpoints and watchpoints can typically be made conditional, so that execution stops only if a particular Boolean predicate evaluates to true. Both data and control operations depend critically on symbolic information. A symbolic debugger needs to be able both to parse source language expressions and to relate them to symbols in the original program. In gdb, for example, the com- mand print a.b[i] needs to parse the to-be-printed expression; it also needs to recognize that a and i are in scope at the point where the program is currently stopped, and that b is an array-typed ﬁeld whose index range includes the current value of i. Similarly, the command break 123 if i+j == 3 needs to parse the expression i+j; it also needs to recognize that there is an executable statement at line 123 in the current source ﬁle, and that i and j are in scope at that line. Both data and control operations also depend on the ability to manipulate a program from outside: to stop and start it, and to read and write its data. This control can be implemented in at least three ways. The easiest occurs in inter- preters. Since an interpreter has direct access to the program’s symbol table and is “in the loop” for the execution of every statement, it is a straightforward matter to move back and forth between the program and the debugger, and to give the latter access to the former’s data.
 
@@ -583,7 +583,7 @@ Setting a watchpoint modern processors can be set to simulate a trap whenever th
 
 x, the debugger jumps to its command loop. Otherwise it performs the write on the process’s behalf and asks the kernel to resume it. ■ Unfortunately, the overhead of repeated context switches between the traced process and the debugger dramatically impacts the performance of software watchpoints: slowdowns of 1000× are not uncommon. Debuggers based on dy- namic binary rewriting have the potential to support arbitrary numbers of watch- points at speeds close to those admitted by hardware watchpoint registers. The idea is straightforward: the traced program runs as partial execution traces in a trace cache managed by the debugger. As it generates each trace, the debugger adds instructions at every store, in-line, to check whether it writes to x’s address and, if so, to jump back to the command loop.
 
-## 16.3.3 Performance Analysis
+16.3.3 Performance Analysis
 
 Before placing a debugged program into production use, one often wants to understand—and if possible improve—its performance. Tools to proﬁle and an- alyze programs are both numerous and varied—far too much so to even survey them here. We focus therefore on the run-time technologies, described in this chapter, that feature prominently in many analysis tools. Perhaps the simplest way to measure, at least approximately, the amount of EXAMPLE 16.35
 
@@ -622,19 +622,19 @@ Haswell performance counters ample, has built-in counters for clock ticks (both 
   mance counters. Explain why statistical sampling and instrumentation might
   proﬁtably be used together.
 
-## 16.4 Summary and Concluding Remarks
+16.4 Summary and Concluding Remarks
 
 We began this chapter by deﬁning a run-time system as the set of libraries, es- sential to many language implementations, that depend on knowledge of the compiler or the programs it produces. We distinguished these from “ordinary” libraries, which require only the arguments they are passed. We noted that several topics covered elsewhere in the book, including garbage collection, variable-length argument lists, exception and event handling, corou- tines and threads, remote procedure calls, transactional memory, and dynamic linking are often considered the purview of the run-time system. We then turned to virtual machines, focusing in particular on the Java Virtual Machine (JVM) and the Common Language Infrastructure (CLI). Under the general heading of late binding of machine code, we considered just-in-time and dynamic compila- tion, binary translation and rewriting, and mobile code and sandboxing. Finally, under the general heading of inspection and introspection, we considered reﬂec- tion mechanisms, symbolic debugging, and performance analysis. Through all these topics we have seen a steady increase in complexity over time. Early Basic interpreters parsed and executed one source statement at a time. Modern interpreters ﬁrst translate their source into a syntax tree. Early Java im- plementations, while still interpreter-based, relied on a separate source-to-byte- code compiler. Modern Java implementations, as well as implementations of the CLI, enhance performance with a just-in-time compiler. For programs that ex- tend themselves at run time, the CLI allows the source-to-byte-code compiler to be invoked dynamically as well, as it is in Common Lisp. Recent systems may pro- ﬁle and reoptimize already-running programs. Similar technology may allow sep- arate tools to translate from one machine language to another, or to instrument code for testing, debugging, security, performance analysis, model checking, or
 
 architectural simulation. The CLI provides extensive support for cross-language interoperability. Many of these developments have served to blur the line between the compiler and the run-time system, and between compile-time and run-time operations. It seems safe to predict that these trends will continue. More and more, programs will come to be seen not as static artifacts, but as dynamic collections of mal- leable components, with rich semantic structure amenable to formal analysis and reconﬁguration.
 
-## 16.5 Exercises
+16.5 Exercises
 
 16.1 Write the formula of Example 15.4 as an expression tree (a syntax tree in which each operator is represented by an internal node whose children are its operands). Convert your tree to an expression DAG by merging identical nodes. Comment on the redundancy in the tree and how it relates to Figure 15.4.
 
 16.2 We assumed in Example 15.4 and Figure 15.4 that a, b, c, and s were all among the ﬁrst few local variables of the current method, and could be pushed onto or popped from the operand stack with a single one-byte instruction. Suppose that this is not the case: that is, that the push and pop instructions require three bytes each. How many bytes will now be required for the code on the left side of Figure 15.4? Most stack-based languages, Java bytecode and CIL among them, pro- vide a swap instruction that reverses the order of the top two values on the stack, and a duplicate instruction that pushes a second copy of the value currently at top of stack. Show how to use swap and duplicate to elimi- nate the pop and the pushes of s in the left side of Figure 15.4. Feel free to exploit the associativity of multiplication. How many instructions is your new sequence? How many bytes?
 
-## 16.3 The speculative optimization of Example 16.5 could in principle be stati- cally performed. Explain why a dynamic compiler might be able to do it more effectively.
+16.3 The speculative optimization of Example 16.5 could in principle be stati- cally performed. Explain why a dynamic compiler might be able to do it more effectively.
 
 16.4 Perhaps the most common form of run-time instrumentation counts the the number of times that each basic block is executed. Since basic blocks are short, adding a load-increment-store instruction sequence to each block can have a signiﬁcant impact on run time. We can improve performance by noting that certain blocks imply the execution of other blocks. In an if... then ... else construct, for example, execution of either the then part or the else part implies execution of the conditional test. If we’re smart, we won’t actually have to instrument the test. Describe a general technique to minimize the number of blocks that must be instrumented to allow a post-processor to obtain an accurate
 
@@ -646,7 +646,7 @@ count for each block. (This is a difﬁcult problem. For hints, see the paper by
 
 16.7 Extend the code of Figure 16.4 to print information about (a) ﬁelds (b) constructors (c) nested classes (d) implemented interfaces (e) ancestor classes, and their methods, ﬁelds, and constructors (f) exceptions thrown by methods (g) generic type parameters
 
-## 16.8 Repeat the previous exercise in C#. Add information about parameter names and generic instances.
+16.8 Repeat the previous exercise in C#. Add information about parameter names and generic instances.
 
 16.9 Write an interactive tool that accepts keyboard commands to load speci- ﬁed class ﬁles, create instances of their classes, invoke their methods, and read and write their ﬁelds. Feel free to limit keyboard input to values of built-in types, and to work only in the global scope. Based on your expe- rience, comment on the feasibility of writing a command-line interpreter for Java, similar to those commonly used for Lisp, Prolog, or the various scripting languages.
 
@@ -656,7 +656,7 @@ count for each block. (This is a difﬁcult problem. For hints, see the paper by
 
 This method should call the annotated methods with the speciﬁed param- eters, test the return values, and report any discrepancies. It should also call the test methods of any nested classes. Be sure to include a mech- anism to invoke the test method of every top-level class. For an extra challenge, devise a way to specify multiple tests of a single method, and a way to test exceptions thrown, in addition to values returned.
 
-## 16.12 C++ provides a typeid operator that can be used to query the concrete type of a pointer or reference variable:
+16.12 C++ provides a typeid operator that can be used to query the concrete type of a pointer or reference variable:
 
 if (typeid(*p) == typeid(my_derived_type)) ...
 
@@ -666,7 +666,7 @@ Values returned by typeid can be compared for equality but not assigned. They al
 
 16.14–16.17 In More Depth.
 
-## 16.6 Explorations
+16.6 Explorations
 
 16.18 Learn about the Java security policy mechanism. What aspects of program behavior can the programmer enable/proscribe? How are such policies enforced? What is the relationship (if any) between security policies and the veriﬁcation process described in Sidebar 16.3?
 

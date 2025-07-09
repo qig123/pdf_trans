@@ -6,6 +6,7 @@ import shutil
 from urllib.parse import quote
 from datetime import datetime
 
+# ==================== 配置加载（保持不变） ====================
 def load_config(path="config.json"):
     """加载配置文件"""
     try:
@@ -13,12 +14,29 @@ def load_config(path="config.json"):
             return json.load(f)
     except FileNotFoundError:
         print(f"错误: 配置文件 '{path}' 未找到。请创建它。")
-        exit() # 或者返回一个默认配置
+        print("将使用默认配置。")
+        return {
+            "margins": {"header": 0.08, "footer": 0.08},
+            "regex": {
+                "title": "^\\s*((\\d+\\.\\d+[\\d\\.]*)|([A-Z]\\.[\\d\\.]*))\\s+[A-Za-z].*",
+                "caption": "^(Figure|Fig\\.?|Table|Chart|图|表)\\s+[\\d\\.\\-A-Za-z]+",
+                "keyword_heading": "^\\s*(Introduction|Conclusion|Summary|Abstract|References|Appendix)\\s*$"
+            },
+            "fonts": {"monospace_keywords": ["mono", "courier"]}
+        }
     except json.JSONDecodeError:
-        print(f"错误: 配置文件 '{path}' 格式不正确。")
-        exit()
+        print(f"错误: 配置文件 '{path}' 格式不正确。将使用默认配置。")
+        # 返回一个默认配置以防万一
+        return {
+            "margins": {"header": 0.08, "footer": 0.08},
+            "regex": {
+                "title": "^\\s*((\\d+\\.\\d+[\\d\\.]*)|([A-Z]\\.[\\d\\.]*))\\s+[A-Za-z].*",
+                "caption": "^(Figure|Fig\\.?|Table|Chart|图|表)\\s+[\\d\\.\\-A-Za-z]+",
+                "keyword_heading": "^\\s*(Introduction|Conclusion|Summary|Abstract|References|Appendix)\\s*$"
+            },
+            "fonts": {"monospace_keywords": ["mono", "courier"]}
+        }
 
-# 在主函数或脚本开始时加载配置
 CONFIG = load_config()
 
 # --- 辅助函数 ---
@@ -30,29 +48,23 @@ def clean_filename(name):
     name = name.strip(' .')
     return (name[:100] if len(name) > 100 else name) or "untitled"
 
-# ==================== ↓↓↓ 这里是修改的部分 ↓↓↓ ====================
-
-# REGEX for matching numbered heading formats. Now this is our PRIMARY heading detector.
-# --- 修改说明 ---
-# 旧版的问题: r'^\s*((\d+(\.\d+)*\.?)|...)' 会错误地匹配 "1. item", "2. item" 这样的列表。
-# 新版的核心改动: 使用 \d+\.\d+ 来要求至少有两级数字（如 "3.1"），从而避免与简单列表冲突。
-# [\d\.]* 允许匹配更深的层级如 "3.1.2"。
+# --- 正则表达式定义 ---
 TITLE_REGEX = re.compile(CONFIG['regex']['title'])
 CAPTION_REGEX = re.compile(CONFIG['regex']['caption'], flags=re.IGNORECASE)
+KEYWORD_HEADING_REGEX = re.compile(CONFIG['regex']['keyword_heading'], flags=re.IGNORECASE)
 
-# REGEX for un-numbered, but likely headings (like "Introduction", "Conclusion")
-KEYWORD_HEADING_REGEX = re.compile(r'^\s*(Introduction|Conclusion|Summary|Abstract|References|Appendix)\s*$', flags=re.IGNORECASE)
-
-header_margin = CONFIG['margins']['header']
-footer_margin = CONFIG['margins']['footer']
-def is_header_or_footer(block_bbox, page_rect, header_margin=0.08, footer_margin=0.08):
+# --- 辅助函数（保持不变） ---
+def is_header_or_footer(block_bbox, page_rect):
     """判断文本块是否位于页眉或页脚区域"""
+    header_margin = CONFIG['margins']['header']
+    footer_margin = CONFIG['margins']['footer']
     header_boundary = page_rect.y0 + page_rect.height * header_margin
     footer_boundary = page_rect.y1 - page_rect.height * footer_margin
     return block_bbox.y1 < header_boundary or block_bbox.y0 > footer_boundary
 
 def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, processed_blocks):
     """为标题查找对应的图像"""
+    # 此函数逻辑不变，因此省略以保持简洁...
     if caption_block_idx > 0:
         prev_block = blocks[caption_block_idx - 1]
         if prev_block["type"] == 1:
@@ -77,13 +89,14 @@ def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, proc
         return {"filename": filename, "bbox": search_area}
     return None
 
-# --- 全新简化的Markdown格式推断函数 ---
-def get_markdown_from_block(block):
+# ==================== ↓↓↓ 核心修改 1: 更新 get_markdown_from_block ↓↓↓ ====================
+def get_markdown_from_block(block, true_headings=None):
     """
-    根据文本块的内容模式推断其Markdown格式。
-    新版: 通过正则预分割，解决内嵌标题不换行的问题。
+    根据文本块的内容模式和“真标题白名单”推断其Markdown格式。
     """
-    # ... (此函数无需变动)
+    if true_headings is None:
+        true_headings = set()
+        
     if block['type'] != 0 or not block.get('lines'):
         return ""
 
@@ -91,9 +104,11 @@ def get_markdown_from_block(block):
     if not full_text.strip():
         return ""
 
+    # 预分割逻辑可以保留，因为它有助于将物理上在一个块、逻辑上是多个段落的内容分开
+    # 例如：一个段落紧跟着一个标题，但 PyMuPDF 把它们放进同一个块里
     split_marker = "<\r\n_SPLIT_HERE_\r\n>"
     processed_text = re.sub(
-        r'(?m)(^|(?<=\n))(\s*((\d+\.\d+[\d\.]*)|([A-Z]\.[\d\.]*))\s+[A-Za-z].*)',
+        r'(?m)(^|(?<=\n))(' + CONFIG['regex']['title'] + r')', # 使用配置中的正则
         lambda m: f"{split_marker}{m.group(2)}",
         full_text
     )
@@ -106,10 +121,32 @@ def get_markdown_from_block(block):
         if not sub_text:
             continue
 
-        if (TITLE_REGEX.match(sub_text) and len(sub_text) < 200) or KEYWORD_HEADING_REGEX.match(sub_text):
+        # 1. 最高优先级：检查是否是“真标题”（来自书签白名单）
+        # 为了更鲁棒的匹配，我们检查子块文本是否包含任何一个白名单标题
+        # 清理子块文本，方式和清理书签标题时一样
+        # (^\s*[\d\.\sA-Z]+[a-z]?) 这个正则可以去掉 "3.2.1", "A.1." 等编号
+        clean_sub_text = re.sub(r'^\s*[\d\.\sA-Z]+[a-z]?\s*', '', sub_text).strip()
+        
+        is_true_heading = False
+        if clean_sub_text:
+            for true_heading in true_headings:
+                # 使用 'in' 进行部分匹配，以增加鲁棒性
+                if true_heading in clean_sub_text and len(clean_sub_text) < (len(true_heading) + 20): # 避免过长的无关内容误匹配
+                    is_true_heading = True
+                    break
+        
+        if is_true_heading:
             output_parts.append(f"## {sub_text.replace(chr(10), ' ')}\n\n")
             continue
 
+        # 2. 次高优先级：检查是否是无编号的关键词标题
+        if KEYWORD_HEADING_REGEX.match(sub_text):
+            output_parts.append(f"## {sub_text.replace(chr(10), ' ')}\n\n")
+            continue
+
+        # 3. 不再使用 TITLE_REGEX 进行通用标题判断，从根本上避免误判
+
+        # 4. 后续逻辑（代码块、列表、段落）保持不变
         mono_fonts = CONFIG['fonts']['monospace_keywords']
         is_monospace_block = all(
             any(keyword in span['font'].lower() for keyword in mono_fonts)
@@ -122,28 +159,28 @@ def get_markdown_from_block(block):
         list_match = re.match(r'^\s*([•*-]|\d+\.|[a-zA-Z]\))\s+', sub_text)
         if list_match:
             lines = sub_text.split('\n')
-            # 将所有行都作为列表项处理，以支持多行列表项
             output_lines = []
-            for i, line in enumerate(lines):
+            for line in lines:
+                clean_line = line.strip()
+                if not clean_line: continue
                 # 检查每一行是否是新的列表项
-                if re.match(r'^\s*([•*-]|\d+\.|[a-zA-Z]\))\s+', line):
-                    # 是新的列表项，使用 *
-                    output_lines.append(re.sub(r'^\s*([•*-]|\d+\.|[a-zA-Z]\))\s+', '* ', line))
+                if re.match(r'^\s*([•*-]|\d+\.|[a-zA-Z]\))\s+', clean_line):
+                    output_lines.append(re.sub(r'^\s*([•*-]|\d+\.|[a-zA-Z]\))\s+', '* ', clean_line))
                 else:
-                    # 不是新的列表项，作为上一项的延续，进行缩进
-                    output_lines.append("  " + line.strip())
+                    output_lines.append("  " + clean_line)
             output_parts.append("\n".join(output_lines) + "\n\n")
             continue
             
         output_parts.append(sub_text.replace('\n', ' ') + "\n\n")
 
     return "".join(output_parts)
+# ==================== ↑↑↑ 核心修改 1 结束 ↑↑↑ ====================
 
 
 # --- 主处理函数 (已更新) ---
 def run_extraction_stable(pdf_path, output_dir="mybook"):
     """
-    处理PDF文件。使用书签作为H1标题，使用内容模式匹配作为H2标题。
+    处理PDF文件。使用书签作为真标题的“白名单”来提高准确性。
     """
     if os.path.exists(output_dir):
         print(f"发现旧输出目录 '{output_dir}'。正在删除...")
@@ -157,12 +194,12 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
         print("错误: 未找到书签。")
         return
 
-    toc = [item for item in original_toc if item[0] <= 2]
+    # 我们仍然只处理前两级书签作为文件/章节结构
+    toc = [item for item in original_toc if item[0] <= CONFIG.get("extraction_options", {}).get("max_toc_level", 2)]
     print(f"处理 {len(toc)} 个书签(从原始 {len(original_toc)} 个过滤到最多2级)。")
 
     markdown_files_list = []
     level_paths = {}
-    CAPTION_REGEX = re.compile(r'^(Figure|Fig\.?|Table|Chart|图|表)\s+[\d\.\-A-Za-z]+', flags=re.IGNORECASE)
 
     for i, item in enumerate(toc):
         level, title, start_page = item
@@ -176,6 +213,24 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
             if next_item[0] <= level:
                 end_page = next_item[2]
                 break
+        
+        # ==================== ↓↓↓ 核心修改 2: 构建真标题白名单 ↓↓↓ ====================
+        true_heading_whitelist = set()
+        for j in range(i + 1, len(original_toc)):
+            sub_item = original_toc[j]
+            if sub_item[0] > level: # 是子书签
+                if sub_item[2] >= end_page: # 超出当前章节范围
+                    break
+                # 清理书签标题，去掉编号，得到纯文本标题
+                clean_title = re.sub(r'^\s*[\d\.\sA-Z]+[a-z]?\s*', '', sub_item[1]).strip()
+                if len(clean_title) > 5: # 过滤掉太短或空的标题
+                    true_heading_whitelist.add(clean_title)
+            elif sub_item[0] <= level: # 遇到同级或更高级别的书签，说明子书签结束了
+                break
+        
+        if true_heading_whitelist:
+             print(f"    - 本章节真标题白名单包含: {list(true_heading_whitelist)[:3]}...")
+        # ==================== ↑↑↑ 核心修改 2 结束 ↑↑↑ ====================
 
         if start_page >= end_page:
             if is_parent_node:
@@ -197,17 +252,12 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
         current_image_dir = os.path.join(md_file_containing_dir, "images")
         os.makedirs(current_image_dir, exist_ok=True)
         
-        # --- 恢复使用书签作为H1标题 ---
         chapter_content = f"# {title}\n\n"
         processed_img_xrefs = set()
 
         for page_num in range(start_page - 1, end_page - 1):
             if page_num >= doc.page_count: continue
             page = doc.load_page(page_num)
-            
-            # --- 移除字体分析 ---
-            # body_size, heading_map = analyze_page_fonts(page)
-            
             page_data = page.get_text("dict")
             blocks = sorted(page_data["blocks"], key=lambda b: (b["bbox"][1], b["bbox"][0]))
             
@@ -237,13 +287,15 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
                 if is_header_or_footer(block_bbox, page.rect): continue
                 if any(area.intersects(block_bbox) for area in ignored_text_areas): continue
 
-                # --- 调用新的、简化的格式化函数 ---
-                markdown_text = get_markdown_from_block(b)
+                # ==================== ↓↓↓ 核心修改 3: 调用时传入白名单 ↓↓↓ ====================
+                markdown_text = get_markdown_from_block(b, true_headings=true_heading_whitelist)
+                # ==================== ↑↑↑ 核心修改 3 结束 ↑↑↑ ====================
+                
                 if markdown_text:
                     page_content_parts[idx] = markdown_text
                 processed_block_indices.add(idx)
 
-             # 3. 处理未被图注关联的图片
+             # 3. 处理未被图注关联的图片 (逻辑不变)
             for img in page.get_images(full=True):
                 xref = img[0]
                 if xref not in processed_img_xrefs:
@@ -271,13 +323,12 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
                 chapter_content += page_content_parts[idx]
 
         # 写入Markdown文件
-        # 清理多余的换行符，但保留代码块中的
         chapter_content = re.sub(r'\n{3,}', '\n\n', chapter_content)
         with open(output_filepath, "w", encoding="utf-8") as f: f.write(chapter_content)
         relative_md_path = os.path.relpath(output_filepath, output_dir).replace(os.sep, '/')
         markdown_files_list.append(relative_md_path)
 
-    # 生成书籍元数据
+    # 生成书籍元数据 (逻辑不变)
     metadata = doc.metadata
     book_title = metadata.get('title') or os.path.splitext(os.path.basename(pdf_path))[0]
     book_authors = [metadata.get('author')] if metadata.get('author') else ["未知作者"]
@@ -296,7 +347,6 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
 if __name__ == "__main__":
     pdf_file = "your_file.pdf"
     if os.path.exists(pdf_file):
-
         run_extraction_stable(pdf_file)
     else:
         print(f"错误: 文件 '{pdf_file}' 未找到。")

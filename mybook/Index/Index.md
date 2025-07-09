@@ -1207,7 +1207,7 @@ compare_and_swap,690 endian-ness, C 64 memory model, 661 microprogramming, C 76 
 
 multiprocessors, 633
 
-## T. J. Watson Research Center, 368;
+T. J. Watson Research Center, 368;
 
 C 105 IBM CP/CMS, 811 Ichbiah, Jean, 859 Icon, 7, 864
 

@@ -462,7 +462,7 @@ Programming Language. Cambridge University Press, Cambridge, England, 1991.
 
 [JW91] Kathleen Jensen and Niklaus Wirth. Pascal User Manual and Report: ISO Pascal Standard. Springer-Verlag, New York, NY, fourth edition, 1991. Revised by Andrew
 
-## B. Mickel and James F. Miner. ISBN 0-387-97649-3.
+B. Mickel and James F. Miner. ISBN 0-387-97649-3.
 
 [Int14b] International Organization for Standardization, Geneva, Switzerland. Information Technology—Program- ming Languages—C++, 2014. ISO/IEC 14882:2014.
 
@@ -474,7 +474,7 @@ Programming Language. Cambridge University Press, Cambridge, England, 1991.
 
 [KCR+98] Richard Kelsey, William Clinger, Jonathan Rees,
 
-## H. Abelson, R. K. Dybvig, C. T. Haynes, G. J. Rozas, N. I. Adams IV, D. P. Friedman, E. Kohlbecker, G. L. Steele, Jr., D. H. Bartley, R. Halstead, D. Oxley, G. J. Sussman,
+H. Abelson, R. K. Dybvig, C. T. Haynes, G. J. Rozas, N. I. Adams IV, D. P. Friedman, E. Kohlbecker, G. L. Steele, Jr., D. H. Bartley, R. Halstead, D. Oxley, G. J. Sussman,
 
 G. Brooks, C. Hanson, K. M. Pitman, and M. Wand. Revised 5 report on the algorithmic language Scheme. Higher-Order and Symbolic Computation, 11(1):7–105, 1998. Edited by Kelsey, Clinger, and Rees. Available at schemers.org/Documents/Standards/R5RS/.
 
@@ -510,9 +510,9 @@ G. Brooks, C. Hanson, K. M. Pitman, and M. Wand. Revised 5 report on the algorit
 
 [KMP77] Donald
 
-## E. Knuth, James
+E. Knuth, James
 
-## H. Morris, and Vaughan R. Pratt. Fast pattern matching in strings. SIAM Journal of Computing, 6(2):323–350, June 1977.
+H. Morris, and Vaughan R. Pratt. Fast pattern matching in strings. SIAM Journal of Computing, 6(2):323–350, June 1977.
 
 [LCM+05] Chi-Keung Luk, Robert Cohn, Robert Muth, Harish Patil, Artur Klauser, Geoff Lowney, Steven Wal- lace, Vijay Janapa Reddi, and Kim Hazelwood. Pin: Build- ing customized program analysis tools with dynamic in- strumentation. In Proceedings of the SIGPLAN 2005 Con- ference on Programming Language Design and Implemen- tation, pages 190–200, Chicago, IL, June 2005.
 
@@ -540,7 +540,7 @@ G. Brooks, C. Hanson, K. M. Pitman, and M. Wand. Revised 5 report on the algorit
 
 [LHL+77] Butler W. Lampson, J. J. Horning, R. L. London,
 
-## J. G. Mitchell, and G. J. Popek. Report on the program- ming language Euclid. ACM SIGPLAN Notices, 12(2):1– 79, February 1977.
+J. G. Mitchell, and G. J. Popek. Report on the program- ming language Euclid. ACM SIGPLAN Notices, 12(2):1– 79, February 1977.
 
 [Krá73] Jaroslav Král. The equivalence of modes and the equivalence of ﬁnite automata. ALGOL Bulletin, 35:34– 35, March 1973.
 
@@ -588,7 +588,7 @@ softwarepreservation.org/projects/LISP/book/LISP% 201.5%20Programmers%20Manual.p
 
 [LSAS77] Barbara Liskov, Alan Snyder, Russel Atkinson, and
 
-## J. Craig Schaffert. Abstraction mechanisms in CLU. Com- munications of the ACM, 20(8):564–576, August 1977.
+J. Craig Schaffert. Abstraction mechanisms in CLU. Com- munications of the ACM, 20(8):564–576, August 1977.
 
 [LYBB14] Tim Lindholm, Frank Yellin, Gilad Bracha, and Alex Buckley. The Java Virtual Machine Speciﬁcation. Addison-Wesley Professional, Java SE 8 edition, 2014. Available at docs.oracle.com/javase/specs/.
 
@@ -646,7 +646,7 @@ Second ACM Symposium on Principles of Programming Languages, pages 378–391, Lo
 
 [NBB+63] Peter Naur (ed.), J. W. Backus, F. L. Bauer,
 
-## J. Green, C. Katz, J. McCarthy, A. J. Perlis, H. Rutishauser,
+J. Green, C. Katz, J. McCarthy, A. J. Perlis, H. Rutishauser,
 
 K. Samelson, B. Vauquois, J. H. Wegstein, A. van Wijn- gaarden, and M. Woodger. Revised report on the algorith- mic language ALGOL 60. Communications of the ACM, 6(1):1–23, January 1963. Original version appeared in the May 1960 issue.
 
@@ -694,7 +694,7 @@ K. Samelson, B. Vauquois, J. H. Wegstein, A. van Wijn- gaarden, and M. Woodger. 
 
 [RF93] B. Ramakrishna Rau and Joseph
 
-## A. Fisher. Instruction-level parallel processing: History, overview, and perspective. Journal of Supercomputing, 7(1/2):9–50, May 1993.
+A. Fisher. Instruction-level parallel processing: History, overview, and perspective. Journal of Supercomputing, 7(1/2):9–50, May 1993.
 
 [PD80] David A. Patterson and David R. Ditzel. The case for the reduced instruction set computer. ACM SIGARCH Computer Architecture News, 8(6):25–33, October 1980.
 
@@ -930,7 +930,7 @@ C. H. A. Koster, M. Sintzoff, C. H. Lindsey, L. G. L T. Meertens, and R. G. Fisk
 
 [WSH77] Jim Welsh,
 
-## W. J. Sneeringer, and Charles Antony Richard Hoare. Ambiguities and insecurities in Pascal. Software—Practice and Experience, 7(6):685–696, November–December 1977.
+W. J. Sneeringer, and Charles Antony Richard Hoare. Ambiguities and insecurities in Pascal. Software—Practice and Experience, 7(6):685–696, November–December 1977.
 
 [ZRA+08] Qin Zhao, Rodric Rabbah, Saman Amarasinghe, Larry Rudolph, and Weng-Fai Wong. How to do a million watchpoints: Efﬁcient debugging using dynamic instru- mentation. In Proceedings of the Seventeenth International Conference on Compiler Construction, pages 147–162, Bu- dapest, Hungary, March 2008.
 

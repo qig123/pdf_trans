@@ -35,7 +35,7 @@ dition turns out to be false, execution branches to a handler that executes in p
 
 Though the syntactic and semantic details vary from language to language, these categories cover all of the control-ﬂow constructs and mechanisms found in most programming languages. A programmer who thinks in terms of these categories, rather than the syntax of some particular language, will ﬁnd it easy to learn new languages, evaluate the tradeoffs among languages, and design and reason about algorithms in a language-independent way. Subroutines are the subject of Chapter 9. Concurrency is the subject of Chap- ter 13. Exception handling and speculation are discussed in those chapters as well, in Sections 9.4 and 13.4.4. The bulk of the current chapter (Sections 6.3 through 6.7) is devoted to the ﬁve remaining categories. We begin in Section 6.1 by considering the evaluation of expressions—the building blocks on which all higher-level ordering is based. We consider the syntactic form of expressions, the precedence and associativity of operators, the order of evaluation of operands, and the semantics of the assignment statement. We focus in particular on the distinction between variables that hold a value and variables that hold a reference to a value; this distinction will play an important role many times in future chap- ters. In Section 6.2 we consider the difference between structured and unstructured (goto-based) control ﬂow. The relative importance of different categories of control ﬂow varies signif- icantly among the different classes of programming languages. Sequencing is central to imperative (von Neumann and object-oriented) languages, but plays a relatively minor role in functional languages, which emphasize the evaluation of expressions, de-emphasizing or eliminating statements (e.g., assignments) that affect program output in any way other than through the return of a value. Sim- ilarly, functional languages make heavy use of recursion, while imperative lan- guages tend to emphasize iteration. Logic languages tend to de-emphasize or hide the issue of control ﬂow entirely: The programmer simply speciﬁes a set of infer- ence rules; the language implementation must ﬁnd an order in which to apply those rules that will allow it to deduce values that satisfy some desired property.
 
-## 6.1 Expression Evaluation
+6.1 Expression Evaluation
 
 An expression generally consists of either a simple object (e.g., a literal constant, or a named variable or constant) or an operator or function applied to a col-
 
@@ -90,7 +90,7 @@ a = b != 0 ? a/b : 0; ■
 
 Postﬁx notation is used for most functions in Postscript, Forth, the input lan- guage of certain hand-held calculators, and the intermediate code of some com- pilers. Postﬁx appears in a few places in other languages as well. Examples in- clude the pointer dereferencing operator (^) of Pascal and the post-increment and decrement operators (++ and --) of C and its descendants.
 
-## 6.1.1 Precedence and Associativity
+6.1.1 Precedence and Associativity
 
 Most languages provide a rich set of built-in arithmetic and logical operators. When written in inﬁx notation, without parentheses, these operators lead to am- biguity as to what is an operand of what. In Fortran, for example, which uses ** EXAMPLE 6.7
 
@@ -133,7 +133,7 @@ infixr 8 ^
 
 Here infixr means “right associative inﬁx operator,” so 4 ^ 3 ^ 2 groups as 4 ^ (3 ^ 2) rather than as (4 ^ 3) ^ 2. The similar infixl and infix dec- larations specify left associativity and nonassociativity, respectively. Precedence levels run from 0 (loosest) to 9 (tightest). If no “ﬁxity” declaration is provided, newly deﬁned operators are left associative by default, and group at level 9. Func- tion application (speciﬁed simply via juxtaposition in Haskell) groups tightest of all—effectively at level 10. ■ Because the rules for precedence and associativity vary so much from one lan- guage to another, a programmer who works in several languages is wise to make liberal use of parentheses.
 
-## 6.1.2 Assignments
+6.1.2 Assignments
 
 In a purely functional language, expressions are the building blocks of programs, and computation consists entirely of expression evaluation. The effect of any individual expression on the overall computation is limited to the value that ex- pression provides to its surrounding context. Complex computations employ re- cursion to generate a potentially unbounded number of values, expressions, and contexts. In an imperative language, by contrast, computation typically consists of an ordered series of changes to the values of variables in memory. Assignments pro- vide the principal means by which to make the changes. Each assignment takes a pair of arguments: a value and a reference to a variable into which the value should be placed. In general, a programming language construct is said to have a side effect if it inﬂuences subsequent computation (and ultimately program output) in any way other than by returning a value for use in the surrounding context. Assignment is perhaps the most fundamental side effect: while the evaluation of an assignment may sometimes yield a value, what we really care about is the fact that it changes the value of a variable, thereby inﬂuencing the result of any later computation in which the variable appears. Many imperative languages distinguish between expressions, which always pro- duce a value, and may or may not have side effects, and statements, which are ex- ecuted solely for their side effects, and return no useful value. Given the centrality of assignment, imperative programming is sometimes described as “computing by means of side effects.” At the opposite extreme, purely functional languages have no side effects. As a result, the value of an expression in such a language depends only on the referenc- ing environment in which the expression is evaluated, not on the time at which
 
@@ -378,7 +378,7 @@ This notation eliminates the asymmetry (nonorthogonality) of functions in most p
   rather than with a regular assignment in which the variable appears on both
   the left- and right-hand sides?
 
-## 6.1.3 Initialization
+6.1.3 Initialization
 
 Because they already provide a construct (the assignment statement) to set the value of a variable, imperative languages do not always provide a means of spec- ifying an initial value for a variable in its declaration. There are several reasons, however, why such initial values may be useful:
 
@@ -427,7 +427,7 @@ Constructors
 
 Many object-oriented languages (Java and C# among them) allow the program- mer to deﬁne types for which initialization of dynamically allocated variables occurs automatically, even when no initial value is speciﬁed in the declaration. Some—notably C++—also distinguish carefully between initialization and as- signment. Initialization is interpreted as a call to a constructor function for the variable’s type, with the initial value as an argument. In the absence of coercion, assignment is interpreted as a call to the type’s assignment operator or, if none has been deﬁned, as a simple bit-wise copy of the value on the assignment’s right- hand side. The distinction between initialization and assignment is particularly important for user-deﬁned abstract data types that perform their own storage management. A typical example occurs in variable-length character strings. An assignment to such a string must generally deallocate the space consumed by the old value of the string before allocating space for the new value. An initialization of the string must simply allocate space. Initialization with a nontrivial value is generally cheaper than default initialization followed by assignment, because it avoids deallocation of the space allocated for the default value. We will return to this issue in Section 10.3.2. Neither Java nor C# distinguishes between initialization and assignment: an initial value can be given in a declaration, but this is the same as an immedi- ate subsequent assignment. Java uses a reference model for all variables of user- deﬁned object types, and provides for automatic storage reclamation, so assign- ment never copies values. C# allows the programmer to specify a value model when desired (in which case assignment does copy values), but otherwise mirrors Java.
 
-## 6.1.4 Ordering within Expressions
+6.1.4 Ordering within Expressions
 
 While precedence and associativity rules deﬁne the order in which binary inﬁx operators are applied within an expression, they do not specify the order in which the operands of a given operator are evaluated. For example, in the expression EXAMPLE 6.28
 
@@ -502,9 +502,9 @@ Overﬂow and arithmetic “identities” and c are all integers between two bil
 
 Reordering and numerical stability bers devote one bit to the sign, eight bits to the exponent (power of two), and 23 bits to the mantissa. Under this representation, a + b is guaranteed to result in a loss of information if | log2(a/b)| > 23. Thus if b = -c, then a + b + c may appear to be zero, instead of a, if the magnitude of a is small, while the magnitudes of b and c are large. In a similar vein, a number like 0.1 cannot be represented precisely, because its binary representation is a “repeating decimal”:
 
-## 0.0001001001.... For certain values of x, (0.1 + x) * 10.0 and 1.0 + (x * 10.0) can differ by as much as 25%, even when 0.1 and x are of the same mag- nitude. ■
+0.0001001001.... For certain values of x, (0.1 + x) * 10.0 and 1.0 + (x * 10.0) can differ by as much as 25%, even when 0.1 and x are of the same mag- nitude. ■
 
-## 6.1.5 Short-Circuit Evaluation
+6.1.5 Short-Circuit Evaluation
 
 Boolean expressions provide a special and important opportunity for code im- provement and increased readability. Consider the expression (a < b) and EXAMPLE 6.34
 
@@ -572,7 +572,7 @@ if d = 0.0 or else n/d < threshold then ...
   of an operator or function are evaluated?
 * What is short-circuit Boolean evaluation? Why is it useful?
 
-## 6.2 Structured and Unstructured Flow
+6.2 Structured and Unstructured Flow
 
 Control ﬂow in assembly languages is achieved by means of conditional and un- conditional jumps (branches). Early versions of Fortran mimicked the low-level EXAMPLE 6.39
 
@@ -589,7 +589,7 @@ The 10 on the bottom line is a statement label. Goto statements also featured pr
 
 6 Edsger W. Dijkstra (1930–2002) developed much of the logical foundation of our modern un- derstanding of concurrency. He was also responsible, among many other contributions, for the semaphores of Section 13.3.5 and for much of the practical development of structured program- ming. He received the ACM Turing Award in 1972.
 
-## 6.2.1 Structured Alternatives to goto
+6.2.1 Structured Alternatives to goto
 
 Once the principal structured constructs had been deﬁned, most of the contro- versy surrounding gotos revolved around a small number of special cases, each of which was eventually addressed in structured ways. Where once a goto might have been used to jump to the end of the current subroutine, most modern lan- guages provide an explicit return statement. Where once a goto might have been used to escape from the middle of a loop, most modern languages provide a break or exit statement for this purpose. (Some languages also provide a state- ment that will skip the remainder of the current iteration only: continue in C; cycle in Fortran 90; next in Perl.) More signiﬁcantly, several languages allow a program to return from a nested chain of subroutine calls in a single opera- tion, and many provide a way to raise an exception that propagates out to some surrounding context. Both of these capabilities might once have been attempted with (nonlocal) gotos.
 
@@ -659,7 +659,7 @@ status := my_proc(args); if status = ok then ... ■
 
 The auxiliary Booleans can be eliminated by using a nonlocal goto or multilevel return, but the caller to which we return must still inspect status codes explic- itly. As a structured alternative, many modern languages provide an exception- handling mechanism for convenient, nonlocal recovery from exceptions. We will discuss exception handling in more detail in Section 9.4. Typically the program- mer appends a block of code called a handler to any computation in which an exception may arise. The job of the handler is to take whatever remedial action is required to recover from the exception. If the protected computation completes in the normal fashion, execution of the handler is skipped. Multilevel returns and structured exceptions have strong similarities. Both in- volve a control transfer from some inner, nested context back to an outer context, unwinding the stack on the way. The distinction lies in where the computing oc- curs. In a multilevel return the inner context has all the information it needs. It completes its computation, generating a return value if appropriate, and transfers to the outer context in a way that requires no post-processing. At an exception, by contrast, the inner context cannot complete its work—it cannot fulﬁll its con- tract. It performs an “abnormal” return, triggering execution of the handler. Common Lisp and Ruby provide mechanisms for both multilevel returns and exceptions, but this dual support is relatively rare. Most languages support only exceptions; programmers implement multilevel returns by writing a trivial han- dler. In an unfortunate overloading of terminology, the names catch and throw, which Common Lisp and Ruby use for multilevel returns, are used for exceptions in several other languages.
 
-## 6.2.2 Continuations
+6.2.2 Continuations
 
 The notion of nonlocal gotos that unwind the stack can be generalized by deﬁn- ing what are known as continuations. In low-level terms, a continuation con- sists of a code address, a referencing environment that should be established (or restored) when jumping to that address, and a reference to another continua- tion that represents what to do in the event of a subsequent subroutine return. (The chain of return continuations constitutes a backtrace of the run-time stack.) In higher-level terms, a continuation is an abstraction that captures a context in which execution might continue. Continuations are fundamental to deno- tational semantics. They also appear as ﬁrst-class values in several programming languages (notably Scheme and Ruby), allowing the programmer to deﬁne new control-ﬂow constructs. Continuation support in Scheme takes the form of a function named call- with-current-continuation, often abbreviated call/cc. This function takes a single argument f , which is itself a function of one argument. Call/cc calls f , passing as argument a continuation c that captures the current program counter, referencing environment, and stack backtrace. The continuation is implemented as a closure, indistinguishable from the closures used to represent subroutines passed as parameters. At any point in the future, f can call c, passing it a value, v. The call will “return” v into c’s captured context, as if it had been returned by the original call to call/cc. Ruby support is similar: EXAMPLE 6.43
 
@@ -711,7 +711,7 @@ start 1; start 2; start 3; end 3; end 2; end 1; end 3; end 2; end 1; end 3; end 
 
 Call/cc sufﬁces to build a wide variety of control abstractions, including gotos, midloop exits, multilevel returns, exceptions, iterators (Section 6.5.3), call-by-name parameters (Section 9.3.1), and coroutines (Section 9.5). It even subsumes the notion of returning from a subroutine, though it seldom replaces it in practice. Used in a disciplined way, continuations make a language surpris- ingly extensible. At the same time, they allow the undisciplined programmer to construct completely inscrutable programs.
 
-## 6.3 Sequencing
+6.3 Sequencing
 
 Like assignment, sequencing is central to imperative programming. It is the prin- cipal means of controlling the order in which side effects (e.g., assignments) oc- cur: when one statement follows another in the program text, the ﬁrst statement executes before the second. In most imperative languages, lists of statements can be enclosed with begin... end or { ... } delimiters and then used in any context in which a single statement is expected. Such a delimited list is usually called a compound statement. A compound statement optionally preceded by a set of declarations is sometimes called a block. In languages like Algol 68, which blur or eliminate the distinction between statements and expressions, the value of a statement (expression) list is the value of its ﬁnal element. In Common Lisp, the programmer can choose to return the value of the ﬁrst element, the second, or the last. Of course, sequencing is a useless operation unless the subexpressions that do not play a part in the return value have side effects. The various sequencing constructs in Lisp are used only in program fragments that do not conform to a purely functional programming model. Even in imperative languages, there is debate as to the value of certain kinds of side effects. In Euclid and Turing, for example, functions (i.e., subroutines that return values, and that therefore can appear within expressions) are not permitted to have side effects. Among other things, side-effect freedom ensures that a Euclid or Turing function, like its counterpart in mathematics, is always idempotent: if called repeatedly with the same set of arguments, it will always return the same value, and the number of consecutive calls (after the ﬁrst) will not affect the results of subsequent execution. In addition, side-effect freedom for functions means that the value of a subexpression will never depend on whether that subexpression is evaluated before or after calling a function in some other subexpression. These properties make it easier for a programmer or theorem-proving system to reason about program behavior. They also simplify code improvement, for example by permitting the safe rearrangement of expressions. Unfortunately, there are some situations in which side effects in functions are EXAMPLE 6.45
 
@@ -727,7 +727,7 @@ procedure rand(ref n : integer)
 
 but most programmers would ﬁnd this less appealing. Ada strikes a compromise: it allows side effects in functions in the form of changes to static or global vari- ables, but does not allow a function to modify its parameters. ■
 
-## 6.4 Selection
+6.4 Selection
 
 Selection statements in most imperative languages employ some variant of the EXAMPLE 6.46
 
@@ -756,7 +756,7 @@ cond in Lisp (cond ((= A B) (...))
 
 Here cond takes as arguments a sequence of pairs. In each pair the ﬁrst ele- ment is a condition; the second is an expression to be returned as the value of the overall construct if the condition evaluates to T (T means “true” in most Lisp dialects). ■
 
-## 6.4.1 Short-Circuited Conditions
+6.4.1 Short-Circuited Conditions
 
 While the condition in an if... then ... else statement is a Boolean expression, there is usually no need for evaluation of that expression to result in a Boolean value in a register. Most machines provide conditional branch instructions that capture simple comparisons. Put another way, the purpose of the Boolean expres- sion in a selection statement is not to compute a value to be stored, but to cause control to branch to various locations. This observation allows us to generate particularly efﬁcient code (called jump code) for expressions that are amenable to the short-circuit evaluation of Section 6.1.5. Jump code is applicable not only to selection statements such as if... then ... else, but to logically controlled loops as well; we will consider the latter in Section 6.5.5. In the usual process of code generation, a synthesized attribute of the root of an expression subtree acquires the name of a register into which the value of the expression will be computed at run time. The surrounding context then uses this register name when generating code that uses the expression. In jump code, inherited attributes of the root inform it of the addresses to which control should branch if the expression is true or false, respectively. Suppose, for example, that we are generating code for the following source: EXAMPLE 6.49
 
@@ -802,7 +802,7 @@ r1 := p if r1 = 0 goto L1 r2 := r1→key if r2 ̸= val goto L1 r1 := 1 goto L2 L
 
 The astute reader will notice that the ﬁrst goto L1 can be replaced by goto L2, since r1 already contains a zero in this case. The code improvement phase of the compiler will notice this also, and make the change. It is easier to ﬁx this sort of thing in the code improver than it is to generate the better version of the code in the ﬁrst place. The code improver has to be able to recognize jumps to redundant instructions for other reasons anyway; there is no point in building special cases into the short-circuit evaluation routines. ■
 
-## 6.4.2 Case/Switch Statements
+6.4.2 Case/Switch Statements
 
 The case statements of Algol W and its descendants provide alternative syntax EXAMPLE 6.52
 
@@ -878,13 +878,13 @@ Most of the time, however, the need to insert a break at the end of each arm— 
 * Explain the use of break to terminate the arms of a C switch statement, and
   the behavior that arises if a break is accidentally omitted.
 
-## 6.5 Iteration
+6.5 Iteration
 
 Iteration and recursion are the two mechanisms that allow a computer to per- form similar operations repeatedly. Without at least one of these mechanisms, the running time of a program (and hence the amount of work it can do and the amount of space it can use) would be a linear function of the size of the program text. In a very real sense, it is iteration and recursion that make computers useful for more than ﬁxed-size tasks. In this section we focus on iteration. Recursion is the subject of Section 6.6. Programmers in imperative languages tend to use iteration more than they use recursion (recursion is more common in functional languages). In most lan- guages, iteration takes the form of loops. Like the statements in a sequence, the it- erations of a loop are generally executed for their side effects: their modiﬁcations of variables. Loops come in two principal varieties, which differ in the mecha- nisms used to determine how many times to iterate. An enumeration-controlled loop is executed once for every value in a given ﬁnite set; the number of iterations is known before the ﬁrst iteration begins. A logically controlled loop is executed
 
 until some Boolean condition (which must generally depend on values altered in the loop) changes value. Most (though not all) languages provide separate con- structs for these two varieties of loop.
 
-## 6.5.1 Enumeration-Controlled Loops
+6.5.1 Enumeration-Controlled Loops
 
 Enumeration-controlled iteration originated with the do loop of Fortran I. Sim- ilar mechanisms have been adopted in some form by almost every subsequent language, but syntax and semantics vary widely. Even Fortran’s own loop has evolved considerably over time. The modern Fortran version looks something EXAMPLE 6.56
 
@@ -972,7 +972,7 @@ r1 := ’a’ r2 := ’z’ if r1 > r2 goto L3 –– Code improver may remove t
 
 Of course, the compiler must generate this sort of code in any event (or use an iteration count) if arithmetic overﬂow may interfere with testing the terminating condition. To permit the compiler to use the fastest correct implementation in all cases, several languages, including Fortran 90 and Pascal, say that the value of the index is undeﬁned after the end of the loop. ■ An attractive solution to both the index modiﬁcation problem and the post- loop value problem was pioneered by Algol W and Algol 68, and subsequently adopted by Ada, Modula 3, and many other languages. In these, the header of the loop is considered to contain a declaration of the index. Its type is inferred from the bounds of the loop, and its scope is the loop’s body. Because the index is not visible outside the loop, its value is not an issue. Of course, the programmer must not give the index the same name as any variable that must be accessed within the loop, but this is a strictly local issue: it has no ramiﬁcations outside the loop.
 
-## 6.5.2 Combination Loops
+6.5.2 Combination Loops
 
 Algol 60 provided a single loop construct that subsumed the properties of more modern enumeration and logically controlled loops. It allowed the programmer to specify an arbitrary number of “enumerators,” each of which could be a single value, a range of values similar to those of modern enumeration-controlled loops, or an expression with a terminating condition. Common Lisp provides an even more powerful facility, with four separate sets of clauses, to initialize index vari- ables (of which there may be an arbitrary number), test for loop termination (in any of several ways), evaluate body expressions, and clean up at loop termination.
 
@@ -1004,7 +1004,7 @@ C for loop with a local index for (int i = first; i <= last; i += step) { ... }
 
 then i will not be visible outside. It will still, however, be vulnerable to (deliberate or accidental) modiﬁcation within the loop. ■
 
-## 6.5.3 Iterators
+6.5.3 Iterators
 
 In all of the examples we have seen so far (with the possible exception of the com- bination loops of Algol 60, Common Lisp, or C), a for loop iterates over the ele- ments of an arithmetic sequence. In general, however, we may wish to iterate over the elements of any well-deﬁned set (what are often called collections, or instances of a container class, in object-oriented code). Clu introduced an elegant iterator mechanism (also found in Python, Ruby, and C#) to do precisely that. Euclid and several more recent languages, notably C++, Java, and Ada 2012, deﬁne a stan- dard interface for iterator objects (sometimes called enumerators) that are equally easy to use, but not as easy to write. Icon, conversely, provides a generalization of iterators, known as generators, that combines enumeration with backtracking search.7
 
@@ -1156,7 +1156,7 @@ ti_delete(&ti);
 
 There are two principal differences between this code and the more structured al- ternatives: (1) the syntax of the loop is a good bit less elegant (and arguably more prone to accidental errors), and (2) the code for the iterator is simply a type and some associated functions—C provides no abstraction mechanism to group them together as a module or a class. By providing a standard interface for iterator ab- stractions, object-oriented languages facilitate the design of higher-order mech- anisms that manipulate whole collections: sorting them, merging them, ﬁnding their intersection or difference, and so on. We leave the C code for tree_iter and the various ti_ functions to Exercise 6.20. ■
 
-## 6.5.4 Generators in Icon
+6.5.4 Generators in Icon
 
 Icon generalizes the concept of iterators, providing a generator mechanism that causes any expression in which it is embedded to enumerate multiple values on demand.
 
@@ -1166,7 +1166,7 @@ We consider Icon generators in more detail on the companion site. The language�
 
 but any expression that contains a generator. Generators can also be used in con- structs like if statements, which will execute their nested code if any generated value makes the condition true, automatically searching through all the possi- bilities. When generators are nested, Icon explores all possible combinations of generated values, and will even backtrack where necessary to undo unsuccessful control-ﬂow branches or assignments.
 
-## 6.5.5 Logically Controlled Loops
+6.5.5 Logically Controlled Loops
 
 In comparison to enumeration-controlled loops, logically controlled loops have many fewer semantic subtleties. The only real question to be answered is where within the body of the loop the terminating condition is tested. By far the most common approach is to test the condition before each iteration. The familiar EXAMPLE 6.74
 
@@ -1249,11 +1249,11 @@ Java extends the C/C++ break statement in a similar fashion, with optional label
 * Give an example in which a mid-test loop results in more elegant code than
   does a pretest or post-test loop.
 
-## 6.6 Recursion
+6.6 Recursion
 
 Unlike the control-ﬂow mechanisms discussed so far, recursion requires no spe- cial syntax. In any language that provides subroutines (particularly functions), all that is required is to permit functions to call themselves, or to call other functions that then call them back in turn. Most programmers learn in a data structures class that recursion and (logically controlled) iteration provide equally powerful means of computing functions: any iterative algorithm can be rewritten, auto- matically, as a recursive algorithm, and vice versa. We will compare iteration and recursion in more detail in the ﬁrst subsection below. In the following subsection we will consider the possibility of passing unevaluated expressions into a func- tion. While usually inadvisable, due to implementation cost, this technique will sometimes allow us to write elegant code for functions that are only deﬁned on a subset of the possible inputs, or that explore logically inﬁnite data structures.
 
-## 6.6.1 Iteration and Recursion
+6.6.1 Iteration and Recursion
 
 As we noted in Section 3.2, Fortran 77 and certain other languages do not permit recursion. A few functional languages do not permit iteration. Most modern languages, however, provide both mechanisms. Iteration is in some sense the more “natural” of the two in imperative languages, because it is based on the repeated modiﬁcation of variables. Recursion is the more natural of the two in
 
@@ -1372,7 +1372,7 @@ For a programmer accustomed to writing in a functional style, this code is per- 
 
 9 Actually, one can do substantially better than linear time using algorithms based on binary matrix multiplication or closest-integer rounding of continuous functions, but these approaches suffer from high constant-factor costs or problems with numeric precision. For most purposes the linear-time algorithm is a reasonable choice.
 
-## 6.6.2 Applicative- and Normal-Order Evaluation
+6.6.2 Applicative- and Normal-Order Evaluation
 
 Throughout the discussion so far we have assumed implicitly that arguments are evaluated before passing them to a subroutine. This need not be the case. It is possible to pass a representation of the unevaluated arguments to the subroutine instead, and to evaluate them only when (if) the value is actually needed. The for- mer option (evaluating before the call) is known as applicative-order evaluation; the latter (evaluating only when the value is actually needed) is known as normal- order evaluation. Normal-order evaluation is what naturally occurs in macros (Section 3.7). It also occurs in short-circuit Boolean evaluation (Section 6.1.5), call-by-name parameters (to be discussed in Section 9.3.1), and certain functional languages (to be discussed in Section 11.5). Algol 60 uses normal-order evaluation by default for user-deﬁned functions (applicative order is also available). This choice was presumably made to mimic the behavior of macros (Section 3.7). Most programmers in 1960 wrote mainly in assembler, and were accustomed to macro facilities. Because the parameter- passing mechanisms of Algol 60 are part of the language, rather than textual ab- breviations, problems like misinterpreted precedence or naming conﬂicts do not arise. Side effects, however, are still very much an issue. We will discuss Algol 60 parameters in more detail in Section 9.3.1.
 
@@ -1402,7 +1402,7 @@ Here cons can be thought of, roughly, as a concatenation operator. Car returns t
 
 The list will occupy only as much space as we have actually explored. More elab- orate lazy data structures (e.g., trees) can be valuable in combinatorial search problems, in which a clever algorithm may explore only the “interesting” parts of a potentially enormous search space. ■
 
-## 6.7 Nondeterminacy
+6.7 Nondeterminacy
 
 Our ﬁnal category of control ﬂow is nondeterminacy. A nondeterministic con- struct is one in which the choice between alternatives (i.e., between control paths)
 
@@ -1436,11 +1436,11 @@ In several cases, advances in compiler technology or in the simple willingness o
 
 6.1 We noted in Section 6.1.1 that most binary arithmetic operators are left- associative in most programming languages. In Section 6.1.4, however, we also noted that most compilers are free to evaluate the operands of a binary operator in either order. Are these statements contradictory? Why or why not?
 
-## 6.2 As noted in Figure 6.1, Fortran and Pascal give unary and binary minus the same level of precedence. Is this likely to lead to nonintuitive evaluations of certain expressions? Why or why not?
+6.2 As noted in Figure 6.1, Fortran and Pascal give unary and binary minus the same level of precedence. Is this likely to lead to nonintuitive evaluations of certain expressions? Why or why not?
 
 6.3 In Example 6.9 we described a common error in Pascal programs caused by the fact that and and or have precedence comparable to that of the arith- metic operators. Show how a similar problem can arise in the stream-based I/O of C++ (described in Section C 8.7.3). (Hint: Consider the precedence of << and >>, and the operators that appear below them in the C column of Figure 6.1.)
 
-## 6.4 Translate the following expression into postﬁx and preﬁx notation:
+6.4 Translate the following expression into postﬁx and preﬁx notation:
 
 [−b + sqrt(b × b −4 × a × c)]/(2 × a)
 
@@ -1450,15 +1450,15 @@ Do you need a special symbol for unary negation?
 
 6.6 Example 6.33 claims that “For certain values of x, (0.1 + x) * 10.0 and 1.0 + (x * 10.0) can differ by as much as 25%, even when 0.1 and x are of the same magnitude.” Verify this claim. (Warning: If you’re us- ing an x86 processor, be aware that ﬂoating-point calculations [even on single-precision variables] are performed internally with 80 bits of preci- sion. Roundoff errors will appear only when intermediate results are stored out to memory [with limited precision] and read back in again.)
 
-## 6.7 Is &(&i) ever valid in C? Explain.
+6.7 Is &(&i) ever valid in C? Explain.
 
-## 6.8 Languages that employ a reference model of variables also tend to employ automatic garbage collection. Is this more than a coincidence? Explain.
+6.8 Languages that employ a reference model of variables also tend to employ automatic garbage collection. Is this more than a coincidence? Explain.
 
 6.9 In Section 6.1.2 (“Orthogonality”), we noted that C uses = for assignment and == for equality testing. The language designers state: “Since assignment is about twice as frequent as equality testing in typical C programs, it’s ap- propriate that the operator be half as long” [KR88, p. 17]. What do you think of this rationale?
 
 6.10 Consider a language implementation in which we wish to catch every use of an uninitialized variable. In Section 6.1.3 we noted that for types in which every possible bit pattern represents a valid value, extra space must be used to hold an initialized/uninitialized ﬂag. Dynamic checks in such a system can be expensive, largely because of the address calculations needed to ac- cess the ﬂags. We can reduce the cost in the common case by having the compiler generate code to automatically initialize every variable with a dis- tinguished sentinel value. If at some point we ﬁnd that a variable’s value is different from the sentinel, then that variable must have been initialized. If its value is the sentinel, we must double-check the ﬂag. Describe a plausible allocation strategy for initialization ﬂags, and show the assembly language sequences that would be required for dynamic checks, with and without the use of sentinels.
 
-## 6.11 Write an attribute grammar, based on the following context-free grammar, that accumulates jump code for Boolean expressions (with short-circuiting)
+6.11 Write an attribute grammar, based on the following context-free grammar, that accumulates jump code for Boolean expressions (with short-circuiting)
 
 into a synthesized attribute code of condition, and then uses this attribute to generate code for if statements.
 
@@ -1468,7 +1468,7 @@ stmt −→if condition then stmt else stmt
 
 You may assume that the code attribute has already been initialized for other stmt and ident nodes. (For hints, see Fischer et al.’s compiler book [FCL10, Sec. 14.1.4].)
 
-## 6.12 Describe a plausible scenario in which a programmer might wish to avoid short-circuit evaluation of a Boolean expression.
+6.12 Describe a plausible scenario in which a programmer might wish to avoid short-circuit evaluation of a Boolean expression.
 
 6.13 Neither Algol 60 nor Algol 68 employs short-circuit evaluation for Boolean expressions. In both languages, however, an if... then ... else construct can be used as an expression. Show how to use if... then ... else to achieve the effect of short-circuit evaluation.
 
@@ -1476,17 +1476,17 @@ You may assume that the code attribute has already been initialized for other st
 
 6.15 As noted in Section 6.4.2, languages vary in how they handle the situation in which the controlling expression in a case statement does not appear among the labels on the arms. C and Fortran 90 say the statement has no effect. Pascal and Modula say it results in a dynamic semantic error. Ada says that the labels must cover all possible values for the type of the expres- sion, so the question of a missing value can never arise at run time. What are the tradeoffs among these alternatives? Which do you prefer? Why?
 
-## 6.16 The equivalence of for and while loops, mentioned in Example 6.64, is not precise. Give an example in which it breaks down. Hint: think about the continue statement.
+6.16 The equivalence of for and while loops, mentioned in Example 6.64, is not precise. Give an example in which it breaks down. Hint: think about the continue statement.
 
-## 6.17 Write the equivalent of Figure 6.5 in C# or Ruby. Write a second version that performs an in-order enumeration, rather than preorder.
+6.17 Write the equivalent of Figure 6.5 in C# or Ruby. Write a second version that performs an in-order enumeration, rather than preorder.
 
-## 6.18 Revise the algorithm of Figure 6.6 so that it performs an in-order enumera- tion, rather than preorder.
+6.18 Revise the algorithm of Figure 6.6 so that it performs an in-order enumera- tion, rather than preorder.
 
 6.19 Write a C++ preorder iterator to supply tree nodes to the loop in Exam- ple 6.69. You will need to know (or learn) how to use pointers, references, inner classes, and operator overloading in C++. For the sake of (relative) simplicity, you may assume that the data in a tree node is always an int; this will save you the need to use generics. You may want to use the stack abstraction from the C++ standard library.
 
-## 6.20 Write code for the tree_iter type (struct) and the ti_create, ti_done, ti_next, ti_val, and ti_delete functions employed in Example 6.73.
+6.20 Write code for the tree_iter type (struct) and the ti_create, ti_done, ti_next, ti_val, and ti_delete functions employed in Example 6.73.
 
-## 6.21 Write, in C#, Python, or Ruby, an iterator that yields (a) all permutations of the integers 1 . . n (b) all combinations of k integers from the range 1 . . n (0 ≤k ≤n).
+6.21 Write, in C#, Python, or Ruby, an iterator that yields (a) all permutations of the integers 1 . . n (b) all combinations of k integers from the range 1 . . n (0 ≤k ≤n).
 
 You may represent your permutations and combinations using either a list or an array.
 
@@ -1508,7 +1508,7 @@ These are most easily output in “dotted parenthesized form”:
 
 6.24 In an expression-orientedlanguage such as Algol 68 or Lisp, a while loop (a do loop in Lisp) has a value as an expression. How do you think this value should be determined? (How is it determined in Algol 68 and Lisp?) Is the value a useless artifact of expression orientation, or are there reasonable programs in which it might actually be used? What do you think should happen if the condition on the loop is such that the body is never executed?
 
-## 6.25 Consider a mid-test loop, here written in C, that looks for blank lines in its input:
+6.25 Consider a mid-test loop, here written in C, that looks for blank lines in its input:
 
 ```
 for (;;) {
@@ -1520,7 +1520,7 @@ consume_line(line);
 
 Show how you might accomplish the same task using a while or do (repeat) loop, if mid-test loops were not available. (Hint: One alterna- tive duplicates part of the code; another introduces a Boolean ﬂag variable.) How do these alternatives compare to the mid-test version?
 
-## 6.26 Rubin [Rub87] used the following example (rewritten here in C) to argue in favor of a goto statement:
+6.26 Rubin [Rub87] used the following example (rewritten here in C) to argue in favor of a goto statement:
 
 ```
 int first_zero_row = -1;
@@ -1538,7 +1538,7 @@ next: ;
 
 The intent of the code is to ﬁnd the ﬁrst all-zero row, if any, of an n × n matrix. Do you ﬁnd the example convincing? Is there a good structured alternative in C? In any language?
 
-## 6.27 Bentley [Ben00, Chap. 4] provides the following informal description of binary search:
+6.27 Bentley [Ben00, Chap. 4] provides the following informal description of binary search:
 
 We are to determine whether the sorted array X[1..N] contains the element T.... Binary search solves the problem by keeping track of a range within the array in which T must be if it is anywhere in the array. Initially, the range is the entire array. The range is shrunk by comparing its middle element to T and discarding half the range. The process continues until T is discovered in the array or until the range in which it must lie is known to be empty.
 
@@ -1554,7 +1554,7 @@ Write code for binary search in your favorite imperative programming lan- guage.
 
 6.31 Write a tail-recursive function in Scheme or ML to compute n factorial (n! =  1≤i≤n i = 1 × 2 × · · · × n). (Hint: You will probably want to deﬁne a “helper” function, as discussed in Section 6.6.1.)
 
-## 6.32 Is it possible to write a tail-recursive version of the classic quicksort algo- rithm? Why or why not?
+6.32 Is it possible to write a tail-recursive version of the classic quicksort algo- rithm? Why or why not?
 
 6.33 Give an example in C in which an in-line subroutine may be signiﬁcantly faster than a functionally equivalent macro. Give another example in which the macro is likely to be faster. (Hint: Think about applicative vs normal- order evaluation of arguments.)
 
@@ -1665,7 +1665,7 @@ Types as a source of “may alias” information concept of aliases, introduced 
 
 Section 7.1 looks more closely at the meaning and purpose of types. It presents some basic deﬁnitions, and introduces the notions of polymorphism and orthog- onality. Section 7.2 takes a closer look at type checking; in particular, it considers type equivalence (when can we say that two types are the same?), type compatibility (when can we use a value of a given type in a given context?), and type inference (how do we deduce the type of an expression from the types of its components and that of the surrounding context?). As an example of both polymorphism and sophisticated inference, Sec- tion 7.2.4 surveys the type system of ML, which combines, to a large extent, the efﬁciency and early error reporting of compilation with the convenience and ﬂex- ibility of interpretation. We continue the study of polymorphism in Section 7.3, with a particular emphasis on generics, which allow a body of code to be param- eterized explicitly for multiple types. Finally, in Section 7.4, we consider what it means to compare two complex objects for equality, or to assign one into the other. In Chapter 8 we will consider syntactic, semantic, and pragmatic issues for some of the most important composite types: records, arrays, strings, sets, pointers, lists, and ﬁles.
 
-## 7.1 Overview
+7.1 Overview
 
 Computer hardware can interpret bits in memory in several different ways: as in- structions, addresses, characters, and integer and ﬂoating-point numbers of var- ious lengths. The bits themselves, however, are untyped: the hardware on most machines makes no attempt to keep track of which interpretations correspond to which locations in memory. Assembly languages reﬂect this lack of typing: op- erations of any kind can be applied to values in arbitrary locations. High-level languages, by contrast, almost always associate types with values, to provide the contextual information and error checking alluded to above. Informally, a type system consists of (1) a mechanism to deﬁne types and asso- ciate them with certain language constructs, and (2) a set of rules for type equiv- alence, type compatibility, and type inference. The constructs that must have types are precisely those that have values, or that can refer to objects that have val- ues. These constructs include named constants, variables, record ﬁelds, param- eters, and sometimes subroutines; literal constants (e.g., 17, 3.14, "foo"); and more complicated expressions containing these. Type equivalence rules deter- mine when the types of two values are the same. Type compatibility rules deter- mine when a value of a given type can be used in a given context. Type inference rules deﬁne the type of an expression based on the types of its constituent parts or
 
@@ -1677,7 +1677,7 @@ DESIGN & IMPLEMENTATION
 
 Dynamic (run-time) type checking can be seen as a form of late binding, and tends to be found in languages that delay other issues until run time as well. Static typing is thus the norm in languages intended for performance; dynamic typing is more common in languages intended for ease of programming. Lisp and Small- talk are dynamically (though strongly) typed. Most scripting languages are also dynamically typed; some (e.g., Python and Ruby) are strongly typed. Languages with dynamic scoping are generally dynamically typed (or not typed at all): if the compiler can’t identify the object to which a name refers, it usually can’t deter- mine the type of the object either.
 
-## 7.1.1 The Meaning of “Type”
+7.1.1 The Meaning of “Type”
 
 While every programmer has at least an informal notion of what is meant by “type,” that notion can be formalized in several different ways. Three of the most popular are what we might call the denotational, structural, and abstraction-based points of view. From the denotational point of view, a type is simply a set of val- ues. A value has a given type if it belongs to the set; an object has a given type if its value is guaranteed to be in the set. From the structural point of view, a type is either one of a small collection of built-in types (integer, character, Boolean, real, etc.; also called primitive or predeﬁned types), or a composite type created by
 
@@ -1687,11 +1687,11 @@ DESIGN & IMPLEMENTATION
 
 applying a type constructor (record, array, set, etc.) to one or more simpler types. (This use of the term “constructor” is unrelated to the initialization func- tions of object-oriented languages. It also differs in a more subtle way from the use of the term in ML.) From the abstraction-based point of view, a type is an in- terface consisting of a set of operations with well-deﬁned and mutually consistent semantics. For both programmers and language designers, types may also reﬂect a mixture of these viewpoints. In denotational semantics (one of several ways to formalize the meaning of programs), a set of values is known as a domain. Types are domains, and the meaning of an expression is a value from the domain that represents the expres- sion’s type. Some domains—the integers, for example—are simple and familiar. Others are more complex. An array can be thought of as a value from a domain whose elements are functions; each of these functions maps values from some ﬁ- nite index type (typically a subset of the integers) to values of some other element type. As it turns out, denotational semantics can associate a type with everything in a program—even statements with side effects. The meaning of an assignment statement is a value from a domain of higher-level functions, each of whose ele- ments maps a store—a mapping from names to values that represents the current contents of memory—to another store, which represents the contents of memory after the assignment. One of the nice things about the denotational view of types is that it allows us in many cases to describe user-deﬁned composite types (records, arrays, etc.) in terms of mathematical operations on sets. We will allude to these operations again under “Composite Types” in Section 7.1.4. Because it is based on mathematical objects, the denotational view of types usually ignores such implementation is- sues as limited precision and word length. This limitation is less serious than it might at ﬁrst appear: Checks for such errors as arithmetic overﬂow are usually implemented outside of the type system of a language anyway. They result in a run-time error, but this error is not called a type clash. When a programmer deﬁnes an enumerated type (e.g., enum hue {red, green, blue} in C), he or she certainly thinks of this type as a set of values. For other varieties of user-deﬁned type, this denotational view may not be as nat- ural. Instead, the programmer may think in terms of the way the type is built from simpler types, or in terms of its meaning or purpose. These ways of think- ing reﬂect the structural and abstraction-based points of view, respectively. The structural point of view was pioneered by Algol W and Algol 68, and is character- istic of many languages designed in the 1970s and 1980s. The abstraction-based point of view was pioneered by Simula-67 and Smalltalk, and is characteristic of modern object-oriented languages; it can also be found in the module constructs of various other languages, and it can be adopted as a matter of programming discipline in almost any language. We will consider the structural point of view in more detail in Chapter 8, and the abstraction-based in Chapter 10.
 
-## 7.1.2 Polymorphism
+7.1.2 Polymorphism
 
 Polymorphism, which we mentioned brieﬂy in Section 3.5.2, takes its name from the Greek, and means “having multiple forms.” It applies to code—both data structures and subroutines—that is designed to work with values of multiple types. To maintain correctness, the types must generally have certain characteris- tics in common, and the code must not depend on any other characteristics. The commonality is usually captured in one of two main ways. In parametric poly- morphism the code takes a type (or set of types) as a parameter, either explicitly or implicitly. In subtype polymorphism, the code is designed to work with values of some speciﬁc type T, but the programmer can deﬁne additional types to be extensions or reﬁnements of T, and the code will work with these subtypes as well. Explicit parametric polymorphism, also known as generics (or templates in C++), typically appears in statically typed languages, and is usually implemented at compile time. The implicit version can also be implemented at compile time— speciﬁcally, in ML-family languages; more commonly, it is paired with dynamic typing, and the checking occurs at run time. Subtype polymorphism appears primarily in object-oriented languages. With static typing, most of the work required to deal with multiple types can be per- formed at compile time: the principal run-time cost is an extra level of indirection on method invocations. Most languages that envision such an implementation, including C++, Eiffel, OCaml, Java, and C#, provide a separate mechanism for generics, also checked mainly at compile time. The combination of subtype and parametric polymorphism is particularly useful for container (collection) classes such as “list of T” (List<T>) or “stack of T” (Stack<T>), where T is initially unspeciﬁed, and can be instantiated later as almost any type. By contrast, dynamically typed object-oriented languages, including Smalltalk, Python, and Ruby, generally use a single mechanism for both parametric and sub- type polymorphism, with checking delayed until run time. A uniﬁed mechanism also appears in Objective-C, which provides dynamically typed objects on top of otherwise static typing. We will consider parametric polymorphism in more detail in Section 7.3, after our coverage of typing in ML. Subtype polymorphism will largely be deferred to Chapter 10, which covers object orientation, and to Section 14.4.4, which focuses on objects in scripting languages.
 
-## 7.1.3 Orthogonality
+7.1.3 Orthogonality
 
 In Section 6.1.2 we discussed the importance of orthogonality in the design of expressions, statements, and control-ﬂow constructs. In a highly orthogonal lan- guage, these features can be used, with consistent behavior, in almost any com- bination. Orthogonality is equally important in type system design. A highly or- thogonal language tends to be easier to understand, to use, and to reason about in
 
@@ -1777,7 +1777,7 @@ B := (1 => 1, 3 | 5 | 7 => 3, others => 0);
 
 Here the aggregates assigned into p and A are positional; the aggregates assigned into q and B name their elements explicitly. The aggregate for B uses a shorthand notation to assign the same value (3) into array elements 3, 5, and 7, and to as- sign a 0 into all unnamed ﬁelds. Several languages, including C, C++, Fortran 90, and Lisp, provide similar capabilities. ■ ML provides a very general facility for composite expressions, based on the use of constructors (discussed in Section 11.4.3). Lambda expressions, which we saw in Section 3.6.4 and will discuss again in Chapter 11, amount to aggregates for values that are functions.
 
-## 7.1.4 Classiﬁcation of Types
+7.1.4 Classiﬁcation of Types
 
 The terminology for types varies some from one language to another. This sub- section presents deﬁnitions for the most common terms. Most languages provide built-in types similar to those supported in hardware by most processors: inte- gers, characters, Booleans, and real (ﬂoating-point) numbers. Booleans (sometimes called logicals) are typically implemented as single-byte quantities, with 1 representing true and 0 representing false. In a few lan- guages and implementations, Booleans may be packed into arrays using only one bit per value. As noted in Section 6.1.2 (“Orthogonality”), C was historically un- usual in omitting a Boolean type: where most languages would expect a Boolean value, C expected an integer, using zero for false and anything else for true. C99 introduced a new _Bool type, but it is effectively an integer that the com- piler is permitted to store in a single bit. As noted in Section C 6.5.4, Icon replaces Booleans with a more general notion of success and failure. Characters have traditionally been implemented as one-byte quantities as well, typically (but not always) using the ASCII encoding. More recent languages (e.g., Java and C#) use a two-byte representation designed to accommodate (the com- monly used portion of) the Unicode character set. Unicode is an international standard designed to capture the characters of a wide variety of languages (see Sidebar 7.3). The ﬁrst 128 characters of Unicode (\u0000 through \u007f) are identical to ASCII. C and C++ provide both regular and “wide” characters, though for wide characters both the encoding and the actual width are imple- mentation dependent. Fortran 2003 supports four-byte Unicode characters.
 
@@ -1923,13 +1923,13 @@ We will examine composite types in more detail in Chapter 8.
   constants? In what ways may a subrange type be preferable to its base type?
   In what ways may a string be preferable to an array of characters?
 
-## 7.2 Type Checking
+7.2 Type Checking
 
 In most statically typed languages, every deﬁnition of an object (constant, vari- able, subroutine, etc.) must specify the object’s type. Moreover, many of the con- texts in which an object might appear are also typed, in the sense that the rules of the language constrain the types that an object in that context may validly possess. In the subsections below we will consider the topics of type equivalence, type com- patibility, and type inference. Of the three, type compatibility is the one of most concern to programmers. It determines when an object of a certain type can be used in a certain context. At a minimum, the object can be used if its type and the type expected by the context are equivalent (i.e., the same). In many languages, however, compatibility is a looser relationship than equivalence: objects and con- texts are often compatible even when their types are different. Our discussion of type compatibility will touch on the subjects of type conversion (also called cast- ing), which changes a value of one type into a value of another; type coercion, which performs a conversion automatically in certain contexts; and nonconvert- ing type casts, which are sometimes used in systems programming to interpret the bits of a value of one type as if they represented a value of some other type. Whenever an expression is constructed from simpler subexpressions, the ques- tion arises: given the types of the subexpressions (and possibly the type expected
 
 by the surrounding context), what is the type of the expression as a whole? This question is answered by type inference. Type inference is often trivial: the sum of two integers is still an integer, for example. In other cases (e.g., when dealing with sets) it is a good bit trickier. Type inference plays a particularly important role in ML, Miranda, and Haskell, in which almost all type annotations are optional, and will be inferred by the compiler when omitted.
 
-## 7.2.1 Type Equivalence
+7.2.1 Type Equivalence
 
 In a language in which the user can deﬁne new types, there are two principal ways of deﬁning type equivalence. Structural equivalence is based on the content of type deﬁnitions: roughly speaking, two types are the same if they consist of the same components, put together in the same way. Name equivalence is based on the lexical occurrence of type deﬁnitions: roughly speaking, each deﬁnition introduces a new type. Structural equivalence is used in Algol-68, Modula-3, and (with various wrinkles) C and ML. Name equivalence appears in Java, C#, standard Pascal, and most Pascal descendants, including Ada. The exact deﬁnition of structural equivalence varies from one language to an- other. It requires that one decide which potential differences between types are important, and which may be considered unimportant. Most people would prob- ably agree that the format of a declaration should not matter—identical declara- tions that differ only in spacing or line breaks should still be considered equiva- lent. Likewise, in a Pascal-like language with structural equivalence, EXAMPLE 7.17
 
@@ -2138,7 +2138,7 @@ Conversions and nonconverting casts in C++
 
 DESIGN & IMPLEMENTATION
 
-## 7.6 Nonconverting casts C programmers sometimes attempt a nonconverting type cast (type pun) by taking the address of an object, converting the type of the resulting pointer, and then dereferencing:
+7.6 Nonconverting casts C programmers sometimes attempt a nonconverting type cast (type pun) by taking the address of an object, converting the type of the resulting pointer, and then dereferencing:
 
 r = *((float *) &n);
 
@@ -2151,7 +2151,7 @@ int n = static_cast<int>(d);
 
 There is also a const_cast that can be used to remove read-only qualiﬁcation. C-style type casts in C++ are deﬁned in terms of const_cast, static_cast, and reinterpret_cast; the precise behavior depends on the source and target types. ■ Any nonconverting type cast constitutes a dangerous subversion of the lan- guage’s type system. In a language with a weak type system such subversions can be difﬁcult to ﬁnd. In a language with a strong type system, the use of explicit nonconverting type casts at least labels the dangerous points in the code, facilitat- ing debugging if problems arise.
 
-## 7.2.2 Type Compatibility
+7.2.2 Type Compatibility
 
 Most languages do not require equivalence of types in every context. Instead, they merely say that a value’s type must be compatible with that of the context in which it appears. In an assignment statement, the type of the right-hand side must be compatible with that of the left-hand side. The types of the operands of + must both be compatible with some common type that supports addition (integers, real numbers, or perhaps strings or sets). In a subroutine call, the types of any arguments passed into the subroutine must be compatible with the types of the corresponding formal parameters, and the types of any formal parameters passed back to the caller must be compatible with the types of the corresponding arguments. The deﬁnition of type compatibility varies greatly from language to language. Ada takes a relatively restrictive approach: an Ada type S is compatible with an expected type T if and only if (1) S and T are equivalent, (2) one is a subtype of the other (or both are subtypes of the same base type), or (3) both are arrays, with the same numbers and types of elements in each dimension. Pascal was only slightly more lenient: in addition to allowing the intermixing of base and subrange types, it allowed an integer to be used in a context where a real was expected.
 
@@ -2207,7 +2207,7 @@ myStack.push(s); myStack.push(f); // we can push any kind of object on a stack .
 
 In a language without type tags, the assignment of a universal reference into an object of a speciﬁc reference type cannot be checked, because objects are not self- descriptive: there is no way to identify their type at run time. The programmer must therefore resort to an (unchecked) type conversion.
 
-## 7.2.3 Type Inference
+7.2.3 Type Inference
 
 We have seen how type checking ensures that the components of an expression (e.g., the arguments of a binary operator) have appropriate types. But what de- termines the type of the overall expression? In many cases, the answer is easy. The result of an arithmetic operator usually has the same type as the operands (possibly after coercing one of them, if their types were not the same). The re- sult of a comparison is usually Boolean. The result of a function call has the type declared in the function’s header. The result of an assignment (in languages in which assignments are expressions) has the same type as the left-hand side. In a few cases, however, the answer is not obvious. Operations on subranges and com- posite objects, for example, do not necessarily preserve the types of the operands. We examine these cases in the remainder of this subsection. In the following sec- tion, we consider a more elaborate form of type inference found in ML, Miranda, and Haskell.
 
@@ -2273,7 +2273,7 @@ decltype(a + b) sum;
 
 Here the type of sum depends on the types of A and B under the C++ coercion rules. If A and B are both int, for example, then sum will be an int. If one of A and B is double and the other is int, then sum will be a double. With appropri- ate (user-provided) coercion rules, sum might be inferred to have a complex (real + imaginary) or arbitrary-precision (“bignum”) type. ■
 
-## 7.2.4 Type Checking in ML
+7.2.4 Type Checking in ML
 
 The most sophisticated form of type inference occurs in the ML family of func- tional languages, including Haskell, F#, and the OCaml and SML dialects of ML itself. Programmers have the option of declaring the types of objects in these lan- guages, in which case the compiler behaves much like that of a more traditional statically typed language. As we noted near the beginning of Section 7.1, how- ever, programmers may also choose not to declare certain types, in which case the compiler will infer them, based on the known types of literal constants, the explicitly declared types of any objects that have them, and the syntactic structure
 
@@ -2372,7 +2372,7 @@ DESIGN & IMPLEMENTATION
   don’t have to?
 * What is uniﬁcation? What is its role in ML?
 
-## 7.3 Parametric Polymorphism
+7.3 Parametric Polymorphism
 
 As we have seen in the previous section, functions in ML-family languages are naturally polymorphic. Consider the simple task of ﬁnding the minimum of two values. In OCaml, the function EXAMPLE 7.44
 
@@ -2405,7 +2405,7 @@ For the ﬁnal call to min, we have provided, as a trailing block, an alternativ
 
 6 The origins of this “duck test” colloquialism are uncertain, but they go back at least as far as the early 20th century. Among other things, the test was widely cited in the 1940s and 50s as a means of identifying supposed Communist sympathizers.
 
-## 7.3.1 Generic Subroutines and Classes
+7.3.1 Generic Subroutines and Classes
 
 The disadvantage of polymorphism in Scheme, Smalltalk, Ruby, and the like is the need for run-time checking, which incurs nontrivial costs, and delays the report- ing of errors. The implicit polymorphism of ML-family languages avoids these disadvantages, but requires advanced type inference. For other compiled lan- guages, explicit parametric polymorphism (otherwise known as generics) allows the programmer to specify type parameters when declaring a subroutine or class. The compiler then uses these parameters in the course of static type checking. Languages that provide generics include Ada, C++ (which calls them tem- plates), Eiffel, Java, C#, and Scala. As a concrete example, consider the overloaded EXAMPLE 7.47
 
@@ -2524,7 +2524,7 @@ sort(strings, 30);
 
 In each case, the compiler will implicitly instantiate an appropriate version of the sort routine. Java and C# have similar conventions. To keep the language man- ageable, the rules for implicit instantiation in C++ are more restrictive than the rules for resolving overloaded subroutines in general. In particular, the compiler will not coerce a subroutine argument to match a type expression containing a generic parameter (Exercise C 7.26). ■ Figure 7.4 summarizes the features of Ada, C++, Java, and C# generics, and of the implicit parametric polymorphism of Lisp and ML. Further explanation of some of the details appears in Section C 7.3.2.
 
-## 7.3.2 Generics in C++, Java, and C#
+7.3.2 Generics in C++, Java, and C#
 
 Several of the key tradeoffs in the design of generics can be illustrated by com- paring the features of C++, Java, and C#. C++ is by far the most ambitious of the three. Its templates are intended for almost any programming task that re- quires substantially similar but not identical copies of an abstraction. Java and C# provide generics purely for the sake of polymorphism. Java’s design was heavily inﬂuenced by the desire for backward compatibility, not only with existing ver- sions of the language, but with existing virtual machines and libraries. The C# designers, though building on an existing language, did not feel as constrained. They had been planning for generics from the outset, and were able to engineer substantial new support into the .NET virtual machine.
 
@@ -2532,7 +2532,7 @@ IN MORE DEPTH
 
 On the companion site we discuss C++, Java, and C# generics in more detail, and consider the impact of their differing designs on the quality of error messages, the speed and size of generated code, and the expressive power of the notation. We note in particular the very different mechanisms used to make generic classes and methods support as broad a class of generic arguments as possible.
 
-## 7.4 Equality Testing and Assignment
+7.4 Equality Testing and Assignment
 
 For simple, primitive data types such as integers, ﬂoating-point numbers, or char- acters, equality testing and assignment are relatively straightforward operations, with obvious semantics and obvious implementations (bit-wise comparison or copy). For more complicated or abstract data types, both semantic and imple- mentation subtleties arise. Consider for example the problem of comparing two character strings. Should the expression s = t determine whether s and t
 
@@ -2589,11 +2589,11 @@ In a typical programming language, the type system consists of a set of built- i
 
 7.1 Most statically typed languages developed since the 1970s (including Java, C#, and the descendants of Pascal) use some form of name equivalence for types. Is structural equivalence a bad idea? Why or why not?
 
-## 7.2 In the following code, which of the variables will a compiler consider to have compatible types under structural equivalence? Under strict name equiva- lence? Under loose name equivalence?
+7.2 In the following code, which of the variables will a compiler consider to have compatible types under structural equivalence? Under strict name equiva- lence? Under loose name equivalence?
 
 type T = array [1..10] of integer S = T A : T B : T C : S D : array [1..10] of integer
 
-## 7.3 Consider the following declarations:
+7.3 Consider the following declarations:
 
   1.
   type cell
@@ -2619,7 +2619,7 @@ Should the declaration at line 4 be said to introduce an alias type? Under stric
 
 from the fact that location zero in a Unix process’s address space on the VAX always contained a zero, while the same location on the 680x0 is not in the address space, and will generate a protection error if used. For both of these classes of bugs, give examples of program fragments that would work on a VAX but not on a 680x0.
 
-## 7.6 Ada provides two “remainder” operators, rem and mod for integer types, deﬁned as follows [Ame83, Sec. 4.5.5]:
+7.6 Ada provides two “remainder” operators, rem and mod for integer types, deﬁned as follows [Ame83, Sec. 4.5.5]:
 
 Integer division and remainder are deﬁned by the relation A = (A/B)*B + (A rem B), where (A rem B) has the sign of A and an absolute value less than the absolute value of B. Integer division satisﬁes the identity (-A)/B = -(A/B) = A/(-B). The result of the modulus operation is such that (A mod B) has the sign of B and an absolute value less than the absolute value of B; in addition, for some integer value N, this result must satisfy the relation A = B*N + (A mod B).
 
@@ -2629,23 +2629,23 @@ Give values of A and B for which A rem B and A mod B differ. For what purposes w
 
 7.8 In Section 7.2.2 we introduced the notion of a universal reference type (void * in C) that refers to an object of unknown type. Using such ref- erences, implement a “poor man’s generic queue” in C, as suggested in Sec- tion 7.3.1. Where do you need type casts? Why? Give an example of a use of the queue that will fail catastrophically at run time, due to the lack of type checking.
 
-## 7.9 Rewrite the code of Figure 7.3 in Ada, Java, or C#. 7.10 (a) Give a generic solution to Exercise 6.19. (b) Translate this solution into Ada, Java, or C#.
+7.9 Rewrite the code of Figure 7.3 in Ada, Java, or C#. 7.10 (a) Give a generic solution to Exercise 6.19. (b) Translate this solution into Ada, Java, or C#.
 
-## 7.11 In your favorite language with generics, write code for simple versions of the following abstractions:
+7.11 In your favorite language with generics, write code for simple versions of the following abstractions:
 
 (a) a stack, implemented as a linked list (b) a priority queue, implemented as a skip list or a partially ordered tree embedded in an array (c) a dictionary (mapping), implemented as a hash table
 
 7.12 Figure 7.3 passes integer max_items to the queue abstraction as a generic parameter. Write an alternative version of the code that makes max_items a parameter to the queue constructor instead. What is the advantage of the generic parameter version?
 
-## 7.13 Rewrite the generic sorting routine of Examples 7.50–7.52 (with con- straints) using OCaml or SML functors.
+7.13 Rewrite the generic sorting routine of Examples 7.50–7.52 (with con- straints) using OCaml or SML functors.
 
-## 7.14 Flesh out the C++ sorting routine of Example 7.53. Demonstrate that this routine does “the wrong thing” when asked to sort an array of char* strings.
+7.14 Flesh out the C++ sorting routine of Example 7.53. Demonstrate that this routine does “the wrong thing” when asked to sort an array of char* strings.
 
 7.15 In Example 7.53 we mentioned three ways to make the need for compar- isons more explicit when deﬁning a generic sort routine in C++: make the comparison routine a method of the generic parameter class T, an extra ar- gument to the sort routine, or an extra generic parameter. Implement these options and discuss their comparative strengths and weaknesses.
 
 7.16 Yet another solution to the problem of the previous exercise is to make the sorting routine a method of a sorter class. The comparison routine can then be passed into the class as a constructor argument. Implement this option and compare it to those of the previous exercise.
 
-## 7.17 Consider the following code skeleton in C++:
+7.17 Consider the following code skeleton in C++:
 
 ```
 #include <list>
@@ -2703,7 +2703,7 @@ apply_to_ints(scores);
 
 How general is this mechanism? What are its limitations? Is it a reasonable substitute for formal (i.e., second-class, as opposed to third-class) subrou- tines?
 
-## 7.20 Modify the code of Figure 7.3 or your solution to Exercise 7.12 to throw an exception if an attempt is made to enqueue an item in a full queue, or to dequeue an item from an empty queue.
+7.20 Modify the code of Figure 7.3 or your solution to Exercise 7.12 to throw an exception if an attempt is made to enqueue an item in a full queue, or to dequeue an item from an empty queue.
 
 7.21–7.27 In More Depth.
 
@@ -2715,7 +2715,7 @@ How general is this mechanism? What are its limitations? Is it a reasonable subs
 
 7.30 Several recent projects attempt to blur the line between static and dynamic typing by adding optional type declarations to scripting languages. These declarations support a strategy of gradual typing, in which programmers initially write in a traditional scripting style and then add declarations in- crementally to increase reliability or decrease run-time cost. Learn about the Dart, Hack, and TypeScript languages, promoted by Google, Facebook, and Microsoft, respectively. What are your impressions? How easy do you think it will be in practice to retroﬁt declarations into programs originally developed without them?
 
-## 7.31 Research the type systems of Standard ML, OCaml, Haskell, and F#. What are the principal differences? What might explain the different choices made by the language designers?
+7.31 Research the type systems of Standard ML, OCaml, Haskell, and F#. What are the principal differences? What might explain the different choices made by the language designers?
 
 7.32 Write a program in C++ or Ada that creates at least two concrete types or subroutines from the same template/generic. Compile your code to assem- bly language and look at the result. Describe the mapping from source to target code.
 
@@ -2737,11 +2737,11 @@ launched a biennial workshop on Types in Language Design and Implementation in 2
 
 Chapter 7 introduced the notion of types as a way to organize the many values and objects manipulated by computer programs. It also introduced ter- minology for both built-in and composite types. As we noted in Section 7.1.4, composite types are formed by joining together one or more simpler types using a type constructor. From a denotational perspective, the constructors can be mod- eled as operations on sets, with each set representing one of the simpler types. In the current chapter we will survey the most important type constructors: records, arrays, strings, sets, pointers, lists, and ﬁles. In the section on records we will also consider both variants (unions) and tuples. In the section on point- ers, we will take a more detailed look at the value and reference models of vari- ables introduced in Section 6.1.2, and the heap management issues introduced in Section 3.2. The section on ﬁles (mostly on the companion site) will include a discussion of input and output mechanisms.
 
-## 8.1 Records (Structures)
+8.1 Records (Structures)
 
 Record types allow related data of heterogeneous types to be stored and manipu- lated together. Originally introduced by Cobol, records also appeared in Algol 68, which called them structures, and introduced the keyword struct. Many mod- ern languages, including C and its descendants, employ the Algol terminology. Fortran 90 simply calls its records “types”: they are the only form of programmer- deﬁned type other than arrays, which have their own special syntax. Structures in C++ are deﬁned as a special form of class (one in which members are globally visible by default). Java has no distinguished notion of struct; its program- mers use classes in all cases. C# and Swift use a reference model for variables of class types, and a value model for variables of struct types. In these languages, structs do not support inheritance. For the sake of simplicity, we will use the term “record” in most of our discussion to refer to the relevant construct in all these languages.
 
-## 8.1.1 Syntax and Operations
+8.1.1 Syntax and Operations
 
 In C, a simple record might be deﬁned as follows: EXAMPLE 8.1
 
@@ -2770,7 +2770,7 @@ yielded.atomic_number in C; atomic_number of element_yielded of mal- achite in C
 
 OCaml records and tuples specifying that the order of record ﬁelds is insigniﬁcant. The OCaml record value {name = "Cu"; atomic_number = 29; atomic_weight = 63.546; metallic = true} is the same as the value {atomic_number = 29; name = "Cu"; atomic_ weight = 63.546; metallic = true}—they will test true for equality. OCaml’s tuples, which we mentioned brieﬂy in Section 7.2.4, and will visit again in Section 11.4.3, resemble records whose ﬁelds are ordered, but unnamed. In SML, the other leading ML dialect, the resemblance is actually equivalence: tuples are deﬁned as syntactic sugar for records whose ﬁeld names are small inte- gers. The values ("Cu", 29), {1 = "Cu", 2 = 29}, and {2 = 29, 1 = "Cu"} will all test true for equality in SML. ■
 
-## 8.1.2 Memory Layout and Its Impact
+8.1.2 Memory Layout and Its Impact
 
 The ﬁelds of a record are usually stored in adjacent locations in memory. In its symbol table, the compiler keeps track of the offset of each ﬁeld within each record type. When it needs to access a ﬁeld, the compiler will often generate a load or store instruction with displacement addressing. For a local object, the base register is typically the frame pointer; the displacement is then the sum of the record’s offset from the register and the ﬁeld’s offset within the record. A likely layout for our element type on a 32-bit machine appears in Figure 8.1. EXAMPLE 8.5
 
@@ -2841,7 +2841,7 @@ DESIGN & IMPLEMENTATION
 
 that mimics the organization of memory-mapped control registers for a partic- ular Ethernet device. C and C++, which are designed in large part for systems programs, guarantee that the ﬁelds of a struct will be allocated in the order declared. The ﬁrst ﬁeld is guaranteed to have the coarsest alignment required by the hardware for any type (generally a four- or eight-byte boundary). Sub- sequent ﬁelds have the natural alignment for their type. Fortran 90 allows the programmer to specify that ﬁelds must not be reordered; in the absence of such a speciﬁcation the compiler can choose its own order. To accommodate systems programs, Ada, C, and C++ all allow the programmer to specify exactly how many bits to devote to each ﬁeld of a record. Where a “packed” directive is es- sentially a nonbinding indication of the programmer’s priorities, bit lengths on ﬁeld declarations are a binding speciﬁcation of assembly-level layout.
 
-## 8.1.3 Variant Records (Unions)
+8.1.3 Variant Records (Unions)
 
 Programming languages of the 1960s and 1970s were designed in an era of se- vere memory constraints. Many allowed the programmer to specify that certain variables (presumably ones that would never be used at the same time) should be allocated “on top of” one another, sharing the same bytes in memory. C’s syntax, EXAMPLE 8.11
 
@@ -2886,11 +2886,11 @@ We discuss unions and variant records in more detail on the companion site. Topi
   7.
   Brieﬂy describe two purposes for unions/variant records.
 
-## 8.2 Arrays
+8.2 Arrays
 
 Arrays are the most common and important composite data types. They have been a fundamental part of almost every high-level language, beginning with For- tran I. Unlike records, which group related ﬁelds of disparate types, arrays are usually homogeneous. Semantically, they can be thought of as a mapping from an index type to a component or element type. Some languages (e.g., Fortran) re- quire that the index type be integer; many languages allow it to be any discrete type. Some languages (e.g., Fortran 77) require that the element type of an array be scalar. Most (including Fortran 90) allow any element type. Some languages (notably scripting languages, but also some newer imperative languages, including Go and Swift) allow nondiscrete index types. The resulting associative arrays must generally be implemented with hash tables or search trees; we consider them in Section 14.4.3. Associative arrays also resemble the dictio- nary or map types supported by the standard libraries of many object-oriented languages. In C++, operator overloading allows these types to use conventional array-like syntax. For the purposes of this chapter, we will assume that array indices are discrete. This admits a (much more efﬁcient) contiguous allocation scheme, to be described in Section 8.2.3. We will also assume that arrays are dense—that a large fraction of their elements are not equal to zero or some other default value. The alternative—sparse arrays—arises in many important scien- tiﬁc problems. For these, libraries (or, in rare cases, the language itself) may support an alternative implementation that explicitly enumerates only the non- default values.
 
-## 8.2.1 Syntax and Operations
+8.2.1 Syntax and Operations
 
 Most languages refer to an element of an array by appending a subscript—usually delimited by square brackets—to the name of the array: A[3]. A few languages— notably Fortran and Ada—use parentheses instead: A(3). In some languages one declares an array by appending subscript notation to EXAMPLE 8.13
 
@@ -2995,7 +2995,7 @@ Array slice operations tensive facilities for slicing, as do Go and many scripti
 
 operands of an array operator need only have the same element type and shape. In particular, slices of the same shape can be intermixed in array operations, even if the arrays from which they were sliced have very different shapes. Any of the built-in arithmetic operators will take arrays as operands; the result is an array, of the same shape as the operands, whose elements are the result of applying the operator to corresponding elements. As a simple example, A + B is an array each of whose elements is the sum of the corresponding elements of A and B. Fortran 90 also provides a huge collection of intrinsic, or built-in functions. More than 60 of these (including logic and bit manipulation, trigonometry, logs and exponents, type conversion, and string manipulation) are deﬁned on scalars, but will also perform their operation element-wise if passed arrays as arguments. The function tan(A), for example, returns an array consisting of the tangents of the elements of A. Many additional intrinsic functions are deﬁned solely on arrays. These include searching and summarization, transposition, and reshaping and subscript permutation. Fortran 90 draws signiﬁcant inspiration from APL, an array manipulation lan- guage developed by Iverson and others in the early to mid-1960s.2 APL was de- signed primarily as a terse mathematical notation for array manipulations. It employs an enormous character set that made it difﬁcult to use with traditional keyboards and textual displays. Its variables are all arrays, and many of the spe- cial characters denote array operations. APL implementations are designed for interpreted, interactive use. They are best suited to “quick and dirty” solution of mathematical problems. The combination of very powerful operators with very terse notation makes APL programs notoriously difﬁcult to read and understand. J, a successor to APL, uses a conventional character set.
 
-## 8.2.2 Dimensions, Bounds, and Allocation
+8.2.2 Dimensions, Bounds, and Allocation
 
 In all of the examples in the previous subsection, the shape of the array (including bounds) was speciﬁed in the declaration. For such static shape arrays, storage can be managed in the usual way: static allocation for arrays whose lifetime is the entire program; stack allocation for arrays whose lifetime is an invocation of a subroutine; heap allocation for dynamically allocated arrays with more general lifetime. Storage management is more complex for arrays whose shape is not known until elaboration time, or whose shape may change during execution. For these the compiler must arrange not only to allocate space, but also to make shape information available at run time (without such information, indexing would not be possible). Some dynamically typed languages allow run-time binding of
 
@@ -3060,7 +3060,7 @@ s = s + " but sweet";
 
 Here the declaration String s introduces a string variable, which we initialize with a reference to the constant string "short". In the subsequent assignment, + creates a new string containing the concatenation of the old s and the constant " but sweet"; s is then set to refer to this new string, rather than the old. Note that arrays of characters are not the same as strings in Java and C#: the length of an array is ﬁxed at elaboration time, and its elements can be modiﬁed in place. ■ Dynamically resizable arrays (other than strings) appear in APL, Common Lisp, and the various scripting languages. They are also supported by the vector, Vector, and ArrayList classes of the C++, Java, and C# libraries, respectively. In contrast to the allocate-able arrays of Fortran 90, these arrays can change their shape—in particular, can grow—while retaining their current content. In many cases, increasing the size will require that the run-time system allocate a larger block, copy any data that are to be retained from the old block to the new, and then deallocate the old. If the number of dimensions of a fully dynamic array is statically known, the dope vector can be kept, together with a pointer to the data, in the stack frame of the subroutine in which the array was declared. If the number of dimensions can change, the dope vector must generally be placed at the beginning of the heap block instead. In the absence of garbage collection, the compiler must arrange to reclaim the space occupied by fully dynamic arrays when control returns from the subrou- tine in which they were declared. Space for stack-allocated arrays is of course reclaimed automatically by popping the stack.
 
-## 8.2.3 Memory Layout
+8.2.3 Memory Layout
 
 Arrays in most language implementations are stored in contiguous locations in memory. In a one-dimensional array, the second element of the array is stored immediately after the ﬁrst; the third is stored immediately after the second, and so forth. For arrays of records, alignment constraints may result in small holes between consecutive elements. For multidimensional arrays, it still makes sense to put the ﬁrst element of the array in the array’s ﬁrst memory location. But which element comes next? There are two reasonable answers, called row-major and column-major order. In EXAMPLE 8.22
 
@@ -3176,7 +3176,7 @@ Indexing a row-pointer array forward. Using our three-dimensional array A as an 
 
 out the compiler uses? Why do most language designers consider row-major layout to be better? 16. How much of the work of computing the address of an element of an array can be performed at compile time? How much must be performed at run time?
 
-## 8.3 Strings
+8.3 Strings
 
 In some languages, a string is simply an array of characters. In other languages, strings have special status, with operations that are not available for arrays of other sorts. Scripting languages like Perl, Python, and Ruby have extensive suites of built-in string operators and functions, including sophisticated pat- tern matching facilities based on regular expressions. Some special-purpose languages—Icon, in particular—provide even more sophisticated mechanisms, including general-purpose generators and backtracking search. We will consider the string and pattern-matching facilities of scripting languages in more detail in Section 14.4.2. Icon was discussed in Section C 6.5.4. In the remainder of the current section we focus on the role of strings in more traditional languages. Almost all programming languages allow literal strings to be speciﬁed as a se- quence of characters, usually enclosed in single or double quote marks. Most lan- guages distinguish between literal characters (often delimited with single quotes) and literal strings (often delimited with double quotes). A few languages make no such distinction, deﬁning a character as simply a string of length one. Most lan- guages also provide escape sequences that allow nonprinting characters and quote marks to appear inside literal strings. C and C++ provide a very rich set of escape sequences. An arbitrary charac- EXAMPLE 8.29
 
@@ -3186,7 +3186,7 @@ one-byte elements, and never contain references to anything else makes dynamic- 
 
 char* assignment in C on the other hand, provides only the ability to create a pointer to a string literal. Because of C’s uniﬁcation of arrays and pointers, even assignment is not sup- ported. Given the declaration char *s, the statement s = "abc" makes s point to the constant "abc" in static storage. If s is declared as an array, rather than a pointer (char s[4]), then the statement will trigger an error message from the compiler. To assign one array into another in C, the program must copy the characters individually. ■ Other languages allow the length of a string-valued variable to change over its lifetime, requiring that the variable be implemented as a block or chain of blocks in the heap. ML and Lisp provide strings as a built-in type. C++, Java, and C# provide them as predeﬁned classes of object, in the formal, object-oriented sense. In all these languages a string variable is a reference to a string. Assigning a new value to such a variable makes it refer to a different object—each such object is immutable. Concatenation and other string operators implicitly create new objects. The space used by objects that are no longer reachable from any variable is reclaimed automatically.
 
-## 8.4 Sets
+8.4 Sets
 
 A programming language set is an unordered collection of an arbitrary number of distinct values of a common type. Sets were introduced by Pascal, and have been supported by many subsequent languages. The type from which elements of a set are drawn is known as the base or universe type. Pascal sets were restricted EXAMPLE 8.31
 
@@ -3211,13 +3211,13 @@ if my_set[j] { ...
 
 If M is a mapping from type D to type R in Go, and if k ∈D is not mapped to anything in R, the expression M[k] will return the “zero value” of type R. For Booleans, the zero value happens to be false, so the test in the last line of our example will return false if j is not in my_set. Deleting a no-longer-present element is preferable to mapping it explicitly to false, because deletion reclaims the space in the underlying hash table; mapping to false does not. ■
 
-## 8.5 Pointers and Recursive Types
+8.5 Pointers and Recursive Types
 
 A recursive type is one whose objects may contain one or more references to other objects of the type. Most recursive types are records, since they need to contain something in addition to the reference, implying the existence of heterogeneous ﬁelds. Recursive types are used to build a wide variety of “linked” data structures, including lists and trees. In languages that use a reference model of variables, it is easy for a record of type foo to include a reference to another record of type foo: every variable (and hence every record ﬁeld) is a reference anyway. In languages that use a value model of variables, recursive types require the notion of a pointer: a variable (or ﬁeld) whose value is a reference to some object. Pointers were ﬁrst introduced in PL/I.
 
 In some languages (e.g., Pascal, Modula-3, and Ada 83), pointers were re- stricted to point only to objects in the heap. The only way to create a new pointer value (without using variant records or casts to bypass the type system) was to call a built-in function that allocated a new object in the heap and returned a pointer to it. In other languages, both old and new, one can create a pointer to a nonheap object by using an “address of” operator. We will examine pointer operations and the ramiﬁcations of the reference and value models in more detail in the ﬁrst subsection below. In any language that permits new objects to be allocated from the heap, the question arises: how and when is storage reclaimed for objects that are no longer needed? In short-lived programs it may be acceptable simply to leave the storage unused, but in most cases unused space must be reclaimed, to make room for other things. A program that fails to reclaim the space for objects that are no longer needed is said to “leak memory.” If such a program runs for an extended period of time, it may run out of space and crash. Some languages, including C, C++, and Rust, require the programmer to re- claim space explicitly. Other languages, including Java, C#, Scala, Go, and all the functional and scripting languages, require the language implementation to re- claim unused objects automatically. Explicit storage reclamation simpliﬁes the language implementation, but raises the possibility that the programmer will forget to reclaim objects that are no longer live (thereby leaking memory), or will accidentally reclaim objects that are still in use (thereby creating dangling references). Automatic storage reclamation (otherwise known as garbage collec- tion) dramatically simpliﬁes the programmer’s task, but imposes certain run- time costs, and raises the question of how the language implementation is to distinguish garbage from active objects. We will discuss dangling references and garbage collection further in Sections 8.5.2 and 8.5.3, respectively.
 
-## 8.5.1 Syntax and Operations
+8.5.1 Syntax and Operations
 
 Operations on pointers include allocation and deallocation of objects in the heap, dereferencing of pointers to access the objects to which they point, and assign-
 
@@ -3477,7 +3477,7 @@ void f(int len) { int A[len]; /* sizeof(A) == len * sizeof(int) */ ■
 * Under what circumstances must the bounds of a C array be speciﬁed in its
   declaration?
 
-## 8.5.2 Dangling References
+8.5.2 Dangling References
 
 When a heap-allocated object is no longer live, a long-running program needs to reclaim the object’s space. Stack objects are reclaimed automatically as part of the subroutine calling sequence. How are heap objects reclaimed? There are two alternatives. Languages like C, C++, and Rust require the programmer to EXAMPLE 8.49
 
@@ -3509,7 +3509,7 @@ IN MORE DEPTH
 
 On the companion site we consider two mechanisms that are sometimes used to catch dangling references at run time. Tombstones introduce an extra level of indirection on every pointer access. When an object is reclaimed, the indirection word (tombstone) is marked in a way that invalidates future references to the object. Locks and keys add a word to every pointer and to every object in the heap; these words must match for the pointer to be valid. Tombstones can be used in languages that permit pointers to nonheap objects, but they introduce the secondary problem of reclaiming the tombstones themselves. Locks and keys are somewhat simpler, but they work only for objects in the heap.
 
-## 8.5.3 Garbage Collection
+8.5.3 Garbage Collection
 
 Explicit reclamation of heap objects is a serious burden on the programmer and a major source of bugs (memory leaks and dangling references). The code required to keep track of object lifetimes makes programs more difﬁcult to design, imple- ment, and maintain. An attractive alternative is to have the language implemen- tation notice when objects are no longer useful and reclaim them automatically.
 
@@ -3604,7 +3604,7 @@ Conservative Collection Language implementors have traditionally assumed that au
 * What are the advantages and disadvantages of allowing pointers to refer to
   objects that do not lie in the heap?
 
-## 8.6 Lists
+8.6 Lists
 
 A list is deﬁned recursively as either the empty list or a pair consisting of an initial object (which may be either a list or an atom) and another (shorter) list. Lists are ideally suited to programming in functional and logic languages, which do most of their work via recursion and higher-order functions (to be described in Section 11.6). Lists can also be used in imperative programs. They are supported by built- in type constructors in a few traditional compiled languages (e.g., Clu) and in most modern scripting languages. They are also commonly supported by library classes in object-oriented languages, and programmers can build their own in any language with records and pointers. Since many of the standard list operations tend to generate garbage, lists tend to work best in a language with automatic garbage collection. One key aspect of lists is very different in the two main functional language families. Lists in ML are homogeneous: every element of the list must have the same type. Lisp lists, by contrast, are heterogeneous: any object may be placed in a list, so long as it is never used in an inconsistent fashion.9 These different EXAMPLE 8.54
 
@@ -3650,7 +3650,7 @@ All of these are meant to capture the mathematical
 
 We could of course create an equivalent list with a series of appropriate function calls. The brevity of the list comprehension syntax, however, can sometimes lead to remarkably elegant programs (see, e.g., Exercise 8.22). ■
 
-## 8.7 Files and Input/Output
+8.7 Files and Input/Output
 
 Input/output (I/O) facilities allow a program to communicate with the outside world. In discussing this communication, it is customary to distinguish between interactive I/O and I/O with ﬁles. Interactive I/O generally implies communica- tion with human users or physical devices, which work in parallel with the run- ning program, and whose input to the program may depend on earlier output from the program (e.g., prompts). Files generally refer to off-line storage imple- mented by the operating system. Files may be further categorized into those that are temporary and those that are persistent. Temporary ﬁles exist for the duration of a single program run; their purpose is to store information that is too large to ﬁt in the memory available to the program. Persistent ﬁles allow a program to read data that existed before the program began running, and to write data that will continue to exist after the program has ended. I/O is one of the most difﬁcult aspects of a language to design, and one that displays the least commonality from one language to the next. Some languages provide built-in file data types and special syntactic constructs for I/O. Others relegate I/O entirely to library packages, which export a (usually opaque) file type and a variety of input and output subroutines. The principal advantage of language integration is the ability to employ non-subroutine-call syntax, and to perform operations (e.g., type checking on subroutine calls with varying numbers of parameters) that may not otherwise be available to library routines. A purely library-based approach to I/O, on the other hand, may keep a substantial amount of “clutter” out of the language deﬁnition.
 
@@ -3684,13 +3684,13 @@ A : array [0..9] of record s : short c : char t : short d : char r : real i : in
 
 8.2 In Example 8.10 we suggested the possibility of sorting record ﬁelds by their alignment requirement, to minimize holes. In the example, we sorted smallest-alignment-ﬁrst. What would happen if we sorted longest- alignment-ﬁrst? Do you see any advantages to this scheme? Any disad- vantages? If the record as a whole must be an even multiple of the longest alignment, do the two approaches ever differ in total space required?
 
-## 8.3 Give Ada code to map from lowercase to uppercase letters, using (a) an array (b) a function
+8.3 Give Ada code to map from lowercase to uppercase letters, using (a) an array (b) a function
 
 Note the similarity of syntax: in both cases upper(‚a‚) is ‚A‚.
 
 8.4 In Section 8.2.2 we noted that in a language with dynamic arrays and a value model of variables, records could have ﬁelds whose size is not known at compile time. To accommodate these, we suggested using a dope vector for the record, to track the offsets of the ﬁelds. Suppose instead that we want to maintain a static offset for each ﬁeld. Can we devise an alternative strategy inspired by the stack frame layout of Figure 8.7, and divide each record into a ﬁxed-size part and a variable-size part? What problems would we need to address? (Hint: Consider nested records.)
 
-## 8.5 Explain how to extend Figure 8.7 to accommodate subroutine arguments that are passed by value, but whose shape is not known until the subroutine is called at run time.
+8.5 Explain how to extend Figure 8.7 to accommodate subroutine arguments that are passed by value, but whose shape is not known until the subroutine is called at run time.
 
 8.6 Explain how to obtain the effect of Fortran 90’s allocate statement for one-dimensional arrays using pointers in C. You will probably ﬁnd that your solution does not generalize to multidimensional arrays. Why not? If you are familiar with C++, show how to use its class facilities to solve the problem.
 
@@ -3700,11 +3700,11 @@ Note the similarity of syntax: in both cases upper(‚a‚) is ‚A‚.
 
 8.9 Continuing the previous exercise, suppose that A has row-pointer layout, and that i, j, and k are again available in registers. Show pseudo-assembler code to load A[i, j, k] into a register. Assuming that all memory loads are cache hits, how many cycles is your code likely to require on a modern pro- cessor?
 
-## 8.10 Repeat the preceding two exercises, modifying your code to include run- time checking of array subscript bounds.
+8.10 Repeat the preceding two exercises, modifying your code to include run- time checking of array subscript bounds.
 
 8.11 In Section 8.2.3 we discussed how to differentiate between the constant and variable portions of an array reference, in order to efﬁciently access the sub- parts of array and record objects. An alternative approach is to generate naive code and count on the compiler’s code improver to ﬁnd the constant portions, group them together, and calculate them at compile time. Discuss the advantages and disadvantages of each approach.
 
-## 8.12 Consider the following C declaration, compiled on a 64-bit x86 machine:
+8.12 Consider the following C declaration, compiled on a 64-bit x86 machine:
 
 ```
 struct {
@@ -3729,7 +3729,7 @@ Assume that these declarations are local to the current subroutine. Note the low
 
 8.14 Suppose A is a 10×10 array of (4-byte) integers, indexed from [0][0] through [9][9]. Suppose further that the address of A is currently in register r1, the value of integer i is currently in register r2, and the value of integer j is currently in register r3. Give pseudo-assembly language for a code sequence that will load the value of A[i][j] into register r1 (a) assuming that A is implemented using (row-major) contiguous allocation; (b) assuming that A is implemented using row pointers. Each line of your pseudocode should correspond to a single instruction on a typical modern machine. You may use as many registers as you need. You need not preserve the values in r1, r2, and r3. You may assume that i and j are in bounds, and that addresses are 4 bytes long. Which code sequence is likely to be faster? Why?
 
-## 8.15 Pointers and recursive type deﬁnitions complicate the algorithm for deter- mining structural equivalence of types. Consider, for example, the follow- ing deﬁnitions:
+8.15 Pointers and recursive type deﬁnitions complicate the algorithm for deter- mining structural equivalence of types. Consider, for example, the follow- ing deﬁnitions:
 
 type A = record x : pointer to B y : real
 
@@ -3737,7 +3737,7 @@ type B = record x : pointer to A y : real
 
 The simple deﬁnition of structural equivalence given in Section 7.2.1 (ex- pand the subparts recursively until all you have is a string of built-in types and type constructors; then compare them) does not work: we get an inﬁ- nite expansion (type A = record x : pointer to record x : pointer to record x : pointer to record . . . ). The obvious reinterpretation is to say two types A and B are equivalent if any sequence of ﬁeld selections, array subscripts, pointer dereferences, and other operations that takes one down into the structure of A, and that ends at a built-in type, always encounters the same ﬁeld names, and ends at the same built-in type when used to dive into the structure of B—and vice versa. Under this reinterpretation, A and B above have the same type. Give an algorithm based on this reinterpretation that could be used in a compiler to determine structural equivalence. (Hint: The fastest approach is due to J. Král [Krá73]. It is based on the algorithm used to ﬁnd the smallest deterministic ﬁnite automaton that accepts a given reg- ular language. This algorithm was outlined in Example 2.15; details can be found in any automata theory textbook [e.g., [HMU07]].)
 
-## 8.16 Explain the meaning of the following C declarations:
+8.16 Explain the meaning of the following C declarations:
 
 ```
 double *a[n];
@@ -3779,7 +3779,7 @@ Each of the functions a, b, and c contains a reference to the next:
 
 How might you address this circularity without giving up on reference counts?
 
-## 8.22 Here is a skeleton for the standard quicksort algorithm in Haskell:
+8.22 Here is a skeleton for the standard quicksort algorithm in Haskell:
 
 ```
 quicksort [] = []
@@ -3804,7 +3804,7 @@ The ++ operator denotes list concatenation (similar to @ in ML). The : operator 
 
 8.37 Experiment with the cost of garbage collection in your favorite language im- plementation. What kind of collector does it use? Can you create artiﬁcial programs for which it performs particularly well or poorly?
 
-## 8.38 Learn about weak references in Java. How do they interact with garbage collection? How do they compare to weak_ptr objects in C++? Describe several scenarios in which they may be useful.
+8.38 Learn about weak references in Java. How do they interact with garbage collection? How do they compare to weak_ptr objects in C++? Describe several scenarios in which they may be useful.
 
 8.39–8.41 In More Depth.
 
@@ -3820,7 +3820,7 @@ In the introduction to Chapter 3, we deﬁned abstraction as a process by which 
 
 the ARM instruction set and the gcc compiler for 32- and 64-bit x86. We also discuss the register window mechanism of the SPARC instruction set. In Section 9.3 we look more closely at subroutine parameters. We consider parameter-passing modes, which determine the operations that a subroutine can apply to its formal parameters and the effects of those operations on the corre- sponding actual parameters. We also consider named and default parameters, variable numbers of arguments, and function return mechanisms. In Section 9.4, we consider the handling of exceptional conditions. While ex- ceptions can sometimes be conﬁned to the current subroutine, in the general case they require a mechanism to “pop out of” a nested context without returning, so that recovery can occur in the calling context. In Section 9.5, we consider corou- tines, which allow a program to maintain two or more execution contexts, and to switch back and forth among them. Coroutines can be used to implement iter- ators (Section 6.5.3), but they have other uses as well, particularly in simulation and in server programs. In Chapter 13 we will use them as the basis for concur- rent (“quasiparallel”) threads. Finally, in Section 9.6 we consider asynchronous events—things that happen outside a program, but to which it needs to respond.
 
-## 9.1 Review of Stack Layout
+9.1 Review of Stack Layout
 
 In Section 3.2.2 we discussed the allocation of space on a subroutine call stack EXAMPLE 9.1
 
@@ -3837,7 +3837,7 @@ that are thus neither local nor global, can be found by maintaining a static cha
 
 Visibility of nested routines for example, the subroutine nesting shown in Figure 9.1. If subroutine D is called directly from B, then clearly B’s frame will already be on the stack. How else could D be called? It is not visible in A or E, because it is nested inside of B. A moment’s thought makes clear that it is only when control enters B (placing B’s frame on the stack) that D comes into view. It can therefore be called by C, or by any other routine (not shown) that is nested inside C or D, but only because these are also within B. ■
 
-## 9.2 Calling Sequences
+9.2 Calling Sequences
 
 Maintenance of the subroutine call stack is the responsibility of the calling se- quence—the code executed by the caller immediately before and after a subroutine call—and of the prologue (code executed at the beginning) and epilogue (code exe- cuted at the end) of the subroutine itself. Sometimes the term “calling sequence” is used to refer to the combined operations of the caller, the prologue, and the epilogue. Tasks that must be accomplished on the way into a subroutine include passing parameters, saving the return address, changing the program counter, changing the stack pointer to allocate space, saving registers (including the frame pointer) that contain values that may be overwritten by the callee but are still live (poten- tially needed) in the caller, changing the frame pointer to refer to the new frame, and executing initialization code for any objects in the new frame that require it. Tasks that must be accomplished on the way out include passing return param- eters or function values, executing ﬁnalization code for any local objects that re- quire it, deallocating the stack frame (restoring the stack pointer), restoring other saved registers (including the frame pointer), and restoring the program counter. Some of these tasks (e.g., passing parameters) must be performed by the caller, because they differ from call to call. Most of the tasks, however, can be performed either by the caller or the callee. In general, we will save space if the callee does as much work as possible: tasks performed in the callee appear only once in the target program, but tasks performed in the caller appear at every call site, and the typical subroutine is called in more than one place.
 
@@ -3889,7 +3889,7 @@ Many parts of the calling sequence, prologue, and epilogue can be omitted in com
 
 leave it there; it does not need to save it in the stack. Likewise it need not save the static link or any caller-saves registers. A subroutine with no local variables and nothing to save or restore may not even need a stack frame on a RISC machine. The simplest subroutines (e.g., li- brary routines to compute the standard mathematical functions) may not touch memory at all, except to fetch instructions: they may take their arguments in registers, compute entirely in (caller-saves) registers, call no other routines, and return their results in registers. As a result they may be extremely fast.
 
-## 9.2.1 Displays
+9.2.1 Displays
 
 One disadvantage of static chains is that access to an object in a scope k levels out requires that the static chain be dereferenced k times. If a local object can be loaded into a register with a single (displacement mode) memory access, an object k levels out will require k + 1 memory accesses. This number can be reduced to a constant by use of a display.
 
@@ -3897,7 +3897,7 @@ IN MORE DEPTH
 
 As described on the companion site, a display is a small array that replaces the static chain. The jth element of the display contains a reference to the frame of the most recently active subroutine at lexical nesting level j. If the currently active routine is nested i > 3 levels deep, then elements i −1, i −2, and i −3 of the display contain the values that would have been the ﬁrst three links of the static chain. An object k levels out can be found at a statically known offset from the address stored in element j = i −k of the display. For most programs the cost of maintaining a display in the subroutine calling sequence tends to be slightly higher than that of maintaining a static chain. At the same time, the cost of dereferencing the static chain has been reduced by modern compilers, which tend to do a good job of caching the links in registers when ap- propriate. These observations, combined with the trend toward languages (those descended from C in particular) in which subroutines do not nest, have made displays less common today than they were in the 1970s.
 
-## 9.2.2 Stack Case Studies: LLVM on ARM; gcc on x86
+9.2.2 Stack Case Studies: LLVM on ARM; gcc on x86
 
 Calling sequences differ signiﬁcantly from machine to machine and even com- piler to compiler, though hardware vendors typically publish suggested conven- tions for their respective architectures, to promote interoperability among pro- gram components produced by different compilers. Many of the most signiﬁ- cant differences reﬂect an evolution over time toward heavier use of registers and lighter use of memory. This evolution reﬂects at least three important technolog- ical trends: the increasing size of register sets, the increasing gap in speed between
 
@@ -3907,7 +3907,7 @@ IN MORE DEPTH
 
 On the companion site we look in some detail at the stack layout conventions and calling sequences of a representative pair of compilers: the LLVM compiler for the 32-bit ARMv7 architecture, and the gcc compiler for the 32- and 64-bit x86. LLVM is a middle/back end combination originally developed at the University of Illinois and now used extensively in both academia and industry. Among other things, it forms the backbone of the standard tool chains for both iPhone (iOS) and Android devices. The GNU compiler collection, gcc, is a cornerstone of the open source movement, used across a huge variety of laptops, desktops, and servers. Both LLVM and gcc have back ends for many target architectures, and front ends for many programming languages. We focus on their support for C, whose conventions are in some sense a “lowest common denominator” for other languages.
 
-## 9.2.3 Register Windows
+9.2.3 Register Windows
 
 As an alternative to saving and restoring registers on subroutine calls and returns, the original Berkeley RISC machines [PD80, Pat85] introduced a hardware mech- anism known as register windows. The basic idea is to map the ISA’s limited set of register names onto some subset (window) of a much larger collection of physical registers, and to change the mapping when making subroutine calls. Old and new mappings overlap a bit, allowing arguments to be passed (and function results re- turned) in the intersection.
 
@@ -3915,7 +3915,7 @@ IN MORE DEPTH
 
 We consider register windows in more detail on the companion site. They have appeared in several commercial processors, most notably the Sun SPARC and the Intel IA-64 (Itanium).
 
-## 9.2.4 In-Line Expansion
+9.2.4 In-Line Expansion
 
 As an alternative to stack-based calling conventions, many language implemen- tations allow certain subroutines to be expanded in-line at the point of call. A copy of the “called” routine becomes a part of the “caller”; no actual subroutine call occurs. In-line expansion avoids a variety of overheads, including space al- location, branch delays from the call and return, maintaining the static chain or display, and (often) saving and restoring registers. It also allows the compiler to perform code improvements such as global register allocation, instruction sche- duling, and common subexpression elimination across the boundaries between subroutines—something that most compilers can’t do otherwise. In many implementations, the compiler chooses which subroutines to expand in-line and which to compile conventionally. In some languages, the program- mer can suggest that particular routines be in-lined. In C and C++, the keyword EXAMPLE 9.6
 
@@ -3982,7 +3982,7 @@ DESIGN & IMPLEMENTATION
 
 9.2 In-lining and modularity Probably the most important argument for in-line expansion is that it allows programmers to adopt a very modular programming style, with lots of tiny subroutines, without sacriﬁcing performance. This modular programming style is essential for object-oriented languages, as we shall see in Chapter 10. The beneﬁt of in-lining is undermined to some degree by the fact that chang- ing the deﬁnition of an in-lined function forces the recompilation of every user of the function; changing the deﬁnition of an ordinary function (without changing its interface) forces relinking only. The best of both worlds may be achieved in systems with just-in-time compilation (Section 16.2.1).
 
-## 9.3 Parameter Passing
+9.3 Parameter Passing
 
 Most subroutines are parameterized: they take arguments that control certain aspects of their behavior, or specify the data on which they are to operate. Pa- rameter names that appear in the declaration of a subroutine are known as for- mal parameters. Variables and expressions that are passed to a subroutine in a particular call are known as actual parameters. We have been referring to actual parameters as arguments. In the following two subsections, we discuss the most common parameter-passing modes, most of which are implemented by passing values, references, or closures. In Section 9.3.3 we will look at additional mecha- nisms, including default (optional) parameters, named parameters, and variable- length argument lists. Finally, in Section 9.3.4 we will consider mechanisms for returning values from functions. As we noted in Section 6.1, most languages use a preﬁx notation for calls to user-deﬁned subroutines, with the subroutine name followed by a parenthe- sized argument list. Lisp places the function name inside the parentheses, as in (max a b). ML dispenses with the parentheses entirely, except when needed for EXAMPLE 9.8
 
@@ -4019,7 +4019,7 @@ In Ada (as in most imperative languages) it is clear that if... then ... else is
 
 Smalltalk, on the other hand, the analogous conditional constructs are syntacti- cally indistinguishable from user-deﬁned operations. They are in fact deﬁned in terms of simpler concepts, rather than being built in, though they require a spe- cial mechanism to evaluate their arguments in normal, rather than applicative, order (Section 6.6.2). ■
 
-## 9.3.1 Parameter Modes
+9.3.1 Parameter Modes
 
 In our discussion of subroutines so far, we have glossed over the semantic rules that govern parameter passing, and that determine the relationship between ac- tual and formal parameters. Some languages, including C, Fortran, ML, and Lisp, deﬁne a single set of rules, which apply to all parameters. Other languages, in- cluding Ada, C++, and Swift, provide two or more sets of rules, corresponding to different parameter-passing modes. As in many aspects of language design, the semantic details are heavily inﬂuenced by implementation issues. Suppose for the moment that x is a global variable in a language with a value EXAMPLE 9.10
 
@@ -4308,7 +4308,7 @@ Variable number of arguments in C# static void print_lines(String foo, params St
 
 The calling syntax is the same. ■
 
-## 9.3.4 Function Returns
+9.3.4 Function Returns
 
 The syntax by which a function indicates the value to be returned varies greatly. In languages like Lisp, ML, and Algol 68, which do not distinguish between ex- pressions and statements, the value of a function is simply the value of its body, which is itself an expression. In several early imperative languages, including Algol 60, Fortran, and Pas- cal, a function speciﬁed its return value by executing an assignment statement whose left-hand side was the name of the function. This approach has an unfor- tunate interaction with the usual static scope rules (Section 3.3.1): the compiler must forbid any immediately nested declaration that would hide the name of the function, since the function would then be unable to return. This special case is EXAMPLE 9.30
 
@@ -4375,7 +4375,7 @@ In functional languages, it is commonplace to return a subroutine as a closure. 
 * Describe three common mechanisms for specifying the return value of a func-
   tion. What are their relative strengths and drawbacks?
 
-## 9.4 Exception Handling
+9.4 Exception Handling
 
 Several times in the preceding chapters and sections we have referred to exception- handling mechanisms. We have delayed detailed discussion of these mechanisms until now because exception handling generally requires the language implemen- tation to “unwind” the subroutine call stack. An exception can be deﬁned as an unexpected—or at least unusual—condition that arises during program execution, and that cannot easily be handled in the local context. It may be detected automatically by the language implementation, or the program may raise or throw it explicitly (the two terms are synonymous). The most common exceptions are various sorts of run-time errors. In an I/O library, for example, an input routine may encounter the end of its ﬁle before it can read a requested value, or it may ﬁnd punctuation marks or letters on the
 
@@ -4445,7 +4445,7 @@ throw my_error("oops!");
 
 If the exception is not handled in the calling routine, it continues to propagate back up the dynamic chain. If it is not handled in the program’s main routine, then a predeﬁned outermost handler is invoked, and usually terminates the pro- gram. ■ In a sense, the dependence of exception handling on the order of subroutine calls might be considered a form of dynamic binding, but it is a much more re- stricted form than is found in PL/I. Rather than say that a handler in a calling routine has been dynamically bound to an error in a called routine, we prefer to say that the handler is lexically bound to the expression or statement that calls the called routine. An exception that is not handled inside a called routine can then be modeled as an “exceptional return”; it causes the calling expression or statement to raise an exception, which is again handled lexically within its subroutine. In practice, exception handlers tend to perform three kinds of operations. First, ideally, a handler will compensate for the exception in a way that allows the program to recover and continue execution. For example, in response to an “out of memory” exception in a storage management routine, a handler might ask the operating system to allocate additional space to the application, after which it could complete the requested operation. Second, when an exception occurs in a given block of code but cannot be handled locally, it is often important to declare a local handler that cleans up any resources allocated in the local block, and then “reraises” the exception, so that it will continue to propagate back to a handler that can (hopefully) recover. Third, if recovery is not possible, a handler can at least print a helpful error message before the program terminates. As discussed in Section 6.2.1, exceptions are related to, but distinct from, the notion of multilevel returns. A routine that performs a multilevel return is func- tioning as expected; in Eiffel terminology, it is fulﬁlling its contract. A routine that raises an exception is not functioning as expected; it cannot fulﬁll its con- tract. Common Lisp and Ruby distinguish between these two related concepts, but most languages do not; in most, a multilevel return requires the outer caller to provide a trivial handler. Common Lisp is also unusual in providing four different versions of its exception-handling mechanism. Two of these provide the usual “exceptional re- turn” semantics; the others are designed to repair the problem and restart eval- uation of some dynamically enclosing expression. Orthogonally, two perform their work in the referencing environment where the handler is declared; the oth- ers perform their work in the environment where the exception ﬁrst arises. The latter option allows an abstraction to provide several alternative strategies for re- covery from exceptions. The user of the abstraction can then specify, dynamically, which of these strategies should be used in a given context. We will consider Com- mon Lisp further in Exercise 9.22 and Exploration 9.43. The “exceptional return” mechanism, with work performed in the environment of the handler, is known as handler-case; it provides semantics comparable to those of most other modern languages.
 
-## 9.4.1 Deﬁning Exceptions
+9.4.1 Deﬁning Exceptions
 
 In many languages, dynamic semantic errors automatically result in exceptions, which the program can then catch. The programmer can also deﬁne additional, application-speciﬁc exceptions. Examples of predeﬁned exceptions include arith- metic overﬂow, division by zero, end-of-ﬁle on input, subscript and subrange er- rors, and null pointer dereference. The rationale for deﬁning these as exceptions (rather than as fatal errors) is that they may arise in certain valid programs. Some other dynamic errors (e.g., return from a subroutine that has not yet designated a return value) are still fatal in most languages. In C++ and Common Lisp, excep- tions are all programmer deﬁned. In PHP, the set_error_handler function can be used to turn built-in semantic errors into ordinary exceptions. In Ada, some of the predeﬁned exceptions can be suppressed by means of a pragma. An Ada exception is simply an object of the built-in exception type: EXAMPLE 9.38
 
@@ -4479,7 +4479,7 @@ In Modula-3, the parameters are included in the exception declaration, much as t
 
 the exceptions that may propagate out of the routine. This list is mandatory in Modula-3: it is a run-time error if an exception arises that does not appear in the header and is not caught internally. The list is optional in C++: if it appears, the semantics are the same as in Modula-3; if it is omitted, all exceptions are permitted to propagate. Java adopts an intermediate approach: it segregates its exceptions into “checked” and “unchecked” categories. Checked exceptions must be declared in subroutine headers; unchecked exceptions need not. Unchecked exceptions are typically run-time errors that most programs will want to be fatal (e.g., subscript out of bounds)—and that would therefore be a nuisance to de- clare in every function—but that a highly robust program may want to catch if they occur in library routines.
 
-## 9.4.2 Exception Propagation
+9.4.2 Exception Propagation
 
 In most languages, a block of code can have a list of exception handlers. In C++: EXAMPLE 9.40
 
@@ -4513,7 +4513,7 @@ finally clause in Python try: # protected block my_stream = open("foo.txt", "r")
 
 A finally clause will be executed whenever control escapes from the protected block, whether the escape is due to normal completion, an exit from a loop, a return from the current subroutine, or the propagation of an exception. We have assumed in our example that my_stream is not bound to anything at the begin- ning of the code, and that it is harmless to close a not-yet-opened stream. ■
 
-## 9.4.3 Implementation of Exceptions
+9.4.3 Implementation of Exceptions
 
 The most obvious implementation for exceptions maintains a linked-list stack of EXAMPLE 9.43
 
@@ -4571,7 +4571,7 @@ been written through to memory will be visible in the handler, but changes that 
 
 * What is a volatile variable in C? Under what circumstances is it useful?
 
-## 9.5 Coroutines
+9.5 Coroutines
 
 Given an understanding of the layout of the run-time stack, we can now consider the implementation of more general control abstractions—coroutines in particu- lar. Like a continuation, a coroutine is represented by a closure (a code address and a referencing environment), into which we can jump by means of a nonlocal goto, in this case a special operation known as transfer. The principal differ- ence between the two abstractions is that a continuation is a constant—it does not change once created—while a coroutine changes every time it runs. When we goto a continuation, our old program counter is lost, unless we explicitly create a new continuation to hold it. When we transfer from one coroutine to another,
 
@@ -4603,7 +4603,7 @@ DESIGN & IMPLEMENTATION
 
 eliminate the ﬁrst of these problems by ensuring that the screen updater receives a share of the processor on a regular basis, but would complicate the second prob- lem: we should need to synchronize the two routines explicitly if their references to ﬁles could interfere. ■
 
-## 9.5.1 Stack Allocation
+9.5.1 Stack Allocation
 
 Because they are concurrent (i.e., simultaneously started but not completed), coroutines cannot share a single stack: their subroutine calls and returns, taken as a whole, do not occur in last-in-ﬁrst-out order. If each coroutine is declared at the outermost level of lexical nesting (as was required in Modula-2), then their stacks are entirely disjoint: the only objects they share are global, and thus statically allo- cated. Most operating systems make it easy to allocate one stack, and to increase its portion of the virtual address space as necessary during execution. It is not as easy to allocate an arbitrary number of such stacks; space for coroutines was historically something of an implementation challenge, at least on machines with limited virtual address space (64-bit architectures ease the problem, by making virtual addresses relatively plentiful). The simplest approach is to give each coroutine a ﬁxed amount of statically allocated stack space. This approach was adopted in Modula-2, which required the programmer to specify the size and location of the stack when initializing a coroutine. It was a run-time error for the coroutine to need additional space. Some Modula-2 implementations would catch the overﬂow and halt with an er- ror message; others would display abnormal behavior. If the coroutine used less (virtual) space than it was given, the excess was simply wasted. If stack frames are allocated from the heap, as they are in most functional lan- guage implementations, then the problems of overﬂow and internal fragmenta- tion are avoided. At the same time, the overhead of each subroutine call increases. An intermediate option is to allocate the stack in large, ﬁxed-size “chunks.” At each call, the subroutine calling sequence checks to see whether there is sufﬁcient space in the current chunk to hold the frame of the called routine. If not, another chunk is allocated and the frame is put there instead. At each subroutine return, the epilogue code checks to see whether the current frame is the last one in its chunk. If so, the chunk is returned to a “free chunk” pool. To reduce the over- head of calls, the compiler can use the ordinary central stack if it is able to verify that a subroutine will not perform a transfer before returning [Sco91].
 
@@ -4618,7 +4618,7 @@ If coroutines can be created at arbitrary levels of lexical nesting (as they cou
 
 Cactus stacks in Simula), then two or more coroutines may be declared in the same nonglobal scope, and must thus share access to objects in that scope. To implement this sharing, the run-time system must employ a so-called cactus stack (named for its resemblance to the Saguaro cacti of the American Southwest; see Figure 9.4). Each branch off the stack contains the frames of a separate coroutine. The dy- namic chain of a given coroutine ends in the block in which the coroutine began execution. The static chain of the coroutine, however, extends down into the re- mainder of the cactus, through any lexically surrounding blocks. In addition to the coroutines of Simula, cactus stacks are needed for the threads of any language with lexically nested threads. “Returning” from the main block of a coroutine must generally terminate the program, as there is no indication of what routine to transfer to. Because a coroutine only runs when speciﬁed as the target of a transfer, there is never any need to terminate it explicitly. When a given corou- tine is no longer needed, the programmer can simply reuse its stack space or, in a language with garbage collection, allow the collector to reclaim it automati- cally. ■
 
-## 9.5.2 Transfer
+9.5.2 Transfer
 
 To transfer from one coroutine to another, the run-time system must change the program counter (PC), the stack, and the contents of the processor’s registers. These changes are encapsulated in the transfer operation: one coroutine calls
 
@@ -4630,7 +4630,7 @@ transfer: push all registers other than sp (including ra) *current coroutine := 
 
 The data structure that represents a coroutine or thread is called a context block. In a simple coroutine package, the context block contains a single value: the coroutine’s sp as of its most recent transfer. (A thread package generally places additional information in the context block, such as an indication of priority, or pointers to link the thread onto various scheduling queues. Some coroutine or thread packages choose to save registers in the context block, rather than at the top of the stack; either approach works ﬁne.) In Modula-2, the coroutine creation routine would initialize the coroutine’s stack to look like the frame of transfer, with a return address and register contents initialized to permit a “return” into the beginning of the coroutine’s code. The creation routine would set the sp value in the context block to point into this artiﬁcial frame, and return a pointer to the context block. To begin execution of the coroutine, some existing routine would need to transfer to it. In Simula (and in the code in Example 9.47), the coroutine creation routine would begin to execute the new coroutine immediately, as if it were a subroutine. After the coroutine completed any application-speciﬁc initialization, it would perform a detach operation. Detach would set up the coroutine stack to look like the frame of transfer, with a return address that pointed to the following statement. It would then allow the creation routine to return to its own caller. In all cases, transfer expects a pointer to a context block as argument; by deref- erencing the pointer it can ﬁnd the sp of the next coroutine to run. A global (static) variable, called current coroutine in the code of Example 9.49, contains a pointer to the context block of the currently running coroutine. This pointer allows transfer to ﬁnd the location in which it should save the old sp.
 
-## 9.5.3 Implementation of Iterators
+9.5.3 Implementation of Iterators
 
 Given an implementation of coroutines, iterators are almost trivial: one coroutine is used to represent the main program; a second is used to represent the iterator. Additional coroutines may be needed if iterators nest.
 
@@ -4638,7 +4638,7 @@ IN MORE DEPTH
 
 Additional details appear on the companion site. As it turns out, coroutines are overkill for iterator implementation. Most compilers use one of two simpler alter- natives. The ﬁrst of these keeps all state in a single stack, but sometimes executes in a frame other than the topmost. The second employs a compile-time code transformation to replace true iterators, transparently, with equivalent iterator objects.
 
-## 9.5.4 Discrete Event Simulation
+9.5.4 Discrete Event Simulation
 
 One of the most important applications of coroutines (and the one for which Simula was designed and named) is discrete event simulation. Simulation in gen- eral refers to any process in which we create an abstract model of some real-world system, and then experiment with the model in order to infer properties of the real-world system. Simulation is desirable when experimentation with the real world would be complicated, dangerous, expensive, or otherwise impractical. A discrete event simulation is one in which the model is naturally expressed in terms of events (typically interactions among various interesting objects) that happen at speciﬁc times. Discrete event simulation is usually not appropriate for contin- uous processes, such as the growth of crystals or the ﬂow of water over a surface, unless these processes are captured at the level of individual particles.
 
@@ -4646,13 +4646,13 @@ IN MORE DEPTH
 
 On the companion site we consider a trafﬁc simulation, in which events model interactions among automobiles, intersections, and trafﬁc lights. We use a sep- arate coroutine for each trip to be taken by car. At any given time we run the coroutine with the earliest expected arrival time at an upcoming intersection. We keep inactive coroutines in a priority queue ordered by those arrival times.
 
-## 9.6 Events
+9.6 Events
 
 An event is something to which a running program (a process) needs to respond, but which occurs outside the program, at an unpredictable time. Events are com- monly caused by inputs to a graphical user interface (GUI) system: keystrokes,
 
 mouse motions, button clicks. They may also be network operations or other asynchronous I/O activity: the arrival of a message, the completion of a previ- ously requested disk operation. In the I/O operations discussed in Section C 8.7, and in Section C 8.7.3 in par- ticular, we assumed that a program looking for input will request it explicitly, and will wait if it isn’t yet available. This sort of synchronous (at a speciﬁed time) and blocking (potentially wait-inducing) input is generally not acceptable for modern applications with graphical interfaces. Instead, the programmer usually wants a handler—a special subroutine—to be invoked when a given event occurs. Han- dlers are sometimes known as callback functions, because the run-time system calls back into the main program instead of being called from it. In an object- oriented language, the callback function may be a method of some handler object, rather than a static subroutine.
 
-## 9.6.1 Sequential Handlers
+9.6.1 Sequential Handlers
 
 Traditionally, event handlers were implemented in sequential programming lan- guages as “spontaneous” subroutine calls, typically using a mechanism deﬁned and implemented by the operating system, outside the language proper. To pre- pare to receive events through this mechanism, a program—call it P—invokes a setup handler library routine, passing as argument the subroutine it wants to have invoked when the event occurs. At the hardware level, asynchronous device activity during P’s execution will trigger an interrupt mechanism that saves P’s registers, switches to a different stack, and jumps to a predeﬁned address in the OS kernel. Similarly, if some other process Q is running when the interrupt occurs (or if some action in Q it- self needs to be reﬂected to P as an event), the kernel will have saved P’s state at the end of its last time slice. Either way, the kernel must arrange to invoke the appropriate event handler despite the fact that P may be at a place in its code where a subroutine call cannot normally occur (e.g., it may be halfway through the calling sequence for some other subroutine). Figure 9.5 illustrates the typical implementation of spontaneous subroutine EXAMPLE 9.50
 
@@ -4663,7 +4663,7 @@ Signal trampoline calls—as used, for example, by the Unix signal mechanism. Th
 
 to the signal trampoline. Immediately before jumping back to the original pro- gram code, the trampoline performs a kernel call to reenable signals. Depending on the details of the operating system, the kernel may buffer some modest num- ber of signals while they are disabled, and deliver them once the handler reenables them. ■ In practice, most event handlers need to share data structures with the main program (otherwise, how would they get the program to do anything interesting in response to the event?). We must take care to make sure neither the handler nor the main program ever sees these shared structures in an inconsistent state. Speciﬁcally, we must prevent a handler from looking at data when the main pro- gram is halfway through modifying it, or modifying data when the main program is halfway through reading it. The typical solution is to synchronize access to such shared structures by bracketing blocks of code in the main program with kernel calls that disable and reenable signals. We will use a similar mechanism to im- plement threads on top of coroutines in Section 13.2.4. More general forms of synchronization will appear in Section 13.3.
 
-## 9.6.2 Thread-Based Handlers
+9.6.2 Thread-Based Handlers
 
 In modern programming languages and run-time systems, events are often han- dled by a separate thread of control, rather than by spontaneous subroutine calls. With a separate handler thread, input can again be synchronous: the handler thread makes a system call to request the next event, and waits for it to occur. Meanwhile, the main program continues to execute. If the program wishes to be able to handle multiple events concurrently, it may create multiple handler threads, each of which calls into the kernel to wait for an event. To protect the integrity of shared data structures, the main program and the handler thread(s) will generally require a full-ﬂedged synchronization mechanism, as discussed in Section 13.3: disabling signals will not sufﬁce. Many contemporary GUI systems are thread-based, though some have just one handler thread. Examples include the OpenGL Utility Toolkit (GLUT), the GNU Image Manipulation Program (GIMP) Tool Kit (Gtk), the JavaFX library, and the .NET Windows Presentation Foundation (WPF). In C#, an event handler is an in- EXAMPLE 9.51
 
@@ -4734,9 +4734,9 @@ that they could be used to implement iterators, but here simpler alternatives ex
 
 ## 9.8 Exercises
 
-## 9.1 Describe as many ways as you can in which functions in imperative pro- gramming languages differ from functions in mathematics.
+9.1 Describe as many ways as you can in which functions in imperative pro- gramming languages differ from functions in mathematics.
 
-## 9.2 Consider the following code in C++:
+9.2 Consider the following code in C++:
 
 ```
 class string_map {
@@ -4757,9 +4757,9 @@ return rtn_val;
 
 Suppose that string_map::operator[] contains the only call to complex_ lookup anywhere in the program. Explain why it would be unwise for the programmer to expand that call textually in-line and eliminate the separate function.
 
-## 9.3 Using your favorite language and compiler, write a program that can tell the order in which certain subroutine parameters are evaluated.
+9.3 Using your favorite language and compiler, write a program that can tell the order in which certain subroutine parameters are evaluated.
 
-## 9.4 Consider the following (erroneous) program in C:
+9.4 Consider the following (erroneous) program in C:
 
 ```
 void foo() {
@@ -4783,7 +4783,7 @@ Local variable i in subroutine foo is never initialized. On many systems, howeve
 
 9.7 Consider an expression like a + b that is passed to a subroutine in Fortran. Is there any semantically meaningful difference between passing this expres- sion as a reference to an unnamed temporary (as Fortran does) or passing it by value (as one might, for example, in Pascal)? That is, can the program- mer tell the difference between a parameter that is a value and a parameter that is a reference to a temporary?
 
-## 9.8 Consider the following subroutine in Fortran 77:
+9.8 Consider the following subroutine in Fortran 77:
 
 ```
 subroutine shift(a, b, c)
@@ -4795,7 +4795,7 @@ end
 
 Suppose we want to call shift(x, y, 0) but we don’t want to change the value of y. Knowing that built-up expressions are passed as temporaries, we decide to call shift(x, y+0, 0). Our code works ﬁne at ﬁrst, but then (with some compilers) fails when we enable optimization. What is going on? What might we do instead?
 
-## 9.9 In some implementations of Fortran IV, the following code would print a 3. Can you suggest an explanation? How do you suppose more recent Fortran implementations get around the problem?
+9.9 In some implementations of Fortran IV, the following code would print a 3. Can you suggest an explanation? How do you suppose more recent Fortran implementations get around the problem?
 
 ```
 c
@@ -4851,15 +4851,15 @@ foo(d.x);
 
 Using what you have learned about parameter-passing modes, explain these language restrictions.
 
-## 9.15 Consider the following declaration in C:
+9.15 Consider the following declaration in C:
 
 double(*foo(double (*)(double, double[]), double)) (double, ...);
 
 Describe in English the type of foo.
 
-## 9.16 Does a program run faster when the programmer leaves optional parame- ters out of a subroutine call? Why or why not?
+9.16 Does a program run faster when the programmer leaves optional parame- ters out of a subroutine call? Why or why not?
 
-## 9.17 Why do you suppose that variable-length argument lists are so seldom sup- ported by high-level programming languages?
+9.17 Why do you suppose that variable-length argument lists are so seldom sup- ported by high-level programming languages?
 
 9.18 Building on Exercise 6.35, show how to implement exceptions using call- with-current-continuation in Scheme. Model your syntax after the handler-case of Common Lisp. As in Exercise 6.35, you will probably need define-syntax and dynamic-wind.
 
@@ -4874,7 +4874,7 @@ Describe in English the type of foo.
 ![Figure 9.6 A problematic...](images/page_499_vector_276.png)
 *Figure 9.6 A problematic program in C to illustrate the use of signals. In most Unix systems, the SIGTSTP signal is generated by typing control-Z at the keyboard.*
 
-## 9.23 Compile and run the program in Figure 9.6. Explain its behavior. Create a new version that behaves more predictably.
+9.23 Compile and run the program in Figure 9.6. Explain its behavior. Create a new version that behaves more predictably.
 
 9.24 In C#, Java, or some other language with thread-based event handling, build a simple program around the “pause button” of Examples 9.51–9.54. Your program should open a small window containing a text ﬁeld and two but- tons, one labeled “pause”, the other labeled “resume”. It should then display an integer in the text ﬁeld, starting with zero and counting up once per sec- ond. If the pause button is pressed, the count should suspend; if the resume button is pressed, it should continue. Note that your program will need at least two threads—one to do the counting, one to handle events. In Java, the JavaFX package will create the handler thread automatically, and your main program can do the counting. In C#, some existing thread will need to call Application.Run in order to become a handler thread. In this case you’ll need a second thread to do the counting.
 
@@ -4886,11 +4886,11 @@ Describe in English the type of foo.
 
 9.37 Explore the details of subroutine calls in the GNU Ada translator gnat. Pay particular attention to the more complex language features, including decla- rations in nested blocks (Section 3.3.2), dynamic-size arrays (Section 8.2.2), in/out parameters (Section 9.3.1), optional and named parameters (Sec- tion 9.3.3), generic subroutines (Section 7.3.1), exceptions (Section 9.4), and concurrency (“Launch-at-Elaboration,” Section 13.2.3).
 
-## 9.38 If you were designing a new imperative language, what set of parameter modes would you pick? Why?
+9.38 If you were designing a new imperative language, what set of parameter modes would you pick? Why?
 
 9.39 Learn about references and the reference assignment operator in PHP. Dis- cuss the similarities and differences between these and the references of C++. In particular, note that assignments in PHP can change the object to which a reference variable refers. Why does PHP allow this but C++ does not?
 
-## 9.40 Learn about pointers to methods in C++. What are they useful for? How do they differ from a C# delegate that encapsulates a method?
+9.40 Learn about pointers to methods in C++. What are they useful for? How do they differ from a C# delegate that encapsulates a method?
 
 9.41 Find manuals for several languages with exceptions and look up the set of predeﬁned exceptions—those that may be raised automatically by the lan- guage implementation. Discuss the differences among the sets deﬁned by different languages. If you were designing an exception-handling facility, what exceptions, if any, would you make predeﬁned? Why?
 
@@ -4898,7 +4898,7 @@ Describe in English the type of foo.
 
 9.43 Learn the details of nonlocal control transfer in Common Lisp. Write a tu- torial that explains tagbody and go; block and return-from; catch and throw; and restart-case, restart-bind, handler-case, handler- bind, find-restart, invoke-restart, ignore-errors, signal, and error. What do you think of all this machinery? Is it over-kill? Be sure to give an example that illustrates the use of handler-bind.
 
-## 9.44 For Common Lisp, Modula-3, and Java, compare the semantics of unwind- protect and try...finally. Speciﬁcally, what happens if an exception arises within a cleanup clause?
+9.44 For Common Lisp, Modula-3, and Java, compare the semantics of unwind- protect and try...finally. Speciﬁcally, what happens if an exception arises within a cleanup clause?
 
 9.45 As noted near the end of Section 9.6.2, an event-handler needs either to execute quickly or to pass its work off to another thread. A particularly ele- gant mechanism for the latter can be found in the async and await prim-
 
@@ -4928,7 +4928,7 @@ Rather, all three of the fundamental concepts of object-oriented programming— 
 
 erything as an object. Most of our discussion will focus on Smalltalk, Eiffel, C++, and Java, though we shall have occasion to mention many other languages as well. We will return to the subject of dynamically typed objects in Section 14.4.4.
 
-## 10.1 Object-Oriented Programming
+10.1 Object-Oriented Programming
 
 Object-oriented programming can be seen as an attempt to enhance opportuni- ties for code reuse by making it easy to deﬁne new abstractions as extensions or reﬁnements of existing abstractions. As a starting point for examples, consider a EXAMPLE 10.1
 
@@ -5196,7 +5196,7 @@ return v;
 
 The practical difference is small in this example. The choice mainly boils down to whether we think of a queue as a special kind of list, or whether we think of a queue as an abstraction that uses a list as part of its implementation. The cases in which inheritance is most compelling are those in which we want to be able to use an object of a derived class (a “client,” say) in a context that expects an object of a base class (a “person,” say), and have that object behave in a special way by virtue of belonging to the derived class (e.g., include extra information when printed). We will consider these sorts of cases in Section 10.4. ■
 
-## 10.1.1 Classes and Generics
+10.1.1 Classes and Generics
 
 The astute reader may have noticed that our various lists and queues have all embedded the assumption that the item in each list node is an integer. In practice, we should like to be able to have lists and queues of many kinds of items, all based on a single copy of the bulk of the code. In a dynamically typed language like Ruby or Python, this is natural: the val ﬁeld would have no static type, and objects of any kind could be added to, and removed from, lists and queues. In a statically typed language like C++, it is tempting to create a general- purpose list_node class that has no val ﬁeld, and then derive subclasses (e.g., int_list_node) that add the values. While this approach can be made to work, it has some unfortunate limitations. Suppose we deﬁne a gp_list_node type, EXAMPLE 10.14
 
@@ -5390,13 +5390,13 @@ In a nutshell, generics exist for the purpose of abstracting over unrelated type
 * Explain why generics may be useful in an object-oriented language, despite
   the extensive polymorphism already provided by inheritance.
 
-## 10.2 Encapsulation and Inheritance
+10.2 Encapsulation and Inheritance
 
 Encapsulation mechanisms enable the programmer to group data and the sub- routines that operate on them together in one place, and to hide irrelevant details from the users of an abstraction. In the preceding section (and like- wise Section 3.3.5) we cast object-oriented programming as an extension of the
 
 “module-as-type” mechanisms of Simula and Euclid. It is also possible to cast object-oriented programming in a “module-as-manager” framework. In the ﬁrst subsection below we consider the data-hiding mechanisms of modules in non-object-oriented languages. In the second subsection we consider the new data-hiding issues that arise when we add inheritance to modules. In the third subsection we brieﬂy return to the module-as-manager approach, and show how several languages, including Ada 95 and Fortran 2003, add inheritance to records, allowing (static) modules to continue to provide data hiding.
 
-## 10.2.1 Modules
+10.2.1 Modules
 
 Scope rules for data hiding were one of the principal innovations of Clu, Modula, Euclid, and other module-based languages of the 1970s. In Clu and Euclid, the declaration and deﬁnition (header and body) of a module always appeared to- gether. In Modula-2, programmers had the option of placing the header and the body in separate ﬁles. Unfortunately, there was no way to divide the header into public and private parts; everything in it was public (i.e., exported). The only concession to data hiding was that pointer types could be declared in a header without revealing the structure of the objects to which they pointed. Compilers could generate code for the users of a module (Sidebar 10.1) without the hidden information, since pointers are all of equal size on most machines. Ada increases ﬂexibility by allowing the header of a package to be divided into EXAMPLE 10.18
 
@@ -5439,7 +5439,7 @@ Making Do without Module Headers
 
 As noted in Section C 3.8, Java packages and C/C++/C# namespaces can be spread across multiple compilation units (ﬁles). In C, C++, and C#, a single ﬁle can also contain pieces of more than one namespace. More signiﬁcantly, many modern languages, including Java and C#, dispense with the notion of separate headers and bodies. While the programmer must still deﬁne the interface (and specify it via public declarations), there is no need to manually identify code that needs to be in the header for implementation reasons: instead the compiler is responsible for extracting this information automatically from the full text of the module. For software engineering purposes it may still be desirable to create preliminary “skeleton” versions of a module, against which other modules can be compiled, but this is optional. To assist in project management and documentation, many Java and C# implementations provide a tool that will extract from the complete text of a module the minimum information required by its users.
 
-## 10.2.2 Classes
+10.2.2 Classes
 
 With the introduction of inheritance, object-oriented languages must supple- ment the scope rules of module-based languages to cover additional issues. For example, how much control should a base class exercise over the visibility of its members in derived classes? Should private members of a base class be visible to methods of a derived class? Should public members of a base class always be public members of a derived class (i.e., be visible to users of the derived class)? We touched on these questions in Example 10.9, where we declared class queue as a private list, hiding public members of the base class from users of the derived class—except for method empty, which we made explicitly visible again with a using declaration. C++ allows the inverse strategy as well: methods of an EXAMPLE 10.20
 
@@ -5471,7 +5471,7 @@ Static Fields and Methods
 
 Orthogonal to the visibility implied by public, private, or protected, most object-oriented languages allow individual ﬁelds and methods to be declared static. Static class members are thought of as “belonging” to the class as a whole, not to any individual object. They are therefore sometimes referred to as class ﬁelds and methods, as opposed to instance ﬁelds and methods. (This termi- nology is most common in languages that create a special metaobject to represent each class—see Example 10.26. The class ﬁelds and methods are thought of as belonging to the metaobject.) A single copy of each static ﬁeld is shared by all instances of its class: changes made to that ﬁeld in methods of one object will be visible to methods of all other objects of the class. A static method, for its part, has no this parameter (explicit or implicit); it cannot access nonstatic (instance) ﬁelds. A nonstatic (instance) method, on the other hand, can access both static and nonstatic ﬁelds.
 
-## 10.2.3 Nesting (Inner Classes)
+10.2.3 Nesting (Inner Classes)
 
 Many languages allow class declarations to nest. This raises an immediate ques- tion: if Inner is a member of Outer, can Inner’s methods see Outer’s members, and if so, which instance do they see? The simplest answer, adopted in C++ and C#, is to allow access to only the static members of the outer class, since these have only a single instance. In effect, nesting serves simply as a means of information hiding. Java takes a more sophisticated approach. It allows a nested (inner) class EXAMPLE 10.22
 
@@ -5499,7 +5499,7 @@ System.out.println(n);
 
 If there are multiple instances of Outer, each instance will have a different n, and calls to Inner.bar will access the appropriate n. To make this work, each instance of Inner (of which there may of course be an arbitrary number) must contain a hidden pointer to the instance of Outer to which it belongs. If a nested class in Java is declared to be static, it behaves as in C++ and C#, with access to only the static members of the surrounding class. Java classes can also be nested inside methods. Such a local class has access not only to all members of the surrounding class but also to the parameters and variables of the method in which it is nested. The catch is that any parameters or variables that the nested class actually uses must be “effectively ﬁnal”—either declared final explicitly or at least never modiﬁed (by the nested class, the sur- rounding method, or any other code) after the nested class is elaborated. This rule permits the implementation to make a copy of the referenced objects rather than maintaining a reference (i.e., a static link) to the frame of the surrounding method. ■ Inner and local classes in Java are widely used to create object closures, as de- scribed in Section 3.6.3. In Section 9.6.2 we used them as handlers for events. We also noted that a local class in Java can be anonymous: it can appear, in-line, inside a call to new (Example 9.54).
 
-## 10.2.4 Type Extensions
+10.2.4 Type Extensions
 
 Smalltalk, Objective-C, Eiffel, C++, Java, and C# were all designed from the out- set as object-oriented languages, either starting from scratch or from an exist- ing language without a strong encapsulation mechanism. They all support a module-as-type approach to abstraction, in which a single mechanism (the class) provides both encapsulation and inheritance. Several other languages, includ- ing Modula-3 and Oberon (both successors to Modula-2), CLOS, Ada 95/2005, and Fortran 2003, can be characterized as object-oriented extensions to languages in which modules already provide encapsulation. Rather than alter the existing module mechanism, these languages provide inheritance and dynamic method binding through a mechanism for extending records. In Ada 2005, our list and queue abstractions could be deﬁned as shown in EXAMPLE 10.23
 
@@ -5513,7 +5513,7 @@ List and queue abstractions in Ada 2005 Figure 10.2. To control access to the st
 
 is interpreted as a call to B(A, C, D), where B is declared as a three-parameter subroutine. Arbitrary Ada code can pass an object of type queue to any routine that expects a list; as in Java, there is no way for a derived type to hide the public members of a base type. ■
 
-## 10.2.5 Extending without Inheritance
+10.2.5 Extending without Inheritance
 
 The desire to extend the functionality of an existing abstraction is one of the prin- cipal motivations for object-oriented programming. Inheritance is the standard mechanism that makes such extension possible. There are times, however, when inheritance is not an option, particularly when dealing with preexisting code. The class one wants to extend may not permit inheritance, for instance: in Java, it may be labeled final; in C#, it may be sealed. Even if inheritance is possible in prin- ciple, there may be a large body of existing code that uses the original class name, and it may not be feasible to go back and change all the variable and parameter declarations to use a new derived type. For situations like these, C# provides extension methods, which give the appear- EXAMPLE 10.24
 
@@ -5557,7 +5557,7 @@ No special functionality is available to extension methods. In particular, they 
   on the other.
 * What are extension methods in C#? What purpose do they serve?
 
-## 10.3 Initialization and Finalization
+10.3 Initialization and Finalization
 
 In Section 3.2 we deﬁned the lifetime of an object to be the interval during which it occupies space and can thus hold data. Most object-oriented languages provide some sort of special mechanism to initialize an object automatically at the begin- ning of its lifetime. When written in the form of a subroutine, this mechanism is known as a constructor. Though the name might be thought to imply otherwise, a constructor does not allocate space; it initializes space that has already been al- located. A few languages provide a similar destructor mechanism to ﬁnalize an object automatically at the end of its lifetime. Several important issues arise:
 
@@ -5567,7 +5567,7 @@ their lifetime uninitialized, or it must provide a way to choose an appropriate 
 
 In the remainder of this section we consider these issues in more detail.
 
-## 10.3.1 Choosing a Constructor
+10.3.1 Choosing a Constructor
 
 Smalltalk, Eiffel, C++, Java, and C# all allow the programmer to specify more than one constructor for a given class. In C++, Java, and C#, the constructors behave like overloaded subroutines: they must be distinguished by their numbers and types of arguments. In Smalltalk and Eiffel, different constructors can have EXAMPLE 10.25
 
@@ -5621,7 +5621,7 @@ This code causes D to execute the today constructor of class Date, and assigns a
 
 supports automatic calls to constructors and destructors (Initialize and Finalize routines) only for objects of types derived from the standard library type Controlled.
 
-## 10.3.2 References and Values
+10.3.2 References and Values
 
 Many object-oriented languages, including Simula, Smalltalk, Python, Ruby, and Java, use a programming model in which variables refer to objects. A few lan- guages, including C++ and Ada, allow a variable to have a value that is an object. Eiffel uses a reference model by default, but allows the programmer to specify that certain classes should be expanded, in which case variables of those classes will use a value model. In a similar vein, C# and Swift use struct to deﬁne types whose variables are values, and class to deﬁne types whose variables are refer- ences. With a reference model for variables, every object is created explicitly, and it is easy to ensure that an appropriate constructor is called. With a value model for variables, object creation can happen implicitly as a result of elaboration. In Ada, which doesn’t provide automatic calls to constructors by default, elaborated objects begin life uninitialized, and it is possible to accidentally attempt to use a variable before it has a value. In C++, the compiler ensures that an appropriate constructor is called for every elaborated object, but the rules it uses to identify constructors and their arguments can sometimes be confusing. If a C++ variable of class type foo is declared with no initial value, then the EXAMPLE 10.27
 
@@ -5729,7 +5729,7 @@ DESIGN & IMPLEMENTATION
 
 operator simply passes to the constructor (a reference to) the already-allocated object. ■
 
-## 10.3.3 Execution Order
+10.3.3 Execution Order
 
 As we have seen, C++ insists that every object be initialized before it can be used. Moreover, if the object’s class (call it B) is derived from some other class (call it A), C++ insists on calling an A constructor before calling a B constructor, so that the derived class is guaranteed never to see its inherited ﬁelds in an inconsistent state. When the programmer creates an object of class B (either via declaration or with a call to new), the creation operation speciﬁes arguments for a B constructor. These arguments allow the C++ compiler to resolve overloading when multiple constructors exist. But where does the compiler obtain arguments for the A con- structor? Adding them to the creation syntax (as Simula did) would be a clear violation of abstraction. The answer adopted in C++ is to allow the header of the EXAMPLE 10.32
 
@@ -5786,7 +5786,7 @@ super( args );
 
 Because Java uses a reference model uniformly for all objects, any class mem- bers that are themselves objects will actually be references, rather than “expanded” objects (to use the Eiffel term). Java simply initializes such members to null. If the programmer wants something different, he or she must call new explicitly within the constructor of the surrounding class. Smalltalk and (in the common case) C# and Eiffel adopt a similar approach. In C#, members whose types are structs are initialized by setting all of their ﬁelds to zero or null. In Eiffel, if a class contains members of an expanded class type, that type is required to have a single constructor, with no arguments; the Eiffel compiler arranges to call this constructor when the surrounding object is created. Smalltalk, Eiffel, CLOS, and Objective-C are all more lax than C++ regarding the initialization of base classes. The compiler or interpreter arranges to call the constructor (creator, initializer) for each newly created object automatically, but it does not arrange to call constructors for base classes automatically; all it does is initialize base class data members to default (zero or null) values. If the derived class wants different behavior, its constructor(s) must call a constructor for the base class explicitly.
 
-## 10.3.4 Garbage Collection
+10.3.4 Garbage Collection
 
 When a C++ object is destroyed, the destructor for the derived class is called ﬁrst, followed by those of the base class(es), in reverse order of derivation. By far the most common use of destructors in C++ is manual storage reclamation. Consider EXAMPLE 10.36
 
@@ -5829,7 +5829,7 @@ In modern C++ code, storage management is often facilitated through the use of s
 * Explain the difference between initialization and assignment in C++.
 * Why does C++ need destructors more than Eiffel does?
 
-## 10.4 Dynamic Method Binding
+10.4 Dynamic Method Binding
 
 One of the principal consequences of inheritance/type extension is that a derived class D has all the members—data and subroutines—of its base class C. As long as D does not hide any of the publicly visible members of C (see Exercise 10.15), it makes sense to allow an object of class D to be used in any context that expects an object of class C: anything we might want to do to an object of class C we can also do to an object of class D. In other words, a derived class that does not hide any publicly visible members of its base class is a subtype of that base class. The ability to use a derived class in a context that expects its base class is called subtype polymorphism. If we imagine an administrative computing system for a EXAMPLE 10.37
 
@@ -5917,7 +5917,7 @@ void seek(long whence);
 
 The code for read_ahead_text_file::seek will undoubtedly need to change the value of the cached upcoming_characters. If the method is not dynami- cally dispatched, however, we cannot guarantee that this will happen: if we pass a read_ahead_text_file reference to a subroutine that expects a text_file ref- erence as argument, and if that subroutine then calls seek, we’ll get the version of seek in the base class. ■ Unfortunately, as we shall see in Section 10.4.3, dynamic method binding imposes run-time overhead. While this overhead is generally modest, it is nonetheless a concern for small subroutines in performance-critical applications. Smalltalk, Objective-C, Python, and Ruby use dynamic method binding for all methods. Java and Eiffel use dynamic method binding by default, but allow indi- vidual methods and (in Java) classes to be labeled final (Java) or frozen (Eiffel), in which case they cannot be overridden by derived classes, and can therefore employ an optimized implementation. Simula, C++, C#, and Ada 95 use static method binding by default, but allow the programmer to specify dynamic binding when desired. In these latter languages it is common terminology to distinguish between overriding a method that uses dynamic binding and (merely) redeﬁning a method that uses static binding. For the sake of clarity, C# requires explicit use of the keywords override and new whenever a method in a derived class overrides or redeﬁnes (respectively) a method of the same name in a base class. Java and C++11 have similar annotations whose use is encouraged but not required.
 
-## 10.4.1 Virtual and Nonvirtual Methods
+10.4.1 Virtual and Nonvirtual Methods
 
 In Simula, C++, and C#, which use static method binding by default, the pro- grammer can specify that particular methods should use dynamic binding by labeling them as virtual. Calls to virtual methods are dispatched to the ap- propriate implementation at run time, based on the class of the object, rather than the type of the reference. In C++ and C#, the keyword virtual preﬁxes the EXAMPLE 10.40
 
@@ -5943,7 +5943,7 @@ procedure print_mailing_label(p : professor) is ...
 
 procedure print_appropriate_label(r : person'Class) is begin print_mailing_label(r); -- calls appropriate overloaded version, depending -- on type of r at run time end print_appropriate_label; ■
 
-## 10.4.2 Abstract Classes
+10.4.2 Abstract Classes
 
 In most object-oriented languages it is possible to omit the body of a virtual method in a base class. In Java and C#, one does so by labeling both the class EXAMPLE 10.42
 
@@ -5967,7 +5967,7 @@ virtual void print_mailing_label() = 0;
 
 C++ refers to abstract methods as pure virtual methods. ■ Regardless of declaration syntax, a class is said to be abstract if it has at least one abstract method. It is not possible to declare an object of an abstract class, because it would be missing at least one member. The only purpose of an abstract class is to serve as a base for other, concrete classes. A concrete class (or one of its intermediate ancestors) must provide a real deﬁnition for every abstract method it inherits. The existence of an abstract method in a base class provides a “hook” for dynamic method binding; it allows the programmer to write code that calls methods of (references to) objects of the base class, under the assumption that appropriate concrete methods will be invoked at run time. Classes that have no members other than abstract methods—no ﬁelds or method bodies—are called interfaces in Java, C#, and Ada 2005. They support a restricted, “mix-in” form of multiple inheritance, which we will consider in Section 10.5.6
 
-## 10.4.3 Member Lookup
+10.4.3 Member Lookup
 
 With static method binding (as in Simula, C++, C#, or Ada 95), the compiler can always tell which version of a method to call, based on the type of the variable being used. With dynamic method binding, however, the object referred to by EXAMPLE 10.44
 
@@ -6047,7 +6047,7 @@ DESIGN & IMPLEMENTATION
 
 public; methods provide the only means of object interaction. The representa- tion of an object begins with the address of a type descriptor. The type descriptor contains a dictionary that maps method names to code fragments. At run time, the Smalltalk interpreter performs a lookup operation in the dictionary to see if the method is supported. If not, it generates a “message not understood” error— the equivalent of a type-clash error in Lisp. CLOS, Objective-C, Swift, and the object-oriented scripting languages provide similar semantics, and invite similar implementations. The dynamic approach is arguably more ﬂexible than the static, but it imposes signiﬁcant cost when methods are small, and delays the reporting of errors. In addition to imposing the overhead of indirection, virtual methods often preclude the in-line expansion of subroutines at compile time. The lack of in-line subroutines can be a serious performance problem when subroutines are small and frequently called. Like C, C++ attempts to avoid run-time overhead when- ever possible: hence its use of static method binding as the default, and its heavy reliance on object-valued variables, for which even virtual methods can be dis- patched at compile time.
 
-## 10.4.4 Object Closures
+10.4.4 Object Closures
 
 We have noted (in Section 3.6.4 and elsewhere) that object closures can be used in an object-oriented language to achieve roughly the same effect as subroutine closures in a language with nested subroutines—namely, to encapsulate a method with context for later execution. It should be noted that this mechanism relies, for its full generality, on dynamic method binding. Recall the plus_x object closure EXAMPLE 10.49
 
@@ -6110,7 +6110,7 @@ The bind routine (an automatically instantiated generic function) encapsulates i
 * What is an abstract (deferred) class?
 * Explain the importance of virtual methods for object closures.
 
-## 10.5 Mix-In Inheritance
+10.5 Mix-In Inheritance
 
 When building an object-oriented system, it is often difﬁcult to design a perfect inheritance tree, in which every class has exactly one parent. A cat may be an animal, a pet, a family_member, or an object_of_affection. A widget in the company database may be a sortable_object (from the reporting system’s perspective), a graphable_object (from the window system’s perspective), or a storable_object (from the ﬁle system’s perspective); how do we choose just one? In the general case, we could imagine allowing a class to have an arbitrary number of parents, each of which could provide it with both ﬁelds and methods (both abstract and concrete). This sort of “true” multiple inheritance is provided by several languages, including C++, Eiffel, CLOS, OCaml, and Python; we will consider it in Section 10.6. Unfortunately, it introduces considerable complexity in both language semantics and run-time implementation. In practice, a more limited mechanism, known as mix-in inheritance, is often all we really need. Consider our widgets, for example. Odds are, the reporting system doesn’t EXAMPLE 10.51
 
@@ -6120,7 +6120,7 @@ Mixing interfaces into a derived class purpose Java code that will sort objects 
 
 If we have already developed some complicated class of widget objects, we can make use of the general-purpose code by mixing the appropriate interfaces into classes derived from widget, as shown in Figure 10.6. ■
 
-## 10.5.1 Implementation
+10.5.1 Implementation
 
 In a language like Ruby, Objective-C, or Swift, which uses dynamic method lookup, the methods of an interface can simply be added to the method dictio- nary of any class that implements the interface. In any context that requires the interface type, the usual lookup mechanism will ﬁnd the proper methods. In a language with fully static typing, in which pointers to methods are expected to lie at known vtable offsets, new machinery is required. The challenge boils down to a need for multiple views of an object. In Figure 10.6, method dictionary.insert expects a storable_object EXAMPLE 10.53
 
@@ -6140,7 +6140,7 @@ Here we have assumed that the this correction occupies the ﬁrst four bytes of 
 
 longer than the code required with single inheritance. Once it executes, however, augmented_widget.get_stored_name will be running with exactly the param- eter it expects: a reference to an augmented_widget object. ■
 
-## 10.5.2 Extensions
+10.5.2 Extensions
 
 The description of interfaces above reﬂects historical versions of Java, with one omission: in addition to abstract methods, an interface can deﬁne static final (constant) ﬁelds. Because such ﬁelds can never change, they introduce no run- time complexity or overhead—the compiler can, effectively, expand them in place wherever they are used. Beginning with Java 8, interfaces have also been extended to allow static and default methods, both of which are given bodies—code—in the declara- tion of the interface. A static method, like a static final ﬁeld, introduces no implementation complexity: it requires no access to object ﬁelds, so there is no ambiguity about what view to pass as this—there is no this parameter. De- fault methods are a bit more tricky. Their code is intended to be used by any class that does not override it. This convention is particularly valuable for library
 
@@ -6158,7 +6158,7 @@ To use the default, each concrete class that inherits from storable_object would
 
 Implementation of default methods example, the default get_local_name has to be able to ﬁnd, and call, the version of get_stored_name deﬁned by the concrete class. The usual way to implement this access depends on tiny forwarding routines: for each class C that inherits from storable_object and that needs the default code, the compiler generates a static, C-speciﬁc forwarding routine that accepts the concrete-class-speciﬁc this parameter, adds back in the this correction that the regular calling sequence just subtracted out, and passes the resulting pointer-to-vtable-pointer to the default method. ■ As it turns out, the equivalent of default methods has long been provided by the Scala programming language, whose mix-ins are known as traits. In fact, traits support not only default methods but also mutable ﬁelds. Rather than try to create a view that would make these ﬁelds directly accessible, the Scala compiler generates, for each concrete class that inherits from the trait, a pair of hidden accessor methods analogous to the properties of C# (Example 10.7). References to the accessor methods are then included in the interface-speciﬁc vtable, where they can be called by default methods. In any class that does not provide its own deﬁnition of a trait ﬁeld, the compiler creates a new private ﬁeld to be used by the accessor methods.
 
-## 10.6 True Multiple Inheritance
+10.6 True Multiple Inheritance
 
 As described in Section 10.5, mix-in inheritance allows an interface to specify functionality that must be provided by an inheriting class in order for objects of that class to be used in a given context. Crucially, an interface does not, for the most part, provide that functionality itself. Even default methods serve mainly to orchestrate access to functionality provided by the inheriting class. At times it can be useful to inherit real functionality from more than one base class. Suppose, for example, that our administrative computing system needs EXAMPLE 10.56
 
@@ -6180,13 +6180,13 @@ Suppose two parent classes provide a method with the same name. Which one do we 
 
 Multiple inheritance with a common “grandparent” is known as repeated in- heritance. Repeated inheritance with separate copies of the grandparent is known as replicated inheritance; repeated inheritance with a single copy of the grandpar- ent is known as shared inheritance. Shared inheritance is the default in Eiffel. Replicated inheritance is the default in C++. Both languages allow the program- mer to obtain the other option when desired.
 
-## 10.7 Object-Oriented Programming Revisited
+10.7 Object-Oriented Programming Revisited
 
 At the beginning of this chapter, we characterized object-oriented programming in terms of three fundamental concepts: encapsulation, inheritance, and dynamic method binding. Encapsulation allows the implementation details of an abstrac- tion to be hidden behind a simple interface. Inheritance allows a new abstraction to be deﬁned as an extension or reﬁnement of some existing abstraction, obtain- ing some or all of its characteristics automatically. Dynamic method binding al- lows the new abstraction to display its new behavior even when used in a context that expects the old abstraction. Different programming languages support these fundamental concepts to dif- ferent degrees. In particular, languages differ in the extent to which they require the programmer to write in an object-oriented style. Some authors argue that a truly object-oriented language should make it difﬁcult or impossible to write programs that are not object-oriented. From this purist point of view, an object- oriented language should present a uniform object model of computing, in which every data type is a class, every variable is a reference to an object, and every subroutine is an object method. Moreover, objects should be thought of in an- thropomorphic terms: as active entities responsible for all computation. Smalltalk and Ruby come close to this ideal. In fact, as described in the subsec- tion below (mostly on the companion site), even such control-ﬂow mechanisms as selection and iteration are modeled as method invocations in Smalltalk. On the other hand, Ada 95 and Fortran 2003 are probably best characterized as von Neu- mann languages that permit the programmer to write in an object-oriented style if desired. So what about C++? It certainly has a wealth of features, including several (multiple inheritance, elaborate access control, strict initialization order, destruc- tors, generics) that are useful in object-oriented programs and that are not found in Smalltalk. At the same time, it has a wealth of problematic wrinkles. Its simple types are not classes. It has subroutines outside of classes. It uses static method binding and replicated multiple inheritance by default, rather than the more costly virtual alternatives. Its unchecked C-style type casts provide a ma- jor loophole for type checking and access control. Its lack of garbage collection is a major obstacle to the creation of correct, self-contained abstractions. Probably most serious of all, C++ retains all of the low-level mechanisms of C, allowing the programmer to escape or subvert the object-oriented model of programming
 
 entirely. It has been suggested that the best C++ programmers are those who did not learn C ﬁrst: they are not as tempted to write “C-style” programs in the newer language. On balance, it is probably safe to say that C++ is an object-oriented language in the same sense that Common Lisp is a functional language. With the possible exception of garbage collection, C++ provides all of the necessary tools, but it requires substantial discipline on the part of the programmer to use those tools “correctly.”
 
-## 10.7.1 The Object Model of Smalltalk
+10.7.1 The Object Model of Smalltalk
 
 Historically, Smalltalk was considered the canonical object-oriented language. The original version of the language was designed by Alan Kay as part of his doc- toral work at the University of Utah in the late 1960s. It was then adopted by the Software Concepts Group at the Xerox Palo Alto Research Center (PARC), and went through ﬁve major revisions in the 1970s, culminating in the Smalltalk-80 language.7
 
@@ -6220,7 +6220,7 @@ sion analysis, and other “global” code improvements to be applied across cal
 
 ## 10.9 Exercises
 
-## 10.1 Some language designers argue that object orientation eliminates the need for nested subroutines. Do you agree? Why or why not?
+10.1 Some language designers argue that object orientation eliminates the need for nested subroutines. Do you agree? Why or why not?
 
 10.2 Design a class hierarchy to represent syntax trees for the CFG of Fig- ure 4.5. Provide a method in each class to return the value of a node. Provide constructors that play the role of the make_leaf, make_un_op, and make_bin_op subroutines.
 
@@ -6228,9 +6228,9 @@ sion analysis, and other “global” code improvements to be applied across cal
 
 10.4 Using the C# indexer mechanism, create a hash table class that can be indexed like an array. (In effect, create a simple version of the System .Collections.Hashtable container class.) Alternatively, use an over- loaded version of operator[] to build a similar class in C++.
 
-## 10.5 In the spirit of Example 10.8, write a double-ended queue (deque) abstrac- tion (pronounced “deck”), derived from a doubly linked list base class.
+10.5 In the spirit of Example 10.8, write a double-ended queue (deque) abstrac- tion (pronounced “deck”), derived from a doubly linked list base class.
 
-## 10.6 Use templates (generics) to abstract your solutions to the previous two questions over the type of data in the container.
+10.6 Use templates (generics) to abstract your solutions to the previous two questions over the type of data in the container.
 
 10.7 Repeat Exercise 10.5 in Python or Ruby. Write a simple program to demonstrate that generics are not needed to abstract over types. What happens if you mix objects of different types in the same deque?
 
@@ -6238,17 +6238,17 @@ sion analysis, and other “global” code improvements to be applied across cal
 
 next and prev pointers for the list within the elements themselves— typically by arranging for the element type to inherit from something like the gp_list_node class of Example 10.14. The result is sometimes called an intrusive list. (a) Explain how you might build intrusive lists in C++ without requir- ing users to pepper their code with explicit type casts. Hint: given multiple inheritance, you will probably need to determine, for each concrete element type, the offset within the representation of the type at which the next and prev pointers appear. For further ideas, search for information on the boost::intrusive::list class of the popu- lar Boost library. (b) Discuss the relative advantages and disadvantages of intrusive and non-intrusive lists.
 
-## 10.9 Can you emulate the inner class of Example 10.22 in C# or C++? (Hint: You’ll need an explicit version of Java’s hidden reference to the surround- ing class.)
+10.9 Can you emulate the inner class of Example 10.22 in C# or C++? (Hint: You’ll need an explicit version of Java’s hidden reference to the surround- ing class.)
 
-## 10.10 Write a package body for the list abstraction of Figure 10.2.
+10.10 Write a package body for the list abstraction of Figure 10.2.
 
-## 10.11 Rewrite the list and queue abstractions in Eiffel, Java, and/or C#.
+10.11 Rewrite the list and queue abstractions in Eiffel, Java, and/or C#.
 
 10.12 Using C++, Java, or C#, implement a Complex class in the spirit of Exam- ple 10.25. Discuss the time and space tradeoffs between maintaining all four values (x, y, ρ, and θ) in the state of the object, or keeping only two and computing the others on demand.
 
-## 10.13 Repeat the previous two exercises for Python and/or Ruby.
+10.13 Repeat the previous two exercises for Python and/or Ruby.
 
-## 10.14 Compare Java final methods with C++ nonvirtual methods. How are they the same? How are they different?
+10.14 Compare Java final methods with C++ nonvirtual methods. How are they the same? How are they different?
 
 10.15 In several object-oriented languages, including C++ and Eiffel, a derived class can hide members of the base class. In C++, for example, we can declare a base class to be public, protected, or private:
 
@@ -6266,7 +6266,7 @@ class D : private A { ...
 
 In all cases, private members of A are inaccessible to methods of B, C, or D. Consider the impact of protected and private base classes on dy- namic method binding. Under what circumstances can a reference to an object of class B, C, or D be assigned into a variable of type A*?
 
-## 10.16 What happens to the implementation of a class if we redeﬁne a data mem- ber? For example, suppose we have
+10.16 What happens to the implementation of a class if we redeﬁne a data mem- ber? For example, suppose we have
 
 ```
 class foo {
@@ -6284,15 +6284,15 @@ int b;
 
 Does the representation of a bar object contain one b ﬁeld or two? If two, are both accessible, or only one? Under what circumstances?
 
-## 10.17 Discuss the relative merits of classes and type extensions. Which do you prefer? Why?
+10.17 Discuss the relative merits of classes and type extensions. Which do you prefer? Why?
 
 10.18 Building on the outline of Example 10.28, write a program that illustrates the difference between copy constructors and operator= in C++. Your code should include examples of each situation in which one of these may be called (don’t forget parameter passing and function returns). In- strument the copy constructors and assignment operators in each of your classes so that they will print their names when called. Run your program to verify that its behavior matches your expectations.
 
 10.19 What do you think of the decision, in C++, C#, and Ada 95, to use static method binding, rather than dynamic, by default? Is the gain in imple- mentation speed worth the loss in abstraction and reusability? Assum- ing that we sometimes want static binding, do you prefer the method-by- method approach of C++ and C#, or the variable-by-variable approach of Ada 95? Why?
 
-## 10.20 If foo is an abstract class in a C++ program, why is it acceptable to declare variables of type foo*, but not of type foo?
+10.20 If foo is an abstract class in a C++ program, why is it acceptable to declare variables of type foo*, but not of type foo?
 
-## 10.21 Consider the Java program shown in Figure 10.8. Assume that this is to be compiled to native code on a machine with 4-byte addresses.
+10.21 Consider the Java program shown in Figure 10.8. Assume that this is to be compiled to native code on a machine with 4-byte addresses.
 
 (a) Draw a picture of the layout in memory of the object created at line 15. Show all virtual function tables. (b) Give assembly-level pseudocode for the call to c.val at line 19. You may assume that the address of c is in register r1 immediately before the call, and that this same register should be used to pass the hidden this parameter. You may ignore the need to save and restore registers, and don’t worry about where to put the return value.
 
@@ -6307,7 +6307,7 @@ Does the representation of a bar object contain one b ﬁeld or two? If two, are
 
 ## 10.10 Explorations
 
-## 10.32 Return for a moment to Exercise 3.7. Build a (more complete) C++ ver- sion of the singly linked list library of Figure 3.16. Discuss the issue of
+10.32 Return for a moment to Exercise 3.7. Build a (more complete) C++ ver- sion of the singly linked list library of Figure 3.16. Discuss the issue of
 
 storage management. Under what circumstances should one delete the el- ements of a list when deleting the list itself? What should the destructor for list_node do? Should it delete its data member? Should it recursively delete node next?
 
@@ -6315,9 +6315,9 @@ storage management. Under what circumstances should one delete the el- ements of
 
 10.34 As described in Section C 5.5.1, performance on pipelined processors de- pends critically on the ability of the hardware to successfully predict the outcome of branches, so that processing of subsequent instructions can begin before processing of the branch has completed. In object-oriented programs, however, knowing the outcome of a branch is not enough: be- cause branches are so often dispatched through vtables, one must also pre- dict the destination. Learn how branch prediction works in one or more modern processors. How well do these processors handle object-oriented programs?
 
-## 10.35 Explore the implementation of mix-in inheritance in a just-in-time (native code) Java compiler. Does it follow the strategy of Section 10.5? How efﬁcient is it?
+10.35 Explore the implementation of mix-in inheritance in a just-in-time (native code) Java compiler. Does it follow the strategy of Section 10.5? How efﬁcient is it?
 
-## 10.36 Explore the implementation of mix-in inheritance in Ruby. How does it differ from that of Java?
+10.36 Explore the implementation of mix-in inheritance in Ruby. How does it differ from that of Java?
 
 10.37 Learn about type hierarchy analysis and type propagation, which can some- times be used to infer the concrete type of objects at compile time, al- lowing the compiler to generate direct calls to methods, rather than indi- recting through vtables. How effective are these techniques? What frac- tion of method calls are they able to optimize in typical benchmarks? What are their limitations? (You might start with the papers of Bacon and Sweeney [BS96] and Diwan et al. [DMM96].)
 

@@ -12,7 +12,7 @@ Rather, all three of the fundamental concepts of object-oriented programming— 
 
 erything as an object. Most of our discussion will focus on Smalltalk, Eiffel, C++, and Java, though we shall have occasion to mention many other languages as well. We will return to the subject of dynamically typed objects in Section 14.4.4.
 
-## 10.1 Object-Oriented Programming
+10.1 Object-Oriented Programming
 
 Object-oriented programming can be seen as an attempt to enhance opportuni- ties for code reuse by making it easy to deﬁne new abstractions as extensions or reﬁnements of existing abstractions. As a starting point for examples, consider a EXAMPLE 10.1
 
@@ -280,7 +280,7 @@ return v;
 
 The practical difference is small in this example. The choice mainly boils down to whether we think of a queue as a special kind of list, or whether we think of a queue as an abstraction that uses a list as part of its implementation. The cases in which inheritance is most compelling are those in which we want to be able to use an object of a derived class (a “client,” say) in a context that expects an object of a base class (a “person,” say), and have that object behave in a special way by virtue of belonging to the derived class (e.g., include extra information when printed). We will consider these sorts of cases in Section 10.4. ■
 
-## 10.1.1 Classes and Generics
+10.1.1 Classes and Generics
 
 The astute reader may have noticed that our various lists and queues have all embedded the assumption that the item in each list node is an integer. In practice, we should like to be able to have lists and queues of many kinds of items, all based on a single copy of the bulk of the code. In a dynamically typed language like Ruby or Python, this is natural: the val ﬁeld would have no static type, and objects of any kind could be added to, and removed from, lists and queues. In a statically typed language like C++, it is tempting to create a general- purpose list_node class that has no val ﬁeld, and then derive subclasses (e.g., int_list_node) that add the values. While this approach can be made to work, it has some unfortunate limitations. Suppose we deﬁne a gp_list_node type, EXAMPLE 10.14
 
@@ -474,13 +474,13 @@ In a nutshell, generics exist for the purpose of abstracting over unrelated type
 * Explain why generics may be useful in an object-oriented language, despite
   the extensive polymorphism already provided by inheritance.
 
-## 10.2 Encapsulation and Inheritance
+10.2 Encapsulation and Inheritance
 
 Encapsulation mechanisms enable the programmer to group data and the sub- routines that operate on them together in one place, and to hide irrelevant details from the users of an abstraction. In the preceding section (and like- wise Section 3.3.5) we cast object-oriented programming as an extension of the
 
 “module-as-type” mechanisms of Simula and Euclid. It is also possible to cast object-oriented programming in a “module-as-manager” framework. In the ﬁrst subsection below we consider the data-hiding mechanisms of modules in non-object-oriented languages. In the second subsection we consider the new data-hiding issues that arise when we add inheritance to modules. In the third subsection we brieﬂy return to the module-as-manager approach, and show how several languages, including Ada 95 and Fortran 2003, add inheritance to records, allowing (static) modules to continue to provide data hiding.
 
-## 10.2.1 Modules
+10.2.1 Modules
 
 Scope rules for data hiding were one of the principal innovations of Clu, Modula, Euclid, and other module-based languages of the 1970s. In Clu and Euclid, the declaration and deﬁnition (header and body) of a module always appeared to- gether. In Modula-2, programmers had the option of placing the header and the body in separate ﬁles. Unfortunately, there was no way to divide the header into public and private parts; everything in it was public (i.e., exported). The only concession to data hiding was that pointer types could be declared in a header without revealing the structure of the objects to which they pointed. Compilers could generate code for the users of a module (Sidebar 10.1) without the hidden information, since pointers are all of equal size on most machines. Ada increases ﬂexibility by allowing the header of a package to be divided into EXAMPLE 10.18
 
@@ -523,7 +523,7 @@ Making Do without Module Headers
 
 As noted in Section C 3.8, Java packages and C/C++/C# namespaces can be spread across multiple compilation units (ﬁles). In C, C++, and C#, a single ﬁle can also contain pieces of more than one namespace. More signiﬁcantly, many modern languages, including Java and C#, dispense with the notion of separate headers and bodies. While the programmer must still deﬁne the interface (and specify it via public declarations), there is no need to manually identify code that needs to be in the header for implementation reasons: instead the compiler is responsible for extracting this information automatically from the full text of the module. For software engineering purposes it may still be desirable to create preliminary “skeleton” versions of a module, against which other modules can be compiled, but this is optional. To assist in project management and documentation, many Java and C# implementations provide a tool that will extract from the complete text of a module the minimum information required by its users.
 
-## 10.2.2 Classes
+10.2.2 Classes
 
 With the introduction of inheritance, object-oriented languages must supple- ment the scope rules of module-based languages to cover additional issues. For example, how much control should a base class exercise over the visibility of its members in derived classes? Should private members of a base class be visible to methods of a derived class? Should public members of a base class always be public members of a derived class (i.e., be visible to users of the derived class)? We touched on these questions in Example 10.9, where we declared class queue as a private list, hiding public members of the base class from users of the derived class—except for method empty, which we made explicitly visible again with a using declaration. C++ allows the inverse strategy as well: methods of an EXAMPLE 10.20
 
@@ -555,7 +555,7 @@ Static Fields and Methods
 
 Orthogonal to the visibility implied by public, private, or protected, most object-oriented languages allow individual ﬁelds and methods to be declared static. Static class members are thought of as “belonging” to the class as a whole, not to any individual object. They are therefore sometimes referred to as class ﬁelds and methods, as opposed to instance ﬁelds and methods. (This termi- nology is most common in languages that create a special metaobject to represent each class—see Example 10.26. The class ﬁelds and methods are thought of as belonging to the metaobject.) A single copy of each static ﬁeld is shared by all instances of its class: changes made to that ﬁeld in methods of one object will be visible to methods of all other objects of the class. A static method, for its part, has no this parameter (explicit or implicit); it cannot access nonstatic (instance) ﬁelds. A nonstatic (instance) method, on the other hand, can access both static and nonstatic ﬁelds.
 
-## 10.2.3 Nesting (Inner Classes)
+10.2.3 Nesting (Inner Classes)
 
 Many languages allow class declarations to nest. This raises an immediate ques- tion: if Inner is a member of Outer, can Inner’s methods see Outer’s members, and if so, which instance do they see? The simplest answer, adopted in C++ and C#, is to allow access to only the static members of the outer class, since these have only a single instance. In effect, nesting serves simply as a means of information hiding. Java takes a more sophisticated approach. It allows a nested (inner) class EXAMPLE 10.22
 
@@ -583,7 +583,7 @@ System.out.println(n);
 
 If there are multiple instances of Outer, each instance will have a different n, and calls to Inner.bar will access the appropriate n. To make this work, each instance of Inner (of which there may of course be an arbitrary number) must contain a hidden pointer to the instance of Outer to which it belongs. If a nested class in Java is declared to be static, it behaves as in C++ and C#, with access to only the static members of the surrounding class. Java classes can also be nested inside methods. Such a local class has access not only to all members of the surrounding class but also to the parameters and variables of the method in which it is nested. The catch is that any parameters or variables that the nested class actually uses must be “effectively ﬁnal”—either declared final explicitly or at least never modiﬁed (by the nested class, the sur- rounding method, or any other code) after the nested class is elaborated. This rule permits the implementation to make a copy of the referenced objects rather than maintaining a reference (i.e., a static link) to the frame of the surrounding method. ■ Inner and local classes in Java are widely used to create object closures, as de- scribed in Section 3.6.3. In Section 9.6.2 we used them as handlers for events. We also noted that a local class in Java can be anonymous: it can appear, in-line, inside a call to new (Example 9.54).
 
-## 10.2.4 Type Extensions
+10.2.4 Type Extensions
 
 Smalltalk, Objective-C, Eiffel, C++, Java, and C# were all designed from the out- set as object-oriented languages, either starting from scratch or from an exist- ing language without a strong encapsulation mechanism. They all support a module-as-type approach to abstraction, in which a single mechanism (the class) provides both encapsulation and inheritance. Several other languages, includ- ing Modula-3 and Oberon (both successors to Modula-2), CLOS, Ada 95/2005, and Fortran 2003, can be characterized as object-oriented extensions to languages in which modules already provide encapsulation. Rather than alter the existing module mechanism, these languages provide inheritance and dynamic method binding through a mechanism for extending records. In Ada 2005, our list and queue abstractions could be deﬁned as shown in EXAMPLE 10.23
 
@@ -597,7 +597,7 @@ List and queue abstractions in Ada 2005 Figure 10.2. To control access to the st
 
 is interpreted as a call to B(A, C, D), where B is declared as a three-parameter subroutine. Arbitrary Ada code can pass an object of type queue to any routine that expects a list; as in Java, there is no way for a derived type to hide the public members of a base type. ■
 
-## 10.2.5 Extending without Inheritance
+10.2.5 Extending without Inheritance
 
 The desire to extend the functionality of an existing abstraction is one of the prin- cipal motivations for object-oriented programming. Inheritance is the standard mechanism that makes such extension possible. There are times, however, when inheritance is not an option, particularly when dealing with preexisting code. The class one wants to extend may not permit inheritance, for instance: in Java, it may be labeled final; in C#, it may be sealed. Even if inheritance is possible in prin- ciple, there may be a large body of existing code that uses the original class name, and it may not be feasible to go back and change all the variable and parameter declarations to use a new derived type. For situations like these, C# provides extension methods, which give the appear- EXAMPLE 10.24
 
@@ -641,7 +641,7 @@ No special functionality is available to extension methods. In particular, they 
   on the other.
 * What are extension methods in C#? What purpose do they serve?
 
-## 10.3 Initialization and Finalization
+10.3 Initialization and Finalization
 
 In Section 3.2 we deﬁned the lifetime of an object to be the interval during which it occupies space and can thus hold data. Most object-oriented languages provide some sort of special mechanism to initialize an object automatically at the begin- ning of its lifetime. When written in the form of a subroutine, this mechanism is known as a constructor. Though the name might be thought to imply otherwise, a constructor does not allocate space; it initializes space that has already been al- located. A few languages provide a similar destructor mechanism to ﬁnalize an object automatically at the end of its lifetime. Several important issues arise:
 
@@ -651,7 +651,7 @@ their lifetime uninitialized, or it must provide a way to choose an appropriate 
 
 In the remainder of this section we consider these issues in more detail.
 
-## 10.3.1 Choosing a Constructor
+10.3.1 Choosing a Constructor
 
 Smalltalk, Eiffel, C++, Java, and C# all allow the programmer to specify more than one constructor for a given class. In C++, Java, and C#, the constructors behave like overloaded subroutines: they must be distinguished by their numbers and types of arguments. In Smalltalk and Eiffel, different constructors can have EXAMPLE 10.25
 
@@ -705,7 +705,7 @@ This code causes D to execute the today constructor of class Date, and assigns a
 
 supports automatic calls to constructors and destructors (Initialize and Finalize routines) only for objects of types derived from the standard library type Controlled.
 
-## 10.3.2 References and Values
+10.3.2 References and Values
 
 Many object-oriented languages, including Simula, Smalltalk, Python, Ruby, and Java, use a programming model in which variables refer to objects. A few lan- guages, including C++ and Ada, allow a variable to have a value that is an object. Eiffel uses a reference model by default, but allows the programmer to specify that certain classes should be expanded, in which case variables of those classes will use a value model. In a similar vein, C# and Swift use struct to deﬁne types whose variables are values, and class to deﬁne types whose variables are refer- ences. With a reference model for variables, every object is created explicitly, and it is easy to ensure that an appropriate constructor is called. With a value model for variables, object creation can happen implicitly as a result of elaboration. In Ada, which doesn’t provide automatic calls to constructors by default, elaborated objects begin life uninitialized, and it is possible to accidentally attempt to use a variable before it has a value. In C++, the compiler ensures that an appropriate constructor is called for every elaborated object, but the rules it uses to identify constructors and their arguments can sometimes be confusing. If a C++ variable of class type foo is declared with no initial value, then the EXAMPLE 10.27
 
@@ -813,7 +813,7 @@ DESIGN & IMPLEMENTATION
 
 operator simply passes to the constructor (a reference to) the already-allocated object. ■
 
-## 10.3.3 Execution Order
+10.3.3 Execution Order
 
 As we have seen, C++ insists that every object be initialized before it can be used. Moreover, if the object’s class (call it B) is derived from some other class (call it A), C++ insists on calling an A constructor before calling a B constructor, so that the derived class is guaranteed never to see its inherited ﬁelds in an inconsistent state. When the programmer creates an object of class B (either via declaration or with a call to new), the creation operation speciﬁes arguments for a B constructor. These arguments allow the C++ compiler to resolve overloading when multiple constructors exist. But where does the compiler obtain arguments for the A con- structor? Adding them to the creation syntax (as Simula did) would be a clear violation of abstraction. The answer adopted in C++ is to allow the header of the EXAMPLE 10.32
 
@@ -870,7 +870,7 @@ super( args );
 
 Because Java uses a reference model uniformly for all objects, any class mem- bers that are themselves objects will actually be references, rather than “expanded” objects (to use the Eiffel term). Java simply initializes such members to null. If the programmer wants something different, he or she must call new explicitly within the constructor of the surrounding class. Smalltalk and (in the common case) C# and Eiffel adopt a similar approach. In C#, members whose types are structs are initialized by setting all of their ﬁelds to zero or null. In Eiffel, if a class contains members of an expanded class type, that type is required to have a single constructor, with no arguments; the Eiffel compiler arranges to call this constructor when the surrounding object is created. Smalltalk, Eiffel, CLOS, and Objective-C are all more lax than C++ regarding the initialization of base classes. The compiler or interpreter arranges to call the constructor (creator, initializer) for each newly created object automatically, but it does not arrange to call constructors for base classes automatically; all it does is initialize base class data members to default (zero or null) values. If the derived class wants different behavior, its constructor(s) must call a constructor for the base class explicitly.
 
-## 10.3.4 Garbage Collection
+10.3.4 Garbage Collection
 
 When a C++ object is destroyed, the destructor for the derived class is called ﬁrst, followed by those of the base class(es), in reverse order of derivation. By far the most common use of destructors in C++ is manual storage reclamation. Consider EXAMPLE 10.36
 
@@ -913,7 +913,7 @@ In modern C++ code, storage management is often facilitated through the use of s
 * Explain the difference between initialization and assignment in C++.
 * Why does C++ need destructors more than Eiffel does?
 
-## 10.4 Dynamic Method Binding
+10.4 Dynamic Method Binding
 
 One of the principal consequences of inheritance/type extension is that a derived class D has all the members—data and subroutines—of its base class C. As long as D does not hide any of the publicly visible members of C (see Exercise 10.15), it makes sense to allow an object of class D to be used in any context that expects an object of class C: anything we might want to do to an object of class C we can also do to an object of class D. In other words, a derived class that does not hide any publicly visible members of its base class is a subtype of that base class. The ability to use a derived class in a context that expects its base class is called subtype polymorphism. If we imagine an administrative computing system for a EXAMPLE 10.37
 
@@ -1001,7 +1001,7 @@ void seek(long whence);
 
 The code for read_ahead_text_file::seek will undoubtedly need to change the value of the cached upcoming_characters. If the method is not dynami- cally dispatched, however, we cannot guarantee that this will happen: if we pass a read_ahead_text_file reference to a subroutine that expects a text_file ref- erence as argument, and if that subroutine then calls seek, we’ll get the version of seek in the base class. ■ Unfortunately, as we shall see in Section 10.4.3, dynamic method binding imposes run-time overhead. While this overhead is generally modest, it is nonetheless a concern for small subroutines in performance-critical applications. Smalltalk, Objective-C, Python, and Ruby use dynamic method binding for all methods. Java and Eiffel use dynamic method binding by default, but allow indi- vidual methods and (in Java) classes to be labeled final (Java) or frozen (Eiffel), in which case they cannot be overridden by derived classes, and can therefore employ an optimized implementation. Simula, C++, C#, and Ada 95 use static method binding by default, but allow the programmer to specify dynamic binding when desired. In these latter languages it is common terminology to distinguish between overriding a method that uses dynamic binding and (merely) redeﬁning a method that uses static binding. For the sake of clarity, C# requires explicit use of the keywords override and new whenever a method in a derived class overrides or redeﬁnes (respectively) a method of the same name in a base class. Java and C++11 have similar annotations whose use is encouraged but not required.
 
-## 10.4.1 Virtual and Nonvirtual Methods
+10.4.1 Virtual and Nonvirtual Methods
 
 In Simula, C++, and C#, which use static method binding by default, the pro- grammer can specify that particular methods should use dynamic binding by labeling them as virtual. Calls to virtual methods are dispatched to the ap- propriate implementation at run time, based on the class of the object, rather than the type of the reference. In C++ and C#, the keyword virtual preﬁxes the EXAMPLE 10.40
 
@@ -1027,7 +1027,7 @@ procedure print_mailing_label(p : professor) is ...
 
 procedure print_appropriate_label(r : person'Class) is begin print_mailing_label(r); -- calls appropriate overloaded version, depending -- on type of r at run time end print_appropriate_label; ■
 
-## 10.4.2 Abstract Classes
+10.4.2 Abstract Classes
 
 In most object-oriented languages it is possible to omit the body of a virtual method in a base class. In Java and C#, one does so by labeling both the class EXAMPLE 10.42
 
@@ -1051,7 +1051,7 @@ virtual void print_mailing_label() = 0;
 
 C++ refers to abstract methods as pure virtual methods. ■ Regardless of declaration syntax, a class is said to be abstract if it has at least one abstract method. It is not possible to declare an object of an abstract class, because it would be missing at least one member. The only purpose of an abstract class is to serve as a base for other, concrete classes. A concrete class (or one of its intermediate ancestors) must provide a real deﬁnition for every abstract method it inherits. The existence of an abstract method in a base class provides a “hook” for dynamic method binding; it allows the programmer to write code that calls methods of (references to) objects of the base class, under the assumption that appropriate concrete methods will be invoked at run time. Classes that have no members other than abstract methods—no ﬁelds or method bodies—are called interfaces in Java, C#, and Ada 2005. They support a restricted, “mix-in” form of multiple inheritance, which we will consider in Section 10.5.6
 
-## 10.4.3 Member Lookup
+10.4.3 Member Lookup
 
 With static method binding (as in Simula, C++, C#, or Ada 95), the compiler can always tell which version of a method to call, based on the type of the variable being used. With dynamic method binding, however, the object referred to by EXAMPLE 10.44
 
@@ -1131,7 +1131,7 @@ DESIGN & IMPLEMENTATION
 
 public; methods provide the only means of object interaction. The representa- tion of an object begins with the address of a type descriptor. The type descriptor contains a dictionary that maps method names to code fragments. At run time, the Smalltalk interpreter performs a lookup operation in the dictionary to see if the method is supported. If not, it generates a “message not understood” error— the equivalent of a type-clash error in Lisp. CLOS, Objective-C, Swift, and the object-oriented scripting languages provide similar semantics, and invite similar implementations. The dynamic approach is arguably more ﬂexible than the static, but it imposes signiﬁcant cost when methods are small, and delays the reporting of errors. In addition to imposing the overhead of indirection, virtual methods often preclude the in-line expansion of subroutines at compile time. The lack of in-line subroutines can be a serious performance problem when subroutines are small and frequently called. Like C, C++ attempts to avoid run-time overhead when- ever possible: hence its use of static method binding as the default, and its heavy reliance on object-valued variables, for which even virtual methods can be dis- patched at compile time.
 
-## 10.4.4 Object Closures
+10.4.4 Object Closures
 
 We have noted (in Section 3.6.4 and elsewhere) that object closures can be used in an object-oriented language to achieve roughly the same effect as subroutine closures in a language with nested subroutines—namely, to encapsulate a method with context for later execution. It should be noted that this mechanism relies, for its full generality, on dynamic method binding. Recall the plus_x object closure EXAMPLE 10.49
 
@@ -1194,7 +1194,7 @@ The bind routine (an automatically instantiated generic function) encapsulates i
 * What is an abstract (deferred) class?
 * Explain the importance of virtual methods for object closures.
 
-## 10.5 Mix-In Inheritance
+10.5 Mix-In Inheritance
 
 When building an object-oriented system, it is often difﬁcult to design a perfect inheritance tree, in which every class has exactly one parent. A cat may be an animal, a pet, a family_member, or an object_of_affection. A widget in the company database may be a sortable_object (from the reporting system’s perspective), a graphable_object (from the window system’s perspective), or a storable_object (from the ﬁle system’s perspective); how do we choose just one? In the general case, we could imagine allowing a class to have an arbitrary number of parents, each of which could provide it with both ﬁelds and methods (both abstract and concrete). This sort of “true” multiple inheritance is provided by several languages, including C++, Eiffel, CLOS, OCaml, and Python; we will consider it in Section 10.6. Unfortunately, it introduces considerable complexity in both language semantics and run-time implementation. In practice, a more limited mechanism, known as mix-in inheritance, is often all we really need. Consider our widgets, for example. Odds are, the reporting system doesn’t EXAMPLE 10.51
 
@@ -1204,7 +1204,7 @@ Mixing interfaces into a derived class purpose Java code that will sort objects 
 
 If we have already developed some complicated class of widget objects, we can make use of the general-purpose code by mixing the appropriate interfaces into classes derived from widget, as shown in Figure 10.6. ■
 
-## 10.5.1 Implementation
+10.5.1 Implementation
 
 In a language like Ruby, Objective-C, or Swift, which uses dynamic method lookup, the methods of an interface can simply be added to the method dictio- nary of any class that implements the interface. In any context that requires the interface type, the usual lookup mechanism will ﬁnd the proper methods. In a language with fully static typing, in which pointers to methods are expected to lie at known vtable offsets, new machinery is required. The challenge boils down to a need for multiple views of an object. In Figure 10.6, method dictionary.insert expects a storable_object EXAMPLE 10.53
 
@@ -1224,7 +1224,7 @@ Here we have assumed that the this correction occupies the ﬁrst four bytes of 
 
 longer than the code required with single inheritance. Once it executes, however, augmented_widget.get_stored_name will be running with exactly the param- eter it expects: a reference to an augmented_widget object. ■
 
-## 10.5.2 Extensions
+10.5.2 Extensions
 
 The description of interfaces above reﬂects historical versions of Java, with one omission: in addition to abstract methods, an interface can deﬁne static final (constant) ﬁelds. Because such ﬁelds can never change, they introduce no run- time complexity or overhead—the compiler can, effectively, expand them in place wherever they are used. Beginning with Java 8, interfaces have also been extended to allow static and default methods, both of which are given bodies—code—in the declara- tion of the interface. A static method, like a static final ﬁeld, introduces no implementation complexity: it requires no access to object ﬁelds, so there is no ambiguity about what view to pass as this—there is no this parameter. De- fault methods are a bit more tricky. Their code is intended to be used by any class that does not override it. This convention is particularly valuable for library
 
@@ -1242,7 +1242,7 @@ To use the default, each concrete class that inherits from storable_object would
 
 Implementation of default methods example, the default get_local_name has to be able to ﬁnd, and call, the version of get_stored_name deﬁned by the concrete class. The usual way to implement this access depends on tiny forwarding routines: for each class C that inherits from storable_object and that needs the default code, the compiler generates a static, C-speciﬁc forwarding routine that accepts the concrete-class-speciﬁc this parameter, adds back in the this correction that the regular calling sequence just subtracted out, and passes the resulting pointer-to-vtable-pointer to the default method. ■ As it turns out, the equivalent of default methods has long been provided by the Scala programming language, whose mix-ins are known as traits. In fact, traits support not only default methods but also mutable ﬁelds. Rather than try to create a view that would make these ﬁelds directly accessible, the Scala compiler generates, for each concrete class that inherits from the trait, a pair of hidden accessor methods analogous to the properties of C# (Example 10.7). References to the accessor methods are then included in the interface-speciﬁc vtable, where they can be called by default methods. In any class that does not provide its own deﬁnition of a trait ﬁeld, the compiler creates a new private ﬁeld to be used by the accessor methods.
 
-## 10.6 True Multiple Inheritance
+10.6 True Multiple Inheritance
 
 As described in Section 10.5, mix-in inheritance allows an interface to specify functionality that must be provided by an inheriting class in order for objects of that class to be used in a given context. Crucially, an interface does not, for the most part, provide that functionality itself. Even default methods serve mainly to orchestrate access to functionality provided by the inheriting class. At times it can be useful to inherit real functionality from more than one base class. Suppose, for example, that our administrative computing system needs EXAMPLE 10.56
 
@@ -1264,13 +1264,13 @@ Suppose two parent classes provide a method with the same name. Which one do we 
 
 Multiple inheritance with a common “grandparent” is known as repeated in- heritance. Repeated inheritance with separate copies of the grandparent is known as replicated inheritance; repeated inheritance with a single copy of the grandpar- ent is known as shared inheritance. Shared inheritance is the default in Eiffel. Replicated inheritance is the default in C++. Both languages allow the program- mer to obtain the other option when desired.
 
-## 10.7 Object-Oriented Programming Revisited
+10.7 Object-Oriented Programming Revisited
 
 At the beginning of this chapter, we characterized object-oriented programming in terms of three fundamental concepts: encapsulation, inheritance, and dynamic method binding. Encapsulation allows the implementation details of an abstrac- tion to be hidden behind a simple interface. Inheritance allows a new abstraction to be deﬁned as an extension or reﬁnement of some existing abstraction, obtain- ing some or all of its characteristics automatically. Dynamic method binding al- lows the new abstraction to display its new behavior even when used in a context that expects the old abstraction. Different programming languages support these fundamental concepts to dif- ferent degrees. In particular, languages differ in the extent to which they require the programmer to write in an object-oriented style. Some authors argue that a truly object-oriented language should make it difﬁcult or impossible to write programs that are not object-oriented. From this purist point of view, an object- oriented language should present a uniform object model of computing, in which every data type is a class, every variable is a reference to an object, and every subroutine is an object method. Moreover, objects should be thought of in an- thropomorphic terms: as active entities responsible for all computation. Smalltalk and Ruby come close to this ideal. In fact, as described in the subsec- tion below (mostly on the companion site), even such control-ﬂow mechanisms as selection and iteration are modeled as method invocations in Smalltalk. On the other hand, Ada 95 and Fortran 2003 are probably best characterized as von Neu- mann languages that permit the programmer to write in an object-oriented style if desired. So what about C++? It certainly has a wealth of features, including several (multiple inheritance, elaborate access control, strict initialization order, destruc- tors, generics) that are useful in object-oriented programs and that are not found in Smalltalk. At the same time, it has a wealth of problematic wrinkles. Its simple types are not classes. It has subroutines outside of classes. It uses static method binding and replicated multiple inheritance by default, rather than the more costly virtual alternatives. Its unchecked C-style type casts provide a ma- jor loophole for type checking and access control. Its lack of garbage collection is a major obstacle to the creation of correct, self-contained abstractions. Probably most serious of all, C++ retains all of the low-level mechanisms of C, allowing the programmer to escape or subvert the object-oriented model of programming
 
 entirely. It has been suggested that the best C++ programmers are those who did not learn C ﬁrst: they are not as tempted to write “C-style” programs in the newer language. On balance, it is probably safe to say that C++ is an object-oriented language in the same sense that Common Lisp is a functional language. With the possible exception of garbage collection, C++ provides all of the necessary tools, but it requires substantial discipline on the part of the programmer to use those tools “correctly.”
 
-## 10.7.1 The Object Model of Smalltalk
+10.7.1 The Object Model of Smalltalk
 
 Historically, Smalltalk was considered the canonical object-oriented language. The original version of the language was designed by Alan Kay as part of his doc- toral work at the University of Utah in the late 1960s. It was then adopted by the Software Concepts Group at the Xerox Palo Alto Research Center (PARC), and went through ﬁve major revisions in the 1970s, culminating in the Smalltalk-80 language.7
 
@@ -1296,15 +1296,15 @@ We have mentioned several features of Smalltalk in previous sections. A some- wh
 * What does it mean for a language to provide a uniform object model? Name
   two languages that do so.
 
-## 10.8 Summary and Concluding Remarks
+10.8 Summary and Concluding Remarks
 
 This has been the last of our six core chapters on language design: names (Chap- ter 3), control ﬂow (Chapter 6), type systems (Chapter 7), composite types (Chapter 8), subroutines (Chapter 9), and objects (Chapter 10). We began in Section 10.1 by identifying three fundamental concepts of object- oriented programming: encapsulation, inheritance, and dynamic method binding. We also introduced the terminology of classes, objects, and methods. We had already seen encapsulation in the modules of Chapter 3. Encapsulation allows the details of a complicated data abstraction to be hidden behind a comparatively simple interface. Inheritance extends the utility of encapsulation by making it easy for programmers to deﬁne new abstractions as reﬁnements or extensions of existing abstractions. Inheritance provides a natural basis for polymorphic sub- routines: if a subroutine expects an instance of a given class as argument, then an object of any class derived from the expected one can be used instead (assuming that it retains the entire existing interface). Dynamic method binding extends this form of polymorphism by arranging for a call to one of the parameter’s methods to use the implementation associated with the class of the actual object at run time, rather than the implementation associated with the declared class of the pa- rameter. We noted that some languages, including Modula-3, Oberon, Ada 95, and Fortran 2003, support object orientation through a type extension mecha- nism, in which encapsulation is associated with modules, but inheritance and dynamic method binding are associated with a special form of record. In later sections we covered object initialization and ﬁnalization, dynamic method binding, and (on the companion site) multiple inheritance in some de- tail. In many cases we discovered tradeoffs between functionality on the one hand and simplicity and execution speed on the other. Treating variables as references, rather than values, often leads to simpler semantics, but requires extra indirec- tion. Garbage collection, as previously noted in Section 8.5.3, dramatically eases the creation and maintenance of software, but imposes run-time costs. Dynamic method binding requires (in the general case) that methods be dispatched us- ing vtables or some other lookup mechanism. Fully general implementations of multiple inheritance tend to impose overheads even when unused. In several cases we saw time/space tradeoffs as well. In-line subroutines, as pre- viously noted in Section 9.2.4, can dramatically improve the performance of code with many small subroutines, not only by eliminating the overhead of the sub- routine calls themselves, but by allowing register allocation, common subexpres-
 
 sion analysis, and other “global” code improvements to be applied across calls. At the same time, in-line expansion generally increases the size of object code. Exercises C 10.28 and C 10.30 explore similar tradeoffs in the implementation of multiple inheritance. Historically, Smalltalk was widely regarded as the purest and most ﬂexible of the object-oriented languages. Its lack of compile-time type checking, however, together with its “message-based” model of computation and its need for dy- namic method lookup, tended to make its implementations rather slow. C++, with its object-valued variables, default static binding, minimal dynamic checks, and high-quality compilers, was largely responsible for popularizing object- oriented programming in the 1990s. Today objects are ubiquitous—in statically typed, compiled languages like Java and C#; in dynamically typed languages like Python, Ruby, PHP, and JavaScript; and even in systems based on binary compo- nents or human-readable service invocations over the World Wide Web (more on these in the Bibliographic Notes).
 
-## 10.9 Exercises
+10.9 Exercises
 
-## 10.1 Some language designers argue that object orientation eliminates the need for nested subroutines. Do you agree? Why or why not?
+10.1 Some language designers argue that object orientation eliminates the need for nested subroutines. Do you agree? Why or why not?
 
 10.2 Design a class hierarchy to represent syntax trees for the CFG of Fig- ure 4.5. Provide a method in each class to return the value of a node. Provide constructors that play the role of the make_leaf, make_un_op, and make_bin_op subroutines.
 
@@ -1312,9 +1312,9 @@ sion analysis, and other “global” code improvements to be applied across cal
 
 10.4 Using the C# indexer mechanism, create a hash table class that can be indexed like an array. (In effect, create a simple version of the System .Collections.Hashtable container class.) Alternatively, use an over- loaded version of operator[] to build a similar class in C++.
 
-## 10.5 In the spirit of Example 10.8, write a double-ended queue (deque) abstrac- tion (pronounced “deck”), derived from a doubly linked list base class.
+10.5 In the spirit of Example 10.8, write a double-ended queue (deque) abstrac- tion (pronounced “deck”), derived from a doubly linked list base class.
 
-## 10.6 Use templates (generics) to abstract your solutions to the previous two questions over the type of data in the container.
+10.6 Use templates (generics) to abstract your solutions to the previous two questions over the type of data in the container.
 
 10.7 Repeat Exercise 10.5 in Python or Ruby. Write a simple program to demonstrate that generics are not needed to abstract over types. What happens if you mix objects of different types in the same deque?
 
@@ -1322,17 +1322,17 @@ sion analysis, and other “global” code improvements to be applied across cal
 
 next and prev pointers for the list within the elements themselves— typically by arranging for the element type to inherit from something like the gp_list_node class of Example 10.14. The result is sometimes called an intrusive list. (a) Explain how you might build intrusive lists in C++ without requir- ing users to pepper their code with explicit type casts. Hint: given multiple inheritance, you will probably need to determine, for each concrete element type, the offset within the representation of the type at which the next and prev pointers appear. For further ideas, search for information on the boost::intrusive::list class of the popu- lar Boost library. (b) Discuss the relative advantages and disadvantages of intrusive and non-intrusive lists.
 
-## 10.9 Can you emulate the inner class of Example 10.22 in C# or C++? (Hint: You’ll need an explicit version of Java’s hidden reference to the surround- ing class.)
+10.9 Can you emulate the inner class of Example 10.22 in C# or C++? (Hint: You’ll need an explicit version of Java’s hidden reference to the surround- ing class.)
 
-## 10.10 Write a package body for the list abstraction of Figure 10.2.
+10.10 Write a package body for the list abstraction of Figure 10.2.
 
-## 10.11 Rewrite the list and queue abstractions in Eiffel, Java, and/or C#.
+10.11 Rewrite the list and queue abstractions in Eiffel, Java, and/or C#.
 
 10.12 Using C++, Java, or C#, implement a Complex class in the spirit of Exam- ple 10.25. Discuss the time and space tradeoffs between maintaining all four values (x, y, ρ, and θ) in the state of the object, or keeping only two and computing the others on demand.
 
-## 10.13 Repeat the previous two exercises for Python and/or Ruby.
+10.13 Repeat the previous two exercises for Python and/or Ruby.
 
-## 10.14 Compare Java final methods with C++ nonvirtual methods. How are they the same? How are they different?
+10.14 Compare Java final methods with C++ nonvirtual methods. How are they the same? How are they different?
 
 10.15 In several object-oriented languages, including C++ and Eiffel, a derived class can hide members of the base class. In C++, for example, we can declare a base class to be public, protected, or private:
 
@@ -1350,7 +1350,7 @@ class D : private A { ...
 
 In all cases, private members of A are inaccessible to methods of B, C, or D. Consider the impact of protected and private base classes on dy- namic method binding. Under what circumstances can a reference to an object of class B, C, or D be assigned into a variable of type A*?
 
-## 10.16 What happens to the implementation of a class if we redeﬁne a data mem- ber? For example, suppose we have
+10.16 What happens to the implementation of a class if we redeﬁne a data mem- ber? For example, suppose we have
 
 ```
 class foo {
@@ -1368,15 +1368,15 @@ int b;
 
 Does the representation of a bar object contain one b ﬁeld or two? If two, are both accessible, or only one? Under what circumstances?
 
-## 10.17 Discuss the relative merits of classes and type extensions. Which do you prefer? Why?
+10.17 Discuss the relative merits of classes and type extensions. Which do you prefer? Why?
 
 10.18 Building on the outline of Example 10.28, write a program that illustrates the difference between copy constructors and operator= in C++. Your code should include examples of each situation in which one of these may be called (don’t forget parameter passing and function returns). In- strument the copy constructors and assignment operators in each of your classes so that they will print their names when called. Run your program to verify that its behavior matches your expectations.
 
 10.19 What do you think of the decision, in C++, C#, and Ada 95, to use static method binding, rather than dynamic, by default? Is the gain in imple- mentation speed worth the loss in abstraction and reusability? Assum- ing that we sometimes want static binding, do you prefer the method-by- method approach of C++ and C#, or the variable-by-variable approach of Ada 95? Why?
 
-## 10.20 If foo is an abstract class in a C++ program, why is it acceptable to declare variables of type foo*, but not of type foo?
+10.20 If foo is an abstract class in a C++ program, why is it acceptable to declare variables of type foo*, but not of type foo?
 
-## 10.21 Consider the Java program shown in Figure 10.8. Assume that this is to be compiled to native code on a machine with 4-byte addresses.
+10.21 Consider the Java program shown in Figure 10.8. Assume that this is to be compiled to native code on a machine with 4-byte addresses.
 
 (a) Draw a picture of the layout in memory of the object created at line 15. Show all virtual function tables. (b) Give assembly-level pseudocode for the call to c.val at line 19. You may assume that the address of c is in register r1 immediately before the call, and that this same register should be used to pass the hidden this parameter. You may ignore the need to save and restore registers, and don’t worry about where to put the return value.
 
@@ -1389,9 +1389,9 @@ Does the representation of a bar object contain one b ﬁeld or two? If two, are
 
 10.23–10.31 In More Depth.
 
-## 10.10 Explorations
+10.10 Explorations
 
-## 10.32 Return for a moment to Exercise 3.7. Build a (more complete) C++ ver- sion of the singly linked list library of Figure 3.16. Discuss the issue of
+10.32 Return for a moment to Exercise 3.7. Build a (more complete) C++ ver- sion of the singly linked list library of Figure 3.16. Discuss the issue of
 
 storage management. Under what circumstances should one delete the el- ements of a list when deleting the list itself? What should the destructor for list_node do? Should it delete its data member? Should it recursively delete node next?
 
@@ -1399,15 +1399,15 @@ storage management. Under what circumstances should one delete the el- ements of
 
 10.34 As described in Section C 5.5.1, performance on pipelined processors de- pends critically on the ability of the hardware to successfully predict the outcome of branches, so that processing of subsequent instructions can begin before processing of the branch has completed. In object-oriented programs, however, knowing the outcome of a branch is not enough: be- cause branches are so often dispatched through vtables, one must also pre- dict the destination. Learn how branch prediction works in one or more modern processors. How well do these processors handle object-oriented programs?
 
-## 10.35 Explore the implementation of mix-in inheritance in a just-in-time (native code) Java compiler. Does it follow the strategy of Section 10.5? How efﬁcient is it?
+10.35 Explore the implementation of mix-in inheritance in a just-in-time (native code) Java compiler. Does it follow the strategy of Section 10.5? How efﬁcient is it?
 
-## 10.36 Explore the implementation of mix-in inheritance in Ruby. How does it differ from that of Java?
+10.36 Explore the implementation of mix-in inheritance in Ruby. How does it differ from that of Java?
 
 10.37 Learn about type hierarchy analysis and type propagation, which can some- times be used to infer the concrete type of objects at compile time, al- lowing the compiler to generate direct calls to methods, rather than indi- recting through vtables. How effective are these techniques? What frac- tion of method calls are they able to optimize in typical benchmarks? What are their limitations? (You might start with the papers of Bacon and Sweeney [BS96] and Diwan et al. [DMM96].)
 
 10.38–10.39 In More Depth.
 
-## 10.11 Bibliographic Notes
+10.11 Bibliographic Notes
 
 Appendix A contains bibliographic citations for the various languages discussed in this chapter, including Simula, Smalltalk, C++, Eiffel, Java, C#, Modula-3, Oberon, Ada 95, Fortran 2003, Python, Ruby, Objective-C, Swift, Go, OCaml,
 

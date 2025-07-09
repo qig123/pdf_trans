@@ -74,7 +74,7 @@ In the early days of computing the implementor’s viewpoint was predominant. Pr
 
 DESIGN & IMPLEMENTATION
 
-## 1.1 Introduction Throughout the book, sidebars like this one will highlight the interplay of language design and language implementation. Among other things, we will consider
+1.1 Introduction Throughout the book, sidebars like this one will highlight the interplay of language design and language implementation. Among other things, we will consider
 
 Cases (such as those mentioned in this section) in which ease or difﬁculty of implementation signiﬁcantly affected the success of a language Language features that many designers now believe were mistakes, at least in part because of implementation difﬁculties Potentially useful features omitted from some languages because of concern that they might be too difﬁcult or slow to implement Language features introduced at least in part to facilitate efﬁcient or elegant implementations Cases in which a machine architecture makes reasonable features unreason- ably expensive Various other tradeoffs in which implementation plays a signiﬁcant role
 
@@ -368,7 +368,7 @@ for more than one machine (target language), and so that the back end may be sha
 
 to the dramatic increases in memory sizes of the mid to late 1980s, compilers were also sometimes divided into passes to minimize memory usage: as each pass completed, the next could reuse its code space.
 
-## 1.6.1 Lexical and Syntax Analysis
+1.6.1 Lexical and Syntax Analysis
 
 Consider the greatest common divisor (GCD) problem introduced at the begin- EXAMPLE 1.20
 
@@ -645,7 +645,7 @@ ident(i) 2
 
 length, and (b) the use of the equally artiﬁcial assignment-expression, additive- expression, multiplicative-expression, and so on, to capture precedence and asso- ciativity in arithmetic expressions. We shall see in the following subsection that much of this complexity can be discarded once parsing is complete. ■ In the process of scanning and parsing, the compiler or interpreter checks to see that all of the program’s tokens are well formed, and that the sequence of tokens conforms to the syntax deﬁned by the context-free grammar. Any mal- formed tokens (e.g., 123abc or $@foo in C) should cause the scanner to produce an error message. Any syntactically invalid token sequence (e.g., A = X Y Z in C) should lead to an error message from the parser.
 
-## 1.6.2 Semantic Analysis and Intermediate Code Generation
+1.6.2 Semantic Analysis and Intermediate Code Generation
 
 Semantic analysis is the discovery of meaning in a program. Among other things, the semantic analyzer recognizes when multiple occurrences of the same identi- ﬁer are meant to refer to the same program entity, and ensures that the uses are consistent. In most languages it also tracks the types of both identiﬁers and ex- pressions, both to verify consistent usage and to guide the generation of code in the back end of a compiler. To assist in its work, the semantic analyzer typically builds and maintains a symbol table data structure that maps each identiﬁer to the information known about it. Among other things, this information includes the identiﬁer’s type, in- ternal structure (if any), and scope (the portion of the program in which it is valid). Using the symbol table, the semantic analyzer enforces a large variety of rules that are not captured by the hierarchical structure of the context-free grammar and the parse tree. In C, for example, it checks to make sure that
 
@@ -670,7 +670,7 @@ Interpreting the syntax tree preter would start at the root of Figure 1.6 and vi
 
 idealized machine. We will consider this option further in Chapter 15, where a control ﬂow graph for our GCD program appears in Figure 15.3. In a suite of re- lated compilers, the front ends for several languages and the back ends for several machines would share a common intermediate form.
 
-## 1.6.3 Target Code Generation
+1.6.3 Target Code Generation
 
 The code generation phase of a compiler translates the intermediate form into the target language. Given the information contained in the syntax tree, gener- ating correct code is usually not a difﬁcult task (generating good code is harder, as we shall see in Section 1.6.4). To generate assembly or machine language, the EXAMPLE 1.26
 
@@ -685,7 +685,7 @@ dence between Figures 1.6 and 1.7 generally apparent. A few hints: esp, ebp, eax
 
 Often a code generator will save the symbol table for later use by a symbolic debugger, by including it in a nonexecutable part of the target code.
 
-## 1.6.4 Code Improvement
+1.6.4 Code Improvement
 
 Code improvement is often referred to as optimization, though it seldom makes anything optimal in any absolute sense. It is an optional phase of compilation whose goal is to transform a program into a new version that computes the same result more efﬁciently—more quickly or using less memory, or both. Some improvements are machine independent. These can be performed as transformations on the intermediate form. Other improvements require an un- derstanding of the target machine (or of whatever will execute the program in the target language). These must be performed as transformations on the target pro- gram. Thus code improvement often appears twice in the list of compiler phases: once immediately after semantic analysis and intermediate code generation, and again immediately after target code generation. Applying a good code improver to the code in Figure 1.7 produces the code EXAMPLE 1.27
 
@@ -718,7 +718,7 @@ In this chapter we introduced the study of programming language design and imple
 
 1.3 Imperative languages like Fortran and C are typically compiled, while scripting languages, in which many issues cannot be settled until run time, are typically interpreted. Is interpretation simply what one “has to do” when compilation is infeasible, or are there actually some advantages to interpret- ing a language, even when a compiler is available?
 
-## 1.4 The gcd program of Example 1.20 might also be written
+1.4 The gcd program of Example 1.20 might also be written
 
 ```
 int main() {
@@ -733,11 +733,11 @@ putint(i);
 
 Does this program compute the same result? If not, can you ﬁx it? Under what circumstances would you expect one or the other to be faster?
 
-## 1.5 Expanding on Example 1.25, trace an interpretation of the gcd program on the inputs 12 and 8. Which syntax tree nodes are visited, in which order?
+1.5 Expanding on Example 1.25, trace an interpretation of the gcd program on the inputs 12 and 8. Which syntax tree nodes are visited, in which order?
 
-## 1.6 Both interpretation and code generation can be performed by traversal of a syntax tree. Compare these two kinds of traversals. In what ways are they similar/different?
+1.6 Both interpretation and code generation can be performed by traversal of a syntax tree. Compare these two kinds of traversals. In what ways are they similar/different?
 
-## 1.7 In your local implementation of C, what is the limit on the size of inte- gers? What happens in the event of arithmetic overﬂow? What are the
+1.7 In your local implementation of C, what is the limit on the size of inte- gers? What happens in the event of arithmetic overﬂow? What are the
 
 implications of size limits on the portability of programs from one ma- chine/compiler to another? How do the answers to these questions differ for Java? For Ada? For Pascal? For Scheme? (You may need to ﬁnd a man- ual.)
 

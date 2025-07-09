@@ -4,7 +4,7 @@
 
 As noted in Section 1.6, the various phases of compilation are commonly grouped into a front end responsible for the analysis of source code, a back end responsible for the synthesis of target code, and often a “middle end” responsible for language- and machine-independent code improvement. Chapters 2 and 4 discussed the work of the front end, culminating in the construction of a syntax tree. The current chapter turns to the work of the back end, and speciﬁcally to code generation, assembly, and linking. We will continue with code improvement in Chapter 17. In Chapters 6 through 10, we often discussed the code that a compiler would generate to implement various language features. Now we will look at how the compiler produces that code from a syntax tree, and how it combines the out- put of multiple compilations to produce a runnable program. We begin in Sec- tion 15.1 with a more detailed overview of the work of program synthesis than was possible in Chapter 1. We focus in particular on one of several plausible ways of dividing that work into phases. In Section 15.2 we then consider the many possible forms of intermediate code passed between these phases. On the com- panion site we provide a bit more detail on two concrete examples—the GIMPLE and RTL formats used by the GNU compilers. We will consider two additional intermediate forms in Chapter 16: Java bytecode and the Common Intermedi- ate Language (CIL) used by Microsoft and other implementors of the Common Language Infrastructure. In Section 15.3 we discuss the generation of assembly code from an abstract syntax tree, using attribute grammars as a formal framework. In Section 15.4 we discuss the internal organization of binary object ﬁles and the layout of programs in memory. Section 15.5 describes assembly. Section 15.6 considers linking.
 
-## 15.1 Back-End Compiler Structure
+15.1 Back-End Compiler Structure
 
 As we noted in Chapter 4, there is less uniformity in back-end compiler structure than there is in front-end structure. Even such unconventional compilers as text
 
@@ -32,11 +32,11 @@ To reduce programmer effort and increase the ease with which a compiler can be p
 
 The ﬁnal phase of our example compiler structure consists of register alloca- tion and instruction scheduling, both of which can be thought of as machine- speciﬁc code improvement. Register allocation requires that we map the unlim- ited virtual registers employed in earlier phases onto the bounded set of architec- tural registers available in the target machine. If there aren’t enough architectural registers to go around, we may need to generate additional loads and stores to multiplex a given architectural register among two or more virtual registers. In- struction scheduling (described in Sections C 5.5 and C 17.6) consists of reorder- ing the instructions of each basic block in an attempt to ﬁll the pipeline(s) of the target machine.
 
-## 15.1.2 Phases and Passes
+15.1.2 Phases and Passes
 
 In Section 1.6 we deﬁned a pass of compilation as a phase or sequence of phases that is serialized with respect to the rest of compilation: it does not start until previous phases have completed, and it ﬁnishes before any subsequent phases start. If desired, a pass may be written as a separate program, reading its input from a ﬁle and writing its output to a ﬁle. Two-pass compilers are particularly common. They may be divided between semantic analysis and intermediate code generation or between intermediate code generation and machine-independent code improvement. In either case, the ﬁrst pass is commonly referred to as the “front end” and the second pass as the “back end.” Like most compilers, our example generates symbolic assembly language as its output (a few compilers, including those written by IBM for the Power family, generate binary machine code directly). The assembler (not shown in Figure 15.1) behaves as an extra pass, assigning addresses to fragments of data and code, and translating symbolic operations into their binary encodings. In most cases, the input to the compiler will have consisted of source code for a single compilation unit. After assembly, the output will need to be linked to other fragments of the application, and to various preexisting subroutine libraries. Some of the work of linking may be delayed until load time (immediately prior to program execution) or even until run time (during program execution). We will discuss assembly and linking in Sections 15.5 through 15.7.
 
-## 15.2 Intermediate Forms
+15.2 Intermediate Forms
 
 An intermediate form (IF) provides the connection between phases of machine- independent code improvement, and continues to represent the program during the various back-end phases. IFs can be classiﬁed in terms of their level, or degree of machine dependence. High-level IFs are often based on trees or directed acyclic graphs (DAGs) that directly capture the hierarchical structure of modern programming languages.
 
@@ -46,7 +46,7 @@ Intermediate forms in Figure 15.1 the syntax trees passed from semantic analysis
 
 To be stored in a ﬁle, an IF requires a linear representation. Sequences of three- address instructions are naturally linear. Tree-based IFs can be linearized via or- dered traversal. Structures like control ﬂow graphs can be linearized by replacing pointers with indices relative to the beginning of the ﬁle.
 
-## 15.2.1 GIMPLE and RTL
+15.2.1 GIMPLE and RTL
 
 Many readers will be familiar with the gcc compilers. Distributed as open source by the Free Software Foundation, gcc is used very widely in both academia and industry. The standard distribution includes front ends for C, C++, Objective- C, Ada, Fortran, Go, and Java. Front ends for additional languages, including Cobol, Modula-2 and 3, Pascal and PL/I, are separately available. The C compiler is the original, and the one most widely used (gcc originally stood for “GNU C compiler”). There are back ends for dozens of processor architectures, including all commercially signiﬁcant options. There are also GNU implementations, not based on gcc, for some two dozen additional languages.
 
@@ -54,7 +54,7 @@ IN MORE DEPTH
 
 Gcc has three main IFs. Most of the (language-speciﬁc) front ends employ, in- ternally, some variant of a high-level syntax tree form known as GENERIC. Early phases of machine-independent code improvement use a somewhat lower-level tree form known as GIMPLE (still a high-level IF). Later phases use a linear form known as RTL (register transfer language). RTL is a medium-level IF, but a bit higher level than most: it overlays a control ﬂow graph on of a sequence of pseu- doinstructions. RTL was, for many years, the principal IF for gcc. GIMPLE was introduced in 2005 as a more suitable form for machine-independent code im- provement. We consider GIMPLE and RTL in more detail on the companion site.
 
-## 15.2.2 Stack-Based Intermediate Forms
+15.2.2 Stack-Based Intermediate Forms
 
 In situations where simplicity and brevity are paramount, designers often turn to stack-based languages. Operations in a such a language pop arguments from— and push results to—a common implicit stack. The lack of named operands means that a stack-based language can be very compact. In certain HP calcu- lators (Exercise 4.7), stack-based expression evaluation serves to minimize the number of keystrokes required to enter equations. For embedded devices and printers, stack-based evaluation in Forth and Postscript serves to reduce memory and bandwidth requirements, respectively (see Sidebar 15.1). Medium-levelstack-based intermediate languages are similarly attractive when passing code from a compiler to an interpreter or virtual machine. Forty years
 
@@ -70,7 +70,7 @@ DESIGN & IMPLEMENTATION
 
 the push operation and two to specify the sqrt routine). This gives us a total of 23 instructions in 25 bytes. By contrast, three-address code for the same formula keeps a, b, c, and s in registers, and requires only 13 instructions. Unfortunately, in typical notation each instruction but the last will be four bytes in length (the last will be eight), and our 13 instructions will occupy 56 bytes. ■
 
-## 15.3 Code Generation
+15.3 Code Generation
 
 The back-end structure of Figure 15.1 is too complex to present in any detail in a EXAMPLE 15.5
 
@@ -81,7 +81,7 @@ Simpler compiler structure single chapter. To limit the scope of our discussion,
 
 generates pure, linear assembly language; because we are not performing code improvements that alter the program’s control ﬂow, there is no need to represent that ﬂow explicitly in a control ﬂow graph. We also adopt a much simpler register allocation algorithm, which can operate directly on the syntax tree prior to code generation, eliminating the need for virtual registers and the subsequent mapping onto architectural registers. Finally, we drop instruction scheduling. The result- ing compiler structure appears in Figure 15.5. Its code generation phase closely resembles the intermediate code generation of Figure 15.1. ■
 
-## 15.3.1 An Attribute Grammar Example
+15.3.1 An Attribute Grammar Example
 
 Like semantic analysis, intermediate code generation can be formalized in terms of an attribute grammar, though it is most commonly implemented via hand- written ad hoc traversal of a syntax tree. We present an attribute grammar here for the sake of clarity. In Figure 1.7, we presented naive x86 assembly language for the GCD pro- gram. We will use our attribute grammar example to generate a similar version here, but for a RISC-like machine, and in pseudo-assembly notation. Because this notation is now meant to represent target code, rather than medium- or low-level intermediate code, we will assume a ﬁxed, limited register set reminiscent of real machines. We will reserve several registers (a1, a2, sp, rv) for special purposes; others (r1 . . rk) will be available for temporary values and expression evaluation. Figure 15.6 contains a fragment of our attribute grammar. To save space, we EXAMPLE 15.6
 
@@ -99,7 +99,7 @@ program −→stmt  stmt.next free reg := 0  program.code := [“main:”] + s
 
 Chapter 4, notation like while : stmt on the left-hand side of a production in- dicates that a while node in the syntax tree is one of several kinds of stmt node; it may serve as the stmt in the right-hand side of its parent production. In our attribute grammar fragment, program, expr, and stmt all have a synthesized at- tribute code that contains a sequence of instructions. Program has an inherited attribute name of type string, obtained from the compiler command line. Id has a synthesized attribute stp that points to the symbol table entry for the identi- ﬁer. Expr has a synthesized attribute reg that indicates the register that will hold the value of the computed expression at run time. Expr and stmt have an inher- ited attribute next free reg that indicates the next register (in an ordered set of temporaries) that is available for use (i.e., that will hold no useful value at run time) immediately before evaluation of a given expression or statement. (For simplicity, we will be managing registers as if they were a stack; more on this in Section 15.3.2.) ■ Because we use a symbol table in our example, and because symbol tables lie outside the formal attribute grammar framework, we must augment our attribute grammar with some extra code for storage management. Speciﬁcally, prior to evaluating the attribute rules of Figure 15.6, we must traverse the symbol table in order to calculate stack-frame offsets for local variables and parameters (two of which—i and j—occur in the GCD program) and in order to generate assembler directives to allocate space for global variables (of which our program has none). Storage allocation and other assembler directives will be discussed in more detail in Section 15.5.
 
-## 15.3.2 Register Allocation
+15.3.2 Register Allocation
 
 Evaluation of the rules of the attribute grammar itself consists of two main tasks. In each subtree we ﬁrst determine the registers that will be used to hold various quantities at run time; then we generate code. Our naive register allocation strat- EXAMPLE 15.7
 
@@ -147,7 +147,7 @@ techniques to improve it in Chapter 17. In the remaining sections of the current
 * Why is management of a limited set of physical registers usually deferred until
   late in the compilation process?
 
-## 15.4 Address Space Organization
+15.4 Address Space Organization
 
 Assemblers, linkers, and loaders typically operate on a pair of related ﬁle formats: relocatable object code and executable object code. Relocatable object code is ac- ceptable as input to a linker; multiple ﬁles in this format can be combined to create an executable program. Executable object code is acceptable as input to a loader: it can be brought into memory and run. A relocatable object ﬁle includes the following descriptive information:
 
@@ -165,7 +165,7 @@ The layout of these segments for a contemporary 32-bit Linux system on the EXAMP
 
 Linux address space layout x86 appears in Figure 15.8. Relative placements and addresses may be different for other operating systems and machines. ■
 
-## 15.5 Assembly
+15.5 Assembly
 
 Some compilers translate source ﬁles directly into object ﬁles acceptable to the linker. More commonly, they generate assembly language that must subsequently be processed by an assembler to create an object ﬁle. In our examples we have consistently employed a symbolic (textual) notation for code. Within a compiler, the representation would not be textual, but it would still be symbolic, most likely consisting of records and linked lists. To translate this symbolic representation into executable code, we must
 
@@ -211,7 +211,7 @@ Assembler source
 
 This organization gives the compiler a bit more ﬂexibility: operations nor- mally performed by an assembler (e.g., assignment of addresses to variables) can be performed earlier if desired. Because there is no separate assembly pass, the overall translation to object code may be slightly faster. The stand-alone assem- bler can be relatively simple. If it is used only for small, special-purpose code fragments, it probably doesn’t need to perform instruction scheduling or other machine-speciﬁc code improvement. Using a disassembler instead of an assem- bly language dump from the compiler ensures that what the programmer sees corresponds precisely to what is in the object ﬁle. If the compiler uses a fancier assembler as a back end, then any program modiﬁcations effected by the assem- bler will not be visible in the assembly language dumped by the compiler. ■
 
-## 15.5.1 Emitting Instructions
+15.5.1 Emitting Instructions
 
 The most basic task of the assembler is to translate symbolic representations of instructions into binary form. In some assemblers this is an entirely straight- forward task, because there is a one-to-one correspondence between mnemonic operations and instruction op-codes. Many assemblers, however, make minor changes to their input in order to improve performance or to extend the instruc- tion set in ways that make the assembly language easier for human beings to read. The GNU assembler, gas, is among the more conservative, but even it takes a few liberties. For example, some compilers generate nop instructions to cache-align EXAMPLE 15.12
 
@@ -229,7 +229,7 @@ Segment switching: The .text directive indicates that subsequent instructions an
 
 Symbol identiﬁcation: The.globl name directive indicates that name should be entered into the table of exported symbols. Alignment: The.align n directive causes the subsequent output to be aligned at an address evenly divisible by 2n. ■
 
-## 15.5.2 Assigning Addresses to Names
+15.5.2 Assigning Addresses to Names
 
 Like compilers, assemblers commonly work in several phases. If the input is tex- tual, an initial phase scans and parses the input, and builds an internal represen- tation. In the most common organization there are two additional phases. The ﬁrst identiﬁes all internal and external (imported) symbols, assigning locations to the internal ones. This phase is complicated by the fact that the length of some in- structions (on a CISC machine) or the number of real instructions produced by a pseudoinstruction (on a RISC machine) may depend on the number of signiﬁcant bits in an address. Given values for symbols, the ﬁnal phase produces object code. Within the object ﬁle, any symbol mentioned in a .globl directive must ap- pear in the table of exported symbols, with an entry that indicates the symbol’s address. Any symbol referred to in a directive or an instruction, but not deﬁned in the input program, must appear in the table of imported symbols, with an en- try that identiﬁes all places in the code at which such references occur. Finally, any instruction or datum whose value depends on the placement of the current ﬁle within the address space of a running program must be listed in the relocation table. Historically, assemblers distinguished between absolute and relocatable words EXAMPLE 15.16
 
@@ -239,14 +239,14 @@ Encoding of addresses in object ﬁles in an object ﬁle. Absolute words were k
 
 To relocate such an instruction, the linker must add the address of the target code segment and the offset within it of the target instruction, subtract the address of the current code segment and the offset within it of the branch instruction, perform a two-bit right arithmetic shift, and truncate the result to 24 bits. In a similar vein, a 32-bit load on ARM requires a two-instruction sequence analogous to that of Example 15.14; if the loaded quantity is relocatable, the linker must re- calculate the 16-bit operands of both instructions. Modern assemblers and object ﬁle formats reﬂect this diversity of relocation modes. ■
 
-## 15.6 Linking
+15.6 Linking
 
 Most language implementations—certainly all that are intended for the construc- tion of large programs—support separate compilation: fragments of the program can be compiled and assembled more or less independently. After compilation, these fragments (known as compilation units) are “glued together” by a linker. In many languages and environments, the programmer explicitly divides the pro- gram into modules or ﬁles, each of which is separately compiled. More integrated environments may abandon the notion of a ﬁle in favor of a database of subrou- tines, each of which is separately compiled. The task of a linker is to join together compilation units. A static linker does its work prior to program execution, producing an executable object ﬁle. A dy- namic linker (described in Section C 15.7) does its work after the (ﬁrst part of the) program has been brought into memory for execution. Each to-be-linked compilation unit must be a relocatable object ﬁle. Typically, some ﬁles will have been produced by compiling fragments of the application being constructed, while others will be preexisting library packages needed by the application. Since most programs make use of libraries, even a “one-ﬁle” application typically needs to be linked. Linking involves two subtasks: relocation and the resolution of external ref- erences. Some authors refer to relocation as loading, and call the entire “joining together” process “link-loading.” Other authors (including the current one) use “loading” to refer to the process of bringing an executable object ﬁle into memory for execution. On very simple machines, or on machines with very simple oper- ating systems, loading entails relocation. More commonly, the operating system uses virtual memory to give every program the impression that it starts at some standard address. In many systems loading also entails a certain amount of link- ing (Section C 15.7).
 
 ![Figure 15.9 Linking relocatable...](images/page_831_vector_358.png)
 *Figure 15.9 Linking relocatable object ﬁles A and B to make an executable object ﬁle. For simplicity of presentation, A’s code section has been placed at offset 0, with B’s code section immediately after, at offset 800 (addresses increase down the page). To allow the operating system to establish different protections for the code and data segments, A’s data section has been placed at the next page boundary (offset 3000), with B’s data section immediately after (offset 3500). External references to M and X have been set to use the appropriate addresses. Internal references to L and Y have been updated by adding in the starting addresses of B’s code and data sections, respectively.*
 
-## 15.6.1 Relocation and Name Resolution
+15.6.1 Relocation and Name Resolution
 
 Each relocatable object ﬁle contains the information required for linking: the import, export, and relocation tables. A static linker uses this information in a two-phase process analogous to that described for assemblers in Section 15.5. In the ﬁrst phase, the linker gathers all of the compilation units together, chooses an order for them in memory, and notes the address at which each will consequently lie. In the second phase, the linker processes each unit, replacing unresolved exter- nal references with appropriate addresses, and modifying instructions that need to be relocated to reﬂect the addresses of their units. These phases are illustrated EXAMPLE 15.17
 
@@ -254,7 +254,7 @@ Static linking pictorially in Figure 15.9. Addresses and offsets are assumed to 
 
 application. Rather than link the entire library into every application, the linker needs to search the library to identify the fragments that are referenced from the main program. If these refer to additional fragments, then those must be included also, recursively. Many systems support a special library format for relocatable object ﬁles. A library in this format may contain an arbitrary number of code and data sections, together with an index that maps symbol names to the sections in which they appear.
 
-## 15.6.2 Type Checking
+15.6.2 Type Checking
 
 Within a compilation unit, the compiler enforces static semantic rules. Across the boundaries between units, it uses module headers to enforce the rules pertaining to external references. In effect, the header for module M makes a set of promises regarding M’s interface to its users. When compiling the body of M, the compiler ensures that those promises are kept. Imagine what could happen, however, if we compiled the body of M, and then changed the numbers and types of param- eters for some of the subroutines in its header ﬁle before compiling some user module U. If both compilations succeed, then M and U will have very differ- ent notions of how to interpret the parameters passed between them; while they may still link together, chaos is likely to ensue at run time. To prevent this sort of problem, we must ensure whenever M and U are linked together that both were compiled using the same version of M’s header. In most module-based languages, the following technique sufﬁces. When compiling the body of module M we create a dummy symbol whose name uniquely characterizes the contents of M’s header. When compiling the body of U we create a reference to the dummy symbol. An attempt to link M and U together will succeed only if they agree on the name of the symbol. One way to create the symbol name that characterizes M is to use a textual EXAMPLE 15.18
 
@@ -266,7 +266,7 @@ DESIGN & IMPLEMENTATION
 
 change the modiﬁcation time. A better candidate is a checksum of the header ﬁle: essentially the output of a hash function that uses the entire text of the ﬁle as key. It is possible in theory for two different but valid ﬁles to have the same checksum, but with a good choice of hash function the odds of this error are exceedingly small. ■ The checksum strategy does require that we know when we’re using a mod- ule header. Unfortunately, as described in Section C 3.8, we don’t know this in C and C++: headers in these languages are simply a programming convention, sup- ported by the textual inclusion mechanism of the language’s preprocessor. Most implementations of C do not enforce consistency of interfaces at link time; in- stead, programmers rely on conﬁguration management tools (e.g., Unix’s make) to recompile ﬁles when necessary. Such tools are typically driven by ﬁle modiﬁ- cation times. Most implementations of C++ adopt a different approach, sometimes called name mangling. The name of each imported or exported symbol in an object ﬁle is created by concatenating the corresponding name from the program source with a representation of its type. For an object, the type consists of the class name and a terse encoding of its structure. For a function, it consists of an encoding of the types of the arguments and the return value. For complicated objects or functions of many arguments, the resulting names can be very long. If the linker limits symbols to some too-small maximum length, the type information can be compressed by hashing, at some small loss in security [SF88]. One problem with any technique based on ﬁle modiﬁcation times or check- sums is that a trivial change to a header ﬁle (e.g., modiﬁcation of a comment, or deﬁnition of a new constant not needed by existing users of the interface) can prevent ﬁles from linking correctly. A similar problem occurs with conﬁguration management tools: a trivial change may cause the tool to recompile ﬁles unnec- essarily. A few programming environments address this issue by tracking changes at a granularity smaller than the compilation unit [Tic86]. Most just live with the need to recompile.
 
-## 15.7 Dynamic Linking
+15.7 Dynamic Linking
 
 On a multiuser system, it is common for several instances of a program (e.g., an editor or web browser) to be executing simultaneously. It would be highly wasteful to allocate space in memory for a separate, identical copy of the code of such a program for every running instance. Many operating systems therefore keep track of the programs that are running, and set up memory mapping tables so that all instances of the same program share the same read-only copy of the program’s code segment. Each instance receives its own writable copy of the data segment. Code segment sharing can save enormous amounts of space. It does not work, however, for instances of programs that are similar but not identical. Many sets of programs, while not identical, have large amounts of library code in common—for example to manage a graphical user interface. If every appli-
 
@@ -295,34 +295,34 @@ In the early 1990s, most operating system vendors adopted dynamic linking in or-
 
 * What is the motivation for dynamic linking?
 
-## 15.8 Summary and Concluding Remarks
+15.8 Summary and Concluding Remarks
 
 In this chapter we focused our attention on the back end of the compiler, and on code generation, assembly, and linking in particular. Compiler middle and back ends vary greatly in internal structure. We dis- cussed one plausible structure, in which semantic analysis is followed by, in order, intermediate code generation, machine-independent code improvement, target code generation, and machine-speciﬁc code improvement (including register al- location and instruction scheduling). The semantic analyzer passes a syntax tree to the intermediate code generator, which in turn passes a control ﬂow graph to the machine-independent code improver. Within the nodes of the control ﬂow graph, we suggested that code be represented by instructions in a pseudo-assembly lan- guage with an unlimited number of virtual registers. In order to delay discussion of code improvement to Chapter 17, we also presented a simpler back-end struc- ture in which code improvement is dropped, naive register allocation happens early, and intermediate and target code generation are merged into a single phase. This simpler structure provided the context for our discussion of code generation. We also discussed intermediate forms (IFs). These can be categorized in terms of their level, or degree of machine independence. On the companion site we con- sidered GIMPLE and RTL, the IFs of the Free Software Foundation GNU com- pilers. A well-deﬁned IF facilitates the construction of compiler families, in which front ends for one or more languages can be paired with back ends for many ma- chines. In many systems that compile for a virtual machine (to be discussed at greater length in Chapter 16), the compiler produces a stack-based medium-level IF. While not generally suitable for use inside the compiler, such an IF can be simple and very compact. Intermediate code generation is typically performed via ad hoc traversal of a syntax tree. Like semantic analysis, the process can be formalized in terms of attribute grammars. We presented part of a small example grammar and used it to generate code for the GCD program introduced in Chapter 1. We noted in passing that target code generation is often automated, in whole or in part, using a code generator generator that takes as input a formal description of the target machine and produces code that performs pattern matching on instruction sequences or trees. In our discussion of assembly and linking we described the format of relo- catable and executable object ﬁles, and discussed the notions of name resolution and relocation. We noted that while not all compilers include an explicit assem- bly phase, all compilation systems must make it possible to generate assembly code for debugging purposes, and must allow the programmer to write special- purpose routines in assembler. In compilers that use an assembler, the assembly phase is sometimes responsible for instruction scheduling and other low-level code improvement. The linker, for its part, supports separate compilation, by “gluing” together object ﬁles produced by multiple compilations. In many mod- ern systems, signiﬁcant portions of the linking task are delayed until load time
 
 or even run time, to allow programs to share the code segments of large, popu- lar libraries. For many languages the linker must perform a certain amount of semantic checking, to guarantee type consistency. In more aggressive optimiz- ing compilation systems (not discussed in this text), the linker may also perform interprocedural code improvement. As noted in Section 1.5, the typical programming environment includes a host of additional tools, including debuggers, performance proﬁlers, conﬁguration and version managers, style checkers, preprocessors, pretty-printers, testing sys- tems, and perusal and cross-referencing utilities. Many of these tools, particularly in well-integrated environments, are directly supported by the compiler. Many make use, for example, of symbol-table information embedded in object ﬁles. Performance proﬁlers and testing systems often rely on special instrumentation code inserted by the compiler at subroutine calls, loop boundaries, and other key points in the code. Perusal, style-checking, and pretty-printing programs may share the compiler’s scanner and parser. Conﬁguration tools often rely on lists of interﬁle dependences, again generated by the compiler, to tell when a change to one part of a large system may require that other parts be recompiled.
 
-## 15.9 Exercises
+15.9 Exercises
 
-## 15.1 If you were writing a two-pass compiler, why might you choose a high- level IF as the link between the front end and the back end? Why might you choose a medium-level IF?
+15.1 If you were writing a two-pass compiler, why might you choose a high- level IF as the link between the front end and the back end? Why might you choose a medium-level IF?
 
 15.2 Consider a language like Ada or Modula-2, in which a module M can be divided into a speciﬁcation (header) ﬁle and an implementation (body) ﬁle for the purpose of separate compilation (Section 10.2.1). Should M’s speciﬁcation itself be separately compiled, or should the compiler simply read it in the process of compiling M’s body and the bodies of other mod- ules that use abstractions deﬁned in M? If the speciﬁcation is compiled, what should the output consist of?
 
 15.3 Many research compilers (e.g., for SR [AO93], Cedar [SZBH86], Lynx [Sco91], and Modula-3 [Har92]) have used C as their IF. C is well doc- umented and mostly machine independent, and C compilers are much more widely available than alternative back ends. What are the disadvan- tages of generating C, and how might they be overcome?
 
-## 15.4 List as many ways as you can think of in which the back end of a just- in-time compiler might differ from that of a more conventional compiler. What design goals dictate the differences?
+15.4 List as many ways as you can think of in which the back end of a just- in-time compiler might differ from that of a more conventional compiler. What design goals dictate the differences?
 
 15.5 Suppose that k (the number of temporary registers) in Figure 15.6 is 4 (this is an artiﬁcially small number for modern machines). Give an example of an expression that will lead to register spilling under our naive register allocation algorithm.
 
 ![Figure 15.10 Syntax tree...](images/page_837_vector_338.png)
 *Figure 15.10 Syntax tree and symbol table for a program that computes the average of N real numbers. The children of the for node are the index variable, the lower bound, the upper bound, and the body.*
 
-## 15.6 Modify the attribute grammar of Figure 15.6 in such a way that it will gen- erate the control ﬂow graph of Figure 15.3 instead of the linear assembly code of Figure 15.7.
+15.6 Modify the attribute grammar of Figure 15.6 in such a way that it will gen- erate the control ﬂow graph of Figure 15.3 instead of the linear assembly code of Figure 15.7.
 
 15.7 Add productions and attribute rules to the grammar of Figure 15.6 to han- dle Ada-style for loops (described in Section 6.5.1). Using your modi- ﬁed grammar, hand-translate the syntax tree of Figure 15.10 into pseudo- assembly notation. Keep the index variable and the upper loop bound in registers.
 
 15.8 One problem (of many) with the code we generated in Section 15.3 is that it computes at run time the value of expressions that could have been com- puted at compile time. Modify the grammar of Figure 15.6 to perform a simple form of constant folding: whenever both operands of an operator are compile-time constants, we should compute the value at compile time and then generate code that uses the value directly. Be sure to consider how to handle overﬂow.
 
-## 15.9 Modify the grammar of Figure 15.6 to generate jump code for Boolean expressions, as described in Section 6.4.1. You should assume short-circuit evaluation (Section 6.1.5).
+15.9 Modify the grammar of Figure 15.6 to generate jump code for Boolean expressions, as described in Section 6.4.1. You should assume short-circuit evaluation (Section 6.1.5).
 
 15.10 Our GCD program did not employ subroutines. Extend the grammar of Figure 15.6 to handle procedures without parameters (feel free to adopt any reasonable conventions on the structure of the syntax tree). Be sure to generate appropriate prologue and epilogue code for each subroutine, and to save and restore any needed temporary registers.
 
@@ -334,13 +334,13 @@ or even run time, to allow programs to share the code segments of large, popu- l
 
 15.16 Investigate and describe the IF of the compiler you use most often. Can you instruct the compiler to dump it to a ﬁle which you can then inspect? Are there tools other than the compiler phases that operate on the IF (e.g., debuggers, code improvers, conﬁguration managers, etc.)? Is the same IF used by compilers for other languages or machines?
 
-## 15.17 Implement Figure 15.6 in your favorite programming language. Deﬁne appropriate data structures to represent a syntax tree; then generate code for some sample trees via ad hoc tree traversal.
+15.17 Implement Figure 15.6 in your favorite programming language. Deﬁne appropriate data structures to represent a syntax tree; then generate code for some sample trees via ad hoc tree traversal.
 
 15.18 Augment your solution to the previous exercise to handle various other language features. Several interesting options have been mentioned in ear- lier exercises. Others include functions, ﬁrst-class subroutines, case state- ments, records, arrays (particularly those of dynamic size), and iterators.
 
 15.19 Find out what tools are available on your favorite system to inspect the content of object ﬁles (on a Unix system, use nm or objdump). Consider some program consisting of a modest number (three to six, say) of com- pilation units. Using the appropriate tool, list the imported and exported symbols in each compilation unit. Then link the ﬁles together. Draw an address map showing the locations at which the various code and data segments have been placed. Which instructions within the code segments have been changed by relocation?
 
-## 15.20 In your favorite C++ compiler, investigate the encoding of type informa- tion in the names of external symbols. Are there strange strings of char-
+15.20 In your favorite C++ compiler, investigate the encoding of type informa- tion in the names of external symbols. Are there strange strings of char-
 
 acters at the end of every name? If so, can you “reverse engineer” the algorithm used to generate them? For hints, type “C++ name mangling” into your favorite search engine.
 

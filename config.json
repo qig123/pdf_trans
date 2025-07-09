@@ -12,8 +12,6 @@
     "monospace_keywords": ["mono", "courier"]
   },
   "extraction_options": {
-    "max_toc_level": 2,
-    "min_heading_length": 5,
-    "max_heading_length": 200
+    "max_toc_level": 2
   }
 }

@@ -10,7 +10,7 @@ Previous chapters of this text have focused largely on imperative program- ming 
 
 formance depend heavily on the evaluation rules for parameters (Section 6.6.2). All have a tendency to generate signiﬁcant amounts of temporary data, which their implementations reclaim through garbage collection (Section 8.5.3). Our chapter begins with a brief introduction to the historical origins of the im- perative, functional, and logic programming models. We then enumerate funda- mental concepts in functional programming and consider how these are realized in the Scheme dialect of Lisp and the OCaml dialect of ML. More brieﬂy, we also consider Common Lisp, Erlang, Haskell, Miranda, pH, Single Assignment C, and Sisal. We pay particular attention to issues of evaluation order and higher-order functions. For those with an interest in the theoretical foundations of functional programming, we provide (on the companion site) an introduction to functions, sets, and the lambda calculus. The formalism helps to clarify the notion of a pure functional language, and illuminates the places where practical languages diverge from the mathematical abstraction.
 
-## 11.1 Historical Origins
+11.1 Historical Origins
 
 To understand the differences among programming models, it can be helpful to consider their theoretical roots, all of which predate the developmentof electronic computers. The imperative and functional models grew out of work undertaken by mathematicians Alan Turing, Alonzo Church, Stephen Kleene, Emil Post, and others in the 1930s. Working largely independently, these individuals developed several very different formalizations of the notion of an algorithm, or effective procedure, based on automata, symbolic manipulation, recursive function deﬁni- tions, and combinatorics. Over time, these various formalizations were shown to be equally powerful: anything that could be computed in one could be computed in the others. This result led Church to conjecture that any intuitively appealing model of computing would be equally powerful as well; this conjecture is known as Church’s thesis. Turing’s model of computing was the Turing machine, an automaton reminis- cent of a ﬁnite or pushdown automaton, but with the ability to access arbitrary cells of an unbounded storage “tape.”1 The Turing machine computes in an im- perative way, by changing the values in cells of its tape, just as a high-level im- perative program computes by changing the values of variables. Church’s model of computing is called the lambda calculus. It is based on the notion of param- eterized expressions (with each parameter introduced by an occurrence of the
 
@@ -18,7 +18,7 @@ To understand the differences among programming models, it can be helpful to con
 
 letter λ—hence the notation’s name).2 Lambda calculus was the inspiration for functional programming: one uses it to compute by substituting parameters into expressions, just as one computes in a high-level functional program by passing arguments to functions. The computing models of Kleene and Post are more ab- stract, and do not lend themselves directly to implementation as a programming language. The goal of early work in computability was not to understand computers (aside from purely mechanical devices, computers did not exist) but rather to formalize the notion of an effective procedure. Over time, this work allowed mathematicians to formalize the distinction between a constructive proof (one that shows how to obtain a mathematical object with some desired property) and a nonconstructive proof (one that merely shows that such an object must exist, perhaps by contradiction, or counting arguments, or reduction to some other theorem whose proof is nonconstructive). In effect, a program can be seen as a constructive proof of the proposition that, given any appropriate inputs, there exist outputs that are related to the inputs in a particular, desired way. Euclid’s al- gorithm, for example, can be thought of as a constructive proof of the proposition that every pair of non-negative integers has a greatest common divisor. Logic programming is also intimately tied to the notion of constructive proofs, but at a more abstract level. Rather than write a general constructive proof that works for all appropriate inputs, the logic programmer writes a set of axioms that allow the computer to discover a constructive proof for each particular set of inputs. We will consider logic programming in more detail in Chapter 12.
 
-## 11.2 Functional Programming Concepts
+11.2 Functional Programming Concepts
 
 In a strict sense of the term, functional programming deﬁnes the outputs of a program as a mathematical function of the inputs, with no notion of internal state, and thus no side effects. Among the languages we consider here, Miranda, Haskell, pH, Sisal, and Single Assignment C are purely functional. Erlang is nearly so. Most others include imperative features. To make functional programming practical, functional languages provide a number of features that are often miss- ing in imperative languages, including
 
@@ -36,7 +36,7 @@ Homogeneity of programs and data: A program in Lisp is itself a list, and can be
 
 Many programmers—probably most—who have written signiﬁcant amounts of software in both imperative and functional styles ﬁnd the latter more aestheti- cally appealing. Moreover, experience with a variety of large commercial projects (see the Bibliographic Notes at the end of the chapter) suggests that the absence of side effects makes functional programs signiﬁcantly easier to write, debug, and maintain than their imperative counterparts. When passed a given set of argu- ments, a pure function can always be counted on to return the same results. Is- sues of undocumented side effects, misordered updates, and dangling or (in most cases) uninitialized references simply don’t occur. At the same time, many imple- mentations of functional languages still fall short in terms of portability, richness of library packages, interfaces to other languages, and debugging and proﬁling tools. We will return to the tradeoffs between functional and imperative pro- gramming in Section 11.8.
 
-## 11.3 A Bit of Scheme
+11.3 A Bit of Scheme
 
 Scheme was originally developed by Guy Steele and Gerald Sussman in the late 1970s, and has evolved through several revisions. The description here follows the 1998 R5RS (ﬁfth revised standard), and should also be compliant with the 2013 R7RS. Most Scheme implementations employ an interpreter that runs a “read-eval- print” loop. The interpreter repeatedly reads an expression from standard input (generally typed by the user), evaluates that expression, and prints the resulting value. If the user types EXAMPLE 11.1
 
@@ -137,7 +137,7 @@ if expressions (if (< 2 3) 4 5) =⇒4 (if #f 2 3) =⇒3
 
 In general, Scheme expressions are evaluated in applicative order, as described in Section 6.6.2. Special forms such as lambda and if are exceptions to this rule. The implementation of if checks to see whether the ﬁrst argument evaluates to #t. If so, it returns the value of the second argument, without evaluating the third argument. Otherwise it returns the value of the third argument, without evaluat- ing the second. We will return to the issue of evaluation order in Section 11.5. ■
 
-## 11.3.1 Bindings
+11.3.1 Bindings
 
 Names can be bound to values by introducing a nested scope: EXAMPLE 11.10
 
@@ -157,7 +157,7 @@ Global bindings with define and letrec allow the user to create nested scopes, t
 
 (define hypot (lambda (a b) (sqrt (+ (* a a) (* b b))))) (hypot 3 4) =⇒5 ■
 
-## 11.3.2 Lists and Numbers
+11.3.2 Lists and Numbers
 
 Like all Lisp dialects, Scheme provides a wealth of functions to manipulate lists. We saw many of these in Section 8.6; we do not repeat them all here. The three EXAMPLE 11.12
 
@@ -171,7 +171,7 @@ Also useful is the null? predicate, which determines whether its argument is the
 
 For fast access to arbitrary elements of a sequence, Scheme provides a vector type that is indexed by integers, like an array, and may have elements of hetero- geneous types, like a record. Interested readers are referred to the Scheme man- ual [SDF+07] for further information. Scheme also provides a wealth of numeric and logical (Boolean) functions and special forms. The language manual describes a hierarchy of ﬁve numeric types: integer, rational, real, complex, and number. The last two levels are op- tional: implementations may choose not to provide any numbers that are not real. Most but not all implementations employ arbitrary-precision representations of both integers and rationals, with the latter stored internally as (numerator, de- nominator) pairs.
 
-## 11.3.3 Equality Testing and Searching
+11.3.3 Equality Testing and Searching
 
 Scheme provides several different equality-testing functions. For numerical com- parisons, = performs type conversions where necessary (e.g., to compare an in- teger and a ﬂoating-point number). For general-purpose use, eqv? performs a shallow comparison, while equal? performs a deep (recursive) comparison, us- ing eqv? at the leaves. The eq? function also performs a shallow comparison, and may be cheaper than eqv? in certain circumstances (in particular, eq? is not required to detect the equality of discrete values stored in different locations, though it may in some implementations). Further details were presented in Sec- tion 7.4. To search for elements in lists, Scheme provides two sets of functions, each of which has variants corresponding to the three general-purpose equality predi- cates. The functions memq, memv, and member take an element and a list as argu- EXAMPLE 11.13
 
@@ -189,7 +189,7 @@ The functions assq, assv, and assoc search for values in association lists (oth-
 
 Searching association lists erwise known as A-lists). A-lists were introduced in Section C 3.4.2 in the context of name lookup for languages with dynamic scoping. An A-list is a dictionary implemented as a list of pairs.5 The ﬁrst element of each pair is a key of some sort; the second element is information corresponding to that key. Assq, assv, and assoc take a key and an A-list as argument, and return the ﬁrst pair in the list, if there is one, whose ﬁrst element is eq?, eqv?, or equal?, respectively, to the key. If there is no matching pair, #f is returned. ■
 
-## 11.3.4 Control Flow and Assignment
+11.3.4 Control Flow and Assignment
 
 We have already seen the special form if. It has a cousin named cond that EXAMPLE 11.15
 
@@ -243,7 +243,7 @@ all be of the same length. For-each calls its function argument repeatedly, pass
 
 The last line is the return value of for-each, assumed here to be the empty list. The language deﬁnition allows this value to be implementation-dependent; the construct is executed for its side effects. ■ Two other control-ﬂow constructs have been mentioned in previous chap- ters. Delay and force (Section 6.6.2) permit the lazy evaluation of expressions. Call-with-current-continuation (call/cc; Section 6.2.2) allows the cur- rent program counter and referencing environment to be saved in the form of a closure, and passed to a speciﬁed subroutine. We will mention delay and force again in Section 11.5.
 
-## 11.3.5 Programs as Lists
+11.3.5 Programs as Lists
 
 As should be clear by now, a program in Scheme takes the form of a list. In technical terms, we say that Lisp and Scheme are homoiconic—self-representing. A parenthesized string of symbols (in which parentheses are balanced) is called an S-expression regardless of whether we think of it as a program or as a list. In fact, an unevaluated program is a list, and can be constructed, deconstructed, and otherwise manipulated with all the usual list functions. Just as quote can be used to inhibit the evaluation of a list that appears as an EXAMPLE 11.19
 
@@ -257,7 +257,7 @@ In the ﬁrst of these declarations, compose takes as arguments a pair of functi
 
 g to it, then applies f, and ﬁnally returns the result. In the second declaration, compose2 performs the same function, but in a different way. The function list returns a list consisting of its (evaluated) arguments. In the body of compose2, this list is the unevaluated expression (lambda (x) (f (g x))). When passed to eval, this list evaluates to the desired function. The second argument of eval speciﬁes the referencing environment in which the expression is to be evaluated. In our example we have speciﬁed the environment deﬁned by the Scheme ver- sion 5 report [KCR+98]. ■ The original description of Lisp [MAE+65] included a self-deﬁnition of the language: code for a Lisp interpreter, written in Lisp. Though Scheme differs in many ways from this early Lisp (most notably in its use of lexical scoping), such a metacircular interpreter can still be written easily [AS96, Chap. 4]. The code is based on the functions eval and apply. The ﬁrst of these we have just seen. The second, apply, takes two arguments: a function and a list. It achieves the effect of calling the function, with the elements of the list as arguments.
 
-## 11.3.6 Extended Example: DFA Simulation in Scheme
+11.3.6 Extended Example: DFA Simulation in Scheme
 
 To conclude our introduction to Scheme, we present a complete program to sim- EXAMPLE 11.20
 
@@ -312,7 +312,7 @@ If we change the input string to 010010, the interpreter will print
 * What is an S-expression?
 * Outline the behavior of eval and apply.
 
-## 11.4 A Bit of OCaml
+11.4 A Bit of OCaml
 
 Like Lisp, ML has a complicated family tree. The original language was devised in the early 1970s by Robin Milner and others at Cambridge University. SML (“Standard” ML) and OCaml (Objective Caml) are the two most widely used di- alects today. Haskell, the most widely used language for functional programming research, is a separate descendant of ML (by way of Miranda). F#, developed by Microsoft and others, is a descendant of OCaml. Work on OCaml (and its predecessor, Caml) has been led since the early 1980s by researchers at INRIA, the French national computing research organization (the ‘O’ was added to the name with the introduction of object-oriented features
 
@@ -373,7 +373,7 @@ c_three;; =⇒3 f_three ();; =⇒3 ■
 
 Lexical conventions in OCaml are straightforward: Identiﬁers are composed of upper- and lower-case letters, digits, underscores, and single quote marks; most are required to start with a lower-case letter or underscore (a few special kinds of names, including type constructors, variants, modules, and exceptions, must start with an upper-case letter). Comments are delimited with (* ... *), and are permitted to nest. Floating-point numbers are required to contain a decimal point: the expression cos 0 will generate a type-clash error message. Built-in types include Boolean values, integers, ﬂoating-point numbers, char- acters, and strings. Values of more complex types can be created using a vari- ety of type constructors, including lists, arrays, tuples, records, variants, objects, and classes; several of these are described in Section 11.4.3. As discussed in Sec- tion 7.2.4, type checking is performed by inferring a type for every expression, and then checking that whenever two expressions need to be of the same type (e.g., be- cause one is an argument and the other is the corresponding formal parameter), the inferences turn out to be the same. To support type inference, some operators that are overloaded in other languages are separate in OCaml. In particular, the usual arithmetic operations have both integer (+, -, *, /) and ﬂoating-point (+., -., *., /.) versions.
 
-## 11.4.1 Equality and Ordering
+11.4.1 Equality and Ordering
 
 Like most functional languages, OCaml uses a reference model for names. When comparing two expressions, either or both of which may simply be a name, there are two different notions of equality. The so-called “physical” comparators, == EXAMPLE 11.25
 
@@ -394,7 +394,7 @@ In the ﬁrst line, there is (conceptually) only one 2 in the world, so referenc
 
 is an undecidable problem). Structural comparison of cyclic structures can result in an inﬁnite loop. ■ Comparison for ordering (<, >, <=, >=) is always based on deep comparison. It is deﬁned in OCaml on all types other than functions. It does what one would normally expect on arithmetic types, characters, and strings (the latter works lex- icographically); on other types the results are deterministic but not necessarily intuitive. In all cases, the results are consistent with the structural equality test (=): if a = b, then a <= b and a >= b; if a <> b, then a < b or a > b. As with the equality tests, comparison of functions will cause a run-time exception; comparison of cyclic structures may not terminate.
 
-## 11.4.2 Bindings and Lambda Expressions
+11.4.2 Bindings and Lambda Expressions
 
 New names in OCaml are introduced with let. An outermost (top-level) let EXAMPLE 11.26
 
@@ -444,7 +444,7 @@ fib_helper 0 1 0;;
 
 Here fib_helper is visible not only within the body of fib, but also within its own body. ■
 
-## 11.4.3 Type Constructors
+11.4.3 Type Constructors
 
 Lists
 
@@ -569,7 +569,7 @@ W Z
 
 can be written Node (‚R‚, Node (‚X‚, Empty, Empty), Node (‚Y‚, Node (‚Z‚, Empty, Empty), Node (‚W‚, Empty, Empty))). ■
 
-## 11.4.4 Pattern Matching
+11.4.4 Pattern Matching
 
 Pattern matching, particularly for strings, appears in many programming lan- guages. Examples include Snobol, Icon, Perl, and the several other scripting lan- guages that have adopted Perl’s facilities (discussed in Section 14.4.2). ML is dis- tinctive in extending pattern matching to the full range of constructed values— including tuples, lists, records, and variants—and integrating it with static typing and type inference. A simple example in OCaml occurs when passing parameters. Suppose, for EXAMPLE 11.40
 
@@ -686,7 +686,7 @@ To which the interpreter responds
 
 val mean : float = 3. val sd : float = 3.3166247903554 ■
 
-## 11.4.5 Control Flow and Side Effects
+11.4.5 Control Flow and Side Effects
 
 We have seen several examples of if expressions in previous sections. Because it must yield a value, almost every if expression has both a then part and an else part. The only exception is when the then part has unit type, and is executed EXAMPLE 11.49
 
@@ -750,7 +750,7 @@ let c = try arc_cos v with Bad_arg (arg, loc) ->
 
 Note that the expression after the arrow must have the same type as the expression between the try and with. Here we have printed an error message and then (after the semicolon) provided a value of 0. ■
 
-## 11.4.6 Extended Example: DFA Simulation in OCaml
+11.4.6 Extended Example: DFA Simulation in OCaml
 
 To conclude our introduction to OCaml, we reprise the DFA simulation pro- EXAMPLE 11.54
 
@@ -823,7 +823,7 @@ Here normal-order evaluation avoids evaluating (+ 2 3) or (+ 3 4). (In this case
 
 In our overview of Scheme we differentiated on several occasions between spe- cial forms and functions. Arguments to functions are always passed by sharing (Section 9.3.1), and are evaluated before they are passed (i.e., in applicative or- der). Arguments to special forms are passed unevaluated—in other words, by name. Each special form is free to choose internally when (and if) to evaluate its parameters. Cond, for example, takes a sequence of unevaluated pairs as argu- ments. It evaluates their cars internally, one at a time, stopping when it ﬁnds one that evaluates to #t. Together, special forms and functions are known as expression types in Scheme. Some expression types are primitive, in the sense that they must be built into the language implementation. Others are derived; they can be deﬁned in terms of primitive expression types. In an eval/apply-based interpreter, primitive spe- cial forms are built into eval; primitive functions are recognized by apply. We have seen how the special form lambda can be used to create derived functions, which can be bound to names with let. Scheme provides an analogous special form, syntax-rules, that can be used to create derived special forms. These can then be bound to names with define-syntax and let-syntax. Derived spe- cial forms are known as macros in Scheme, but unlike most other macros, they are hygienic—lexically scoped, integrated into the language’s semantics, and im- mune from the problems of mistaken grouping and variable capture described in Section 3.7. Like C++ templates (Section C 7.3.2), Scheme macros are Tur- ing complete. They behave like functions whose arguments are passed by name (Section C 9.3.2) instead of by sharing. They are implemented, however, via log- ical expansion in the interpreter’s parser and semantic analyzer, rather than by delayed evaluation with thunks.
 
-## 11.5.1 Strictness and Lazy Evaluation
+11.5.1 Strictness and Lazy Evaluation
 
 Evaluation order can have an effect not only on execution speed but also on pro- gram correctness. A program that encounters a dynamic semantic error or an inﬁnite regression in an “unneeded” subexpression under applicative-order eval- uation may terminate successfully under normal-order evaluation. A (side-effect- free) function is said to be strict if it is undeﬁned (fails to terminate, or encounters an error) when any of its arguments is undeﬁned. Such a function can safely eval- uate all its arguments, so its result will not depend on evaluation order. A function is said to be nonstrict if it does not impose this requirement—that is, if it is some- times deﬁned even when one of its arguments is not. A language is said to be strict if it is deﬁned in such a way that functions are always strict. A language is said to be nonstrict if it permits the deﬁnition of nonstrict functions. If a language always evaluates expressions in applicative order, then every function is guaranteed to be strict, because whenever an argument is undeﬁned, its evaluation will fail and so will the function to which it is being passed. Contrapositively, a nonstrict lan- guage cannot use applicative order; it must use normal order to avoid evaluating unneeded arguments. Standard ML, OCaml, and (with the exception of macros) Scheme are strict. Miranda and Haskell are nonstrict.
 
@@ -841,7 +841,7 @@ DESIGN & IMPLEMENTATION
 
 use of delay and force,6 and in OCaml through the similar mechanisms of the standard Lazy library. It can also be achieved implicitly in Scheme (in cer- tain contexts) through the use of macros. Where normal-order evaluation can be thought of as function evaluation using call-by-name parameters, lazy evaluation is sometimes said to employ “call by need.” In addition to Miranda and Haskell, call by need can be found in the R scripting language, widely used by statisticians. The principal problem with lazy evaluation is its behavior in the presence of side effects. If an argument contains a reference to a variable that may be modi- ﬁed by an assignment, then the value of the argument will depend on whether it is evaluated before or after the assignment. Likewise, if the argument contains an assignment, values elsewhere in the program may depend on when evaluation oc- curs. These problems do not arise in Miranda or Haskell because they are purely functional: there are no side effects. Scheme and OCaml leave the problem up to the programmer, but require that every use of a delay-ed expression be enclosed in force, making it relatively easy to identify the places where side effects are an issue.
 
-## 11.5.2 I/O: Streams and Monads
+11.5.2 I/O: Streams and Monads
 
 A major source of side effects can be found in traditional I/O: an input routine will generally return a different value every time it is called, and multiple calls to an output routine, though they never return a value, must occur in the proper order if the program is to be considered correct. One way to avoid these side effects is to model input and output as streams— unbounded-length lists whose elements are generated lazily. We saw an example of a stream in the inﬁnite lists of Section 6.6.2 (an OCaml example appears in Exercise 11.18). If we model input and output as streams, then a program takes EXAMPLE 11.58
 
@@ -959,7 +959,7 @@ DESIGN & IMPLEMENTATION
 
 11.5 Monads Monads are very heavily used in Haskell. The IO monad serves as the central repository for imperative language features—not only I/O and random num- bers but also mutable global variables and shared-memory synchronization. Additional monads (with accessible hidden state) support partial functions and various container classes (lists and sets). When coupled with lazy evalua- tion, monadic containers in turn provide a natural foundation for backtrack- ing search, nondeterminism, and the functional equivalent of iterators. (In the list monad, for example, hidden state can carry the continuation needed to generate the tail of an inﬁnite list.) The inability to extract values from the IO monad reﬂects the fact that the physical world is imperative, and that a language that needs to interact with the physical world in nontrivial ways must include imperative features. Put another way, the IO monad (unlike monads in general) is more than syntactic sugar: by hiding the state of the physical world it makes it possible to express things that could not otherwise be expressed in a functional way, provided that we are willing to enforce a sequential evaluation order. The beauty of monads is that they conﬁne sequentiality to a relatively small fraction of the typical program, so that side effects cannot interfere with the bulk of the computation.
 
-## 11.6 Higher-Order Functions
+11.6 Higher-Order Functions
 
 A function is said to be a higher-order function (also called a functional form) if it takes a function as an argument, or returns a function as a result. We have seen several examples already of higher-order functions in Scheme: call/cc (Sec- tion 6.2.2), for-each (Example 11.18), compose (Example 11.19), and apply (Section 11.3.5). We also saw a Haskell version of the higher-order function map in Section 11.5.2. The Scheme version of map is slightly more general. Like EXAMPLE 11.64
 
@@ -1152,7 +1152,7 @@ Lambda calculus is a constructive notation for function deﬁnitions. We conside
 
 a lambda expression. Computation amounts to macro substitution of arguments into the function deﬁnition, followed by reduction to simplest form via simple and mechanical rewrite rules. The order in which these rules are applied captures the distinction between applicative and normal-order evaluation, as described in Section 6.6.2. Conventions on the use of certain simple functions (e.g., the identity function) allow selection, structures, and even arithmetic to be captured as lambda expressions. Recursion is captured through the notion of ﬁxed points.
 
-## 11.8 Functional Programming in Perspective
+11.8 Functional Programming in Perspective
 
 Side-effect-free programming is a very appealing idea. As discussed in Sections
 
@@ -1194,15 +1194,15 @@ for list-based data. We then turned to a pair of concrete examples—the Scheme 
 
 ## 11.10 Exercises
 
-## 11.1 Is the define primitive of Scheme an imperative language feature? Why or why not?
+11.1 Is the define primitive of Scheme an imperative language feature? Why or why not?
 
 11.2 It is possible to write programs in a purely functional subset of an imper- ative language such as C, but certain limitations of the language quickly become apparent. What features would need to be added to your favorite imperative language to make it genuinely useful as a functional language? (Hint: What does Scheme have that C lacks?)
 
-## 11.3 Explain the connection between short-circuit Boolean expressions and normal-order evaluation. Why is cond a special form in Scheme, rather than a function?
+11.3 Explain the connection between short-circuit Boolean expressions and normal-order evaluation. Why is cond a special form in Scheme, rather than a function?
 
 11.4 Write a program in your favorite imperative language that has the same in- put and output as the Scheme program of Figure 11.1. Can you make any general observations about the usefulness of Scheme for symbolic compu- tation, based on your experience?
 
-## 11.5 Suppose we wish to remove adjacent duplicate elements from a list (e.g., after sorting). The following Scheme function accomplishes this goal:
+11.5 Suppose we wish to remove adjacent duplicate elements from a list (e.g., after sorting). The following Scheme function accomplishes this goal:
 
 ```
 (define unique
@@ -1312,11 +1312,11 @@ Your output should be a parse table that has this same format, except that every
 
 (Hint: You may want to deﬁne a right_context function that takes a nonterminal B as argument and returns a list of all pairs (A, β), where A is a nonterminal and β is a list of symbols, such that for some potentially different list of symbols α, A −→α B β. This function is useful for com- puting FOLLOW sets. You may also want to build a tail-recursive function that recomputes FIRST and FOLLOW sets until they converge. You will ﬁnd it easier if you do not include ϵ in either set, but rather keep a separate estimate, for each nonterminal, of whether it may generate ϵ.)
 
-## 11.16 Write an equality operator (call it =/) that works correctly on the yearday type of Example 11.38. (You may need to look up the rules that govern the occurrence of leap years.)
+11.16 Write an equality operator (call it =/) that works correctly on the yearday type of Example 11.38. (You may need to look up the rules that govern the occurrence of leap years.)
 
 11.17 Create addition and subtraction functions for the celsius and fahrenheit temperature types introduced in Sidebar 11.3. To allow the two scales to be mixed, you should also deﬁne conversion functions ct_of_ft : fahrenheit_temp -> celsius_temp and ft_of_ct : celsius_temp -> fahrenheit_temp. Your conversions should round to the nearest de- gree (half degrees round up).
 
-## 11.18 We can use encapsulation within functions to delay evaluation in OCaml:
+11.18 We can use encapsulation within functions to delay evaluation in OCaml:
 
 ```
 type 'a delayed_list =
@@ -1349,7 +1349,7 @@ head naturals;; =⇒1 head (rest naturals);; =⇒2 head (rest (rest naturals));;
 
 The delayed list naturals is effectively of unlimited length. It will be computed out only as far as actually needed. If a value is needed more than once, however, it will be recomputed every time. Show how to use pointers and assignment (Example 8.42) to memoize the values of a delayed_list, so that elements are computed only once.
 
-## 11.19 Write an OCaml version of Example 11.67. Alternatively (or in addition), solve Exercises 11.5, 11.7, 11.8, 11.10, 11.13, 11.14, or 11.15 in OCaml.
+11.19 Write an OCaml version of Example 11.67. Alternatively (or in addition), solve Exercises 11.5, 11.7, 11.8, 11.10, 11.13, 11.14, or 11.15 in OCaml.
 
 11.20–11.23 In More Depth.
 
@@ -1357,7 +1357,7 @@ The delayed list naturals is effectively of unlimited length. It will be compute
 
 11.24 Read the original self-deﬁnition of Lisp [MAE+65]. Compare it to a sim- ilar deﬁnition of Scheme [AS96, Chap. 4]. What is different? What has stayed the same? What is built into apply and eval in each deﬁnition? What do you think of the whole idea? Does a metacircular interpreter really deﬁne anything, or is it “circular reasoning”?
 
-## 11.25 Read the Turing Award lecture of John Backus [Bac78], in which he argues for functional programming. How does his FP notation compare to the Lisp and ML language families?
+11.25 Read the Turing Award lecture of John Backus [Bac78], in which he argues for functional programming. How does his FP notation compare to the Lisp and ML language families?
 
 11.26 Learn more about monads in Haskell. Pay particular attention to the def- inition of lists. Explain the relationship of the list monad to list com- prehensions (Example 8.58), iterators, continuations (Section 6.2.2), and backtracking search.
 
@@ -1379,7 +1379,7 @@ Having considered functional languages in some detail, we now turn to logic lang
 
 1 Axiomatic semantics models each statement or expression in the language as a predicate trans- former—an inference rule that takes a set of conditions known to be true initially and derives a new set of conditions guaranteed to be true after the construct has been evaluated. The study of formal semantics is beyond the scope of this book.
 
-## 12.1 Logic Programming Concepts
+12.1 Logic Programming Concepts
 
 Logic programming systems allow the programmer to state a collection of axioms from which theorems can be proven. The user of a logic program states a theorem, or goal, and the language implementation attempts to ﬁnd a collection of axioms and inference steps (including choices of values for variables) that together imply the goal. Of the several existing logic languages, Prolog is by far the most widely used. In almost all logic languages, axioms are written in a standard form known as EXAMPLE 12.1
 
@@ -1411,7 +1411,7 @@ In the following section we consider Prolog in more detail. We return to formal 
 
 2 Note that the word “head” is used for two different things in Prolog: the head of a Horn clause and the head of a list. The distinction between these is usually clear from context.
 
-## 12.2 Prolog
+12.2 Prolog
 
 Much as an imperative or functional language interpreter evaluates expressions in the context of a referencing environment in which various functions and con- stants have been deﬁned, a Prolog interpreter runs in the context of a database of clauses (Horn clauses) that are assumed to be true.3 Each clause is composed of terms, which may be constants, variables, or structures. A constant is either an atom or a number. A structure can be thought of as either a logical predicate or a data structure. Atoms in Prolog are similar to symbols in Lisp. Lexically, an atom looks like EXAMPLE 12.4
 
@@ -1478,7 +1478,7 @@ the query
 
 will yield only one solution. ■
 
-## 12.2.1 Resolution and Uniﬁcation
+12.2.1 Resolution and Uniﬁcation
 
 The resolution principle, due to Robinson [Rob65], says that if C1 and C2 are Horn clauses and the head of C1 matches one of the terms in the body of C2, then we can replace the term in C2 with the body of C1. Consider the following example. EXAMPLE 12.8
 
@@ -1527,7 +1527,7 @@ has_lab(D) :- meets_in(D, R), is_lab(R).
 
 (S takes a lab class if S takes C and C is a lab class. Moreover D is a lab class if D meets in room R and R is a lab.) An attempt to resolve these rules will unify the head of the second with the second term in the body of the ﬁrst, causing C and D to be uniﬁed, even though neither is instantiated. ■
 
-## 12.2.2 Lists
+12.2.2 Lists
 
 Like equality checking, list manipulation is a sufﬁciently common operation in Prolog to warrant its own notation. The construct [a, b, c] is syntactic sugar EXAMPLE 12.12
 
@@ -1571,7 +1571,7 @@ Y = [d, e].
 
 This example highlights the difference between functions and Prolog predi- cates. The former have a clear notion of inputs (arguments) and outputs (results); the latter do not. In an imperative or functional language we apply functions to arguments to generate results. In a logic language we search for values for which a predicate is true. (Not all logic languages are equally ﬂexible. Mercury, for exam- ple, requires the programmer to specify in or out modes on arguments. These allow the compiler to generate substantially faster code.) Note that when the in- terpreter prints its response to our second query, it is not yet certain whether additional solutions might exist. Only after we enter a semicolon does it invest the effort to determine that there are none. ■
 
-## 12.2.3 Arithmetic
+12.2.3 Arithmetic
 
 The usual arithmetic operators are available in Prolog, but they play the role of predicates, not of functions. Thus +(2, 3), which may also be written 2 + 3, EXAMPLE 12.14
 
@@ -1586,7 +1586,7 @@ To handle arithmetic, Prolog provides a built-in predicate, is, that uniﬁes it
 
 ?- is(X, 1+2). X = 3. ?- X is 1+2. X = 3. % infix is also ok ?- 1+2 is 4-1. false. % 1st argument (1+2) is already instantiated ?- X is Y. ERROR % 2nd argument (Y) must already be instantiated ?- Y is 1+2, X is Y. Y = X, X = 3. % Y is instantiated before it is needed ■
 
-## 12.2.4 Search/Execution Order
+12.2.4 Search/Execution Order
 
 So how does Prolog go about answering a query (satisfying a goal)? What it needs is a sequence of resolution steps that will build the goal out of clauses in the database, or a proof that no such sequence exists. In the realm of formal logic, one can imagine two principal search strategies:
 
@@ -1631,7 +1631,7 @@ path(X, X).
 
 From a logical point of view, our database still deﬁnes the same relationships. A Prolog interpreter, however, will no longer be able to ﬁnd answers. Even a simple query like ?- path(a, a) will never terminate. To see why, consider Figure 12.2. The interpreter ﬁrst uniﬁes path(a, a) with the left-hand side of path(X, Y) :- path(X, Z), edge(Z, Y). It then considers the goals on the right-hand side, the ﬁrst of which (path(X, Z)), uniﬁes with the left-hand side of the very same rule, leading to an inﬁnite regression. In effect, the Prolog interpreter gets lost in an inﬁnite branch of the search tree, and never discovers ﬁnite branches to the right. We could avoid this problem by exploring the tree in breadth-ﬁrst order, but that strategy was rejected by Prolog’s designers because of its expense: it can require substantially more space, and does not lend itself to a stack-based imple- mentation. ■
 
-## 12.2.5 Extended Example: Tic-Tac-Toe
+12.2.5 Extended Example: Tic-Tac-Toe
 
 In the previous subsection we saw how the order of clauses in the Prolog database, EXAMPLE 12.19
 
@@ -1743,7 +1743,7 @@ good(5). good(1). good(3). good(7). good(9). good(2). good(4). good(6). good(8).
   Describe the Prolog search strategy. Discuss backtracking and the instantiation
   of variables.
 
-## 12.2.6 Imperative Control Flow
+12.2.6 Imperative Control Flow
 
 We have seen that the ordering of clauses and of terms in Prolog is signiﬁcant, with ramiﬁcations for efﬁciency, termination, and choice among alternatives. In addition to simple ordering, Prolog provides the programmer with severalexplicit control-ﬂow features. The most important of these features is known as the cut. The cut is a zero-argument predicate written as an exclamation point: !. As a subgoal it always succeeds, but with a crucial side effect: it commits the interpreter to whatever choices have been made since unifying the parent goal with the left- hand side of the current rule, including the choice of that uniﬁcation itself. For EXAMPLE 12.20
 
@@ -1854,7 +1854,7 @@ repeat :- repeat.
 
 Within the above deﬁnition of get, backtracking will return to repeat as often as needed to produce a printable character (one with ASCII code at least 32). In general, repeat allows us to turn any predicate with side effects into a genera- tor. ■
 
-## 12.2.7 Database Manipulation
+12.2.7 Database Manipulation
 
 Clauses in Prolog are simply collections of terms, connected by the built-in pred- EXAMPLE 12.27
 
@@ -2038,15 +2038,15 @@ IN MORE DEPTH
 
 In conventional logical notation there are many ways to state a given proposition. Logic programming is built on clausal form, which provides a unique expression for every proposition. Many though not all clausal forms can be cast as a collec- tion of Horn clauses, and thus translated into Prolog. On the companion site we trace the steps required to translate an arbitrary proposition into clausal form. We also characterize the cases in which this form can and cannot be translated into Prolog.
 
-## 12.4 Logic Programming in Perspective
+12.4 Logic Programming in Perspective
 
 In the abstract, logic programming is a very compelling idea: it suggests a model of computing in which we simply list the logical properties of an unknown value, and then the computer ﬁgures out how to ﬁnd it (or tells us it doesn’t exist). Unfortunately, reality falls quite a bit short of the vision, for both theoretical and practical reasons.
 
-## 12.4.1 Parts of Logic Not Covered
+12.4.1 Parts of Logic Not Covered
 
 As noted in Section 12.3, Horn clauses do not capture all of ﬁrst-order pred- icate calculus. In particular, they cannot be used to express statements whose clausal form includes a disjunction with more than one non-negated term. We can sometimes get around this problem in Prolog by using the \+ predicate, but the semantics are not the same (see Section 12.4.3).
 
-## 12.4.2 Execution Order
+12.4.2 Execution Order
 
 In Section 12.2.4, we saw that one must often consider execution order to ensure that a Prolog search will terminate. Even for searches that terminate, naive code can be very inefﬁcient. Consider the problem of sorting. A natural declarative EXAMPLE 12.35
 
@@ -2086,11 +2086,11 @@ DESIGN & IMPLEMENTATION
 
 As we saw in Chapter 10, it can be useful to distinguish between the speciﬁca- tion of a program and its implementation. The speciﬁcation says what the pro- gram is to do; the implementation says how it is to do it. Horn clauses provide an excellent notation for speciﬁcations. When augmented with search rules (as in Prolog) they allow implementations to be expressed in the same notation.
 
-## 12.4.3 Negation and the “Closed World” Assumption
+12.4.3 Negation and the “Closed World” Assumption
 
 A collection of Horn clauses, such as the facts and rules of a Prolog database, constitutes a list of things assumed to be true. It does not include any things assumed to be false. This reliance on purely “positive” logic implies that Prolog’s \+ predicate is different from logical negation. Unless the database is assumed to contain everything that is true (this is the closed world assumption), the goal \+(T) can succeed simply because our current knowledge is insufﬁcient to prove
 
-## T. Moreover, negation in Prolog occurs outside any implicit existential quantiﬁers EXAMPLE 12.37
+T. Moreover, negation in Prolog occurs outside any implicit existential quantiﬁers EXAMPLE 12.37
 
 Negation as failure on the right-hand side of a rule. Thus
 
@@ -2160,25 +2160,25 @@ uniﬁcation, search/execution order, list manipulation, and high-order predicat
 
 ## 12.6 Exercises
 
-## 12.1 Starting with the clauses at the beginning of Example 12.17, use resolution (as illustrated in Example 12.3) to show, in two different ways, that there is a path from a to e.
+12.1 Starting with the clauses at the beginning of Example 12.17, use resolution (as illustrated in Example 12.3) to show, in two different ways, that there is a path from a to e.
 
-## 12.2 Solve Exercise 6.22 in Prolog.
+12.2 Solve Exercise 6.22 in Prolog.
 
 12.3 Consider the Prolog gcd program in Figure 1.2. Does this program work “backward” as well as forward? (Given integers d and n, can you use it to generate a sequence of integers m such that gcd(n, m) = d?) Explain your answer.
 
-## 12.4 In the spirit of Example 11.20, write a Prolog program that exploits back- tracking to simulate the execution of a nondeterministic ﬁnite automaton.
+12.4 In the spirit of Example 11.20, write a Prolog program that exploits back- tracking to simulate the execution of a nondeterministic ﬁnite automaton.
 
 12.5 Show that resolution is commutative and associative. Speciﬁcally, if A, B, and C are Horn clauses, show that (A ⊕B) = (B ⊕A) and that ((A ⊕B) ⊕ C) = (A ⊕(B ⊕C)), where ⊕indicates resolution. Be sure to think about what happens to variables that are instantiated as a result of uniﬁcation.
 
 12.6 In Example 12.8, the query ?- classmates(jane_doe, X) will succeed three times: twice with X = jane_doe and once with X = ajit_chandra. Show how to modify the classmates(X, Y) rule so that a student is not considered a classmate of himself or herself.
 
-## 12.7 Modify Example 12.17 so that the goal path(X, Y), for arbitrary already- instantiated X and Y, will succeed no more than once, even if there are multiple paths from X to Y.
+12.7 Modify Example 12.17 so that the goal path(X, Y), for arbitrary already- instantiated X and Y, will succeed no more than once, even if there are multiple paths from X to Y.
 
 12.8 Using only \+ (no cuts), modify the tic-tac-toe example of Section 12.2.5 so it will generate only one candidate move from a given board position. How does your solution compare to the cut-based one (Example 12.22)?
 
-## 12.9 Prove the claim, made in Example 12.19, that there is no winning strategy in tic-tac-toe—that either player can force a draw.
+12.9 Prove the claim, made in Example 12.19, that there is no winning strategy in tic-tac-toe—that either player can force a draw.
 
-## 12.10 Prove that the tic-tac-toe strategy of Example 12.19 is optimal (wins against an imperfect opponent whenever possible, draws otherwise), or give a counterexample.
+12.10 Prove that the tic-tac-toe strategy of Example 12.19 is optimal (wins against an imperfect opponent whenever possible, draws otherwise), or give a counterexample.
 
 12.11 Starting with the tic-tac-toe program of Figure 12.4, draw a directed acyclic graph in which every clause is a node and an arc from A to B indi- cates that it is important, either for correctness or efﬁciency, that A come before B in the program. (Do not draw any other arcs.) Any topologi- cal sort of your graph should constitute an equally efﬁcient version of the program. (Is the existing program one of them?)
 
@@ -2190,7 +2190,7 @@ not sufﬁce; when asked to look for an uninstantiated member, they ﬁnd only t
 
 12.14 Use the clause predicate of Prolog to write a predicate call_bfs that attempts to satisfy goals breadth-ﬁrst. (Hint: You will want to keep a queue of yet-to-be-pursued subgoals, each of which is represented by a stack that captures backtracking alternatives.)
 
-## 12.15 Write a (list-based) insertion sort algorithm in Prolog. Here’s what it looks like in C, using arrays:
+12.15 Write a (list-based) insertion sort algorithm in Prolog. Here’s what it looks like in C, using arrays:
 
 ```
 void insertion_sort(int A[], int N)
@@ -2209,9 +2209,9 @@ A[j] = t;
 
 12.16 Quicksort works well for large lists, but has higher overhead than insertion sort for short lists. Write a sort algorithm in Prolog that uses quicksort initially, but switches to insertion sort (as deﬁned in the previous exercise) for sublists of 15 or fewer elements. (Hint: You can count the number of elements during the partition operation.)
 
-## 12.17 Write a Prolog sorting routine that is guaranteed to take O(n log n) time in the worst case. (Hint: Try merge sort; a description can be found in almost any algorithms or data structures text.)
+12.17 Write a Prolog sorting routine that is guaranteed to take O(n log n) time in the worst case. (Hint: Try merge sort; a description can be found in almost any algorithms or data structures text.)
 
-## 12.18 Consider the following interaction with a Prolog interpreter:
+12.18 Consider the following interaction with a Prolog interpreter:
 
 ```
 ?- Y = X, X = foo(X).
@@ -2230,13 +2230,13 @@ which a structure like this one would be useful? If not, can you suggest how a P
 
 ## 12.7 Explorations
 
-## 12.22 Learn about alternative search strategies for Prolog and other logic lan- guages. How do forward chaining solvers work? What are the prospects for intelligent hybrid strategies?
+12.22 Learn about alternative search strategies for Prolog and other logic lan- guages. How do forward chaining solvers work? What are the prospects for intelligent hybrid strategies?
 
 12.23 Between 1982 and 1992 the Japanese government invested large sums of money in logic programming. Research the Fifth Generation project, ad- ministered by the Japanese Ministry of International Trade and Industry (MITI). What were its goals? What was achieved? What was not? How tightly were the goals and outcomes tied to Prolog? What lessons can we learn from the project today?
 
 12.24 Read ahead to Chapter 14 and learn about XSLT, a language used to ma- nipulate data represented in XML, the extended markup language (of which XHTML, the latest standard for web pages, is an example). XSLT is generally described as declarative. Is it logic based? How does it com- pare to Prolog in expressive power, level of abstraction, and execution ef- ﬁciency?
 
-## 12.25 Repeat the previous question for SQL, the database query language (for an introduction, type “SQL tutorial” into your favorite Internet search en- gine).
+12.25 Repeat the previous question for SQL, the database query language (for an introduction, type “SQL tutorial” into your favorite Internet search en- gine).
 
 12.26 Spreadsheets like Microsoft Excel are sometimes characterized as declar- ative programming. Is this fair? Ignoring extensions like Visual Basic macros, does the ability to deﬁne relationships among cells provide Turing complete expressive power? Compare the execution model to that of Pro- log. How is the order of update for cells determined? Can data be pushed “both ways,” as they can in Prolog?
 
@@ -2276,7 +2276,7 @@ In general, we use the word concurrent to characterize any system in which two o
 
 any given time, all but one of them is stopped at a well-known place. A concurrent system is parallel if more than one task can be physically active at once; this re- quires more than one processor. The distinction is purely an implementation and performance issue: from a semantic point of view, there is no difference between true parallelism and the “quasiparallelism” of a system that switches between tasks at unpredictable times. A parallel system is distributed if its processors are associ- ated with people or devices that are physically separated from one another in the real world. Under these deﬁnitions, “concurrent” applies to all three motivations above. “Parallel” applies to the second and third; “distributed” applies to only the third. We will focus in this chapter on concurrency and parallelism. Parallelism has become a pressing concern since 2005 or so, with the proliferation of multicore processors. We will have less occasion to touch on distribution. While languages have been designed for distributed computing, most distributed systems run sep- arate programs on every networked processor, and use message-passing library routines to communicate among them. We begin our study with an overview of the ways in which parallelism may be used in modern programs. Our overview will touch on the motivation for concurrency (even on uniprocessors) and the concept of races, which are the principal source of complexity in concurrent programs. We will also brieﬂy survey the architectural features of modern multicore and multiprocessor ma- chines. In Section 13.2 we consider the contrast between shared-memory and message-passing models of concurrency, and between language and library-based implementations. Building on coroutines, we explain how a language or li- brary can create and schedule threads. Section 13.3 focuses on low-level mecha- nisms for shared-memory synchronization. Section 13.4 extends the discussion to language-level constructs. Message-passing models of concurrency are consid- ered in Section 13.5 (mostly on the companion site).
 
-## 13.1 Background and Motivation
+13.1 Background and Motivation
 
 Concurrency is not a new idea. Much of the theoretical groundwork was laid in the 1960s, and Algol 68 includes concurrent programming features. Widespread interest in concurrency is a relatively recent phenomenon, however; it stems in part from the availability of low-cost multicore and multiprocessor machines, and in part from the proliferation of graphical, multimedia, and web-based applica- tions, all of which are naturally represented by concurrent threads of control.
 
@@ -2319,7 +2319,7 @@ If the instructions interleave roughly as shown, both threads may load the same 
 
 If Thread 1 gets there ﬁrst, we will get the “right” result; if Thread 2 gets there ﬁrst, we won’t. ■ The most common purpose of synchronization is to make some sequence of instructions, known as a critical section, appear to be atomic—to happen “all at once” from the point of view of every other thread. In our example, the critical section is a load, an increment, and a store. The most common way to make the sequence atomic is with a mutual exclusion lock, which we acquire before the ﬁrst instruction of the sequence and release after the last. We will study locks in Sections 13.3.1 and 13.3.5. In Sections 13.3.2 and 13.4.4 we will also consider mechanisms that achieve atomicity without locks. At lower levels of abstraction, expert programmers may need to understand hardware and run-time systems in sufﬁcient detail to implement synchronization mechanisms. This chapter should convey a sense of the issues, but a full treatment at this level is beyond the scope of the current text.
 
-## 13.1.1 The Case for Multithreaded Programs
+13.1.1 The Case for Multithreaded Programs
 
 Our ﬁrst motivation for concurrency—to capture the logical structure of certain applications—has arisen several times in earlier chapters. In Section C 8.7.1 we noted that interactive I/O must often interrupt the execution of the current pro- gram. In a video game, for example, we must handle keystrokes and mouse or joystick motions while continually updating the image on the screen. The stan- dard way to structure such a program, as described in Section 9.6.2, is to execute the input handlers in a separate thread of control, which coexists with one or more threads responsible for updating the screen. In Section 9.5, we considered a screen saver program that used coroutines to interleave “sanity checks” on the ﬁle system with updates to a moving picture on the screen. We also considered discrete-event simulation, which uses coroutines to represent the active entities of some real-world system. The semantics of discrete-event simulation require that events occur atomi- cally at ﬁxed points in time. Coroutines provide a natural implementation, be- cause they execute one at a time: so long as we never switch coroutines in the mid- dle of a to-be-atomic operation, all will be well. In our other examples, however— and indeed in most “naturally concurrent” programs—there is no need for corou- tine semantics. By assigning concurrent tasks to threads instead of to coroutines, we acknowledge that those tasks can proceed in parallel if more than one core is available. We also move responsibility for ﬁguring out which thread should run when from the programmer to the language implementation. In return, we give up any notion of trivial atomicity. The need for multithreaded programs is easily seen in web-based applications. EXAMPLE 13.3
 
@@ -2343,7 +2343,7 @@ The principal problem with a dispatch loop—beyond the complexity of subdi- vid
 
 trying to enumerate a recursive set with iterator objects in Section 6.5.3, only worse. Like true iterators, a thread package turns the program “right side out,” making the management of tasks (threads) implicit and the control ﬂow within threads explicit.
 
-## 13.1.2 Multiprocessor Architecture
+13.1.2 Multiprocessor Architecture
 
 Parallel computer hardware is enormously diverse. A distributed system—one that we think of in terms of interactions among separate programs running on separate machines—may be as large as the Internet, or as small as the components of a cell phone. A parallel but nondistributed system—one that we think of in terms of a single program running on a single machine—may still be very large. China’s Tianhe-2 supercomputer, for example, has more than 3 million cores, consumes over 17 MW of power, and occupies 720 square meters of ﬂoor space (about a ﬁfth of an acre). Historically, most parallel but nondistributed machines were homogeneous— their processors were all identical. In recent years, many machines have added programmable GPUs, ﬁrst as separate processors, and more recently as separate portions of a single processor chip. While the cores of a GPU are internally homo- geneous, they are very different from those of the typical CPU, leading to a glob- ally heterogeneous system. Future systems may have cores of many other kinds as well, each specialized to particular kinds of programs or program components. In an ideal world, programming languages and runtimes would map program fragments to suitable cores at suitable times, but this sort of automation is still very much a research goal. As of 2015, programmers who want to make use of the GPU write appropriate portions of their code in special-purpose languages like OpenCL or CUDA, which emphasize repetitive operations over vectors. A main program, running on the CPU, then ships the resulting “kernels” to the GPU explicitly. In the remainder of this chapter, we will concentrate on thread-level paral- lelism for homogeneous machines. For these, many of the most important archi- tectural questions involve the memory system. In some machines, all of physical memory is accessible to every core, and the hardware guarantees that every write is quickly visible everywhere. At the other extreme, some machines partition main memory among processors, forcing cores to interact through some sepa- rate message-passing mechanism. In intermediate designs, some machines share memory in a noncoherent fashion, making writes on one core visible to another only when both have explicitly ﬂushed their caches. From the point of view of language or library implementation, the principal distinction between shared-memory and message-passing hardware is that mes- sages typically require the active participation of cores at both ends of the con- nection: one to send, the other to receive. On a shared-memory machine, a core can read and write remote memory without any other core’s assistance. On small machines (2–4 processors, say), main memory may be uniform— equally distant from all processors. On larger machines (and even on some very
 
@@ -2402,11 +2402,11 @@ technology and the advancement of human knowledge. Supercomputers have changed d
 * What is a vector machine? Where does vector technology appear in modern
   systems?
 
-## 13.2 Concurrent Programming Fundamentals
+13.2 Concurrent Programming Fundamentals
 
 Within a concurrent program, we will use the term thread to refer to the active entity that the programmer thinks of as running concurrently with other threads. In most systems, the threads of a given program are implemented on top of one or more processes provided by the operating system. OS designers often distinguish between a heavyweight process, which has its own address space, and a collection of lightweight processes, which may share an address space. Lightweight processes were added to most variants of Unix in the late 1980s and early 1990s, to accom- modate the proliferation of shared-memory multiprocessors. We will sometimes use the word task to refer to a well-deﬁned unit of work that must be performed by some thread. In one common programming idiom, a collection of threads shares a common “bag of tasks”—a list of work to be done. Each thread repeatedly removes a task from the bag, performs it, and goes back for another. Sometimes the work of a task entails adding new tasks to the bag. Unfortunately, terminology is inconsistent across systems and authors. Several languages call their threads processes. Ada calls them tasks. Several operating sys- tems call lightweight processes threads. The Mach OS, from which OSF Unix and Mac OS X are derived, calls the address space shared by lightweight processes a task. A few systems try to avoid ambiguity by coining new words, such as “actors,” “ﬁbers,” or “ﬁlaments.” We will attempt to use the deﬁnitions of the preceding two paragraphs consistently, and to identify cases in which the terminology of particular languages or systems differs from this usage.
 
-## 13.2.1 Communication and Synchronization
+13.2.1 Communication and Synchronization
 
 In any concurrent programming model, two of the most crucial issues to be ad- dressed are communication and synchronization. Communication refers to any mechanism that allows one thread to obtain information produced by another. Communication mechanisms for imperative programs are generally based on either shared memory or message passing. In a shared-memory programming model, some or all of a program’s variables are accessible to multiple threads.
 
@@ -2421,13 +2421,13 @@ DESIGN & IMPLEMENTATION
 
 sider synchronization again brieﬂy in Section 13.2.4, and then more thoroughly in Section 13.3.
 
-## 13.2.2 Languages and Libraries
+13.2.2 Languages and Libraries
 
 Thread-level concurrency can be provided to the programmer in the form of ex- plicitly concurrent languages, compiler-supported extensions to traditional se- quential languages, or library packages outside the language proper. All three options are widely used, though shared-memory languages are more common at the “low end” (for multicore and small multiprocessor machines), and message- passing libraries are more common at the “high end” (for massively parallel su- percomputers). Examples of systems in widespread use are categorized in Fig- ure 13.4. For many years, almost all parallel programming employed traditional sequen- tial languages (largely C and Fortran) augmented with libraries for synchroniza- tion or message passing, and this approach still dominates today. In the Unix world, shared memory parallelism has largely converged on the POSIX pthreads standard, which includes mechanisms to create, destroy, schedule, and synchro- nize threads. This standard became an ofﬁcial part of both C and C++ as of their 2011 versions. Similar functionality for Windows machines is provided by Microsoft’s thread package and compilers. For high-end scientiﬁc computing, message-based parallelism has likewise converged on the MPI (Message Passing Interface) standard, with open-source and commercial implementations available for almost every platform. While language support for concurrency goes back all the way to Algol 68 (and coroutines to Simula), and while such support was widely available in Ada by the late 1980s, widespread interest in these features didn’t really arise until the mid-1990s, when the explosive growth of the World Wide Web began to drive the development of parallel servers and concurrent client programs. This devel- opment coincided nicely with the introduction of Java, and Microsoft followed with C# a few years later. Though not yet as inﬂuential, many other languages, including Erlang, Go, Haskell, Rust, and Scala, are explicitly parallel as well.
 
 In the realm of scientiﬁc programming, there is a long history of extensions to Fortran designed to facilitate the parallel execution of loop iterations. By the turn of the century this work had largely converged on a set of extensions known as OpenMP, available not only in Fortran but also in C and C++. Syntactically, OpenMP comprises a set of pragmas (compiler directives) to create and synchro- nize threads, and to schedule work among them. On machines composed of a network of multiprocessors, it is increasingly common to see hybrid programs that use OpenMP within a multiprocessor and MPI across them. In both the shared memory and message passing columns of Figure 13.4, the parallel constructs are intended for use within a single multithreaded program. For communication across program boundaries in distributed systems, program- mers have traditionally employed library implementations of the standard In- ternet protocols, in a manner reminiscent of ﬁle-based I/O (Section C 8.7). For client-server interaction, however, it can be attractive to provide a higher-level in- terface based on remote procedure calls (RPC), an alternative we consider further in Section C 13.5.4. In comparison to library packages, an explicitly concurrent programming lan- guage has the advantage of compiler support. It can make use of syntax other than subroutine calls, and can integrate communication and thread management more tightly with such concepts as type checking, scoping, and exceptions. At the same time, since most programs have historically been sequential, concurrent languages have been slow to gain widespread acceptance, particularly given that the presence of concurrent features can sometime make the sequential case more difﬁcult to understand.
 
-## 13.2.3 Thread Creation Syntax
+13.2.3 Thread Creation Syntax
 
 Almost every concurrent system allows threads to be created (and destroyed) dy- namically. Syntactic and semantic details vary considerably from one language or library to another, but most conform to one of six principal options: co-begin, parallel loops, launch-at-elaboration, fork (with optional join), implicit receipt, and early reply. The ﬁrst two options delimit threads with special control-ﬂow constructs. The others use syntax resembling (or identical to) subroutines. At least one pedagogical language (SR) provided all six options. Most others pick and choose. Most libraries use fork/join, as do Java and C#. Ada uses both launch-at-elaboration and fork. OpenMP uses co-begin and parallel loops. RPC systems are typically based on implicit receipt.
 
@@ -2620,7 +2620,7 @@ DESIGN & IMPLEMENTATION
 
 sult parameters depend. Drawing inspiration from the detach operation used to launch coroutines in Simula (Example 9.47), a few languages (SR and Her- mes [SBG+91] among them) allow a callee to execute a reply operation that re- turns results to the caller without terminating. After an early reply, the two threads continue concurrently. Semantically, the portion of the callee prior to the reply plays much the same role as the constructor of a Java or C# thread; the portion after the reply plays the role of the run method. The usual implementation is also similar, and may run counter to the programmer’s intuition: since early reply is optional, and can appear in any subroutine, we can use the caller’s thread to execute the initial por- tion of the callee, and create a new thread only when—and if—the callee replies instead of returning.
 
-## 13.2.4 Implementation of Threads
+13.2.4 Implementation of Threads
 
 As we noted near the beginning of Section 13.2, the threads of a concurrent pro- gram are usually implemented on top of one or more processes provided by the operating system. At one extreme, we could use a separate OS process for ev- ery thread; at the other extreme we could multiplex all of a program’s threads on top of a single process. On a supercomputer with a separate core for every concurrent activity, or in a language in which threads are relatively heavyweight abstractions (long-lived, and created by the dozens rather than the thousands), the one-process-per-thread extreme is often acceptable. In a simple language on a uniprocessor, the all-threads-on-one-process extreme may be acceptable. Many EXAMPLE 13.20
 
@@ -2703,13 +2703,13 @@ We can extend our preemptive thread package to run on top of more than one OS-pr
 * Describe the progressive implementation of scheduling, preemption, and
   (true) parallelism on top of coroutines.
 
-## 13.3 Implementing Synchronization
+13.3 Implementing Synchronization
 
 As noted in Section 13.2.1, synchronization is the principal semantic challenge for shared-memory concurrent programs. Typically, synchronization serves either to make some operation atomic or to delay that operation until some necessary pre- condition holds. As noted in Section 13.1, atomicity is most commonly achieved with mutual exclusion locks. Mutual exclusion ensures that only one thread is ex- ecuting some critical section of code at a given point in time. Critical sections typically transform a shared data structure from one consistent state to another. Condition synchronization allows a thread to wait for a precondition, often ex- pressed as a predicate on the value(s) in one or more shared variables. It is tempt- ing to think of mutual exclusion as a form of condition synchronization (don’t proceed until no other thread is in its critical section), but this sort of condition would require consensus among all extant threads, something that condition syn- chronization doesn’t generally provide.
 
 Our implementation of parallel threads, sketched at the end of Section 13.2.4, requires both atomicity and condition synchronization. Atomicity of operations on the ready list and related data structures ensures that they always satisfy a set of logical invariants: the lists are well formed, each thread is either running or resides in exactly one list, and so forth. Condition synchronization appears in the requirement that a process in need of a thread to run must wait until the ready list is nonempty. It is worth emphasizing that we do not in general want to overly synchronize programs. To do so would eliminate opportunities for parallelism, which we gen- erally want to maximize in the interest of performance. Moreover not all races are bad. If two processes are racing to dequeue the last thread from the ready list, we don’t generally care which succeeds and which waits for another thread. We do care that the implementation of dequeue does not have internal, instruction-level races that might compromise the ready list’s integrity. In general, our goal is to provide only as much synchronization as is necessary to eliminate “bad” races— those that might otherwise cause the program to produce incorrect results. In the ﬁrst subsection below we consider busy-wait synchronization. In the second we present an alternative, called nonblocking synchronization, in which atomicity is achieved without the need for mutual exclusion. In the third sub- section we return to the subject of memory consistency (originally mentioned in Section 13.1.2), and discuss its implications for the semantics and implementa- tion of language-level synchronization mechanisms. Finally, in Sections 13.3.4 and 13.3.5, we use busy-waiting among processes to implement a parallelism-safe thread scheduler, and then use this scheduler in turn to implement the most basic scheduler-based synchronization mechanism: namely, semaphores.
 
-## 13.3.1 Busy-Wait Synchronization
+13.3.1 Busy-Wait Synchronization
 
 Busy-wait condition synchronization is easy if we can cast a condition in the form of “location X contains value Y”: a thread that needs to wait for the condition can simply read X in a loop, waiting for Y to appear. To wait for a condition involving more than one location, one needs atomicity to read the locations together, but given that, the implementation is again a simple loop. Other forms of busy-wait synchronization are somewhat trickier. In the re- mainder of this section we consider spin locks, which provide mutual exclusion, and barriers, which ensure that no thread continues past a given point in a pro- gram until all threads have reached that point.
 
@@ -2749,7 +2749,7 @@ The “sense-reversing” barrier counter, modiﬁed by an atomic fetch_and_decr
 
 Java 7 phasers participating threads can change from one phaser episode to another. When the number is large, the phaser can be tiered to run in logarithmic time. Moreover, arrival and departure can be speciﬁed as separate operations: in between, a thread can do work that (a) does not require that all other threads have arrived, and (b) does not have to be completed before any other threads depart. ■
 
-## 13.3.2 Nonblocking Algorithms
+13.3.2 Nonblocking Algorithms
 
 When a lock is acquired at the beginning of a critical section, and released at the end, no other thread can execute a similarly protected piece of code at the same time. As long as every thread follows the same conventions, code within the critical section is atomic—it appears to happen all at once. But this is not the only possible way to achieve atomicity. Suppose we wish to make an arbitrary update EXAMPLE 13.29
 
@@ -2778,7 +2778,7 @@ The M&S queue dequeue operation does not require cleanup, but the enqueue operat
 ![Figure 13.10 Operations on...](images/page_692_vector_236.png)
 *Figure 13.10 Operations on a nonblocking concurrent queue. In the dequeue operation (left), a single CAS swings the head pointer to the next node in the queue. In the enqueue operation (right), a ﬁrst CAS changes the next pointer of the tail node to point at the new node, at which point the operation is said to have logically completed. A subsequent “cleanup” CAS, which can be performed by any thread, swings the tail pointer to point at the new node as well.*
 
-## 13.3.3 Memory Consistency
+13.3.3 Memory Consistency
 
 In all our discussions so far, we have depended, implicitly, on hardware memory coherence. Unfortunately, coherence alone is not enough to make a multipro- cessor or even a single multicore processor behave as most programmers would expect. We must also worry, when more than one location is written at about the same time, about the order in which the writes become visible to different cores. Intuitively, most programmers expect shared memory to be sequentially con- sistent—to make all writes visible to all cores in the same order, and to make any given core’s writes visible in the order they were performed. Unfortunately, this behavior turns out to be very hard to implement efﬁciently—hard enough that most hardware designers simply don’t provide it. Instead, they provide one of sev- eral relaxed memory models, in which certain loads and stores may appear to occur “out of order.” Relaxed consistency has important ramiﬁcations for language de- signers, compiler writers, and the implementors of synchronization mechanisms and nonblocking algorithms.
 
@@ -2832,7 +2832,7 @@ Using volatile to avoid a data race variable initialized to indicate that it is 
 
 before conﬁrming that initialized was true. The volatile declaration precludes all these undesirable possibilities. Returning to Example 13.31, we might avoid a temporal loop by declaring both X and inspected as volatile, or by enclosing accesses to them in atomic oper- ations, bracketed by lock acquire and release. In Example 13.32, volatile dec- larations on X and Y will again sufﬁce to ensure sequential consistency, but the cost may be somewhat higher: on some machines, the compiler may need to use extra locks or special instructions to force a total order among writes to disjoint locations. ■ Synchronization races are common in multithreaded programs. Whether they are bugs or expected behavior depends on the application. Data races, on the other hand, are almost always program bugs. They are so hard to reason about— and so rarely useful—that the C++ memory model outlaws them altogether: given a program with a data race, a C++ implementation is permitted to display any behavior whatsoever. Ada has similar rules. For Java, by contrast, an empha- sis on embedded applications motivated the language designers to constrain the behavior of racy programs in ways that would preserve the integrity of the under- lying virtual machine. A Java program that contains a data race must continue to follow all the normal language rules, and any read that is not ordered with respect to a unique preceding write must return a value that might have been written by some previous write to the same location, or by a write that is unordered with respect to the read. We will return to the Java Memory Model in Section 13.4.3, after we have discussed the language’s synchronization mechanisms.
 
-## 13.3.4 Scheduler Implementation
+13.3.4 Scheduler Implementation
 
 To implement user-level threads, OS-level processes must synchronize access to the ready list and condition queues, generally by means of spinning. Code for EXAMPLE 13.34
 
@@ -2867,7 +2867,7 @@ The bounded buffer problem scheduler-based synchronization mechanisms. A bounded
 ![Figure 13.15 Semaphore operations,...](images/page_700_vector_330.png)
 *Figure 13.15 Semaphore operations, for use with the scheduler code of Figure 13.13.*
 
-## 13.3.5 Semaphores
+13.3.5 Semaphores
 
 Semaphores are the oldest of the scheduler-based synchronization mechanisms. They were described by Dijkstra in the mid-1960s [Dij68a], and appear in Al- gol 68. They are still heavily used today, particularly in library-based implemen- tations of concurrency. A semaphore is basically a counter with two associated operations, P and V.4 A EXAMPLE 13.38
 
@@ -2903,11 +2903,11 @@ Bounded buffer with semaphores lem. It uses a binary semaphore for mutual exclus
 * What is a semaphore? What operations does it support? How do binary and
   general semaphores differ?
 
-## 13.4 Language-Level Constructs
+13.4 Language-Level Constructs
 
 Though widely used, semaphores are also widely considered to be too “low level” for well-structured, maintainable code. They suffer from two principal problems. First, because their operations are simply subroutine calls, it is easy to leave one out (e.g., on a control path with several nested if statements). Second, unless they are hidden inside an abstraction, uses of a given semaphore tend to get scat- tered throughout a program, making it difﬁcult to track them down for purposes of software maintenance.
 
-## 13.4.1 Monitors
+13.4.1 Monitors
 
 Monitors were suggested by Dijkstra [Dij72] as a solution to the problems of semaphores. They were developed more thoroughly by Brinch Hansen [Bri73], and formalized by Hoare [Hoa74] in the early 1970s. They have been incorpo- rated into at least a score of languages, of which Concurrent Pascal [Bri75], Mod- ula (1) [Wir77b], and Mesa [LR80] were probably the most inﬂuential.5 They
 
@@ -2958,7 +2958,7 @@ DESIGN & IMPLEMENTATION
 
 13.6 The nested monitor problem While maintaining exclusion on outer monitor(s) when waiting in an inner one may lead to deadlock with a signaling thread, releasing those outer moni- tors may lead to similar (if a bit more subtle) deadlocks. When a waiting thread awakens it must reacquire exclusion on both inner and outer monitors. The innermost monitor is of course available, because the matching signal hap- pened there, but there is in general no way to ensure that unrelated threads will not be busy in the outer monitor(s). Moreover one of those threads may need access to the inner monitor in order to complete its work and release the outer monitor(s). If we insist that the awakened thread be the ﬁrst to run in the inner monitor after the signal, then deadlock will result. One way to avoid this problem is to arrange for mutual exclusion across all the monitors of a program. This solution severely limits concurrency in multiprocessor imple- mentations, but may be acceptable on a uniprocessor. A more general solution is addressed in Exercise 13.21.
 
-## 13.4.2 Conditional Critical Regions
+13.4.2 Conditional Critical Regions
 
 Conditional critical regions (CCRs) are another alternative to semaphores, pro- posed by Brinch Hansen at about the same time as monitors [Bri73]. A critical EXAMPLE 13.42
 
@@ -2981,7 +2981,7 @@ DESIGN & IMPLEMENTATION
 
 implicit reader–writer lock on the protected object ensures that potentially con- ﬂicting operations exclude one another in time: a procedure or entry obtains ex- clusive access to the object; a function can operate concurrently with other func- tions, but not with a procedure or entry. Procedures and entries differ from one another in two important ways. First, an entry can have a Boolean expression guard, for which the calling task (thread) will wait before beginning execution (much as it would for the condition of a CCR). Second, an entry supports three special forms of call: timed calls, which abort after waiting for a speciﬁed amount of time, conditional calls, which execute alternative code if the call cannot proceed immediately, and asynchronous calls, which begin executing alternative code immediately, but abort it if the call is able to proceed before the alternative completes. In comparison to the conditions of CCRs, the guards on entries of protected objects in Ada 95 admit a more efﬁcient implementation, because they do not have to be evaluated in the context of the calling thread. Moreover, because all guards are gathered together in the deﬁnition of the protected object, the com- piler can generate code to test them as a group as efﬁciently as possible, in a man- ner suggested by Kessels [Kes77]. Though an Ada task cannot wait on a condition in the middle of an entry (only at the beginning), it can requeue itself on an- other entry, achieving much the same effect. Ada 95 code for a bounded buffer would closely resemble the pseudocode of Figure 13.18; we leave the details to Exercise 13.23.
 
-## 13.4.3 Synchronization in Java
+13.4.3 Synchronization in Java
 
 In Java, every object accessible to more than one thread has an implicit mutual EXAMPLE 13.43
 
@@ -3045,7 +3045,7 @@ The Java Memory Model, which we introduced in Section 13.3.3, speciﬁes exactly
 
 monitor (releases a lock, leaves a synchronized block, or waits). At that point all its previous writes must be visible to other threads. Similarly, a thread is al- lowed to keep cached copies of values written by other threads until it reads a volatile variable or enters a monitor (acquires a lock, enters a synchronized block, or wakes up from a wait). At that point any subsequent reads must obtain new copies of anything that has been written by other threads. The compiler is free to reorder ordinary reads and writes in the absence of intrathread data dependences. It can also move ordinary reads and writes down past a subsequent volatile read, up past a previous volatile write, or into a synchronized block from above or below. It cannot reorder volatile accesses, monitor entry, or monitor exit with respect to one another. If the compiler can prove that a volatile variable or monitor isn’t used by more than one thread during a given interval of time, it can reorder its operations like ordinary accesses. For data-race-free programs, these rules ensure the ap- pearance of sequential consistency. Moreover even in the presence of races, Java implementations ensure that reads and writes of object references and of 32-bit and smaller quantities are always atomic, and that every read returns the value written either by some unordered write or by some immediately preceding or- dered write. Formalization of the Java memory model proved to be a surprisingly difﬁcult task. Most of the difﬁculty stemmed from the desire to specify meaningful seman- tics for programs with data races. The C++11 memory model, also introduced in Section 13.3.3, avoids this complexity by simply prohibiting such programs. To ﬁrst approximation, C++ deﬁnes a happens-before ordering on memory accesses, similar to the ordering in Java, and then guarantees sequential consistency for programs in which all conﬂicting accesses are ordered. Modest additional com- plexity is introduced by allowing the programmer to specify weaker ordering on individual reads and writes of atomic variables; we consider this feature in Ex- ploration 13.42.
 
-## 13.4.4 Transactional Memory
+13.4.4 Transactional Memory
 
 All the general-purpose mechanisms we have considered for atomicity—sema- phores, monitors, conditional critical regions—are essentially syntactic variants on locks. Critical sections that need to exclude one another must acquire and release the same lock. Critical sections that are mutually independent can run in parallel only if they acquire and release separate locks. This creates an unfortu- nate tradeoff for programmers: it is easy to write a data-race-free program with a single lock, but such a program will not scale: as cores and threads are added, the lock will become a bottleneck, and program performance will stagnate. To increase scalability, skillful programmers partition their program data into equiv- alence classes, each protected by a separate lock. A critical section must then acquire the locks for every accessed equivalence class. If different critical sections acquire locks in different orders, deadlock can result. Enforcing a common or- der can be difﬁcult, however, because we may not be able to predict, when an
 
@@ -3094,7 +3094,7 @@ Challenges
 
 Many subtleties have been glossed over in our example implementation. The translation in Example 13.49 will not behave correctly if code inside the atomic block throws an exception (other than abort) or executes a return or an exit out of some surrounding loop. The pseudocode of Figure 13.19 also fails to consider that transactions may be nested. Several additional issues are still the subject of debate among TM designers. What should we do about operations inside transactions (I/O, system calls, etc.) that cannot easily be rolled back, and how do we prevent such transactions from ever calling retry? How do we discourage programmers from creating transac- tions so large they almost always conﬂict with one another, and cannot run in par- allel? Should a program ever be able to detect that transactions are aborting? How should transactions interact with locks and with nonblocking data structures? Should races between transactions and nontransactional code be considered pro- gram bugs? If so, should there be any constraints on the behavior that may result? These and similar questions will need to be answered by any production-quality TM-capable language.
 
-## 13.4.5 Implicit Synchronization
+13.4.5 Implicit Synchronization
 
 In several shared-memory languages, the operations that threads can perform on shared data are restricted in such a way that synchronization can be implicit in the operations themselves, rather than appearing as separate, explicit operations. We have seen one example of implicit synchronization already: the forall loop of HPF and Fortran 95 (Example 13.10). Separate iterations of a forall loop proceed concurrently, semantically in lock-step with each other: each iteration reads all data used in its instance of the ﬁrst assignment statement before any iteration updates its instance of the left-hand side. The left-hand side updates in turn occur before any iteration reads the data used in its instance of the sec- ond assignment statement, and so on. Compilation of forall loops for vector machines, while far from trivial, is more or less straightforward. On a more con- ventional multiprocessor, however, good performance usually depends on high- quality dependence analysis, which allows the compiler to identify situations in which statements within a loop do not in fact depend on one another, and can proceed without synchronization. Dependence analysis plays a crucial role in other languages as well. In Side- bar 11.1 we mentioned the purely functional languages Sisal and pH (recall that
 
@@ -3183,7 +3183,7 @@ Several researchers have noted that the backtracking search of logic languages s
 
 * Explain the difference between AND parallelism and OR parallelism in Prolog.
 
-## 13.5 Message Passing
+13.5 Message Passing
 
 Shared-memory concurrency has become ubiquitous on multicore processors and multiprocessor servers. Message passing, however, still dominates both dis- tributed and high-end computing. Supercomputers and large-scale clusters are programmed primarily in Fortran or C/C++ with the MPI library package. Dis- tributed computing increasingly relies on client–server abstractions layered on top of libraries that implement the TCP/IP Internet standard. As in shared- memory computing, scores of message-passing languages have also been devel- oped for particular application domains, or for research or pedagogical purposes.
 
@@ -3201,7 +3201,7 @@ languages being designed for purely sequential execution. As of 2015, explic- it
 
 ## 13.7 Exercises
 
-## 13.1 Give an example of a “benign” race condition—one whose outcome affects program behavior, but not correctness.
+13.1 Give an example of a “benign” race condition—one whose outcome affects program behavior, but not correctness.
 
 13.2 We have deﬁned the ready list of a thread package to contain all threads that are runnable but not running, with a separate variable to identify the currently running thread. Could we just as easily have deﬁned the ready list to contain all runnable threads, with the understanding that the one at the head of the list is running? (Hint: Think about multiprocessors.)
 
@@ -3221,7 +3221,7 @@ languages being designed for purely sequential execution. As of 2015, explic- it
 
 (Hint: You may ﬁnd it useful to consult Doug Lea’s Java Memory Model “Cookbook for Compiler Writers,” at gee.cs.oswego.edu/dl/jmm/cookbook. html).
 
-## 13.10 Implement the nonblocking queue of Example 13.30 on an x86. (Com- plete pseudocode can be found in the paper by Michael and Scott [MS98].)
+13.10 Implement the nonblocking queue of Example 13.30 on an x86. (Com- plete pseudocode can be found in the paper by Michael and Scott [MS98].)
 
 Do you need fence instructions to ensure consistency? If you have access to appropriate hardware, port your code to a machine with a more relaxed memory model (e.g., ARM or Power). What new fences or atomic refer- ences do you need?
 
@@ -3235,13 +3235,13 @@ Do you need fence instructions to ensure consistency? If you have access to appr
 
 13.16 To make spin locks useful on a multiprogrammed multiprocessor, one might want to ensure that no process is ever preempted in the middle of a critical section. That way it would always be safe to spin in user space, be- cause the process holding the lock would be guaranteed to be running on some other processor, rather than preempted and possibly in need of the current processor. Explain why an operating system designer might not want to give user processes the ability to disable preemption arbitrarily. (Hint: Think about fairness and multiple users.) Can you suggest a way to get around the problem? (References to several possible solutions can be found in the paper by Kontothanassis, Wisniewski, and Scott [KWS97].)
 
-## 13.17 Show how to use semaphores to construct a scheduler-based n-thread bar- rier.
+13.17 Show how to use semaphores to construct a scheduler-based n-thread bar- rier.
 
-## 13.18 Prove that monitors and semaphores are equally powerful. That is, use each to implement the other. In the monitor-based implementation of semaphores, what is your monitor invariant?
+13.18 Prove that monitors and semaphores are equally powerful. That is, use each to implement the other. In the monitor-based implementation of semaphores, what is your monitor invariant?
 
-## 13.19 Show how to use binary semaphores to implement general semaphores.
+13.19 Show how to use binary semaphores to implement general semaphores.
 
-## 13.20 In Example 13.38 (Figure 13.15), suppose we replaced the middle four lines of procedure P with
+13.20 In Example 13.38 (Figure 13.15), suppose we replaced the middle four lines of procedure P with
 
 if S.N = 0 sleep on(S.Q) S.N −:= 1
 
@@ -3253,20 +3253,20 @@ What is the problem with this new version? Explain how it connects to the questi
 
 13.21 Suppose that every monitor has a separate mutual exclusion lock, so that different threads can run in different monitors concurrently, and that we want to release exclusion on both inner and outer monitors when a thread waits in a nested call. When the thread awakens it will need to reacquire the outer locks. How can we ensure its ability to do so? (Hint: Think about the order in which to acquire locks, and be prepared to abandon Hoare semantics. For further hints, see Wettstein [Wet78].)
 
-## 13.22 Show how general semaphores can be implemented with conditional criti- cal regions in which all threads wait for the same condition, thereby avoid- ing the overhead of unproductive wake-ups.
+13.22 Show how general semaphores can be implemented with conditional criti- cal regions in which all threads wait for the same condition, thereby avoid- ing the overhead of unproductive wake-ups.
 
-## 13.23 Write code for a bounded buffer using the protected object mechanism of Ada 95.
+13.23 Write code for a bounded buffer using the protected object mechanism of Ada 95.
 
 ![Figure 13.20 The Dining...](images/page_727_vector_248.png)
 *Figure 13.20 The Dining Philosophers. Hungry philosophers must contend for the forks to their left and right in order to eat.*
 
-## 13.24 Repeat the previous exercise in Java using synchronized statements or methods. Try to make your solution as simple and conceptually clear as possible. You will probably want to use notifyAll.
+13.24 Repeat the previous exercise in Java using synchronized statements or methods. Try to make your solution as simple and conceptually clear as possible. You will probably want to use notifyAll.
 
 13.25 Give a more efﬁcient solution to the previous exercise that avoids the use of notifyAll. (Warning: It is tempting to observe that the buffer can never be both full and empty at the same time, and to assume therefore that waiting threads are either all producers or all consumers. This need not be the case, however: if the buffer ever becomes even a temporary perfor- mance bottleneck, there may be an arbitrary number of waiting threads, including both producers and consumers.)
 
-## 13.26 Repeat the previous exercise using Java Lock variables.
+13.26 Repeat the previous exercise using Java Lock variables.
 
-## 13.27 Explain how escape analysis, mentioned brieﬂy in Sidebar 10.3, could be used to reduce the cost of certain synchronized statements and methods in Java.
+13.27 Explain how escape analysis, mentioned brieﬂy in Sidebar 10.3, could be used to reduce the cost of certain synchronized statements and methods in Java.
 
 13.28 The dining philosophers problem [Dij72] is a classic exercise in synchro- nization (Figure 13.20). Five philosophers sit around a circular table. In the center is a large communal plate of spaghetti. Each philosopher repeat- edly thinks for a while and then eats for a while, at intervals of his or her own choosing. On the table between each pair of adjacent philosophers is a single fork. To eat, a philosopher requires both adjacent forks: the one on the left and the one on the right. Because they share a fork, adjacent philosophers cannot eat simultaneously. Write a solution to the dining philosophers problem in which each philosopher is represented by a process and the forks are represented by shared data. Synchronize access to the forks using semaphores, monitors, or conditional critical regions. Try to maximize concurrency.
 
@@ -3274,7 +3274,7 @@ What is the problem with this new version? Explain how it connects to the questi
 
 13.30 In some concurrent programming systems, global variables are shared by all threads. In others, each newly created thread has a separate copy of the global variables, commonly initialized to the values of the globals of the creating thread. Under this private globals approach, shared data must be allocated from a special heap. In still other programming systems, the programmer can specify which global variables are to be private and which are to be shared. Discuss the tradeoffs between private and shared global variables. Which would you prefer to have available, for which sorts of programs? How would you implement each? Are some options harder to implement than others? To what extent do your answers depend on the nature of processes provided by the operating system?
 
-## 13.31 Rewrite Example 13.51 in Java.
+13.31 Rewrite Example 13.51 in Java.
 
 13.32 AND parallelism in logic languages is analogous to the parallel evaluation of arguments in a functional language (e.g., Multilisp). Does OR par- allelism have a similar analog? (Hint: Think about special forms [Sec- tion 11.5].) Can you suggest a way to obtain the effect of OR parallelism in Multilisp?
 
@@ -3326,13 +3326,13 @@ Traditional programming languages are intended primarily for the con- struction 
 
 dynamic (run-time) checking. Their type systems, likewise, tend to embrace such high-level concepts as tables, patterns, lists, and ﬁles. General-purpose scripting languages like Perl, Python, and Ruby are some- times called glue languages, because they were originally designed to “glue” ex- isting programs together to build a larger system. With the growth of the World Wide Web, scripting languages have become the standard way to generate dy- namic content, both on servers and with the client browser. They are also widely used to customize or extend the functionality of such “scriptable” systems as edi- tors, spreadsheets, games, and presentation tools. We consider the history and nature of scripting in more detail in Section 14.1. We then turn in Section 14.2 to some of the problem domains in which scripting is widely used. These include command interpretation (shells), text processing and report generation, mathematics and statistics, general-purpose program co- ordination, and conﬁguration and extension. In Section 14.3 we consider several forms of scripting used on the World Wide Web, including CGI scripts, server- and client-side processing of scripts embedded in web pages, Java applets, and (on the companion site) XSLT. Finally, in Section 14.4, we consider some of the more interesting language features, common to many scripting languages, that distinguish them from their more traditional “mainstream” cousins. We look in particular at naming, scoping, and typing; string and pattern manipulation; and high-level structured data. We will not provide a detailed introduction to any one scripting language, though we will consider concrete examples in several. As in most of this book, the emphasis will be on underlying concepts.
 
-## 14.1 What Is a Scripting Language?
+14.1 What Is a Scripting Language?
 
 Modern scripting languages have two principal sets of ancestors. In one set are the command interpreters or “shells” of traditional batch and “terminal” (command- line) computing. In the other set are various tools for text processing and report generation. Examples in the ﬁrst set include IBM’s JCL, the MS-DOS command interpreter, and the Unix sh and csh shell families. Examples in the second set include IBM’s RPG and Unix’s sed and awk. From these evolved Rexx, IBM’s “Restructured Extended Executor,” which dates from 1979, and Perl, originally devised by Larry Wall in the late 1980s, and still one of the most widely used general-purpose scripting languages. Other general-purpose scripting languages include Python, Ruby, PowerShell (for Windows), and AppleScript (for the Mac). With the growth of the World Wide Web in the late 1990s, Perl was widely adopted for “server-side” web scripting, in which a web server executes a pro- gram (on the server’s machine) to generate the content of a page. One early web-scripting enthusiast was Rasmus Lerdorf, who created a collection of scripts to track access to his personal home page. Originally written in Perl but soon redesigned as a full-ﬂedged and independent language, these scripts evolved into PHP, now the most popular platform for server-side web scripting. PHP competi- tors include JSP (Java Server Pages), Ruby on Rails, and, on Microsoft platforms,
 
 PowerShell. For scripting on the client computer, all major browsers implement JavaScript, a language developed by Netscape Corporation in the mid 1990s, and standardized by ECMA (the European standards body) in 1999 [ECM11]. In a classic paper on scripting [Ous98], John Ousterhout, the creator of Tcl, suggested that “Scripting languages assume that a collection of useful components already exist in other languages. They are intended not for writing applications from scratch but rather for combining components.” Ousterhout envisioned a future in which programmers would increasingly rely on scripting languages for the top-level structure of their systems, where clarity, reusability, and ease of de- velopment are crucial. Traditional “systems languages” like C, C++, or Java, he argued, would be used for self-contained, reusable system components, which emphasize complex algorithms or execution speed. As a general rule of thumb that still seems reasonable today, he suggested that code could be developed 5 to 10 times faster in a scripting language, but would run 10 to 20 times faster in a traditional systems language. Some authors reserve the term “scripting” for the glue languages used to coor- dinate multiple programs. In common usage, however, scripting is a broader and vaguer concept, encompassing not only web scripting but also extension languages. These are typically embedded within some larger host program, which they can then control. Many readers will be familiar with the Visual Ba- sic “macros” of Microsoft Ofﬁce and related applications. Others may be fa- miliar with the Lisp-based extension language of the emacs text editor, or the widespread use of Lua in the computer gaming industry. Several other languages, including Tcl, Rexx, Python, and the Guile and Elk dialects of Scheme, have im- plementations designed to be embedded in other applications. In a similar vein, several widely used commercial applications provide their own proprietary exten- sion languages. For graphical user interface (GUI) programming, the Tk toolkit, originally designed for use with Tcl, has been incorporated into several scripting languages, including Perl, Python, and Ruby. One can also view XSLT (extensible stylesheet language transformations) as a scripting language, albeit somewhat different from the others considered in this chapter. XSLT is part of the growing family of XML (extensible markup language) tools. We consider it further in Section 14.3.5.
 
-## 14.1.1 Common Characteristics
+14.1.1 Common Characteristics
 
 While it is difﬁcult to deﬁne scripting languages precisely, there are several char- acteristics that they tend to have in common:
 
@@ -3383,13 +3383,13 @@ much more fundamental, and have much more direct support. Perl, for one, provide
 
 Much of the most rapid change in programming languages today is occurring in scripting languages. This can be attributed to several causes, including the continued growth of the Web, the dynamism of the open-source community, and the comparatively low investment required to create a new scripting language. Where a compiled, industrial-quality language like Java or C# requires a multiyear investment by a very large programming team, a single talented designer, working alone, can create a usable implementation of a new scripting language in only a year or two. Due in part to this rapid change, newer scripting languages have been able to incorporate some of the most innovative concepts in language design. Ruby, for example, has a uniform object model (much like Smalltalk), true iterators (like Clu), lambda expressions, (like Lisp), array slices (like Fortran 90), structured exception handling, multiway assignment, and reﬂection. Python has many of these features as well, and a few that Ruby lacks, including Haskell-style list com- prehensions.
 
-## 14.2 Problem Domains
+14.2 Problem Domains
 
 Some general-purpose languages—Scheme and Visual Basic, for example—are widely used for scripting. Conversely, some scripting languages, including Perl,
 
 Python, and Ruby, are intended by their designers for general-purpose use, with features intended to support “programming in the large”: modules, separate compilation, reﬂection, program development environments, and so on. For the most part, however, scripting languages tend to see their principal use in well- deﬁned problem domains. We consider some of these in the following subsec- tions.
 
-## 14.2.1 Shell (Command) Languages
+14.2.1 Shell (Command) Languages
 
 In the days of punch-card computing (through perhaps the mid 1970s), simple command languages allowed the user to “script” the processing of a card deck. A control card at the front of the deck, for example, might indicate that the upcom- ing cards represented a program to be compiled, or perhaps machine language for the compiler itself, or input for a program already compiled and stored on disk. A control card embedded later in the deck might test the exit status of the most recently executed program and choose what to do next based on whether that program completed successfully. Given the linear nature of a card deck, however (one can’t in general back up), command languages for batch processing tended not to be very sophisticated. JCL, for example, had no iteration constructs. With the development of interactive timesharing in the 1960s and early 1970s, command languages became much more sophisticated. Louis Pouzin wrote a simple command interpreter for CTSS, the Compatible Time Sharing System at MIT, in 1963 and 1964. When work began on the groundbreaking Multics sys- tem in 1964, Pouzin sketched the design of an extended command language, with quoting and argument-passing mechanisms, for which he coined the term “shell.” The subsequent implementation served as inspiration for Ken Thompson in the design of the original Unix shell in 1973. In the mid-1970s, Stephen Bourne and John Mashey separately extended the Thompson shell with control ﬂow and vari- ables; Bourne’s design was adopted as the Unix standard, taking the place (and the name) of the Thompson shell, sh. In the late 1970s Bill Joy developed the so-called “C shell” (csh), inspired at least in part by Mashey’s syntax, and introducing signiﬁcant enhancementsfor in- teractive use, including history, aliases, and job control. The tcsh version of csh adds command-line editing and command completion. David Korn incorpo- rated these mechanisms into a direct descendant of the Bourne shell, ksh, which is very similar to the standard POSIX shell [Int03b]. The popular “Bourne-again” shell, bash, is an open-source version of ksh. While tcsh is still popular in some quarters, ksh/bash/POSIX sh is substantially better for writing shell scripts, and comparable for interactive use. In addition to features designed for interactive use, which we will not consider further here, shell languages provide a wealth of mechanisms to manipulate ﬁle- names, arguments, and commands, and to glue together other programs. Most of these features are retained by more general scripting languages. We consider a few of them here, using bash syntax. The discussion is of necessity heavily simpliﬁed; full details can be found in the bash man page, or in various on-line tutorials.
 
@@ -3574,7 +3574,7 @@ DESIGN & IMPLEMENTATION
 
 14.4 Magic numbers When the Unix kernel is asked to execute a ﬁle (via the execve system call), it checks the ﬁrst few bytes of the ﬁle for a “magic number” that indicates the ﬁle’s type. Some values correspond to directly executable object ﬁle formats. UnderLinux, for example, the ﬁrst four bytes of an object ﬁle are 0x7f45_4c46 (⟨del⟩ELF in ASCII). Under Mac OS X they are 0xfeed_face. If the ﬁrst two bytes are 0x2321 (#! in ASCII), the kernel assumes that the ﬁle is a script, and reads subsequent characters to ﬁnd the name of the interpreter. The #! convention in Unix is the main reason that most scripting languages use # as the opening comment delimiter. Early versions of sh used the no-op command (:) as a way to introduce comments. Joy’s C shell introduced #, whereupon some versions of sh were modiﬁed to launch csh when asked to execute a script that appeared to begin with a C shell comment. This mecha- nism evolved into the more general mechanism used in many (though not all) variants of Unix today.
 
-## 14.2.2 Text Processing and Report Generation
+14.2.2 Text Processing and Report Generation
 
 Shell languages tend to be heavily string-oriented. Commands are strings, parsed into lists of words. Variables are string-valued. Variable expansion mechanisms allow the user to extract preﬁxes, sufﬁxes, or arbitrary substrings. Concatenation is indicated by simple juxtaposition. There are elaborate quoting conventions. Few more conventional languages have similar support for strings. At the same time, shell languages are clearly not intended for the sort of text manipulation commonly performed in editors like emacs or vim. Search and substitution, in particular, are missing, and many other tasks that editors accom- plish with a single keystroke—insertion, deletion, replacement, bracket match- ing, forward and backward motion—would be awkward to implement, or simply make no sense, in the context of the shell. For repetitive text manipulation it is natural to want to automate the editing process. Tools to accomplish this task constitute the second principal class of ancestors for modern scripting languages.
 
@@ -3626,7 +3626,7 @@ Extracting HTML headers with Perl example, again to extract headers from an HTML
 
 The next statement is similar to continue in C or Fortran: it jumps to the bottom of the innermost loop and begins the next iteration. The redo statement also skips the remainder of the current iteration, but returns to the top of the loop, without reevaluating the control expression. In our example program, redo allows us to append additional input to the current line, rather than reading a new line. Because end-of-ﬁle is normally detected by an undeﬁned return value from <>, and because that failure will happen only once per ﬁle, we must explicitly test for eof when using redo here. Note that if and its symmetric opposite, unless, can be used as either a preﬁx or a postﬁx test. Readers familiar with Perl may have noticed two subtle but key innovations in the substitution command of line 4 of the script. First, where the expression .* (in sed, awk, and Perl) matches the longest possible string of characters that permits subsequent portions of the match to succeed, the expression .*? in Perl matches the shortest possible such string. This distinction allows us to easily iso- late the ﬁrst header in a given line. Second, much as sed allows later portions of a regular expression to refer back to earlier, parenthesized portions (line 4 of Figure 14.1), Perl allows such captured strings to be used outside the regular ex- pression. We have leveraged this feature to print matched headers in line 6 of Figure 14.4. In general, the regular expressions of Perl are signiﬁcantly more pow- erful than those of sed and awk; we will return to this subject in more detail in Section 14.4.2. ■
 
-## 14.2.3 Mathematics and Statistics
+14.2.3 Mathematics and Statistics
 
 As we noted in our discussions of sed and awk, one of the distinguishing charac- teristics of text processing and report generation is the frequent use of “one-line programs” and other simple scripts. Anyone who has ever entered formulas in the cells of a spreadsheet realizes that similar needs arise in mathematics and statis- tics. And just as shell and report generation tools have evolved into powerful languages for general-purpose computing, so too have notations and tools for mathematical and statistical computing. In Section 8.2.1 (“Slices and Array Operations”), we mentioned APL, one of the more unusual languages of the 1960s. Originally conceived as a pen-and- paper notation for teaching applied mathematics, APL retained its emphasis on the concise, elegant expression of mathematical algorithms when it evolved into a programming language. Though it lacked both easy access to other programs and sophisticated string manipulation, APL displayed all the other characteristics of scripting described in Section 14.1.1, and one sometimes ﬁnds it listed as a scripting language. The modern successors to APL include a trio of commercial packages for math- ematical computing: Maple, Mathematica, and Matlab. Though their design philosophies differ, each provides extensive support for numerical methods, sym- bolic mathematics (formula manipulation), data visualization, and mathematical
 
@@ -3685,7 +3685,7 @@ In addition to (true) iterators, Ruby provides continuations, ﬁrst-class and h
 
 rather than instance methods; they have no notion of “current object.” Variables stdin and stderr refer to global objects of class IO. Regular expression operations in Ruby are methods of class Regexp, and can be invoked with standard object-oriented syntax. For convenience, Perl-like nota- tion is also supported as syntactic sugar; we have used this notation in Figure 14.7. The rescue clause of the innermost begin ... end block is an exception han- dler. As in the Python code of Figure 14.6, it allows us to determine whether the kill operation has succeeded by catching the (expected) exception that arises when we attempt to refer to a process after it has died. ■
 
-## 14.2.5 Extension Languages
+14.2.5 Extension Languages
 
 Most applications accept some sort of commands, which tell them what to do. Sometimes these commands are entered textually; more often they are triggered by user interface events such as mouse clicks, menu selections, and keystrokes. Commands in a graphical drawing program might save or load a drawing; select, insert, delete, or modify its parts; choose a line style, weight, or color; zoom or rotate the display; or modify user preferences. An extension language serves to increase the usefulness of an application by al- lowing the user to create new commands, generally using the existing commands as building blocks. Extension languages are widely regarded as an essential feature of sophisticated tools. Adobe’s graphics suite (Illustrator, Photoshop, InDesign, etc.) can be extended (scripted) using JavaScript, Visual Basic (on Windows), or AppleScript (on the Mac). Disney and Industrial Light & Magic use Python to extend their internal (proprietary) tools. The computer gaming industry makes heavy use of Lua for scripting of both commercial and open-source game en- gines. Many commercially available tools, including AutoCAD, Maya, Director, and Flash, have their own unique scripting languages. This list barely scratches the surface. To admit extension, a tool must
 
@@ -3729,7 +3729,7 @@ This one-line script, executed in any of the ways described above, binds our num
 
 * Name several commercial tools that use extension languages.
 
-## 14.3 Scripting the World Wide Web
+14.3 Scripting the World Wide Web
 
 Much of the content of the World Wide Web—particularly the content that is vis- ible to search engines—is static: pages that seldom, if ever, change. But hypertext, the abstract notion on which the Web is based, was always conceived as a way to represent “the complex, the changing, and the indeterminate” [Nel65]. Much of the power of the Web today lies in its ability to deliver pages that move, play sounds, respond to user actions, or—perhaps most important—contain infor- mation created or formatted on demand, in response to the page-fetch request. From a programming languages point of view, simple playback of recorded audio or video is not particularly interesting. We therefore focus our attention here on content that is generated on the ﬂy by a program—a script—associated with an Internet URI (uniform resource identiﬁer).4 Suppose we type a URI into a browser on a client machine, and the browser sends a request to the appropriate web server. If the content is dynamically created, an obvious ﬁrst question is: does the script that creates it run on the server or the client machine? These options are known as server-side and client-side web scripting, respectively. Server-side scripts are typically used when the service provider wants to re- tain complete control over the content of the page, but can’t (or doesn’t want to) create the content in advance. Examples include the pages returned by search engines, Internet retailers, auction sites, and any organization that provides its clients with on-line access to personal accounts. Client-side scripts are typically used for tasks that don’t need access to proprietary information, and are more
 
@@ -3740,7 +3740,7 @@ Much of the content of the World Wide Web—particularly the content that is vis
 
 efﬁcient if executed on the client’s machine. Examples include interactive anima- tion, error-checking of ﬁll-in forms, and a wide variety of other self-contained calculations.
 
-## 14.3.1 CGI Scripts
+14.3.1 CGI Scripts
 
 The original mechanism for server-side web scripting was the Common Gateway Interface (CGI). A CGI script is an executable program residing in a special di- rectory known to the web server program. When a client requests the URI corre- sponding to such a program, the server executes the program and sends its output back to the client. Naturally, this output needs to be something that the browser will understand—typically HTML. CGI scripts may be written in any language available on the server’s machine, though Perl is particularly popular: its string-handling and “glue” mechanisms are ideally suited to generating HTML, and it was already widely available during the early years of the Web. As a simple if somewhat artiﬁcial example, suppose we EXAMPLE 14.29
 
@@ -3753,7 +3753,7 @@ Adder web form with a CGI script appears in Figure 14.11. The form element in th
 
 part of the URI (for a get-type form) or on the standard input stream (for a post-type form, shown here).5 With either method, we can access the values using the param routine of the standard CGI Perl library, loaded at the beginning of our script. ■
 
-## 14.3.2 Embedded Server-Side Scripts
+14.3.2 Embedded Server-Side Scripts
 
 Though widely used, CGI scripts have several disadvantages:
 
@@ -3795,13 +3795,13 @@ Self-posting Adder web form reside in an arbitrary web directory, including the 
 ![Figure 14.14 An interactive...](images/page_766_vector_531.png)
 *Figure 14.14 An interactive PHP web page. The script at top could be used in place of the script in the middle of Figure 14.11. The lower script in the current ﬁgure replaces both the web page at the top and the script in the middle of Figure 14.11. It checks to see if it has received a full set of arguments. If it hasn’t, it displays the ﬁll-in form; if it has, it displays results.*
 
-## 14.3.3 Client-Side Scripts
+14.3.3 Client-Side Scripts
 
 While embedded server-side scripts are generally faster than CGI scripts, at least when start-up cost predominates, communication across the Internet is still too slow for truly interactive pages. If we want the behavior or appearance of the page to change as the user moves the mouse, clicks, types, or hides or exposes windows, we really need to execute some sort of script on the client’s machine. Because they run on the web designer’s site, CGI scripts and, to a lesser extent, embeddable server-side scripts can be written in many different languages. All the client ever sees is standard HTML. Client-side scripts, by contrast, require an interpreter on the client’s machine. By virtue of having been “in the right place at the right time” historically, JavaScript is supported with at least some degree of consistency by almost all of the world’s web browsers. Given the number of legacy browsers still running, and the difﬁculty of convincing users to upgrade or to install new plug-ins, pages intended for use outside a limited domain (e.g., the desktops of a single company) almost always use JavaScript for interactive features. Figure 14.15 shows a page with embedded JavaScript that imitates (on the EXAMPLE 14.35
 
 Adder web form in JavaScript client) the behavior of the Adder scripts of Figures 14.11 and 14.14. Function doAdd is deﬁned in the header of the page so it is available throughout. In partic- ular, it will be invoked when the user clicks on the Calculate button. By default, the input values are character strings; we use the parseInt function to convert them to integers. The parentheses around (argA + argB) in the ﬁnal assign- ment statement then force the use of integer addition. The other occurrences of + are string concatenation. To disable the usual mechanism whereby input data are submitted to the server when the user hits the enter or return key, we have speciﬁed a dummy behavior for the onsubmit attribute of the form. Rather than replace the page with output text, as our CGI and PHP scripts did, we have chosen in our JavaScript version to append the output at the bottom. The HTML SPAN element provides a named place in the document where this output can be inserted, and the getElementById JavaScript method provides us with a reference to this element. The HTML Document Object Model (DOM), standard- ized by the World Wide Web Consortium, speciﬁes a very large number of other elements, attributes, and user actions, all of which are accessible in JavaScript. Through them, scripts can, at appropriate times, inspect or alter almost any as- pect of the content, structure, or style of a page. ■
 
-## 14.3.4 Java Applets and Other Embedded Elements
+14.3.4 Java Applets and Other Embedded Elements
 
 As an alternative to requiring client-side scripts to interact with the DOM of a web page, many browsers support an embedding mechanism that allows a browser plug-in to assume responsibility for some rectangular region of the page, in which it can then display whatever it wants. In other words, plug-ins are less a matter of scripting the browser than of bypassing it entirely. Historically, plug-ins were
 
@@ -3818,7 +3818,7 @@ The type attribute informs the browser that the embedded element is expected to 
 
 Flash Player is more accurately described as a multimedia display engine than a general purpose programming language interpreter. Over time, plug-ins have proven to be a major source of browser security bugs. Almost any nontrivial plug-in requires access to operating system services— network IO, local ﬁle space, graphics acceleration, and so on. Providing just enough service to make the plug-in useful—but not enough to allow it to do any harm—has proven extremely difﬁcult. To address this problem, extensive mul- timedia support has been built into the HTML5 standard, allowing the browser itself to assume responsibility for much of what was once accomplished with plug- ins. Security is still a problem, but the number of software modules that must be trusted—and the number of points at which an attacker might try to gain entrance—is signiﬁcantly reduced. Many browsers now disable Java by default. Some disable Flash as well.
 
-## 14.3.5 XSLT
+14.3.5 XSLT
 
 Most readers will undoubtedly have had the opportunity to write, or at least to read, the HTML (hypertext markup language) used to compose web pages. HTML has, for the most part, a nested structure in which fragments of docu- ments (elements) are delimited by tags that indicate their purpose or appearance. We saw in Section 14.2.2, for example, that top-level headings are delimited with <h1> and </h1>. Unfortunately, as a result of the chaotic and informal way in which the Web evolved, HTML ended up with many inconsistencies in its design, and incompatibilities among the versions implemented by different vendors.
 
@@ -3853,7 +3853,7 @@ XML can be used to create specialized markup languages for a very wide range of 
 
 * What is HTML? XML? XSLT? How are they related to one another?
 
-## 14.4 Innovative Features
+14.4 Innovative Features
 
 In Section 14.1.1, we listed several common characteristics of scripting languages:
 
@@ -3868,7 +3868,7 @@ In Section 14.1.1, we listed several common characteristics of scripting languag
 
 Several of these are discussed in more detail in the subsections below. Speciﬁ- cally, Section 14.4.1 considers naming and scoping in scripting languages; Sec- tion 14.4.2 discusses string and pattern manipulation; and Section 14.4.3 con- siders data types. Items (1), (2), and (5) in our list, while important, are not particularly difﬁcult or subtle, and will not be considered further here.
 
-## 14.4.1 Names and Scopes
+14.4.1 Names and Scopes
 
 Most scripting languages (Scheme is the obvious exception) do not require vari- ables to be declared. A few languages, notably Perl and JavaScript, permit optional declarations, primarily as a sort of compiler-checked documentation. Perl can be run in a mode (use strict ‚vars‚) that requires declarations. With or without declarations, most scripting languages use dynamic typing. Values are generally self-descriptive, so the interpreter can perform type checking at run time, or co- erce values when appropriate. Nesting and scoping conventions vary quite a bit. Scheme, Python, JavaScript, and R provide the classic combination of nested subroutines and static (lexical) scope. Tcl allows subroutines to nest, but uses dynamic scoping. Named subrou- tines (methods) do not nest in PHP or Ruby, and they are only sort of nest in Perl (more on this below as well), but Perl and Ruby join Scheme, Python, JavaScript, and R in providing ﬁrst-class anonymous local subroutines. Nested blocks are statically scoped in Perl. In Ruby, they are part of the named scope in which they appear. Scheme, Perl, Python, Ruby, JavaScript, and R all provide unlimited extent for variables captured in closures. PHP, R, and the major glue languages (Perl, Tcl, Python, Ruby) all have sophisticated namespace mechanisms for infor- mation hiding and the selective import of names from separate modules.
 
@@ -3935,7 +3935,7 @@ DESIGN & IMPLEMENTATION
 
 its print statement, the inner scope ﬁnds the y from the middle scope. It ﬁnds the global x, however, because of the our operator on line 6. Now what about z? The rules require us to start with static scoping, ignoring local operators. According, then, to the our operator in the inner scope, we are using the global z. Once we know this, we look to see whether a dynamic (local) redeclaration of z is in effect. In this case indeed it is, and our program prints 1, 2, 3. As it turns out, the our declaration in the inner scope had no effect on this program. If only x had been declared our, we would still have used the global z, and then found the dynamic instance from the middle scope. ■
 
-## 14.4.2 String and Pattern Manipulation
+14.4.2 String and Pattern Manipulation
 
 When we ﬁrst considered regular expressions, in Section 2.1.1, we noted that many scripting languages and related tools employ extended versions of the no- tation. Some extensions are simply a matter of convenience. Others increase the expressive power of the notation, allowing us to generate (match) nonregular sets of strings. Still other extensions serve to tie the notation to other language fea- tures. We have already seen examples of extended regular expressions in sed (Fig- ure 14.1), awk (Figures 14.2 and 14.3), Perl (Figures 14.4 and 14.5), Python (Fig- ure 14.6), and Ruby (Figure 14.7). Many readers will also be familiar with grep, the stand-alone Unix pattern-matching tool (see Sidebar 14.8). While there are many different implementations of extended regular expres- sions (“REs” for short), with slightly different syntax, most fall into two main groups. The ﬁrst group includes awk, egrep (the most widely used of several different versions of grep), and the regex library for C. These implement REs as deﬁned in the POSIX standard [Int03b]. Languages in the second group follow the lead of Perl, which provides a large set of extensions, sometimes referred to as “advanced REs.” Perl-like advanced REs appear in PHP, Python, Ruby, JavaScript, Emacs Lisp, Java, and C#. They can also be found in third-party packages for C++ and other languages. A few tools, including sed, classic grep, and older Unix editors, provide so-called “basic” REs, less capable than those of egrep. In certain languages and tools—notably sed, awk, Perl, PHP, Ruby, and JavaScript—regular expressions are tightly integrated into the rest of the lan- guage, with special syntax and built-in operators. In these languages an RE is typ- ically delimited with slash characters, though other delimiters may be accepted in some cases (and Perl in fact provides slightly different semantics for a few alterna- tive delimiters). In most other languages, REs are expressed as ordinary character strings, and are manipulated by passing them to library routines. Over the next few pages we will consider POSIX and advanced REs in more detail. Following Perl, we will use slashes as delimiters. Our coverage will of necessity be incom- plete. The chapter on REs in the Perl book [CfWO12, Chap. 5] is over 100 pages long. The corresponding Unix man page totals some 40 pages.
 
@@ -4172,7 +4172,7 @@ prefix(now ) match(is) suffix( the time) ■
 
 * Describe the notion of capture in regular expressions.
 
-## 14.4.3 Data Types
+14.4.3 Data Types
 
 As we have seen, scripting languages don’t generally require (or even permit) the declaration of types for variables. Most perform extensive run-time checks to make sure that values are never used in inappropriate ways. Some languages (e.g., Scheme, Python, and Ruby) are relatively strict about this checking; the program- mer who wants to convert from one type to another must say so explicitly. If we EXAMPLE 14.59
 
@@ -4357,7 +4357,7 @@ Using wantarray to determine calling context wantarray. This returns true if the
 
 if ( something went wrong ) { return wantarray ? () : undef; } ■
 
-## 14.4.4 Object Orientation
+14.4.4 Object Orientation
 
 Though not an object-oriented language, Perl 5 has features that allow one to program in an object-oriented style.7 PHP and JavaScript have cleaner, more conventional-looking object-oriented features, but both allow the programmer to use a more traditional imperative style as well. Python and Ruby are explicitly and uniformly object-oriented. Perl uses a value model for variables; objects are always accessed via pointers. In PHP and JavaScript, a variable can hold either a value of a primitive type or a reference to an object of composite type. In contrast to Perl, however, these languages provide no way to speak of the reference itself, only the object to which it refers. Python and Ruby use a uniform reference model. Classes are themselves objects in Python and Ruby, much as they are in Small- talk. They are merely types in PHP, much as they are in C++, Java, or C#. Classes in Perl are simply an alternative way of looking at packages (namespaces). JavaScript, remarkably, has objects but no classes; its inheritance is based on a concept known as prototypes, initially introduced by the Self programming lan- guage.
 
@@ -4554,7 +4554,7 @@ lack of declarations, simple scoping rules, ﬂexible dynamic typing, easy acces
 
 ## 14.6 Exercises
 
-## 14.1 Does ﬁlename “globbing” provide the expressive power of standard regu- lar expressions? Explain.
+14.1 Does ﬁlename “globbing” provide the expressive power of standard regu- lar expressions? Explain.
 
 14.2 Write shell scripts to (a) Replace blanks with underscores in the names of all ﬁles in the current directory. (b) Rename every ﬁle in the current directory by prepending to its name a textual representation of its modiﬁcation date. (c) Find all eps ﬁles in the ﬁle hierarchy below the current directory, and create any corresponding pdf ﬁles that are missing or out of date. (d) Print the names of all ﬁles in the ﬁle hierarchy below the current di- rectory for which a given predicate evaluates to true. Your (quoted) predicate should be speciﬁed on the command line using the syntax of the Unix test command, with one or more at signs (@) standing in for the name of the candidate ﬁle.
 
@@ -4573,7 +4573,7 @@ lack of declarations, simple scoping rules, ﬂexible dynamic typing, easy acces
 
 14.9 Create a ﬁll-in web form that uses a JavaScript implementation of the Luhn formula (Exercise 4.10) to check for typos in credit card numbers. (But don’t use real credit card numbers; homework exercises don’t tend to be very secure!) 14.10 (a) Modify the code of Figure 14.15 (Example 14.35) so that it replaces the form with its output, as the CGI and PHP versions of Figures 14.11 and 14.14 do. (b) Modify the CGI and PHP scripts of Figures 14.11 and 14.14 (Exam- ples 14.30 and 14.34) so they appear to append their output to the bottom of the form, as the JavaScript version of Figure 14.15 does.
 
-## 14.11 Run the following program in Perl:
+14.11 Run the following program in Perl:
 
 ```
 sub foo {
@@ -4594,7 +4594,7 @@ You may be surprised by the output. Perl 5 allows named subroutines to nest, but
 
 14.12 Write a program that will map the web pages stored in the ﬁle hierarchy below the current directory. Your output should itself be a web page, con- taining the names of all directories and .html ﬁles, printed at levels of indentation corresponding to their level in the ﬁle hierarchy. Each .html ﬁle name should be a live link to its ﬁle. Use whatever language(s) seem most appropriate to the task.
 
-## 14.13 In Section 14.4.1 we claimed that nested blocks in Ruby were part of the named scope in which they appear. Verify this claim by running the fol- lowing Ruby script and explaining its output:
+14.13 In Section 14.4.1 we claimed that nested blocks in Ruby were part of the named scope in which they appear. Verify this claim by running the fol- lowing Ruby script and explaining its output:
 
 ```
 def foo(x)
@@ -4634,7 +4634,7 @@ print "exponent: ", $6, "\n";
 
 What purpose does this extra notation serve? Why might the code here be preferable to that of Example 14.57?
 
-## 14.17 Consider again the sed code of Figure 14.1. It is tempting to write the ﬁrst of the compound statements as follows (note the differences in the three substitution commands):
+14.17 Consider again the sed code of Figure 14.1. It is tempting to write the ﬁrst of the compound statements as follows (note the differences in the three substitution commands):
 
 ```
 /<[hH][123]>.*<\/[hH][123]>/ {
@@ -4660,7 +4660,7 @@ Explain why this doesn’t work. (Hint: Remember the difference between greedy a
 
 ## 14.7 Explorations
 
-## 14.22 Learn about TEX [Knu86] and LATEX [Lam94], the typesetting system used to create this book. Explore the ways in which its specialized target
+14.22 Learn about TEX [Knu86] and LATEX [Lam94], the typesetting system used to create this book. Explore the ways in which its specialized target
 
 domain—professional typesetting—inﬂuenced its design. Features you might wish to consider include dynamic scoping, the relatively impover- ished arithmetic and control-ﬂow facilities, and the use of macros as the fundamental control abstraction.
 
@@ -4676,7 +4676,7 @@ domain—professional typesetting—inﬂuenced its design. Features you might w
 
 14.28 Investigate the details of RE support in PHP, Tcl, Python, Ruby, JavaScript, Emacs Lisp, Java, and C#. Write a paper that documents, as concisely as possible, the differences among these, using Perl as a reference for com- parison.
 
-## 14.29 Do a web search for Perl 6, a community-based effort that has been in the works for many years. Write a report that summarizes the changes with
+14.29 Do a web search for Perl 6, a community-based effort that has been in the works for many years. Write a report that summarizes the changes with
 
 respect to Perl 5. What do you think of these changes? If you were in charge of the revision, what would you do differently?
 

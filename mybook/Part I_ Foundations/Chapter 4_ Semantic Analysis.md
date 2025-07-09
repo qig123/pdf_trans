@@ -6,7 +6,7 @@ In Chapter 2 we considered the topic of programming language syntax. In the curr
 
 there will inevitably be cases in which an error will always occur, but the compiler cannot tell, and must delay the error message until run time; there will also be cases in which an error can never occur, but the compiler cannot tell, and must incur the cost of unnecessary run-time checks. Both semantic analysis and intermediate code generation can be described in terms of annotation, or decoration of a parse tree or syntax tree. The annotations themselves are known as attributes. Numerous examples of static and dynamic semantic rules will appear in subsequent chapters. In this current chapter we focus primarily on the mechanisms a compiler uses to enforce the static rules. We will consider intermediate code generation (including the generation of code for dynamic semantic checks) in Chapter 15. In Section 4.1 we consider the role of the semantic analyzer in more detail, considering both the rules it needs to enforce and its relationship to other phases of compilation. Most of the rest of the chapter is then devoted to the subject of attribute grammars. Attribute grammars provide a formal framework for the decoration of a tree. This framework is a useful conceptual tool even in compilers that do not build a parse tree or syntax tree as an explicit data structure. We introduce the notion of an attribute grammar in Section 4.2. We then consider various ways in which such grammars can be applied in practice. Section 4.3 discusses the issue of attribute ﬂow, which constrains the order(s) in which nodes of a tree can be decorated. In practice, most compilers require decoration of the parse tree (or the evaluation of attributes that would reside in a parse tree if there were one) to occur in the process of an LL or LR parse. Section 4.4 presents action routines as an ad hoc mechanism for such “on-the-ﬂy” evaluation. In Section 4.5 (mostly on the companion site) we consider the management of space for parse tree attributes. Because they have to reﬂect the structure of the CFG, parse trees tend to be very complicated (recall the example in Figure 1.5). Once parsing is complete, we typically want to replace the parse tree with a syntax tree that reﬂects the input program in a more straightforward way (Figure 1.6). One particularly common compiler organization uses action routines during parsing solely for the purpose of constructing the syntax tree. The syntax tree is then decorated during a sepa- rate traversal, which can be formalized, if desired, with a separate attribute gram- mar. We consider the decoration of syntax trees in Section 4.6.
 
-## 4.1 The Role of the Semantic Analyzer
+4.1 The Role of the Semantic Analyzer
 
 Programming languages vary dramatically in their choice of semantic rules. Lisp dialects, for example, allow “mixed-mode” arithmetic on arbitrary numeric types, which they will automatically promote from integer to rational to ﬂoating-point or “bignum” (extended) precision, as required to maintain precision. Ada, by contract, assigns a speciﬁc type to every numeric variable, and requires the pro- grammer to convert among these explicitly when combining them in expressions.
 
@@ -50,7 +50,7 @@ In general, compile-time algorithms that predict run-time behavior are known as 
 
 compilers perform extensive static analysis in an attempt to eliminate the need for dynamic checks on array subscripts, variant record tags, or potentially dangling pointers (to be discussed in Chapter 8). If we think of the omission of unnecessary dynamic checks as a performance optimization, it is natural to look for other ways in which static analysis may enable code improvement. We will consider this topic in more detail in Chap- ter 17. Examples include alias analysis, which determines when values can be safely cached in registers, computed “out of order,” or accessed by concurrent threads; escape analysis, which determines when all references to a value will be conﬁned to a given context, allowing the value to be allocated on the stack in- stead of the heap, or to be accessed without locks; and subtype analysis, which determines when a variable in an object-oriented language is guaranteed to have a certain subtype, so that its methods can be called without dynamic dispatch. An optimization is said to be unsafe if it may lead to incorrect code in certain programs. It is said to be speculative if it usually improves performance, but may degrade it in certain cases. A compiler is said to be conservative if it applies op- timizations only when it can guarantee that they will be both safe and effective. By contrast, an optimistic compiler may make liberal use of speculative optimiza- tions. It may also pursue unsafe optimizations by generating two versions of the code, with a dynamic check that chooses between them based on information not available at compile time. Examples of speculative optimization include nonbind- ing prefetches, which try to bring data into the cache before they are needed, and trace scheduling, which rearranges code in hopes of improving the performance of the processor pipeline and the instruction cache. To eliminate dynamic checks, language designers may choose to tighten se- mantic rules, banning programs for which conservative analysis fails. The ML type system, for example (Section 7.2.4), avoids the dynamic type checks of Lisp, but disallows certain useful programming idioms that Lisp supports. Similarly, the deﬁnite assignment rules of Java and C# (Section 6.1.3) allow the compiler to ensure that a variable is always given a value before it is used in an expression, but disallow certain programs that are legal (and correct) in C.
 
-## 4.2 Attribute Grammars
+4.2 Attribute Grammars
 
 In Chapter 2 we learned how to use a context-free grammar to specify the syntax of a programming language. Here, for example, is an LR (bottom-up) grammar EXAMPLE 4.3
 
@@ -240,7 +240,7 @@ binary operator, respectively, and pointers to the supplied operand(s). Figures 
   What does it mean for an attribute grammar to be S-attributed? L-attributed?
   Noncircular? What is the signiﬁcance of these grammar classes?
 
-## 4.4 Action Routines
+4.4 Action Routines
 
 Just as there are automatic tools that will construct a parser for a given context- free grammar, there are automatic tools that will construct a semantic analyzer (attribute evaluator) for a given attribute grammar. Attribute evaluator gen-
 
@@ -290,7 +290,7 @@ In an LR parser generator, one cannot in general embed action routines at arbi- 
 
 side in which the production being parsed can be identiﬁed unambiguously (this is known as the trailing part; the ambiguous preﬁx is the left corner). If the at- tribute ﬂow of the action routines is strictly bottom-up (as it is in an S-attributed attribute grammar), then execution at the end of right-hand sides is all that is needed. The attribute grammars of Figures 4.1 and 4.5, in fact, are essentially identical to the action routine versions. If the action routines are responsible for a signiﬁcant part of semantic analysis, however (as opposed to simply building a syntax tree), then they will often need contextual information in order to do their job. To obtain and use this information in an LR parse, they will need some (necessarily limited) access to inherited attributes or to information outside the current production. We consider this issue further in Section C 4.5.1.
 
-## 4.5 Space Management for Attributes
+4.5 Space Management for Attributes
 
 Any attribute evaluation method requires space to hold the attributes of the gram- mar symbols. If we are building an explicit parse tree, then the obvious approach is to store attributes in the nodes of the tree themselves. If we are not building a parse tree, then we need to ﬁnd a way to keep track of the attributes for the sym- bols we have seen (or predicted) but not yet ﬁnished parsing. The details differ in bottom-up and top-down parsers. For a bottom-up parser with an S-attributed grammar, the obvious approach is to maintain an attribute stack that directly mirrors the parse stack: next to every state number on the parse stack is an attribute record for the symbol we shifted when we entered that state. Entries in the attribute stack are pushed and popped automatically by the parser driver; space managementis not an issue for the writer of action routines. Complications arise if we try to achieve the effect of inherited attributes, but these can be accommodated within the basic attribute-stack frame- work. For a top-down parser with an L-attributed grammar, we have two principal options. The ﬁrst option is automatic, but more complex than for bottom-up grammars. It still uses an attribute stack, but one that does not mirror the parse stack. The second option has lower space overhead, and saves time by “short- cutting” copy rules, but requires action routines to allocate and deallocate space for attributes explicitly. In both families of parsers, it is common for some of the contextual infor- mation for action routines to be kept in global variables. The symbol table in particular is usually global. Rather than pass its full contents through attributes from one production to the next, we pass an indication of the currently active scope. Lookups in the global table then use this scope information to obtain the right referencing environment.
 
@@ -301,7 +301,7 @@ IN MORE DEPTH
 
 We consider attribute space management in more detail on the companion site. Using bottom-up and top-down grammars for arithmetic expressions, we illus- trate automatic management for both bottom-up and top-down parsers, as well as the ad hoc option for top-down parsers.
 
-## 4.6 Tree Grammars and Syntax Tree Decoration
+4.6 Tree Grammars and Syntax Tree Decoration
 
 In our discussion so far we have used attribute grammars solely to decorate parse trees. As we mentioned in the chapter introduction, attribute grammars can also be used to decorate syntax trees. If our compiler uses action routines simply to build a syntax tree, then the bulk of semantic analysis and intermediate code gen- eration will use the syntax tree as base. Figure 4.11 contains a bottom-up CFG for a calculator language with types and EXAMPLE 4.14
 
@@ -405,7 +405,7 @@ parse tree, such that R.ok = true if and only if the string corresponding to the
 
 4.2 Modify the grammar of Figure 2.25 so that it accepts only programs that contain at least one write statement. Make the same change in the solution to Exercise 2.17. Based on your experience, what do you think of the idea of using the CFG to enforce the rule that every function in C must contain at least one return statement?
 
-## 4.3 Give two examples of reasonable semantic rules that cannot be checked at reasonable cost, either statically or by compiler-generated code at run time.
+4.3 Give two examples of reasonable semantic rules that cannot be checked at reasonable cost, either statically or by compiler-generated code at run time.
 
 4.4 Write an S-attributed attribute grammar, based on the CFG of Example 4.7, that accumulates the value of the overall expression into the root of the tree. You will need to use dynamic memory allocation so that individual attributes can hold an arbitrary amount of information.
 
@@ -415,9 +415,9 @@ parse tree, such that R.ok = true if and only if the string corresponding to the
 
 4.7 Suppose that we want to translate constant expressions into the postﬁx, or “reverse Polish” notation of logician Jan Łukasiewicz. Postﬁx notation does not require parentheses. It appears in stack-based languages such as Postscript, Forth, and the P-code and Java bytecode intermediate forms mentioned in Section 1.4. It also served, historically, as the input language of certain hand-held calculators made by Hewlett-Packard. When given a number, a postﬁx calculator would push the number onto an internal stack. When given an operator, it would pop the top two numbers from the stack, apply the operator, and push the result. The display would show the value at the top of the stack. To compute 2 × (15 −3)/4, for example, one would push 2 E 1 5 E 3 E - * 4 E / (here E is the “enter” key, used to end the string of digits that constitute a number). Using the underlying CFG of Figure 4.1, write an attribute grammar that will associate with the root of the parse tree a sequence of postﬁx calculator button pushes, seq, that will compute the arithmetic value of the tokens derived from that symbol. You may assume the existence of a function buttons(c) that returns a sequence of button pushes (ending with E on a postﬁx calculator) for the constant c. You may also assume the existence of a concatenation function for sequences of button pushes.
 
-## 4.8 Repeat the previous exercise using the underlying CFG of Figure 4.3.
+4.8 Repeat the previous exercise using the underlying CFG of Figure 4.3.
 
-## 4.9 Consider the following grammar for reverse Polish arithmetic expressions:
+4.9 Consider the following grammar for reverse Polish arithmetic expressions:
 
 E −→E E op | id
 
@@ -443,7 +443,7 @@ Augment this grammar with attribute rules that will accumulate the value of the 
 
 4.12 One potential criticism of the obvious solution to the previous problem is that the values in internal nodes of the parse tree do not reﬂect the value, in context, of the fringe below them. Create an alternative solution that addresses this criticism. More speciﬁcally, create your grammar in such a way that the val of an internal node is the sum of the vals of its chil- dren. Illustrate your solution by drawing the parse tree and attribute ﬂow for 12.34. (Hint: You will probably want a different underlying CFG, and non-L-attributed ﬂow.)
 
-## 4.13 Consider the following attribute grammar for variable declarations, based on the CFG of Exercise 2.11:
+4.13 Consider the following attribute grammar for variable declarations, based on the CFG of Exercise 2.11:
 
 decl −→ID decl tail  decl.t := decl tail.t  decl tail.in tab := insert (decl.in tab, ID.n, decl tail.t)  decl.out tab := decl tail.out tab decl tail −→, decl  decl tail.t := decl.t  decl.in tab := decl tail.in tab  decl tail.out tab := decl.out tab decl tail −→: ID ;  decl tail.t := ID.n  decl tail.out tab := decl tail.in tab
 
@@ -451,15 +451,15 @@ Show a parse tree for the string A, B : C;. Then, using arrows and textual descr
 
 4.14 A CFG-based attribute evaluator capable of handling non-L-attributed at- tribute ﬂow needs to take a parse tree as input. Explain how to build a parse tree automatically during a top-down or bottom-up parse (i.e., without ex- plicit action routines).
 
-## 4.15 Building on Example 4.13, modify the remainder of the recursive descent parser of Figure 2.17 to build syntax trees for programs in the calculator language.
+4.15 Building on Example 4.13, modify the remainder of the recursive descent parser of Figure 2.17 to build syntax trees for programs in the calculator language.
 
 4.16 Write an LL(1) grammar with action routines and automatic attribute space management that generates the reverse Polish translation described in Ex- ercise 4.7. 4.17 (a) Write a context-free grammar for polynomials in x. Add semantic func- tions to produce an attribute grammar that will accumulate the poly- nomial’s derivative (as a string) in a synthesized attribute of the root of the parse tree. (b) Replace your semantic functions with action routines that can be eval- uated during parsing. 4.18 (a) Write a context-free grammar for case or switch statements in the style of Pascal or C. Add semantic functions to ensure that the same label does not appear on two different arms of the construct. (b) Replace your semantic functions with action routines that can be eval- uated during parsing.
 
-## 4.19 Write an algorithm to determine whether the rules of an arbitrary attribute grammar are noncircular. (Your algorithm will require exponential time in the worst case [JOR75].)
+4.19 Write an algorithm to determine whether the rules of an arbitrary attribute grammar are noncircular. (Your algorithm will require exponential time in the worst case [JOR75].)
 
 4.20 Rewrite the attribute grammar of Figure 4.14 in the form of an ad hoc tree traversal consisting of mutually recursive subroutines in your favorite pro- gramming language. Keep the symbol table in a global variable, rather than passing it through arguments.
 
-## 4.21 Write an attribute grammar based on the CFG of Figure 4.11 that will build a syntax tree with the structure described in Figure 4.14.
+4.21 Write an attribute grammar based on the CFG of Figure 4.11 that will build a syntax tree with the structure described in Figure 4.14.
 
 4.22 Augment the attribute grammar of Figure 4.5, Figure 4.6, or Exercise 4.21 to initialize a synthesized attribute in every syntax tree node that indicates the location (line and column) at which the corresponding construct appears in the source program. You may assume that the scanner initializes the location of every token.
 
@@ -467,7 +467,7 @@ Show a parse tree for the string A, B : C;. Then, using arrows and textual descr
 
 so. Be sure to think carefully about your coercion rules. In the expression my_int + my_real, for example, how will you know whether to coerce the integer to be a real, or to coerce the real to be an integer?
 
-## 4.24 Explain the need for the A : B notation on the left-hand sides of produc- tions in a tree grammar. Why isn’t similar notation required for context-free grammars?
+4.24 Explain the need for the A : B notation on the left-hand sides of produc- tions in a tree grammar. Why isn’t similar notation required for context-free grammars?
 
 4.25 A potential objection to the tree attribute grammar of Example 4.17 is that it repeatedly copies the entire symbol table from one node to another. In this particular tiny language, it is easy to see that the referencing environment never shrinks: the symbol table changes only with the addition of new iden- tiﬁers. Exploiting this observation, show how to modify the pseudocode of Figure 4.14 so that it copies only pointers, rather than the entire symbol table.
 

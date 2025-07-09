@@ -4,11 +4,11 @@
 
 Chapter 7 introduced the notion of types as a way to organize the many values and objects manipulated by computer programs. It also introduced ter- minology for both built-in and composite types. As we noted in Section 7.1.4, composite types are formed by joining together one or more simpler types using a type constructor. From a denotational perspective, the constructors can be mod- eled as operations on sets, with each set representing one of the simpler types. In the current chapter we will survey the most important type constructors: records, arrays, strings, sets, pointers, lists, and ﬁles. In the section on records we will also consider both variants (unions) and tuples. In the section on point- ers, we will take a more detailed look at the value and reference models of vari- ables introduced in Section 6.1.2, and the heap management issues introduced in Section 3.2. The section on ﬁles (mostly on the companion site) will include a discussion of input and output mechanisms.
 
-## 8.1 Records (Structures)
+8.1 Records (Structures)
 
 Record types allow related data of heterogeneous types to be stored and manipu- lated together. Originally introduced by Cobol, records also appeared in Algol 68, which called them structures, and introduced the keyword struct. Many mod- ern languages, including C and its descendants, employ the Algol terminology. Fortran 90 simply calls its records “types”: they are the only form of programmer- deﬁned type other than arrays, which have their own special syntax. Structures in C++ are deﬁned as a special form of class (one in which members are globally visible by default). Java has no distinguished notion of struct; its program- mers use classes in all cases. C# and Swift use a reference model for variables of class types, and a value model for variables of struct types. In these languages, structs do not support inheritance. For the sake of simplicity, we will use the term “record” in most of our discussion to refer to the relevant construct in all these languages.
 
-## 8.1.1 Syntax and Operations
+8.1.1 Syntax and Operations
 
 In C, a simple record might be deﬁned as follows: EXAMPLE 8.1
 
@@ -37,7 +37,7 @@ yielded.atomic_number in C; atomic_number of element_yielded of mal- achite in C
 
 OCaml records and tuples specifying that the order of record ﬁelds is insigniﬁcant. The OCaml record value {name = "Cu"; atomic_number = 29; atomic_weight = 63.546; metallic = true} is the same as the value {atomic_number = 29; name = "Cu"; atomic_ weight = 63.546; metallic = true}—they will test true for equality. OCaml’s tuples, which we mentioned brieﬂy in Section 7.2.4, and will visit again in Section 11.4.3, resemble records whose ﬁelds are ordered, but unnamed. In SML, the other leading ML dialect, the resemblance is actually equivalence: tuples are deﬁned as syntactic sugar for records whose ﬁeld names are small inte- gers. The values ("Cu", 29), {1 = "Cu", 2 = 29}, and {2 = 29, 1 = "Cu"} will all test true for equality in SML. ■
 
-## 8.1.2 Memory Layout and Its Impact
+8.1.2 Memory Layout and Its Impact
 
 The ﬁelds of a record are usually stored in adjacent locations in memory. In its symbol table, the compiler keeps track of the offset of each ﬁeld within each record type. When it needs to access a ﬁeld, the compiler will often generate a load or store instruction with displacement addressing. For a local object, the base register is typically the frame pointer; the displacement is then the sum of the record’s offset from the register and the ﬁeld’s offset within the record. A likely layout for our element type on a 32-bit machine appears in Figure 8.1. EXAMPLE 8.5
 
@@ -108,7 +108,7 @@ DESIGN & IMPLEMENTATION
 
 that mimics the organization of memory-mapped control registers for a partic- ular Ethernet device. C and C++, which are designed in large part for systems programs, guarantee that the ﬁelds of a struct will be allocated in the order declared. The ﬁrst ﬁeld is guaranteed to have the coarsest alignment required by the hardware for any type (generally a four- or eight-byte boundary). Sub- sequent ﬁelds have the natural alignment for their type. Fortran 90 allows the programmer to specify that ﬁelds must not be reordered; in the absence of such a speciﬁcation the compiler can choose its own order. To accommodate systems programs, Ada, C, and C++ all allow the programmer to specify exactly how many bits to devote to each ﬁeld of a record. Where a “packed” directive is es- sentially a nonbinding indication of the programmer’s priorities, bit lengths on ﬁeld declarations are a binding speciﬁcation of assembly-level layout.
 
-## 8.1.3 Variant Records (Unions)
+8.1.3 Variant Records (Unions)
 
 Programming languages of the 1960s and 1970s were designed in an era of se- vere memory constraints. Many allowed the programmer to specify that certain variables (presumably ones that would never be used at the same time) should be allocated “on top of” one another, sharing the same bytes in memory. C’s syntax, EXAMPLE 8.11
 
@@ -153,11 +153,11 @@ We discuss unions and variant records in more detail on the companion site. Topi
   7.
   Brieﬂy describe two purposes for unions/variant records.
 
-## 8.2 Arrays
+8.2 Arrays
 
 Arrays are the most common and important composite data types. They have been a fundamental part of almost every high-level language, beginning with For- tran I. Unlike records, which group related ﬁelds of disparate types, arrays are usually homogeneous. Semantically, they can be thought of as a mapping from an index type to a component or element type. Some languages (e.g., Fortran) re- quire that the index type be integer; many languages allow it to be any discrete type. Some languages (e.g., Fortran 77) require that the element type of an array be scalar. Most (including Fortran 90) allow any element type. Some languages (notably scripting languages, but also some newer imperative languages, including Go and Swift) allow nondiscrete index types. The resulting associative arrays must generally be implemented with hash tables or search trees; we consider them in Section 14.4.3. Associative arrays also resemble the dictio- nary or map types supported by the standard libraries of many object-oriented languages. In C++, operator overloading allows these types to use conventional array-like syntax. For the purposes of this chapter, we will assume that array indices are discrete. This admits a (much more efﬁcient) contiguous allocation scheme, to be described in Section 8.2.3. We will also assume that arrays are dense—that a large fraction of their elements are not equal to zero or some other default value. The alternative—sparse arrays—arises in many important scien- tiﬁc problems. For these, libraries (or, in rare cases, the language itself) may support an alternative implementation that explicitly enumerates only the non- default values.
 
-## 8.2.1 Syntax and Operations
+8.2.1 Syntax and Operations
 
 Most languages refer to an element of an array by appending a subscript—usually delimited by square brackets—to the name of the array: A[3]. A few languages— notably Fortran and Ada—use parentheses instead: A(3). In some languages one declares an array by appending subscript notation to EXAMPLE 8.13
 
@@ -262,7 +262,7 @@ Array slice operations tensive facilities for slicing, as do Go and many scripti
 
 operands of an array operator need only have the same element type and shape. In particular, slices of the same shape can be intermixed in array operations, even if the arrays from which they were sliced have very different shapes. Any of the built-in arithmetic operators will take arrays as operands; the result is an array, of the same shape as the operands, whose elements are the result of applying the operator to corresponding elements. As a simple example, A + B is an array each of whose elements is the sum of the corresponding elements of A and B. Fortran 90 also provides a huge collection of intrinsic, or built-in functions. More than 60 of these (including logic and bit manipulation, trigonometry, logs and exponents, type conversion, and string manipulation) are deﬁned on scalars, but will also perform their operation element-wise if passed arrays as arguments. The function tan(A), for example, returns an array consisting of the tangents of the elements of A. Many additional intrinsic functions are deﬁned solely on arrays. These include searching and summarization, transposition, and reshaping and subscript permutation. Fortran 90 draws signiﬁcant inspiration from APL, an array manipulation lan- guage developed by Iverson and others in the early to mid-1960s.2 APL was de- signed primarily as a terse mathematical notation for array manipulations. It employs an enormous character set that made it difﬁcult to use with traditional keyboards and textual displays. Its variables are all arrays, and many of the spe- cial characters denote array operations. APL implementations are designed for interpreted, interactive use. They are best suited to “quick and dirty” solution of mathematical problems. The combination of very powerful operators with very terse notation makes APL programs notoriously difﬁcult to read and understand. J, a successor to APL, uses a conventional character set.
 
-## 8.2.2 Dimensions, Bounds, and Allocation
+8.2.2 Dimensions, Bounds, and Allocation
 
 In all of the examples in the previous subsection, the shape of the array (including bounds) was speciﬁed in the declaration. For such static shape arrays, storage can be managed in the usual way: static allocation for arrays whose lifetime is the entire program; stack allocation for arrays whose lifetime is an invocation of a subroutine; heap allocation for dynamically allocated arrays with more general lifetime. Storage management is more complex for arrays whose shape is not known until elaboration time, or whose shape may change during execution. For these the compiler must arrange not only to allocate space, but also to make shape information available at run time (without such information, indexing would not be possible). Some dynamically typed languages allow run-time binding of
 
@@ -327,7 +327,7 @@ s = s + " but sweet";
 
 Here the declaration String s introduces a string variable, which we initialize with a reference to the constant string "short". In the subsequent assignment, + creates a new string containing the concatenation of the old s and the constant " but sweet"; s is then set to refer to this new string, rather than the old. Note that arrays of characters are not the same as strings in Java and C#: the length of an array is ﬁxed at elaboration time, and its elements can be modiﬁed in place. ■ Dynamically resizable arrays (other than strings) appear in APL, Common Lisp, and the various scripting languages. They are also supported by the vector, Vector, and ArrayList classes of the C++, Java, and C# libraries, respectively. In contrast to the allocate-able arrays of Fortran 90, these arrays can change their shape—in particular, can grow—while retaining their current content. In many cases, increasing the size will require that the run-time system allocate a larger block, copy any data that are to be retained from the old block to the new, and then deallocate the old. If the number of dimensions of a fully dynamic array is statically known, the dope vector can be kept, together with a pointer to the data, in the stack frame of the subroutine in which the array was declared. If the number of dimensions can change, the dope vector must generally be placed at the beginning of the heap block instead. In the absence of garbage collection, the compiler must arrange to reclaim the space occupied by fully dynamic arrays when control returns from the subrou- tine in which they were declared. Space for stack-allocated arrays is of course reclaimed automatically by popping the stack.
 
-## 8.2.3 Memory Layout
+8.2.3 Memory Layout
 
 Arrays in most language implementations are stored in contiguous locations in memory. In a one-dimensional array, the second element of the array is stored immediately after the ﬁrst; the third is stored immediately after the second, and so forth. For arrays of records, alignment constraints may result in small holes between consecutive elements. For multidimensional arrays, it still makes sense to put the ﬁrst element of the array in the array’s ﬁrst memory location. But which element comes next? There are two reasonable answers, called row-major and column-major order. In EXAMPLE 8.22
 
@@ -443,7 +443,7 @@ Indexing a row-pointer array forward. Using our three-dimensional array A as an 
 
 out the compiler uses? Why do most language designers consider row-major layout to be better? 16. How much of the work of computing the address of an element of an array can be performed at compile time? How much must be performed at run time?
 
-## 8.3 Strings
+8.3 Strings
 
 In some languages, a string is simply an array of characters. In other languages, strings have special status, with operations that are not available for arrays of other sorts. Scripting languages like Perl, Python, and Ruby have extensive suites of built-in string operators and functions, including sophisticated pat- tern matching facilities based on regular expressions. Some special-purpose languages—Icon, in particular—provide even more sophisticated mechanisms, including general-purpose generators and backtracking search. We will consider the string and pattern-matching facilities of scripting languages in more detail in Section 14.4.2. Icon was discussed in Section C 6.5.4. In the remainder of the current section we focus on the role of strings in more traditional languages. Almost all programming languages allow literal strings to be speciﬁed as a se- quence of characters, usually enclosed in single or double quote marks. Most lan- guages distinguish between literal characters (often delimited with single quotes) and literal strings (often delimited with double quotes). A few languages make no such distinction, deﬁning a character as simply a string of length one. Most lan- guages also provide escape sequences that allow nonprinting characters and quote marks to appear inside literal strings. C and C++ provide a very rich set of escape sequences. An arbitrary charac- EXAMPLE 8.29
 
@@ -453,7 +453,7 @@ one-byte elements, and never contain references to anything else makes dynamic- 
 
 char* assignment in C on the other hand, provides only the ability to create a pointer to a string literal. Because of C’s uniﬁcation of arrays and pointers, even assignment is not sup- ported. Given the declaration char *s, the statement s = "abc" makes s point to the constant "abc" in static storage. If s is declared as an array, rather than a pointer (char s[4]), then the statement will trigger an error message from the compiler. To assign one array into another in C, the program must copy the characters individually. ■ Other languages allow the length of a string-valued variable to change over its lifetime, requiring that the variable be implemented as a block or chain of blocks in the heap. ML and Lisp provide strings as a built-in type. C++, Java, and C# provide them as predeﬁned classes of object, in the formal, object-oriented sense. In all these languages a string variable is a reference to a string. Assigning a new value to such a variable makes it refer to a different object—each such object is immutable. Concatenation and other string operators implicitly create new objects. The space used by objects that are no longer reachable from any variable is reclaimed automatically.
 
-## 8.4 Sets
+8.4 Sets
 
 A programming language set is an unordered collection of an arbitrary number of distinct values of a common type. Sets were introduced by Pascal, and have been supported by many subsequent languages. The type from which elements of a set are drawn is known as the base or universe type. Pascal sets were restricted EXAMPLE 8.31
 
@@ -478,13 +478,13 @@ if my_set[j] { ...
 
 If M is a mapping from type D to type R in Go, and if k ∈D is not mapped to anything in R, the expression M[k] will return the “zero value” of type R. For Booleans, the zero value happens to be false, so the test in the last line of our example will return false if j is not in my_set. Deleting a no-longer-present element is preferable to mapping it explicitly to false, because deletion reclaims the space in the underlying hash table; mapping to false does not. ■
 
-## 8.5 Pointers and Recursive Types
+8.5 Pointers and Recursive Types
 
 A recursive type is one whose objects may contain one or more references to other objects of the type. Most recursive types are records, since they need to contain something in addition to the reference, implying the existence of heterogeneous ﬁelds. Recursive types are used to build a wide variety of “linked” data structures, including lists and trees. In languages that use a reference model of variables, it is easy for a record of type foo to include a reference to another record of type foo: every variable (and hence every record ﬁeld) is a reference anyway. In languages that use a value model of variables, recursive types require the notion of a pointer: a variable (or ﬁeld) whose value is a reference to some object. Pointers were ﬁrst introduced in PL/I.
 
 In some languages (e.g., Pascal, Modula-3, and Ada 83), pointers were re- stricted to point only to objects in the heap. The only way to create a new pointer value (without using variant records or casts to bypass the type system) was to call a built-in function that allocated a new object in the heap and returned a pointer to it. In other languages, both old and new, one can create a pointer to a nonheap object by using an “address of” operator. We will examine pointer operations and the ramiﬁcations of the reference and value models in more detail in the ﬁrst subsection below. In any language that permits new objects to be allocated from the heap, the question arises: how and when is storage reclaimed for objects that are no longer needed? In short-lived programs it may be acceptable simply to leave the storage unused, but in most cases unused space must be reclaimed, to make room for other things. A program that fails to reclaim the space for objects that are no longer needed is said to “leak memory.” If such a program runs for an extended period of time, it may run out of space and crash. Some languages, including C, C++, and Rust, require the programmer to re- claim space explicitly. Other languages, including Java, C#, Scala, Go, and all the functional and scripting languages, require the language implementation to re- claim unused objects automatically. Explicit storage reclamation simpliﬁes the language implementation, but raises the possibility that the programmer will forget to reclaim objects that are no longer live (thereby leaking memory), or will accidentally reclaim objects that are still in use (thereby creating dangling references). Automatic storage reclamation (otherwise known as garbage collec- tion) dramatically simpliﬁes the programmer’s task, but imposes certain run- time costs, and raises the question of how the language implementation is to distinguish garbage from active objects. We will discuss dangling references and garbage collection further in Sections 8.5.2 and 8.5.3, respectively.
 
-## 8.5.1 Syntax and Operations
+8.5.1 Syntax and Operations
 
 Operations on pointers include allocation and deallocation of objects in the heap, dereferencing of pointers to access the objects to which they point, and assign-
 
@@ -744,7 +744,7 @@ void f(int len) { int A[len]; /* sizeof(A) == len * sizeof(int) */ ■
 * Under what circumstances must the bounds of a C array be speciﬁed in its
   declaration?
 
-## 8.5.2 Dangling References
+8.5.2 Dangling References
 
 When a heap-allocated object is no longer live, a long-running program needs to reclaim the object’s space. Stack objects are reclaimed automatically as part of the subroutine calling sequence. How are heap objects reclaimed? There are two alternatives. Languages like C, C++, and Rust require the programmer to EXAMPLE 8.49
 
@@ -776,7 +776,7 @@ IN MORE DEPTH
 
 On the companion site we consider two mechanisms that are sometimes used to catch dangling references at run time. Tombstones introduce an extra level of indirection on every pointer access. When an object is reclaimed, the indirection word (tombstone) is marked in a way that invalidates future references to the object. Locks and keys add a word to every pointer and to every object in the heap; these words must match for the pointer to be valid. Tombstones can be used in languages that permit pointers to nonheap objects, but they introduce the secondary problem of reclaiming the tombstones themselves. Locks and keys are somewhat simpler, but they work only for objects in the heap.
 
-## 8.5.3 Garbage Collection
+8.5.3 Garbage Collection
 
 Explicit reclamation of heap objects is a serious burden on the programmer and a major source of bugs (memory leaks and dangling references). The code required to keep track of object lifetimes makes programs more difﬁcult to design, imple- ment, and maintain. An attractive alternative is to have the language implemen- tation notice when objects are no longer useful and reclaim them automatically.
 
@@ -871,7 +871,7 @@ Conservative Collection Language implementors have traditionally assumed that au
 * What are the advantages and disadvantages of allowing pointers to refer to
   objects that do not lie in the heap?
 
-## 8.6 Lists
+8.6 Lists
 
 A list is deﬁned recursively as either the empty list or a pair consisting of an initial object (which may be either a list or an atom) and another (shorter) list. Lists are ideally suited to programming in functional and logic languages, which do most of their work via recursion and higher-order functions (to be described in Section 11.6). Lists can also be used in imperative programs. They are supported by built- in type constructors in a few traditional compiled languages (e.g., Clu) and in most modern scripting languages. They are also commonly supported by library classes in object-oriented languages, and programmers can build their own in any language with records and pointers. Since many of the standard list operations tend to generate garbage, lists tend to work best in a language with automatic garbage collection. One key aspect of lists is very different in the two main functional language families. Lists in ML are homogeneous: every element of the list must have the same type. Lisp lists, by contrast, are heterogeneous: any object may be placed in a list, so long as it is never used in an inconsistent fashion.9 These different EXAMPLE 8.54
 
@@ -917,7 +917,7 @@ All of these are meant to capture the mathematical
 
 We could of course create an equivalent list with a series of appropriate function calls. The brevity of the list comprehension syntax, however, can sometimes lead to remarkably elegant programs (see, e.g., Exercise 8.22). ■
 
-## 8.7 Files and Input/Output
+8.7 Files and Input/Output
 
 Input/output (I/O) facilities allow a program to communicate with the outside world. In discussing this communication, it is customary to distinguish between interactive I/O and I/O with ﬁles. Interactive I/O generally implies communica- tion with human users or physical devices, which work in parallel with the run- ning program, and whose input to the program may depend on earlier output from the program (e.g., prompts). Files generally refer to off-line storage imple- mented by the operating system. Files may be further categorized into those that are temporary and those that are persistent. Temporary ﬁles exist for the duration of a single program run; their purpose is to store information that is too large to ﬁt in the memory available to the program. Persistent ﬁles allow a program to read data that existed before the program began running, and to write data that will continue to exist after the program has ended. I/O is one of the most difﬁcult aspects of a language to design, and one that displays the least commonality from one language to the next. Some languages provide built-in file data types and special syntactic constructs for I/O. Others relegate I/O entirely to library packages, which export a (usually opaque) file type and a variety of input and output subroutines. The principal advantage of language integration is the ability to employ non-subroutine-call syntax, and to perform operations (e.g., type checking on subroutine calls with varying numbers of parameters) that may not otherwise be available to library routines. A purely library-based approach to I/O, on the other hand, may keep a substantial amount of “clutter” out of the language deﬁnition.
 
@@ -935,7 +935,7 @@ form, but may be converted to and from internal types during read and write oper
 * What are some of the tradeoffs between supporting I/O in the language
   proper versus supporting it in libraries?
 
-## 8.8 Summary and Concluding Remarks
+8.8 Summary and Concluding Remarks
 
 This section concludes the fourth of our six core chapters on language design (names [from Part I], control ﬂow, type systems, composite types, subroutines, and classes). In our survey of composite types, we spent the most time on records, arrays, and recursive types. Key issues for records include the syntax and seman- tics of variant records, whole-record operations, type safety, and the interaction of each of these with memory layout. Memory layout is also important for arrays, in which it interacts with binding time for shape; static, stack, and heap-based allocation strategies; efﬁcient array traversal in numeric applications; the inter- operability of pointers and arrays in C; and the available set of whole-array and slice-based operations. For recursive data types, much depends on the choice between the value and reference models of variables/names. Recursive types are a natural fallout of the reference model; with the value model they require the notion of a pointer: a variable whose value is a reference. The distinction between values and refer- ences is important from an implementation point of view: it would be wasteful to implement built-in types as references, so languages with a reference model generally implement built-in and user-deﬁned types differently. Java reﬂects this distinction in the language semantics, calling for a value model of built-in types and a reference model for objects of user-deﬁned class types. Recursive types are generally used to create linked data structures. In most cases these structures must be allocated from a heap. In some languages, the pro- grammer is responsible for deallocating heap objects that are no longer needed. In other languages, the language run-time system identiﬁes and reclaims such garbage automatically. Explicit deallocation is a burden on the programmer, and
 
@@ -943,7 +943,7 @@ leads to the problems of memory leaks and dangling references. While language im
 
 considered too expensive for production-quality imperative languages, garbage collection is now standard not only in functional and scripting languages, but in Ada, Java, C#, Scala, and Go, among others.
 
-## 8.9 Exercises
+8.9 Exercises
 
 8.1 Suppose we are compiling for a machine with 1-byte characters, 2-byte shorts, 4-byte integers, and 8-byte reals, and with alignment rules that re- quire the address of every primitive data element to be an even multiple of the element’s size. Suppose further that the compiler is not permitted to reorder ﬁelds. How much space will be consumed by the following array? Explain.
 
@@ -951,13 +951,13 @@ A : array [0..9] of record s : short c : char t : short d : char r : real i : in
 
 8.2 In Example 8.10 we suggested the possibility of sorting record ﬁelds by their alignment requirement, to minimize holes. In the example, we sorted smallest-alignment-ﬁrst. What would happen if we sorted longest- alignment-ﬁrst? Do you see any advantages to this scheme? Any disad- vantages? If the record as a whole must be an even multiple of the longest alignment, do the two approaches ever differ in total space required?
 
-## 8.3 Give Ada code to map from lowercase to uppercase letters, using (a) an array (b) a function
+8.3 Give Ada code to map from lowercase to uppercase letters, using (a) an array (b) a function
 
 Note the similarity of syntax: in both cases upper(‚a‚) is ‚A‚.
 
 8.4 In Section 8.2.2 we noted that in a language with dynamic arrays and a value model of variables, records could have ﬁelds whose size is not known at compile time. To accommodate these, we suggested using a dope vector for the record, to track the offsets of the ﬁelds. Suppose instead that we want to maintain a static offset for each ﬁeld. Can we devise an alternative strategy inspired by the stack frame layout of Figure 8.7, and divide each record into a ﬁxed-size part and a variable-size part? What problems would we need to address? (Hint: Consider nested records.)
 
-## 8.5 Explain how to extend Figure 8.7 to accommodate subroutine arguments that are passed by value, but whose shape is not known until the subroutine is called at run time.
+8.5 Explain how to extend Figure 8.7 to accommodate subroutine arguments that are passed by value, but whose shape is not known until the subroutine is called at run time.
 
 8.6 Explain how to obtain the effect of Fortran 90’s allocate statement for one-dimensional arrays using pointers in C. You will probably ﬁnd that your solution does not generalize to multidimensional arrays. Why not? If you are familiar with C++, show how to use its class facilities to solve the problem.
 
@@ -967,11 +967,11 @@ Note the similarity of syntax: in both cases upper(‚a‚) is ‚A‚.
 
 8.9 Continuing the previous exercise, suppose that A has row-pointer layout, and that i, j, and k are again available in registers. Show pseudo-assembler code to load A[i, j, k] into a register. Assuming that all memory loads are cache hits, how many cycles is your code likely to require on a modern pro- cessor?
 
-## 8.10 Repeat the preceding two exercises, modifying your code to include run- time checking of array subscript bounds.
+8.10 Repeat the preceding two exercises, modifying your code to include run- time checking of array subscript bounds.
 
 8.11 In Section 8.2.3 we discussed how to differentiate between the constant and variable portions of an array reference, in order to efﬁciently access the sub- parts of array and record objects. An alternative approach is to generate naive code and count on the compiler’s code improver to ﬁnd the constant portions, group them together, and calculate them at compile time. Discuss the advantages and disadvantages of each approach.
 
-## 8.12 Consider the following C declaration, compiled on a 64-bit x86 machine:
+8.12 Consider the following C declaration, compiled on a 64-bit x86 machine:
 
 ```
 struct {
@@ -996,7 +996,7 @@ Assume that these declarations are local to the current subroutine. Note the low
 
 8.14 Suppose A is a 10×10 array of (4-byte) integers, indexed from [0][0] through [9][9]. Suppose further that the address of A is currently in register r1, the value of integer i is currently in register r2, and the value of integer j is currently in register r3. Give pseudo-assembly language for a code sequence that will load the value of A[i][j] into register r1 (a) assuming that A is implemented using (row-major) contiguous allocation; (b) assuming that A is implemented using row pointers. Each line of your pseudocode should correspond to a single instruction on a typical modern machine. You may use as many registers as you need. You need not preserve the values in r1, r2, and r3. You may assume that i and j are in bounds, and that addresses are 4 bytes long. Which code sequence is likely to be faster? Why?
 
-## 8.15 Pointers and recursive type deﬁnitions complicate the algorithm for deter- mining structural equivalence of types. Consider, for example, the follow- ing deﬁnitions:
+8.15 Pointers and recursive type deﬁnitions complicate the algorithm for deter- mining structural equivalence of types. Consider, for example, the follow- ing deﬁnitions:
 
 type A = record x : pointer to B y : real
 
@@ -1004,7 +1004,7 @@ type B = record x : pointer to A y : real
 
 The simple deﬁnition of structural equivalence given in Section 7.2.1 (ex- pand the subparts recursively until all you have is a string of built-in types and type constructors; then compare them) does not work: we get an inﬁ- nite expansion (type A = record x : pointer to record x : pointer to record x : pointer to record . . . ). The obvious reinterpretation is to say two types A and B are equivalent if any sequence of ﬁeld selections, array subscripts, pointer dereferences, and other operations that takes one down into the structure of A, and that ends at a built-in type, always encounters the same ﬁeld names, and ends at the same built-in type when used to dive into the structure of B—and vice versa. Under this reinterpretation, A and B above have the same type. Give an algorithm based on this reinterpretation that could be used in a compiler to determine structural equivalence. (Hint: The fastest approach is due to J. Král [Krá73]. It is based on the algorithm used to ﬁnd the smallest deterministic ﬁnite automaton that accepts a given reg- ular language. This algorithm was outlined in Example 2.15; details can be found in any automata theory textbook [e.g., [HMU07]].)
 
-## 8.16 Explain the meaning of the following C declarations:
+8.16 Explain the meaning of the following C declarations:
 
 ```
 double *a[n];
@@ -1046,7 +1046,7 @@ Each of the functions a, b, and c contains a reference to the next:
 
 How might you address this circularity without giving up on reference counts?
 
-## 8.22 Here is a skeleton for the standard quicksort algorithm in Haskell:
+8.22 Here is a skeleton for the standard quicksort algorithm in Haskell:
 
 ```
 quicksort [] = []
@@ -1071,7 +1071,7 @@ The ++ operator denotes list concatenation (similar to @ in ML). The : operator 
 
 8.37 Experiment with the cost of garbage collection in your favorite language im- plementation. What kind of collector does it use? Can you create artiﬁcial programs for which it performs particularly well or poorly?
 
-## 8.38 Learn about weak references in Java. How do they interact with garbage collection? How do they compare to weak_ptr objects in C++? Describe several scenarios in which they may be useful.
+8.38 Learn about weak references in Java. How do they interact with garbage collection? How do they compare to weak_ptr objects in C++? Describe several scenarios in which they may be useful.
 
 8.39–8.41 In More Depth.
 

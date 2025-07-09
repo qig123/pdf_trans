@@ -28,7 +28,7 @@ In general, we use the word concurrent to characterize any system in which two o
 
 any given time, all but one of them is stopped at a well-known place. A concurrent system is parallel if more than one task can be physically active at once; this re- quires more than one processor. The distinction is purely an implementation and performance issue: from a semantic point of view, there is no difference between true parallelism and the “quasiparallelism” of a system that switches between tasks at unpredictable times. A parallel system is distributed if its processors are associ- ated with people or devices that are physically separated from one another in the real world. Under these deﬁnitions, “concurrent” applies to all three motivations above. “Parallel” applies to the second and third; “distributed” applies to only the third. We will focus in this chapter on concurrency and parallelism. Parallelism has become a pressing concern since 2005 or so, with the proliferation of multicore processors. We will have less occasion to touch on distribution. While languages have been designed for distributed computing, most distributed systems run sep- arate programs on every networked processor, and use message-passing library routines to communicate among them. We begin our study with an overview of the ways in which parallelism may be used in modern programs. Our overview will touch on the motivation for concurrency (even on uniprocessors) and the concept of races, which are the principal source of complexity in concurrent programs. We will also brieﬂy survey the architectural features of modern multicore and multiprocessor ma- chines. In Section 13.2 we consider the contrast between shared-memory and message-passing models of concurrency, and between language and library-based implementations. Building on coroutines, we explain how a language or li- brary can create and schedule threads. Section 13.3 focuses on low-level mecha- nisms for shared-memory synchronization. Section 13.4 extends the discussion to language-level constructs. Message-passing models of concurrency are consid- ered in Section 13.5 (mostly on the companion site).
 
-## 13.1 Background and Motivation
+13.1 Background and Motivation
 
 Concurrency is not a new idea. Much of the theoretical groundwork was laid in the 1960s, and Algol 68 includes concurrent programming features. Widespread interest in concurrency is a relatively recent phenomenon, however; it stems in part from the availability of low-cost multicore and multiprocessor machines, and in part from the proliferation of graphical, multimedia, and web-based applica- tions, all of which are naturally represented by concurrent threads of control.
 
@@ -71,7 +71,7 @@ If the instructions interleave roughly as shown, both threads may load the same 
 
 If Thread 1 gets there ﬁrst, we will get the “right” result; if Thread 2 gets there ﬁrst, we won’t. ■ The most common purpose of synchronization is to make some sequence of instructions, known as a critical section, appear to be atomic—to happen “all at once” from the point of view of every other thread. In our example, the critical section is a load, an increment, and a store. The most common way to make the sequence atomic is with a mutual exclusion lock, which we acquire before the ﬁrst instruction of the sequence and release after the last. We will study locks in Sections 13.3.1 and 13.3.5. In Sections 13.3.2 and 13.4.4 we will also consider mechanisms that achieve atomicity without locks. At lower levels of abstraction, expert programmers may need to understand hardware and run-time systems in sufﬁcient detail to implement synchronization mechanisms. This chapter should convey a sense of the issues, but a full treatment at this level is beyond the scope of the current text.
 
-## 13.1.1 The Case for Multithreaded Programs
+13.1.1 The Case for Multithreaded Programs
 
 Our ﬁrst motivation for concurrency—to capture the logical structure of certain applications—has arisen several times in earlier chapters. In Section C 8.7.1 we noted that interactive I/O must often interrupt the execution of the current pro- gram. In a video game, for example, we must handle keystrokes and mouse or joystick motions while continually updating the image on the screen. The stan- dard way to structure such a program, as described in Section 9.6.2, is to execute the input handlers in a separate thread of control, which coexists with one or more threads responsible for updating the screen. In Section 9.5, we considered a screen saver program that used coroutines to interleave “sanity checks” on the ﬁle system with updates to a moving picture on the screen. We also considered discrete-event simulation, which uses coroutines to represent the active entities of some real-world system. The semantics of discrete-event simulation require that events occur atomi- cally at ﬁxed points in time. Coroutines provide a natural implementation, be- cause they execute one at a time: so long as we never switch coroutines in the mid- dle of a to-be-atomic operation, all will be well. In our other examples, however— and indeed in most “naturally concurrent” programs—there is no need for corou- tine semantics. By assigning concurrent tasks to threads instead of to coroutines, we acknowledge that those tasks can proceed in parallel if more than one core is available. We also move responsibility for ﬁguring out which thread should run when from the programmer to the language implementation. In return, we give up any notion of trivial atomicity. The need for multithreaded programs is easily seen in web-based applications. EXAMPLE 13.3
 
@@ -95,7 +95,7 @@ The principal problem with a dispatch loop—beyond the complexity of subdi- vid
 
 trying to enumerate a recursive set with iterator objects in Section 6.5.3, only worse. Like true iterators, a thread package turns the program “right side out,” making the management of tasks (threads) implicit and the control ﬂow within threads explicit.
 
-## 13.1.2 Multiprocessor Architecture
+13.1.2 Multiprocessor Architecture
 
 Parallel computer hardware is enormously diverse. A distributed system—one that we think of in terms of interactions among separate programs running on separate machines—may be as large as the Internet, or as small as the components of a cell phone. A parallel but nondistributed system—one that we think of in terms of a single program running on a single machine—may still be very large. China’s Tianhe-2 supercomputer, for example, has more than 3 million cores, consumes over 17 MW of power, and occupies 720 square meters of ﬂoor space (about a ﬁfth of an acre). Historically, most parallel but nondistributed machines were homogeneous— their processors were all identical. In recent years, many machines have added programmable GPUs, ﬁrst as separate processors, and more recently as separate portions of a single processor chip. While the cores of a GPU are internally homo- geneous, they are very different from those of the typical CPU, leading to a glob- ally heterogeneous system. Future systems may have cores of many other kinds as well, each specialized to particular kinds of programs or program components. In an ideal world, programming languages and runtimes would map program fragments to suitable cores at suitable times, but this sort of automation is still very much a research goal. As of 2015, programmers who want to make use of the GPU write appropriate portions of their code in special-purpose languages like OpenCL or CUDA, which emphasize repetitive operations over vectors. A main program, running on the CPU, then ships the resulting “kernels” to the GPU explicitly. In the remainder of this chapter, we will concentrate on thread-level paral- lelism for homogeneous machines. For these, many of the most important archi- tectural questions involve the memory system. In some machines, all of physical memory is accessible to every core, and the hardware guarantees that every write is quickly visible everywhere. At the other extreme, some machines partition main memory among processors, forcing cores to interact through some sepa- rate message-passing mechanism. In intermediate designs, some machines share memory in a noncoherent fashion, making writes on one core visible to another only when both have explicitly ﬂushed their caches. From the point of view of language or library implementation, the principal distinction between shared-memory and message-passing hardware is that mes- sages typically require the active participation of cores at both ends of the con- nection: one to send, the other to receive. On a shared-memory machine, a core can read and write remote memory without any other core’s assistance. On small machines (2–4 processors, say), main memory may be uniform— equally distant from all processors. On larger machines (and even on some very
 
@@ -154,11 +154,11 @@ technology and the advancement of human knowledge. Supercomputers have changed d
 * What is a vector machine? Where does vector technology appear in modern
   systems?
 
-## 13.2 Concurrent Programming Fundamentals
+13.2 Concurrent Programming Fundamentals
 
 Within a concurrent program, we will use the term thread to refer to the active entity that the programmer thinks of as running concurrently with other threads. In most systems, the threads of a given program are implemented on top of one or more processes provided by the operating system. OS designers often distinguish between a heavyweight process, which has its own address space, and a collection of lightweight processes, which may share an address space. Lightweight processes were added to most variants of Unix in the late 1980s and early 1990s, to accom- modate the proliferation of shared-memory multiprocessors. We will sometimes use the word task to refer to a well-deﬁned unit of work that must be performed by some thread. In one common programming idiom, a collection of threads shares a common “bag of tasks”—a list of work to be done. Each thread repeatedly removes a task from the bag, performs it, and goes back for another. Sometimes the work of a task entails adding new tasks to the bag. Unfortunately, terminology is inconsistent across systems and authors. Several languages call their threads processes. Ada calls them tasks. Several operating sys- tems call lightweight processes threads. The Mach OS, from which OSF Unix and Mac OS X are derived, calls the address space shared by lightweight processes a task. A few systems try to avoid ambiguity by coining new words, such as “actors,” “ﬁbers,” or “ﬁlaments.” We will attempt to use the deﬁnitions of the preceding two paragraphs consistently, and to identify cases in which the terminology of particular languages or systems differs from this usage.
 
-## 13.2.1 Communication and Synchronization
+13.2.1 Communication and Synchronization
 
 In any concurrent programming model, two of the most crucial issues to be ad- dressed are communication and synchronization. Communication refers to any mechanism that allows one thread to obtain information produced by another. Communication mechanisms for imperative programs are generally based on either shared memory or message passing. In a shared-memory programming model, some or all of a program’s variables are accessible to multiple threads.
 
@@ -173,13 +173,13 @@ DESIGN & IMPLEMENTATION
 
 sider synchronization again brieﬂy in Section 13.2.4, and then more thoroughly in Section 13.3.
 
-## 13.2.2 Languages and Libraries
+13.2.2 Languages and Libraries
 
 Thread-level concurrency can be provided to the programmer in the form of ex- plicitly concurrent languages, compiler-supported extensions to traditional se- quential languages, or library packages outside the language proper. All three options are widely used, though shared-memory languages are more common at the “low end” (for multicore and small multiprocessor machines), and message- passing libraries are more common at the “high end” (for massively parallel su- percomputers). Examples of systems in widespread use are categorized in Fig- ure 13.4. For many years, almost all parallel programming employed traditional sequen- tial languages (largely C and Fortran) augmented with libraries for synchroniza- tion or message passing, and this approach still dominates today. In the Unix world, shared memory parallelism has largely converged on the POSIX pthreads standard, which includes mechanisms to create, destroy, schedule, and synchro- nize threads. This standard became an ofﬁcial part of both C and C++ as of their 2011 versions. Similar functionality for Windows machines is provided by Microsoft’s thread package and compilers. For high-end scientiﬁc computing, message-based parallelism has likewise converged on the MPI (Message Passing Interface) standard, with open-source and commercial implementations available for almost every platform. While language support for concurrency goes back all the way to Algol 68 (and coroutines to Simula), and while such support was widely available in Ada by the late 1980s, widespread interest in these features didn’t really arise until the mid-1990s, when the explosive growth of the World Wide Web began to drive the development of parallel servers and concurrent client programs. This devel- opment coincided nicely with the introduction of Java, and Microsoft followed with C# a few years later. Though not yet as inﬂuential, many other languages, including Erlang, Go, Haskell, Rust, and Scala, are explicitly parallel as well.
 
 In the realm of scientiﬁc programming, there is a long history of extensions to Fortran designed to facilitate the parallel execution of loop iterations. By the turn of the century this work had largely converged on a set of extensions known as OpenMP, available not only in Fortran but also in C and C++. Syntactically, OpenMP comprises a set of pragmas (compiler directives) to create and synchro- nize threads, and to schedule work among them. On machines composed of a network of multiprocessors, it is increasingly common to see hybrid programs that use OpenMP within a multiprocessor and MPI across them. In both the shared memory and message passing columns of Figure 13.4, the parallel constructs are intended for use within a single multithreaded program. For communication across program boundaries in distributed systems, program- mers have traditionally employed library implementations of the standard In- ternet protocols, in a manner reminiscent of ﬁle-based I/O (Section C 8.7). For client-server interaction, however, it can be attractive to provide a higher-level in- terface based on remote procedure calls (RPC), an alternative we consider further in Section C 13.5.4. In comparison to library packages, an explicitly concurrent programming lan- guage has the advantage of compiler support. It can make use of syntax other than subroutine calls, and can integrate communication and thread management more tightly with such concepts as type checking, scoping, and exceptions. At the same time, since most programs have historically been sequential, concurrent languages have been slow to gain widespread acceptance, particularly given that the presence of concurrent features can sometime make the sequential case more difﬁcult to understand.
 
-## 13.2.3 Thread Creation Syntax
+13.2.3 Thread Creation Syntax
 
 Almost every concurrent system allows threads to be created (and destroyed) dy- namically. Syntactic and semantic details vary considerably from one language or library to another, but most conform to one of six principal options: co-begin, parallel loops, launch-at-elaboration, fork (with optional join), implicit receipt, and early reply. The ﬁrst two options delimit threads with special control-ﬂow constructs. The others use syntax resembling (or identical to) subroutines. At least one pedagogical language (SR) provided all six options. Most others pick and choose. Most libraries use fork/join, as do Java and C#. Ada uses both launch-at-elaboration and fork. OpenMP uses co-begin and parallel loops. RPC systems are typically based on implicit receipt.
 
@@ -372,7 +372,7 @@ DESIGN & IMPLEMENTATION
 
 sult parameters depend. Drawing inspiration from the detach operation used to launch coroutines in Simula (Example 9.47), a few languages (SR and Her- mes [SBG+91] among them) allow a callee to execute a reply operation that re- turns results to the caller without terminating. After an early reply, the two threads continue concurrently. Semantically, the portion of the callee prior to the reply plays much the same role as the constructor of a Java or C# thread; the portion after the reply plays the role of the run method. The usual implementation is also similar, and may run counter to the programmer’s intuition: since early reply is optional, and can appear in any subroutine, we can use the caller’s thread to execute the initial por- tion of the callee, and create a new thread only when—and if—the callee replies instead of returning.
 
-## 13.2.4 Implementation of Threads
+13.2.4 Implementation of Threads
 
 As we noted near the beginning of Section 13.2, the threads of a concurrent pro- gram are usually implemented on top of one or more processes provided by the operating system. At one extreme, we could use a separate OS process for ev- ery thread; at the other extreme we could multiplex all of a program’s threads on top of a single process. On a supercomputer with a separate core for every concurrent activity, or in a language in which threads are relatively heavyweight abstractions (long-lived, and created by the dozens rather than the thousands), the one-process-per-thread extreme is often acceptable. In a simple language on a uniprocessor, the all-threads-on-one-process extreme may be acceptable. Many EXAMPLE 13.20
 
@@ -455,13 +455,13 @@ We can extend our preemptive thread package to run on top of more than one OS-pr
 * Describe the progressive implementation of scheduling, preemption, and
   (true) parallelism on top of coroutines.
 
-## 13.3 Implementing Synchronization
+13.3 Implementing Synchronization
 
 As noted in Section 13.2.1, synchronization is the principal semantic challenge for shared-memory concurrent programs. Typically, synchronization serves either to make some operation atomic or to delay that operation until some necessary pre- condition holds. As noted in Section 13.1, atomicity is most commonly achieved with mutual exclusion locks. Mutual exclusion ensures that only one thread is ex- ecuting some critical section of code at a given point in time. Critical sections typically transform a shared data structure from one consistent state to another. Condition synchronization allows a thread to wait for a precondition, often ex- pressed as a predicate on the value(s) in one or more shared variables. It is tempt- ing to think of mutual exclusion as a form of condition synchronization (don’t proceed until no other thread is in its critical section), but this sort of condition would require consensus among all extant threads, something that condition syn- chronization doesn’t generally provide.
 
 Our implementation of parallel threads, sketched at the end of Section 13.2.4, requires both atomicity and condition synchronization. Atomicity of operations on the ready list and related data structures ensures that they always satisfy a set of logical invariants: the lists are well formed, each thread is either running or resides in exactly one list, and so forth. Condition synchronization appears in the requirement that a process in need of a thread to run must wait until the ready list is nonempty. It is worth emphasizing that we do not in general want to overly synchronize programs. To do so would eliminate opportunities for parallelism, which we gen- erally want to maximize in the interest of performance. Moreover not all races are bad. If two processes are racing to dequeue the last thread from the ready list, we don’t generally care which succeeds and which waits for another thread. We do care that the implementation of dequeue does not have internal, instruction-level races that might compromise the ready list’s integrity. In general, our goal is to provide only as much synchronization as is necessary to eliminate “bad” races— those that might otherwise cause the program to produce incorrect results. In the ﬁrst subsection below we consider busy-wait synchronization. In the second we present an alternative, called nonblocking synchronization, in which atomicity is achieved without the need for mutual exclusion. In the third sub- section we return to the subject of memory consistency (originally mentioned in Section 13.1.2), and discuss its implications for the semantics and implementa- tion of language-level synchronization mechanisms. Finally, in Sections 13.3.4 and 13.3.5, we use busy-waiting among processes to implement a parallelism-safe thread scheduler, and then use this scheduler in turn to implement the most basic scheduler-based synchronization mechanism: namely, semaphores.
 
-## 13.3.1 Busy-Wait Synchronization
+13.3.1 Busy-Wait Synchronization
 
 Busy-wait condition synchronization is easy if we can cast a condition in the form of “location X contains value Y”: a thread that needs to wait for the condition can simply read X in a loop, waiting for Y to appear. To wait for a condition involving more than one location, one needs atomicity to read the locations together, but given that, the implementation is again a simple loop. Other forms of busy-wait synchronization are somewhat trickier. In the re- mainder of this section we consider spin locks, which provide mutual exclusion, and barriers, which ensure that no thread continues past a given point in a pro- gram until all threads have reached that point.
 
@@ -501,7 +501,7 @@ The “sense-reversing” barrier counter, modiﬁed by an atomic fetch_and_decr
 
 Java 7 phasers participating threads can change from one phaser episode to another. When the number is large, the phaser can be tiered to run in logarithmic time. Moreover, arrival and departure can be speciﬁed as separate operations: in between, a thread can do work that (a) does not require that all other threads have arrived, and (b) does not have to be completed before any other threads depart. ■
 
-## 13.3.2 Nonblocking Algorithms
+13.3.2 Nonblocking Algorithms
 
 When a lock is acquired at the beginning of a critical section, and released at the end, no other thread can execute a similarly protected piece of code at the same time. As long as every thread follows the same conventions, code within the critical section is atomic—it appears to happen all at once. But this is not the only possible way to achieve atomicity. Suppose we wish to make an arbitrary update EXAMPLE 13.29
 
@@ -530,7 +530,7 @@ The M&S queue dequeue operation does not require cleanup, but the enqueue operat
 ![Figure 13.10 Operations on...](images/page_692_vector_236.png)
 *Figure 13.10 Operations on a nonblocking concurrent queue. In the dequeue operation (left), a single CAS swings the head pointer to the next node in the queue. In the enqueue operation (right), a ﬁrst CAS changes the next pointer of the tail node to point at the new node, at which point the operation is said to have logically completed. A subsequent “cleanup” CAS, which can be performed by any thread, swings the tail pointer to point at the new node as well.*
 
-## 13.3.3 Memory Consistency
+13.3.3 Memory Consistency
 
 In all our discussions so far, we have depended, implicitly, on hardware memory coherence. Unfortunately, coherence alone is not enough to make a multipro- cessor or even a single multicore processor behave as most programmers would expect. We must also worry, when more than one location is written at about the same time, about the order in which the writes become visible to different cores. Intuitively, most programmers expect shared memory to be sequentially con- sistent—to make all writes visible to all cores in the same order, and to make any given core’s writes visible in the order they were performed. Unfortunately, this behavior turns out to be very hard to implement efﬁciently—hard enough that most hardware designers simply don’t provide it. Instead, they provide one of sev- eral relaxed memory models, in which certain loads and stores may appear to occur “out of order.” Relaxed consistency has important ramiﬁcations for language de- signers, compiler writers, and the implementors of synchronization mechanisms and nonblocking algorithms.
 
@@ -584,7 +584,7 @@ Using volatile to avoid a data race variable initialized to indicate that it is 
 
 before conﬁrming that initialized was true. The volatile declaration precludes all these undesirable possibilities. Returning to Example 13.31, we might avoid a temporal loop by declaring both X and inspected as volatile, or by enclosing accesses to them in atomic oper- ations, bracketed by lock acquire and release. In Example 13.32, volatile dec- larations on X and Y will again sufﬁce to ensure sequential consistency, but the cost may be somewhat higher: on some machines, the compiler may need to use extra locks or special instructions to force a total order among writes to disjoint locations. ■ Synchronization races are common in multithreaded programs. Whether they are bugs or expected behavior depends on the application. Data races, on the other hand, are almost always program bugs. They are so hard to reason about— and so rarely useful—that the C++ memory model outlaws them altogether: given a program with a data race, a C++ implementation is permitted to display any behavior whatsoever. Ada has similar rules. For Java, by contrast, an empha- sis on embedded applications motivated the language designers to constrain the behavior of racy programs in ways that would preserve the integrity of the under- lying virtual machine. A Java program that contains a data race must continue to follow all the normal language rules, and any read that is not ordered with respect to a unique preceding write must return a value that might have been written by some previous write to the same location, or by a write that is unordered with respect to the read. We will return to the Java Memory Model in Section 13.4.3, after we have discussed the language’s synchronization mechanisms.
 
-## 13.3.4 Scheduler Implementation
+13.3.4 Scheduler Implementation
 
 To implement user-level threads, OS-level processes must synchronize access to the ready list and condition queues, generally by means of spinning. Code for EXAMPLE 13.34
 
@@ -619,7 +619,7 @@ The bounded buffer problem scheduler-based synchronization mechanisms. A bounded
 ![Figure 13.15 Semaphore operations,...](images/page_700_vector_330.png)
 *Figure 13.15 Semaphore operations, for use with the scheduler code of Figure 13.13.*
 
-## 13.3.5 Semaphores
+13.3.5 Semaphores
 
 Semaphores are the oldest of the scheduler-based synchronization mechanisms. They were described by Dijkstra in the mid-1960s [Dij68a], and appear in Al- gol 68. They are still heavily used today, particularly in library-based implemen- tations of concurrency. A semaphore is basically a counter with two associated operations, P and V.4 A EXAMPLE 13.38
 
@@ -655,11 +655,11 @@ Bounded buffer with semaphores lem. It uses a binary semaphore for mutual exclus
 * What is a semaphore? What operations does it support? How do binary and
   general semaphores differ?
 
-## 13.4 Language-Level Constructs
+13.4 Language-Level Constructs
 
 Though widely used, semaphores are also widely considered to be too “low level” for well-structured, maintainable code. They suffer from two principal problems. First, because their operations are simply subroutine calls, it is easy to leave one out (e.g., on a control path with several nested if statements). Second, unless they are hidden inside an abstraction, uses of a given semaphore tend to get scat- tered throughout a program, making it difﬁcult to track them down for purposes of software maintenance.
 
-## 13.4.1 Monitors
+13.4.1 Monitors
 
 Monitors were suggested by Dijkstra [Dij72] as a solution to the problems of semaphores. They were developed more thoroughly by Brinch Hansen [Bri73], and formalized by Hoare [Hoa74] in the early 1970s. They have been incorpo- rated into at least a score of languages, of which Concurrent Pascal [Bri75], Mod- ula (1) [Wir77b], and Mesa [LR80] were probably the most inﬂuential.5 They
 
@@ -710,7 +710,7 @@ DESIGN & IMPLEMENTATION
 
 13.6 The nested monitor problem While maintaining exclusion on outer monitor(s) when waiting in an inner one may lead to deadlock with a signaling thread, releasing those outer moni- tors may lead to similar (if a bit more subtle) deadlocks. When a waiting thread awakens it must reacquire exclusion on both inner and outer monitors. The innermost monitor is of course available, because the matching signal hap- pened there, but there is in general no way to ensure that unrelated threads will not be busy in the outer monitor(s). Moreover one of those threads may need access to the inner monitor in order to complete its work and release the outer monitor(s). If we insist that the awakened thread be the ﬁrst to run in the inner monitor after the signal, then deadlock will result. One way to avoid this problem is to arrange for mutual exclusion across all the monitors of a program. This solution severely limits concurrency in multiprocessor imple- mentations, but may be acceptable on a uniprocessor. A more general solution is addressed in Exercise 13.21.
 
-## 13.4.2 Conditional Critical Regions
+13.4.2 Conditional Critical Regions
 
 Conditional critical regions (CCRs) are another alternative to semaphores, pro- posed by Brinch Hansen at about the same time as monitors [Bri73]. A critical EXAMPLE 13.42
 
@@ -733,7 +733,7 @@ DESIGN & IMPLEMENTATION
 
 implicit reader–writer lock on the protected object ensures that potentially con- ﬂicting operations exclude one another in time: a procedure or entry obtains ex- clusive access to the object; a function can operate concurrently with other func- tions, but not with a procedure or entry. Procedures and entries differ from one another in two important ways. First, an entry can have a Boolean expression guard, for which the calling task (thread) will wait before beginning execution (much as it would for the condition of a CCR). Second, an entry supports three special forms of call: timed calls, which abort after waiting for a speciﬁed amount of time, conditional calls, which execute alternative code if the call cannot proceed immediately, and asynchronous calls, which begin executing alternative code immediately, but abort it if the call is able to proceed before the alternative completes. In comparison to the conditions of CCRs, the guards on entries of protected objects in Ada 95 admit a more efﬁcient implementation, because they do not have to be evaluated in the context of the calling thread. Moreover, because all guards are gathered together in the deﬁnition of the protected object, the com- piler can generate code to test them as a group as efﬁciently as possible, in a man- ner suggested by Kessels [Kes77]. Though an Ada task cannot wait on a condition in the middle of an entry (only at the beginning), it can requeue itself on an- other entry, achieving much the same effect. Ada 95 code for a bounded buffer would closely resemble the pseudocode of Figure 13.18; we leave the details to Exercise 13.23.
 
-## 13.4.3 Synchronization in Java
+13.4.3 Synchronization in Java
 
 In Java, every object accessible to more than one thread has an implicit mutual EXAMPLE 13.43
 
@@ -797,7 +797,7 @@ The Java Memory Model, which we introduced in Section 13.3.3, speciﬁes exactly
 
 monitor (releases a lock, leaves a synchronized block, or waits). At that point all its previous writes must be visible to other threads. Similarly, a thread is al- lowed to keep cached copies of values written by other threads until it reads a volatile variable or enters a monitor (acquires a lock, enters a synchronized block, or wakes up from a wait). At that point any subsequent reads must obtain new copies of anything that has been written by other threads. The compiler is free to reorder ordinary reads and writes in the absence of intrathread data dependences. It can also move ordinary reads and writes down past a subsequent volatile read, up past a previous volatile write, or into a synchronized block from above or below. It cannot reorder volatile accesses, monitor entry, or monitor exit with respect to one another. If the compiler can prove that a volatile variable or monitor isn’t used by more than one thread during a given interval of time, it can reorder its operations like ordinary accesses. For data-race-free programs, these rules ensure the ap- pearance of sequential consistency. Moreover even in the presence of races, Java implementations ensure that reads and writes of object references and of 32-bit and smaller quantities are always atomic, and that every read returns the value written either by some unordered write or by some immediately preceding or- dered write. Formalization of the Java memory model proved to be a surprisingly difﬁcult task. Most of the difﬁculty stemmed from the desire to specify meaningful seman- tics for programs with data races. The C++11 memory model, also introduced in Section 13.3.3, avoids this complexity by simply prohibiting such programs. To ﬁrst approximation, C++ deﬁnes a happens-before ordering on memory accesses, similar to the ordering in Java, and then guarantees sequential consistency for programs in which all conﬂicting accesses are ordered. Modest additional com- plexity is introduced by allowing the programmer to specify weaker ordering on individual reads and writes of atomic variables; we consider this feature in Ex- ploration 13.42.
 
-## 13.4.4 Transactional Memory
+13.4.4 Transactional Memory
 
 All the general-purpose mechanisms we have considered for atomicity—sema- phores, monitors, conditional critical regions—are essentially syntactic variants on locks. Critical sections that need to exclude one another must acquire and release the same lock. Critical sections that are mutually independent can run in parallel only if they acquire and release separate locks. This creates an unfortu- nate tradeoff for programmers: it is easy to write a data-race-free program with a single lock, but such a program will not scale: as cores and threads are added, the lock will become a bottleneck, and program performance will stagnate. To increase scalability, skillful programmers partition their program data into equiv- alence classes, each protected by a separate lock. A critical section must then acquire the locks for every accessed equivalence class. If different critical sections acquire locks in different orders, deadlock can result. Enforcing a common or- der can be difﬁcult, however, because we may not be able to predict, when an
 
@@ -846,7 +846,7 @@ Challenges
 
 Many subtleties have been glossed over in our example implementation. The translation in Example 13.49 will not behave correctly if code inside the atomic block throws an exception (other than abort) or executes a return or an exit out of some surrounding loop. The pseudocode of Figure 13.19 also fails to consider that transactions may be nested. Several additional issues are still the subject of debate among TM designers. What should we do about operations inside transactions (I/O, system calls, etc.) that cannot easily be rolled back, and how do we prevent such transactions from ever calling retry? How do we discourage programmers from creating transac- tions so large they almost always conﬂict with one another, and cannot run in par- allel? Should a program ever be able to detect that transactions are aborting? How should transactions interact with locks and with nonblocking data structures? Should races between transactions and nontransactional code be considered pro- gram bugs? If so, should there be any constraints on the behavior that may result? These and similar questions will need to be answered by any production-quality TM-capable language.
 
-## 13.4.5 Implicit Synchronization
+13.4.5 Implicit Synchronization
 
 In several shared-memory languages, the operations that threads can perform on shared data are restricted in such a way that synchronization can be implicit in the operations themselves, rather than appearing as separate, explicit operations. We have seen one example of implicit synchronization already: the forall loop of HPF and Fortran 95 (Example 13.10). Separate iterations of a forall loop proceed concurrently, semantically in lock-step with each other: each iteration reads all data used in its instance of the ﬁrst assignment statement before any iteration updates its instance of the left-hand side. The left-hand side updates in turn occur before any iteration reads the data used in its instance of the sec- ond assignment statement, and so on. Compilation of forall loops for vector machines, while far from trivial, is more or less straightforward. On a more con- ventional multiprocessor, however, good performance usually depends on high- quality dependence analysis, which allows the compiler to identify situations in which statements within a loop do not in fact depend on one another, and can proceed without synchronization. Dependence analysis plays a crucial role in other languages as well. In Side- bar 11.1 we mentioned the purely functional languages Sisal and pH (recall that
 
@@ -935,7 +935,7 @@ Several researchers have noted that the backtracking search of logic languages s
 
 * Explain the difference between AND parallelism and OR parallelism in Prolog.
 
-## 13.5 Message Passing
+13.5 Message Passing
 
 Shared-memory concurrency has become ubiquitous on multicore processors and multiprocessor servers. Message passing, however, still dominates both dis- tributed and high-end computing. Supercomputers and large-scale clusters are programmed primarily in Fortran or C/C++ with the MPI library package. Dis- tributed computing increasingly relies on client–server abstractions layered on top of libraries that implement the TCP/IP Internet standard. As in shared- memory computing, scores of message-passing languages have also been devel- oped for particular application domains, or for research or pedagogical purposes.
 
@@ -953,7 +953,7 @@ languages being designed for purely sequential execution. As of 2015, explic- it
 
 ## 13.7 Exercises
 
-## 13.1 Give an example of a “benign” race condition—one whose outcome affects program behavior, but not correctness.
+13.1 Give an example of a “benign” race condition—one whose outcome affects program behavior, but not correctness.
 
 13.2 We have deﬁned the ready list of a thread package to contain all threads that are runnable but not running, with a separate variable to identify the currently running thread. Could we just as easily have deﬁned the ready list to contain all runnable threads, with the understanding that the one at the head of the list is running? (Hint: Think about multiprocessors.)
 
@@ -973,7 +973,7 @@ languages being designed for purely sequential execution. As of 2015, explic- it
 
 (Hint: You may ﬁnd it useful to consult Doug Lea’s Java Memory Model “Cookbook for Compiler Writers,” at gee.cs.oswego.edu/dl/jmm/cookbook. html).
 
-## 13.10 Implement the nonblocking queue of Example 13.30 on an x86. (Com- plete pseudocode can be found in the paper by Michael and Scott [MS98].)
+13.10 Implement the nonblocking queue of Example 13.30 on an x86. (Com- plete pseudocode can be found in the paper by Michael and Scott [MS98].)
 
 Do you need fence instructions to ensure consistency? If you have access to appropriate hardware, port your code to a machine with a more relaxed memory model (e.g., ARM or Power). What new fences or atomic refer- ences do you need?
 
@@ -987,13 +987,13 @@ Do you need fence instructions to ensure consistency? If you have access to appr
 
 13.16 To make spin locks useful on a multiprogrammed multiprocessor, one might want to ensure that no process is ever preempted in the middle of a critical section. That way it would always be safe to spin in user space, be- cause the process holding the lock would be guaranteed to be running on some other processor, rather than preempted and possibly in need of the current processor. Explain why an operating system designer might not want to give user processes the ability to disable preemption arbitrarily. (Hint: Think about fairness and multiple users.) Can you suggest a way to get around the problem? (References to several possible solutions can be found in the paper by Kontothanassis, Wisniewski, and Scott [KWS97].)
 
-## 13.17 Show how to use semaphores to construct a scheduler-based n-thread bar- rier.
+13.17 Show how to use semaphores to construct a scheduler-based n-thread bar- rier.
 
-## 13.18 Prove that monitors and semaphores are equally powerful. That is, use each to implement the other. In the monitor-based implementation of semaphores, what is your monitor invariant?
+13.18 Prove that monitors and semaphores are equally powerful. That is, use each to implement the other. In the monitor-based implementation of semaphores, what is your monitor invariant?
 
-## 13.19 Show how to use binary semaphores to implement general semaphores.
+13.19 Show how to use binary semaphores to implement general semaphores.
 
-## 13.20 In Example 13.38 (Figure 13.15), suppose we replaced the middle four lines of procedure P with
+13.20 In Example 13.38 (Figure 13.15), suppose we replaced the middle four lines of procedure P with
 
 if S.N = 0 sleep on(S.Q) S.N −:= 1
 
@@ -1005,20 +1005,20 @@ What is the problem with this new version? Explain how it connects to the questi
 
 13.21 Suppose that every monitor has a separate mutual exclusion lock, so that different threads can run in different monitors concurrently, and that we want to release exclusion on both inner and outer monitors when a thread waits in a nested call. When the thread awakens it will need to reacquire the outer locks. How can we ensure its ability to do so? (Hint: Think about the order in which to acquire locks, and be prepared to abandon Hoare semantics. For further hints, see Wettstein [Wet78].)
 
-## 13.22 Show how general semaphores can be implemented with conditional criti- cal regions in which all threads wait for the same condition, thereby avoid- ing the overhead of unproductive wake-ups.
+13.22 Show how general semaphores can be implemented with conditional criti- cal regions in which all threads wait for the same condition, thereby avoid- ing the overhead of unproductive wake-ups.
 
-## 13.23 Write code for a bounded buffer using the protected object mechanism of Ada 95.
+13.23 Write code for a bounded buffer using the protected object mechanism of Ada 95.
 
 ![Figure 13.20 The Dining...](images/page_727_vector_248.png)
 *Figure 13.20 The Dining Philosophers. Hungry philosophers must contend for the forks to their left and right in order to eat.*
 
-## 13.24 Repeat the previous exercise in Java using synchronized statements or methods. Try to make your solution as simple and conceptually clear as possible. You will probably want to use notifyAll.
+13.24 Repeat the previous exercise in Java using synchronized statements or methods. Try to make your solution as simple and conceptually clear as possible. You will probably want to use notifyAll.
 
 13.25 Give a more efﬁcient solution to the previous exercise that avoids the use of notifyAll. (Warning: It is tempting to observe that the buffer can never be both full and empty at the same time, and to assume therefore that waiting threads are either all producers or all consumers. This need not be the case, however: if the buffer ever becomes even a temporary perfor- mance bottleneck, there may be an arbitrary number of waiting threads, including both producers and consumers.)
 
-## 13.26 Repeat the previous exercise using Java Lock variables.
+13.26 Repeat the previous exercise using Java Lock variables.
 
-## 13.27 Explain how escape analysis, mentioned brieﬂy in Sidebar 10.3, could be used to reduce the cost of certain synchronized statements and methods in Java.
+13.27 Explain how escape analysis, mentioned brieﬂy in Sidebar 10.3, could be used to reduce the cost of certain synchronized statements and methods in Java.
 
 13.28 The dining philosophers problem [Dij72] is a classic exercise in synchro- nization (Figure 13.20). Five philosophers sit around a circular table. In the center is a large communal plate of spaghetti. Each philosopher repeat- edly thinks for a while and then eats for a while, at intervals of his or her own choosing. On the table between each pair of adjacent philosophers is a single fork. To eat, a philosopher requires both adjacent forks: the one on the left and the one on the right. Because they share a fork, adjacent philosophers cannot eat simultaneously. Write a solution to the dining philosophers problem in which each philosopher is represented by a process and the forks are represented by shared data. Synchronize access to the forks using semaphores, monitors, or conditional critical regions. Try to maximize concurrency.
 
@@ -1026,7 +1026,7 @@ What is the problem with this new version? Explain how it connects to the questi
 
 13.30 In some concurrent programming systems, global variables are shared by all threads. In others, each newly created thread has a separate copy of the global variables, commonly initialized to the values of the globals of the creating thread. Under this private globals approach, shared data must be allocated from a special heap. In still other programming systems, the programmer can specify which global variables are to be private and which are to be shared. Discuss the tradeoffs between private and shared global variables. Which would you prefer to have available, for which sorts of programs? How would you implement each? Are some options harder to implement than others? To what extent do your answers depend on the nature of processes provided by the operating system?
 
-## 13.31 Rewrite Example 13.51 in Java.
+13.31 Rewrite Example 13.51 in Java.
 
 13.32 AND parallelism in logic languages is analogous to the parallel evaluation of arguments in a functional language (e.g., Multilisp). Does OR par- allelism have a similar analog? (Hint: Think about special forms [Sec- tion 11.5].) Can you suggest a way to obtain the effect of OR parallelism in Multilisp?
 
