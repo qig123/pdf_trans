@@ -15,6 +15,15 @@ def clean_filename(name):
     name = re.sub(r'[\x00-\x1f\x7f]', '', name)
     name = name.strip(' .')
     return (name[:100] if len(name) > 100 else name) or "untitled"
+# REGEX for matching typical heading formats like "1.2", "1.2.3", "A.1", "Chapter 1" etc.
+TITLE_REGEX = re.compile(
+    r'^\s*('
+    r'(Chapter|Part|Section|Appendix|Kapitel|Teil)\s+[\dIVXLC]+\s*[:.\-]?|'  # "Chapter 1", "Part A"
+    r'(\d+(\.\d+)*\.?)|'  # "3.1", "3.2.1", "4.2."
+    r'[A-Z]\.[\d\.]*'  # "A.1", "B.2.3"
+    r')\s+', 
+    flags=re.IGNORECASE
+)
 
 def is_header_or_footer(block_bbox, page_rect, header_margin=0.12, footer_margin=0.12):
     """判断文本块是否位于页眉或页脚区域"""
@@ -82,51 +91,86 @@ def analyze_page_fonts(page):
 def get_markdown_from_block(block, body_size, heading_map):
     """
     根据文本块的属性（字体、大小、内容）推断其Markdown格式。
+    **New:** Now includes logic to split a block if its first line is a heading.
     """
-    if block['type'] != 0 or not block['lines']:
+    if block['type'] != 0 or not block.get('lines'):
         return ""
 
-    # 1. 组合文本块内的所有span，并处理加粗/斜体
-    full_text_parts = []
-    block_size = round(block['lines'][0]['spans'][0]['size'])
+    # --- NEW: Block Splitting Logic ---
+    # Check if the first line of the block looks like a standalone heading.
+    first_line = block['lines'][0]
+    first_line_spans = first_line.get('spans', [])
+    if not first_line_spans:
+        return "" # Empty line
+
+    first_line_text = "".join(s['text'] for s in first_line_spans).strip()
+    first_line_size = round(first_line_spans[0]['size'])
+    is_first_line_bold = all(s['flags'] & 16 for s in first_line_spans) # Check if all spans are bold
+
+    # Heuristic for a heading-like first line:
+    # 1. It matches our title regex, OR it's significantly larger than body text.
+    # 2. It's relatively short.
+    # 3. It doesn't look like a list item starting a long paragraph.
+    is_potential_heading = (
+        (TITLE_REGEX.match(first_line_text) and is_first_line_bold) or 
+        (first_line_size in heading_map)
+    ) and len(first_line_text) < 150 and not first_line_text.endswith(('.', ','))
+
+    if is_potential_heading and len(block['lines']) > 1:
+        # This block contains a heading AND a subsequent paragraph. Split them.
+        heading_level = heading_map.get(first_line_size, '##') # Use ## as default for regex match
+        
+        # Format the heading
+        heading_md = f"{heading_level} {first_line_text}\n\n"
+        
+        # Format the rest of the block as a normal paragraph
+        rest_of_block = {'type': 0, 'lines': block['lines'][1:]}
+        # Recursively call this function for the rest, but it will now fail the split-check
+        # and be treated as a normal paragraph block.
+        paragraph_md = get_markdown_from_block(rest_of_block, body_size, heading_map)
+        
+        return heading_md + paragraph_md
+
+    # --- Fallback to Original Logic (if no split is needed) ---
+    # This handles blocks that are entirely a heading, entirely a paragraph, a list, etc.
     
+    full_text_parts = []
+    is_monospace_block = all(
+        ("mono" in span['font'].lower() or "courier" in span['font'].lower())
+        for line in block['lines'] for span in line['spans']
+    )
+
     for line in block['lines']:
         line_parts = []
-        is_monospace = "mono" in line['spans'][0]['font'].lower() or "courier" in line['spans'][0]['font'].lower()
         for span in line['spans']:
             text = span['text']
-            # 检查加粗和斜体标志
-            is_bold = span['flags'] & 16
-            is_italic = span['flags'] & 2
-            
-            if is_bold: text = f"**{text}**"
-            if is_italic: text = f"*{text}*"
+            if span['flags'] & 16: text = f"**{text}**" # Bold
+            if span['flags'] & 2: text = f"*{text}*"   # Italic
             line_parts.append(text)
         full_text_parts.append("".join(line_parts))
     
     full_text = "\n".join(full_text_parts).strip()
-    if not full_text:
-        return ""
+    if not full_text: return ""
 
-    # 2. 根据规则应用Markdown格式
-    # 规则a: 识别为代码块 (基于等宽字体)
-    if is_monospace and len(full_text.splitlines()) > 1:
+    # Code block detection
+    if is_monospace_block and len(full_text.splitlines()) > 1:
         return f"```\n{full_text}\n```\n\n"
 
-    # 规则b: 识别为标题 (基于字体大小)
+    # Whole-block heading detection (for cases like "Introduction")
+    block_size = round(block['lines'][0]['spans'][0]['size'])
     if block_size in heading_map and len(full_text) < 150 and not full_text.strip().endswith('.'):
         return f"{heading_map[block_size]} {full_text}\n\n"
 
-    # 规则c: 识别为列表 (基于行首字符)
+    # List detection
     list_match = re.match(r'^\s*([•*-]|\d+\.|[a-zA-Z]\))\s+', full_text)
     if list_match:
-        # 将列表项的后续行进行缩进
         lines = full_text.split('\n')
-        rest_of_lines = "\n".join(["  " + l for l in lines[1:]])
-        return f"* {lines[0][list_match.end():]}\n{rest_of_lines}\n" # 统一用*号，\n后不加\n，让连续列表项紧挨
+        first_line = lines[0][list_match.end():].strip()
+        rest_of_lines = "\n".join(["  " + l.strip() for l in lines[1:]])
+        return f"* {first_line}\n{rest_of_lines}\n"
 
-    # 规则d: 默认作为普通段落
-    return full_text + "\n\n"
+    # Default paragraph
+    return full_text.replace('\n', ' ') + "\n\n"
 
 
 # --- 主处理函数 (已更新) ---
