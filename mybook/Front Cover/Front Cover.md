@@ -1,6 +1,6 @@
 # Front Cover
 
-Programming Language Pragmatics
+**Programming Language Pragmatics**
 
 FOURTH EDITION
 
