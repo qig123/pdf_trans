@@ -2283,7 +2283,7 @@ most recent invocation of the lexically surrounding subroutine. If a subroutine 
 
 EXAMPLE 3.6  and then add the appropriate offset. Static chains are illustrated in Figure 3.5. We  Static chains  will discuss the code required to maintain them in Section 9.2.  ■
 
-## 3.3.3 Declaration Order
+3.3.3 Declaration Order
 
 In our discussion so far we have glossed over an important subtlety: suppose an  object x is declared somewhere within block B. Does the scope of x include the  portion of B before the declaration, and if so can x actually be used in that portion  of the code? Put another way, can an expression E refer to any name declared in  the current scope, or only to names that are declared before E in the scope?
 
@@ -2474,7 +2474,7 @@ using rand_mgr::generator;  generator *g1 = rand_mgr::create();  generator *g2 =
 
 In more complex programs, it may make sense for a module to export several  related types, instances of which can then be passed to its subroutines.  ■
 
-## 3.3.5 Module Types and Classes
+3.3.5 Module Types and Classes
 
 An alternative solution to the multiple instance problem appeared in Eu­ clid, which treated each module as a type, rather than a simple encapsulation
 
@@ -2521,7 +2521,7 @@ While there is a clear progression from modules to module types to classes, it i
 
 EXAMPLE 3.17  all cases. Suppose we are developing an interactive “frst person” game. Class  Modules and classes in a  hierarchies may be just what we need to represent characters, possessions, build- large application  ings, goals, and a host of other data abstractions. At the same time, especially on  a project with a large team of programmers, we will probably want to divide the  functionality of the game into large-scale subsystems such as graphics and ren­ dering, physics, and strategy. These subsystems are really not data abstractions,  and we probably don’t want the option to create multiple instances of them. They  are naturally captured with traditional modules, particularly if those modules are  designed for separate compilation (Section 3.8). Recognizing the need for both  multi-instance abstractions and functional subdivision, many languages, includ­ ing  C++,  Java, C#,  Python, and  Ruby, provide  separate  class  and  module  mecha­ nisms.  ■
 
-## 3.3.6 Dynamic Scoping
+3.3.6 Dynamic Scoping
 
 In a language with dynamic scoping, the bindings between names and objects  depend on the fow of control at run time, and in particular on the order in which  subroutines are called. In comparison to the static scope rules discussed in the  previous section, dynamic scope rules are generally quite simple: the “current”  binding for a given name is the one encountered most recently during execution,  and not yet destroyed by returning from its scope.
 
