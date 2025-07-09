@@ -6,7 +6,7 @@ import shutil
 from urllib.parse import quote
 from datetime import datetime
 
-# clean_filename 和 find_image_for_caption 函数保持不变，这里省略
+# clean_filename 和 find_image_for_caption 函数保持不变
 def clean_filename(name):
     """Cleans a string to be safely used as a file or directory name."""
     name = re.sub(r'[<>:"/\\|?*]', '_', name)
@@ -20,7 +20,6 @@ def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, proc
     if caption_block_idx > 0:
         prev_block = blocks[caption_block_idx - 1]
         if prev_block["type"] == 1:
-            # block["number"] from get_text("dict") is the xref for images
             xref = prev_block["number"]
             if xref not in processed_blocks:
                 try:
@@ -30,9 +29,7 @@ def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, proc
                     with open(os.path.join(image_dir, filename), "wb") as f: f.write(base_image["image"])
                     processed_blocks.add(xref)
                     return {"filename": filename}
-                except Exception:
-                    return None
-
+                except Exception: return None
     # If not found, assume vector and take a screenshot of the area above
     caption_bbox = fitz.Rect(blocks[caption_block_idx]["bbox"])
     search_area = fitz.Rect(page.rect.x0, caption_bbox.y0 - 400, page.rect.x1, caption_bbox.y0 - 5)
@@ -42,14 +39,14 @@ def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, proc
         pix = page.get_pixmap(clip=search_area, dpi=150)
         pix.save(os.path.join(image_dir, filename))
         return {"filename": filename}
-    
     return None
-
 
 def run_extraction_stable(pdf_path, output_dir="mybook"):
     """
-    Extracts content with stable plain text logic and advanced image handling.
-    Corrected directory and file placement logic.
+    Extracts content with refined hierarchical logic.
+    - Parent items (like "Part I", "Chapter 1") get their own intro .md file.
+    - Content for a parent item stops at the beginning of its first child.
+    - File structure correctly mirrors the book's nested structure.
     """
     if os.path.exists(output_dir):
         print(f"Old output directory '{output_dir}' found. Deleting it...")
@@ -64,70 +61,77 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
         print("Error: No bookmarks found.")
         return
 
-    print("Starting extraction with stable text processing...")
+    print("Starting extraction with refined hierarchical processing...")
     markdown_files_list = []
     level_paths = {}
     CAPTION_REGEX = re.compile(r'^(Figure|Fig\.?|Table|Chart|图|表)\s+[\d\.\-A-Za-z]+', flags=re.IGNORECASE)
 
     for i, item in enumerate(toc):
         level, title, start_page = item
-        
         safe_title = clean_filename(title)
         level_paths[level] = safe_title
         
         print(f"{'  ' * (level-1)}-> Processing: {title}")
 
-        # --- START: MODIFIED PATH LOGIC ---
+        # --- START: REFINED PATH AND PAGE RANGE LOGIC ---
 
-        # Determine if the current item is a "parent" node (i.e., has children)
         is_parent_node = (i + 1 < len(toc)) and (toc[i+1][0] > level)
 
-        # Get the path of the parent directory
+        # **CRITICAL CHANGE**: Determine the correct end_page
+        if is_parent_node:
+            # For a parent, its "intro" content ends where its FIRST CHILD begins.
+            end_page = toc[i+1][2] 
+        else:
+            # For a leaf node, its content ends where the NEXT SIBLING or UNCLE begins.
+            end_page = doc.page_count + 1 # Default to end of document
+            for next_item in toc[i+1:]:
+                if next_item[0] <= level:
+                    end_page = next_item[2]
+                    break
+        
+        # If a parent bookmark is purely structural (no pages between it and its child), skip creating a file.
+        if start_page >= end_page:
+            print(f"{'  ' * (level-1)}  - Skipping empty section.")
+            # We still need to create the directory for its children
+            if is_parent_node:
+                parent_dir_parts = [level_paths[l] for l in range(1, level)]
+                parent_dir = os.path.join(output_dir, *parent_dir_parts)
+                current_content_dir = os.path.join(parent_dir, safe_title)
+                os.makedirs(current_content_dir, exist_ok=True)
+            continue
+            
+        # Path logic from before is mostly correct, let's keep it.
         parent_dir_parts = [level_paths[l] for l in range(1, level)]
         parent_dir = os.path.join(output_dir, *parent_dir_parts)
 
         if is_parent_node:
-            # If it's a parent, its content and children go into a new directory named after it.
-            # e.g., "Part I" -> mybook/Part I/
+            # A parent gets its own directory.
             current_content_dir = os.path.join(parent_dir, safe_title)
-            # The .md file for "Part I" itself goes inside this directory.
-            # e.g., mybook/Part I/Part I.md
+            # Its intro .md file goes inside that directory.
             output_filepath = os.path.join(current_content_dir, f"{safe_title}.md")
         else:
-            # If it's a leaf node, its file goes directly into its parent's directory.
-            # e.g., "1.1 Intro" (child of "Chapter 1") goes into mybook/Part I/Chapter 1/
+            # A leaf file goes into its parent's directory.
             current_content_dir = parent_dir
-            # e.g., mybook/Part I/Chapter 1/1.1 Intro.md
             output_filepath = os.path.join(current_content_dir, f"{safe_title}.md")
 
-        # The image directory is always 'images' inside the directory that CONTAINS the .md file.
-        # This ensures sub-chapters' images are placed in the main chapter's image folder.
         md_file_containing_dir = os.path.dirname(output_filepath)
         current_image_dir = os.path.join(md_file_containing_dir, "images")
         
-        # Ensure both the directory for the .md file and the images subdir exist.
         os.makedirs(current_image_dir, exist_ok=True)
         
-        # --- END: MODIFIED PATH LOGIC ---
-        
-        end_page = doc.page_count
-        for next_item in toc[i+1:]:
-            if next_item[0] <= level:
-                end_page = next_item[2]
-                break
+        # --- END: REFINED PATH AND PAGE RANGE LOGIC ---
         
         chapter_content = f"# {title}\n\n"
         processed_img_xrefs = set()
 
-        # The page range in TOC is 1-based, need to adjust for 0-based page index.
-        # Also, the end page is exclusive.
+        # Page range is 1-based, exclusive at the end.
         for page_num in range(start_page - 1, end_page - 1):
             if page_num >= doc.page_count: continue
             page = doc.load_page(page_num)
             
+            # (Content extraction loop remains the same)
             page_data = page.get_text("dict")
             blocks = sorted(page_data["blocks"], key=lambda b: (b["bbox"][1], b["bbox"][0]))
-
             caption_blocks_indices = {idx for idx, b in enumerate(blocks) if b["type"] == 0 and "lines" in b and CAPTION_REGEX.match(''.join(s["text"] for s in b["lines"][0]["spans"]).strip())}
             
             for idx in sorted(list(caption_blocks_indices)):
@@ -136,7 +140,6 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
                 short_alt = ' '.join(full_caption.split()[:4]) + "..."
                 image_info = find_image_for_caption(doc, page, blocks, idx, current_image_dir, processed_img_xrefs)
                 if image_info:
-                    # The relative path for the image is always from its .md file.
                     relative_path = os.path.join("images", quote(image_info["filename"]))
                     chapter_content += f"![{short_alt}]({relative_path})\n*{full_caption}*\n\n"
                 else:
@@ -176,7 +179,6 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
     doc.close()
 
 if __name__ == "__main__":
-    # 请确保将 "your_document.pdf" 替换为您的PDF文件名
     pdf_file = "your_document.pdf"
     if os.path.exists(pdf_file):
         run_extraction_stable(pdf_file)
