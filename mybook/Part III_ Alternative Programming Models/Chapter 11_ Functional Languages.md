@@ -1,6 +1,6 @@
-## 11
+# Chapter 11: Functional Languages
 
-### **Functional Languages**
+**11** **Functional Languages**
 
 **Previous chapters of this text have focused** largely on imperative program- ming languages. In the current chapter and the next we emphasize functional and logic languages instead. While imperative languages are far more widely used, “industrial-strength” implementations exist for both functional and logic languages, and both models have commercially important applications. Lisp has traditionally been popular for the manipulation of symbolic data, particu- larly in the ﬁeld of artiﬁcial intelligence. OCaml is heavily used in the ﬁnancial services industry. In recent years functional languages—statically typed ones in particular—have become increasingly popular for scientiﬁc applications as well. Logic languages are widely used for formal speciﬁcations and theorem proving and, less widely, for many other applications. Of course, functional and logic languages have a great deal in common with their imperative cousins. Naming and scoping issues arise under every model. So do types, expressions, and the control-ﬂow concepts of selection and recursion. All languages must be scanned, parsed, and analyzed semantically. In addition, functional languages make heavy use of subroutines—more so even than most von Neumann languages—and the notions of concurrency and nondeterminacy are as common in functional and logic languages as they are in the imperative case. As noted in Chapter 1, the boundaries between language categories tend to be rather fuzzy. One can write in a largely functional style in many imperative lan- guages, and many functional languages include imperative features (assignment and iteration). The most common logic language—Prolog—provides certain im- perative features as well. Finally, it is easy to build a logic programming system in most functional programming languages. Because of the overlap between imperative and functional concepts, we have had occasion several times in previous chapters to consider issues of particu- lar importance to functional programming languages. Most such languages de- pend heavily on polymorphism (the implicit parametric kind—Sections 7.1.2, 7.3, and 7.2.4). Most make heavy use of lists (Section 8.6). Several, historically, were dynamically scoped (Sections 3.3.6 and C 3.4.2). All employ recursion (Sec- tion 6.6) for repetitive execution, with the result that program behavior and per-
 
@@ -123,7 +123,7 @@ if expressions (if (< 2 3) 4 5) =*⇒*4 (if #f 2 3) =*⇒*3
 
 In general, Scheme expressions are evaluated in applicative order, as described in Section 6.6.2. Special forms such as lambda and if are exceptions to this rule. The implementation of if checks to see whether the ﬁrst argument evaluates to #t. If so, it returns the value of the second argument, without evaluating the third argument. Otherwise it returns the value of the third argument, without evaluat- ing the second. We will return to the issue of evaluation order in Section 11.5. ■
 
-## 11.3.1** Bindings**
+11.3.1** Bindings**
 
 Names can be bound to values by introducing a nested scope: **EXAMPLE** 11.10
 
@@ -143,7 +143,7 @@ Global bindings with define and letrec allow the user to create nested scopes, t
 
 (define hypot (lambda (a b) (sqrt (+ (* a a) (* b b))))) (hypot 3 4) =*⇒*5 ■
 
-## 11.3.2** Lists and Numbers**
+11.3.2** Lists and Numbers**
 
 Like all Lisp dialects, Scheme provides a wealth of functions to manipulate lists. We saw many of these in Section 8.6; we do not repeat them all here. The three **EXAMPLE** 11.12
 
@@ -155,7 +155,7 @@ Also useful is the null? predicate, which determines whether its argument is the
 
 For fast access to arbitrary elements of a sequence, Scheme provides a vector type that is indexed by integers, like an array, and may have elements of hetero- geneous types, like a record. Interested readers are referred to the Scheme man- ual [SDF+07] for further information. Scheme also provides a wealth of numeric and logical (Boolean) functions and special forms. The language manual describes a hierarchy of ﬁve numeric types: integer, rational, real, complex, and number. The last two levels are op- tional: implementations may choose not to provide any numbers that are not real. Most but not all implementations employ arbitrary-precision representations of both integers and rationals, with the latter stored internally as (numerator, de- nominator) pairs.
 
-## 11.3.3** Equality Testing and Searching**
+11.3.3** Equality Testing and Searching**
 
 Scheme provides several different equality-testing functions. For numerical com- parisons, = performs type conversions where necessary (e.g., to compare an in- teger and a ﬂoating-point number). For general-purpose use, eqv? performs a *shallow* comparison, while equal? performs a* deep* (recursive) comparison, us- ing eqv? at the leaves. The eq? function also performs a shallow comparison, and may be cheaper than eqv? in certain circumstances (in particular, eq? is not required to detect the equality of discrete values stored in different locations, though it may in some implementations). Further details were presented in Sec- tion 7.4. To search for elements in lists, Scheme provides two sets of functions, each of which has variants corresponding to the three general-purpose equality predi- cates. The functions memq, memv, and member take an element and a list as argu- **EXAMPLE** 11.13
 
@@ -173,7 +173,7 @@ The functions assq, assv, and assoc search for values in* association lists* (ot
 
 Searching association lists erwise known as* A-list*s). A-lists were introduced in Section C 3.4.2 in the context of name lookup for languages with dynamic scoping. An A-list is a dictionary implemented as a list of pairs.5 The ﬁrst element of each pair is a key of some sort; the second element is information corresponding to that key. Assq, assv, and assoc take a key and an A-list as argument, and return the ﬁrst pair in the list, if there is one, whose ﬁrst element is eq?, eqv?, or equal?, respectively, to the key. If there is no matching pair, #f is returned. ■
 
-## 11.3.4** Control Flow and Assignment**
+11.3.4** Control Flow and Assignment**
 
 We have already seen the special form if. It has a cousin named cond that **EXAMPLE** 11.15
 
@@ -212,9 +212,7 @@ The ﬁrst argument to do is a list of triples, each of which speciﬁes a new v
 
 **DESIGN & IMPLEMENTATION**
 
-## 11.1 Iteration in functional programs
-
-It is important to distinguish between iteration as a notation for repeated ex- ecution and iteration as a means of orchestrating side effects. One can in fact deﬁne iteration as syntactic sugar for tail recursion, and Val, Sisal, and pH do precisely that (with special syntax to facilitate the passing of values from one iteration to the next). Such a notation may still be entirely side-effect free, that is, entirely functional. In Scheme, assignment and I/O are the truly imperative features. We think of iteration as imperative because most Scheme programs that use it have assignments or I/O in their loops.
+11.1 Iteration in functional programs It is important to distinguish between iteration as a notation for repeated ex- ecution and iteration as a means of orchestrating side effects. One can in fact deﬁne iteration as syntactic sugar for tail recursion, and Val, Sisal, and pH do precisely that (with special syntax to facilitate the passing of values from one iteration to the next). Such a notation may still be entirely side-effect free, that is, entirely functional. In Scheme, assignment and I/O are the truly imperative features. We think of iteration as imperative because most Scheme programs that use it have assignments or I/O in their loops.
 
 all be of the same length. For-each calls its function argument repeatedly, pass- ing successive sets of arguments from the lists. In the example shown here, the unnamed function produced by the lambda expression will be called on the ar- guments 2 and 3, 4 and 5, and 6 and 7. The interpreter will print
 
@@ -227,7 +225,7 @@ all be of the same length. For-each calls its function argument repeatedly, pass
 
 The last line is the return value of for-each, assumed here to be the empty list. The language deﬁnition allows this value to be implementation-dependent; the construct is executed for its side effects. ■ Two other control-ﬂow constructs have been mentioned in previous chap- ters. Delay and force (Section 6.6.2) permit the lazy evaluation of expressions. Call-with-current-continuation (call/cc; Section 6.2.2) allows the cur- rent program counter and referencing environment to be saved in the form of a closure, and passed to a speciﬁed subroutine. We will mention delay and force again in Section 11.5.
 
-## 11.3.5** Programs as Lists**
+11.3.5** Programs as Lists**
 
 As should be clear by now, a program in Scheme takes the form of a list. In technical terms, we say that Lisp and Scheme are* homoiconic*—self-representing. A parenthesized string of symbols (in which parentheses are balanced) is called an* S-expression* regardless of whether we think of it as a program or as a list. In fact, an unevaluated program* is* a list, and can be constructed, deconstructed, and otherwise manipulated with all the usual list functions. Just as quote can be used to inhibit the evaluation of a list that appears as an **EXAMPLE** 11.19
 
@@ -241,7 +239,7 @@ In the ﬁrst of these declarations, compose takes as arguments a pair of functi
 
 g to it, then applies f, and ﬁnally returns the result. In the second declaration, compose2 performs the same function, but in a different way. The function list returns a list consisting of its (evaluated) arguments. In the body of compose2, this list is the* unevaluated* expression (lambda (x) (f (g x))). When passed to eval, this list evaluates to the desired function. The second argument of eval speciﬁes the referencing environment in which the expression is to be evaluated. In our example we have speciﬁed the environment deﬁned by the Scheme ver- sion 5 report [KCR+98]. ■ The original description of Lisp [MAE+65] included a* self-deﬁnition* of the language: code for a Lisp interpreter, written in Lisp. Though Scheme differs in many ways from this early Lisp (most notably in its use of lexical scoping), such a* metacircular* interpreter can still be written easily [AS96, Chap. 4]. The code is based on the functions eval and apply. The ﬁrst of these we have just seen. The second, apply, takes two arguments: a function and a list. It achieves the effect of calling the function, with the elements of the list as arguments.
 
-## 11.3.6** Extended Example: DFA Simulation in Scheme**
+11.3.6** Extended Example: DFA Simulation in Scheme**
 
 To conclude our introduction to Scheme, we present a complete program to sim- **EXAMPLE** 11.20
 
@@ -266,40 +264,22 @@ If we change the input string to 010010, the interpreter will print
 ![Figure 11.1 Scheme program...](images/page_582_vector_387.png)
 *Figure 11.1 Scheme program to simulate the actions of a DFA. Given a machine description and an input symbol i, function move searches for a transition labeled i from the start state to some new state s. It then returns a new machine with the same transition function and ﬁnal states, but with s as its “start” state. The main function, simulate, encapsulates a tail-recursive helper function that accumulates an inverted list of moves, returning when it has consumed all input symbols. The wrapper then checks to see if the helper ended in a ﬁnal state; it returns the (properly ordered) series of moves, with accept or reject at the end. The functions cadr and caddr are deﬁned as (lambda (x) (car (cdr x))) and (lambda (x) (car (cdr (cdr x)))), respectively. Scheme provides a large collection of such abbreviations.*
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 1. What mathematical formalism underlies functional programming?
 
-### 1.
-What mathematical formalism underlies functional programming?
+## 2. List several distinguishing characteristics of functional programming lan- guages.
 
-* 
-  List several distinguishing characteristics of functional programming lan-
-  guages.
-### 3.
-Brieﬂy describe the behavior of the Lisp/Scheme* read-eval-print* loop.
-4.
-What is a* ﬁrst-class* value?
+## 3. Brieﬂy describe the behavior of the Lisp/Scheme* read-eval-print* loop. 4. What is a* ﬁrst-class* value?
 
 ![Figure 11.2 DFA to...](images/page_583_vector_241.png)
 *Figure 11.2 DFA to accept all strings of zeros and ones containing an even number of each. At the bottom of the ﬁgure is a representation of the machine as a Scheme data structure, using the conventions of Figure 11.1.*
 
-* 
-  Explain the difference between let, let*, and letrec in Scheme.
-  6.
-  Explain the difference between eq?, eqv?, and equal?.
-* 
-  Describe three ways in which Scheme programs can depart from a purely
-  functional programming model.
-  8.
-  What is an* association list*?
-  9.
-  What does it mean for a language to be* homoiconic*?
-### 10. What is an S-expression?
+## 5. Explain the difference between let, let*, and letrec in Scheme. 6. Explain the difference between eq?, eqv?, and equal?.
 
-* Outline the behavior of eval and apply.
+## 7. Describe three ways in which Scheme programs can depart from a purely functional programming model. 8. What is an* association list*? 9. What does it mean for a language to be* homoiconic*?
 
-## 11.4
+## 10. What is an* S-expression*? 11. Outline the behavior of eval and apply.
 
-### **A Bit of OCaml**
+11.4 **A Bit of OCaml**
 
 Like Lisp, ML has a complicated family tree. The original language was devised in the early 1970s by Robin Milner and others at Cambridge University. SML (“Standard” ML) and OCaml (Objective Caml) are the two most widely used di- alects today. Haskell, the most widely used language for functional programming research, is a separate descendant of ML (by way of Miranda). F#, developed by Microsoft and others, is a descendant of OCaml. Work on OCaml (and its predecessor, Caml) has been led since the early 1980s by researchers at INRIA, the French national computing research organization (the ‘O’ was added to the name with the introduction of object-oriented features
 
@@ -360,7 +340,7 @@ c_three;; =*⇒*3 f_three ();; =*⇒*3 ■
 
 Lexical conventions in OCaml are straightforward: Identiﬁers are composed of upper- and lower-case letters, digits, underscores, and single quote marks; most are required to start with a lower-case letter or underscore (a few special kinds of names, including type constructors, variants, modules, and exceptions, must start with an upper-case letter). Comments are delimited with (* ... *), and are permitted to nest. Floating-point numbers are required to contain a decimal point: the expression cos 0 will generate a type-clash error message. Built-in types include Boolean values, integers, ﬂoating-point numbers, char- acters, and strings. Values of more complex types can be created using a vari- ety of type constructors, including lists, arrays, tuples, records, variants, objects, and classes; several of these are described in Section 11.4.3. As discussed in Sec- tion 7.2.4, type checking is performed by* inferring* a type for every expression, and then checking that whenever two expressions need to be of the same type (e.g., be- cause one is an argument and the other is the corresponding formal parameter), the inferences turn out to be the same. To support type inference, some operators that are overloaded in other languages are separate in OCaml. In particular, the usual arithmetic operations have both integer (+, -, *, /) and ﬂoating-point (+., -., *., /.) versions.
 
-## 11.4.1** Equality and Ordering**
+11.4.1** Equality and Ordering**
 
 Like most functional languages, OCaml uses a reference model for names. When comparing two expressions, either or both of which may simply be a name, there are two different notions of equality. The so-called “physical” comparators, == **EXAMPLE** 11.25
 
@@ -381,7 +361,7 @@ In the ﬁrst line, there is (conceptually) only one 2 in the world, so referenc
 
 is an undecidable problem). Structural comparison of cyclic structures can result in an inﬁnite loop. ■ Comparison for ordering (<, >, <=, >=) is always based on deep comparison. It is deﬁned in OCaml on all types other than functions. It does what one would normally expect on arithmetic types, characters, and strings (the latter works lex- icographically); on other types the results are deterministic but not necessarily intuitive. In all cases, the results are consistent with the structural equality test (=): if a = b, then a <= b and a >= b; if a <> b, then a < b or a > b. As with the equality tests, comparison of functions will cause a run-time exception; comparison of cyclic structures may not terminate.
 
-## 11.4.2** Bindings and Lambda Expressions**
+11.4.2** Bindings and Lambda Expressions**
 
 New names in OCaml are introduced with let. An outermost (top-level) let **EXAMPLE** 11.26
 
@@ -393,9 +373,7 @@ Here fun introduces a lambda expression. The names preceding the right ar- row (
 
 **DESIGN & IMPLEMENTATION**
 
-### 11.2 Equality and ordering in SML and Haskell
-
-Unlike OCaml, SML provides a single equality operator: a built-in polymor- phic function deﬁned on some but not all types. Equality tests are deep for expressions of immutable types and shallow for those of mutable types. Tests on unsupported (e.g., function) types produce a compile-time error message rather than a run-time exception. The ordering comparisons, by contrast, are deﬁned as overloaded names for a collection of built-in functions, each of which works on a different type. As noted in Example 3.28 and Sidebar 7.7, Haskell uniﬁes and extends the handling of equality and comparisons with a concept known as* type classes*.The equality operators (= and <>), for example, are declared (but not deﬁned) in a predeﬁned class Eq; any value that is passed to one of these operators will be inferred to be of some type in class Eq. Any value that is passed to one of the ordering operators (<, <=, >=, >) will similarly be inferred to be of some type in class Ord. This latter class is deﬁned to be an extension of Eq; every type in class Ord must support the operators of class Eq as well. There is a strong analogy between type classes and the* interfaces* of languages with mix- in inheritance (Section 10.5).
+11.2 Equality and ordering in SML and Haskell Unlike OCaml, SML provides a single equality operator: a built-in polymor- phic function deﬁned on some but not all types. Equality tests are deep for expressions of immutable types and shallow for those of mutable types. Tests on unsupported (e.g., function) types produce a compile-time error message rather than a run-time exception. The ordering comparisons, by contrast, are deﬁned as overloaded names for a collection of built-in functions, each of which works on a different type. As noted in Example 3.28 and Sidebar 7.7, Haskell uniﬁes and extends the handling of equality and comparisons with a concept known as* type classes*.The equality operators (= and <>), for example, are declared (but not deﬁned) in a predeﬁned class Eq; any value that is passed to one of these operators will be inferred to be of some type in class Eq. Any value that is passed to one of the ordering operators (<, <=, >=, >) will similarly be inferred to be of some type in class Ord. This latter class is deﬁned to be an extension of Eq; every type in class Ord must support the operators of class Eq as well. There is a strong analogy between type classes and the* interfaces* of languages with mix- in inheritance (Section 10.5).
 
 let average x y = (x +. y) /. 2.;;
 
@@ -433,7 +411,7 @@ fib_helper 0 1 0;;
 
 Here fib_helper is visible not only within the body of fib, but also within its own body. ■
 
-## 11.4.3** Type Constructors**
+11.4.3** Type Constructors**
 
 ***Lists***
 
@@ -554,7 +532,7 @@ W Z
 
 can be written Node (‚R‚, Node (‚X‚, Empty, Empty), Node (‚Y‚, Node (‚Z‚, Empty, Empty), Node (‚W‚, Empty, Empty))). ■
 
-## 11.4.4** Pattern Matching**
+11.4.4** Pattern Matching**
 
 Pattern matching, particularly for strings, appears in many programming lan- guages. Examples include Snobol, Icon, Perl, and the several other scripting lan- guages that have adopted Perl’s facilities (discussed in Section 14.4.2). ML is dis- tinctive in extending pattern matching to the full range of constructed values— including tuples, lists, records, and variants—and integrating it with static typing and type inference. A simple example in OCaml occurs when passing parameters. Suppose, for **EXAMPLE** 11.40
 
@@ -585,9 +563,7 @@ match t with
 
 **DESIGN & IMPLEMENTATION**
 
-## 11.3 Type Equivalence in OCaml
-
-Because of their use of type inference, ML-family languages generally provide the effect of structural type equivalence. Variants can be used to obtain the effect of name equivalence when desired:
+11.3 Type Equivalence in OCaml Because of their use of type inference, ML-family languages generally provide the effect of structural type equivalence. Variants can be used to obtain the effect of name equivalence when desired:
 
 ```
 type celsius_temp = CT of int;;
@@ -673,7 +649,7 @@ To which the interpreter responds
 
 val mean : float = 3. val sd : float = 3.3166247903554 ■
 
-## 11.4.5** Control Flow and Side Effects**
+11.4.5** Control Flow and Side Effects**
 
 We have seen several examples of if expressions in previous sections. Because it must yield a value, almost every if expression has both a then part and an else part. The only exception is when the then part has unit type, and is executed **EXAMPLE** 11.49
 
@@ -737,7 +713,7 @@ let c = try arc_cos v with Bad_arg (arg, loc) ->
 
 Note that the expression after the arrow must have the same type as the expression between the try and with. Here we have printed an error message and then (after the semicolon) provided a value of 0. ■
 
-### 11.4.6** Extended Example: DFA Simulation in OCaml**
+11.4.6** Extended Example: DFA Simulation in OCaml**
 
 To conclude our introduction to OCaml, we reprise the DFA simulation pro- **EXAMPLE** 11.54
 
@@ -753,19 +729,11 @@ If we change the input string to abaaba, the interpreter will print
 
 * : state list * decision = ([0; 2; 3; 1; 3; 2; 0], Accept)
   ■
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 12. Why does OCaml provide separate arithmetic operators for integer and ﬂoating-point values?
 
-#### 12. Why does OCaml provide separate arithmetic operators for integer and
+## 13. Explain the difference between* physical* and* structural* equality of values in OCaml.
 
-ﬂoating-point values?
-
-#### 13. Explain the difference between physical and structural equality of values in
-
-OCaml.
-
-#### 14. How do lists in OCaml differ from those of Lisp and Scheme?
-
-* Identify the values that OCaml treats as* mutable*.
+## 14. How do lists in OCaml differ from those of Lisp and Scheme? 15. Identify the values that OCaml treats as* mutable*.
 
 * List three contexts in which OCaml performs* pattern matching*.
   17. Explain the difference between* tuples* and* records* in OCaml. How does an
@@ -814,7 +782,7 @@ Here normal-order evaluation avoids evaluating (+ 2 3) or (+ 3 4). (In this case
 
 In our overview of Scheme we differentiated on several occasions between spe- cial forms and functions. Arguments to functions are always passed by sharing (Section 9.3.1), and are evaluated before they are passed (i.e., in applicative or- der). Arguments to special forms are passed unevaluated—in other words, by name. Each special form is free to choose internally when (and if) to evaluate its parameters. Cond, for example, takes a sequence of unevaluated pairs as argu- ments. It evaluates their cars internally, one at a time, stopping when it ﬁnds one that evaluates to #t. Together, special forms and functions are known as* expression types* in Scheme. Some expression types are* primitive*, in the sense that they must be built into the language implementation. Others are* derived*; they can be deﬁned in terms of primitive expression types. In an eval/apply-based interpreter, primitive spe- cial forms are built into eval; primitive functions are recognized by apply. We have seen how the special form lambda can be used to create derived functions, which can be bound to names with let. Scheme provides an analogous special form, syntax-rules, that can be used to create derived special forms. These can then be bound to names with define-syntax and let-syntax. Derived spe- cial forms are known as* macro*s in Scheme, but unlike most other macros, they are* hygienic*—lexically scoped, integrated into the language’s semantics, and im- mune from the problems of mistaken grouping and variable capture described in Section 3.7. Like C++ templates (Section C 7.3.2), Scheme macros are Tur- ing complete. They behave like functions whose arguments are passed by name (Section C 9.3.2) instead of by sharing. They are implemented, however, via log- ical expansion in the interpreter’s parser and semantic analyzer, rather than by delayed evaluation with thunks.
 
-## 11.5.1** Strictness and Lazy Evaluation**
+11.5.1** Strictness and Lazy Evaluation**
 
 Evaluation order can have an effect not only on execution speed but also on pro- gram correctness. A program that encounters a dynamic semantic error or an inﬁnite regression in an “unneeded” subexpression under applicative-order eval- uation may terminate successfully under normal-order evaluation. A (side-effect- free) function is said to be* strict* if it is undeﬁned (fails to terminate, or encounters an error) when any of its arguments is undeﬁned. Such a function can safely eval- uate all its arguments, so its result will not depend on evaluation order. A function is said to be* nonstrict* if it does not impose this requirement—that is, if it is some- times deﬁned even when one of its arguments is not. A* language* is said to be strict if it is deﬁned in such a way that functions are always strict. A language is said to be nonstrict if it permits the deﬁnition of nonstrict functions. If a language always evaluates expressions in applicative order, then every function is guaranteed to be strict, because whenever an argument is undeﬁned, its evaluation will fail and so will the function to which it is being passed. Contrapositively, a nonstrict lan- guage cannot use applicative order; it must use normal order to avoid evaluating unneeded arguments. Standard ML, OCaml, and (with the exception of macros) Scheme are strict. Miranda and Haskell are nonstrict.
 
@@ -828,13 +796,11 @@ Here (* 3 4) will be evaluated only once. While the cost of manipulating memos w
 
 **DESIGN & IMPLEMENTATION**
 
-## 11.4 Lazy evaluation
-
-One of the beauties of a purely functional language is that it makes lazy evalua- tion a completely transparent performance optimization: the programmer can think in terms of nonstrict functions and normal-order evaluation, counting on the implementation to avoid the cost of repeated evaluation. For languages with imperative features, however, this characterization does not hold: lazy evaluation is* not* transparent in the presence of side effects.
+11.4 Lazy evaluation One of the beauties of a purely functional language is that it makes lazy evalua- tion a completely transparent performance optimization: the programmer can think in terms of nonstrict functions and normal-order evaluation, counting on the implementation to avoid the cost of repeated evaluation. For languages with imperative features, however, this characterization does not hold: lazy evaluation is* not* transparent in the presence of side effects.
 
 use of delay and force,6 and in OCaml through the similar mechanisms of the standard Lazy library. It can also be achieved implicitly in Scheme (in cer- tain contexts) through the use of macros. Where normal-order evaluation can be thought of as function evaluation using call-by-name parameters, lazy evaluation is sometimes said to employ “call by need.” In addition to Miranda and Haskell, call by need can be found in the R scripting language, widely used by statisticians. The principal problem with lazy evaluation is its behavior in the presence of side effects. If an argument contains a reference to a variable that may be modi- ﬁed by an assignment, then the value of the argument will depend on whether it is evaluated before or after the assignment. Likewise, if the argument contains an assignment, values elsewhere in the program may depend on when evaluation oc- curs. These problems do not arise in Miranda or Haskell because they are purely functional: there are no side effects. Scheme and OCaml leave the problem up to the programmer, but require that every use of a delay-ed expression be enclosed in force, making it relatively easy to identify the places where side effects are an issue.
 
-## 11.5.2** I/O: Streams and Monads**
+11.5.2** I/O: Streams and Monads**
 
 A major source of side effects can be found in traditional I/O: an input routine will generally return a different value every time it is called, and multiple calls to an output routine, though they never return a value, must occur in the proper order if the program is to be considered correct. One way to avoid these side effects is to model input and output as* streams*— unbounded-length lists whose elements are generated lazily. We saw an example of a stream in the inﬁnite lists of Section 6.6.2 (an OCaml example appears in Exercise 11.18). If we model input and output as streams, then a program takes **EXAMPLE** 11.58
 
@@ -948,13 +914,9 @@ The library function interact is of type (String -> String) -> IO (). It takes a
 
 **DESIGN & IMPLEMENTATION**
 
-## 11.5 Monads
+11.5 Monads Monads are very heavily used in Haskell. The IO monad serves as the central repository for imperative language features—not only I/O and random num- bers but also mutable global variables and shared-memory synchronization. Additional monads (with accessible hidden state) support partial functions and various container classes (lists and sets). When coupled with lazy evalua- tion, monadic containers in turn provide a natural foundation for backtrack- ing search, nondeterminism, and the functional equivalent of iterators. (In the list monad, for example, hidden state can carry the continuation needed to generate the tail of an inﬁnite list.) The inability to extract values from the IO monad reﬂects the fact that the physical world is imperative, and that a language that needs to interact with the physical world in nontrivial ways must include imperative features. Put another way, the IO monad (unlike monads in general) is more than syntactic sugar: by hiding the state of the physical world it makes it possible to express things that could not otherwise be expressed in a functional way, provided that we are willing to enforce a sequential evaluation order. The beauty of monads is that they conﬁne sequentiality to a relatively small fraction of the typical program, so that side effects cannot interfere with the bulk of the computation.
 
-Monads are very heavily used in Haskell. The IO monad serves as the central repository for imperative language features—not only I/O and random num- bers but also mutable global variables and shared-memory synchronization. Additional monads (with accessible hidden state) support partial functions and various container classes (lists and sets). When coupled with lazy evalua- tion, monadic containers in turn provide a natural foundation for backtrack- ing search, nondeterminism, and the functional equivalent of iterators. (In the list monad, for example, hidden state can carry the continuation needed to generate the tail of an inﬁnite list.) The inability to extract values from the IO monad reﬂects the fact that the physical world is imperative, and that a language that needs to interact with the physical world in nontrivial ways must include imperative features. Put another way, the IO monad (unlike monads in general) is more than syntactic sugar: by hiding the state of the physical world it makes it possible to express things that could not otherwise be expressed in a functional way, provided that we are willing to enforce a sequential evaluation order. The beauty of monads is that they conﬁne sequentiality to a relatively small fraction of the typical program, so that side effects cannot interfere with the bulk of the computation.
-
-## 11.6
-
-### **Higher-Order Functions**
+11.6 **Higher-Order Functions**
 
 A function is said to be a* higher-order function* (also called a* functional form*) if it takes a function as an argument, or returns a function as a result. We have seen several examples already of higher-order functions in Scheme: call/cc (Sec- tion 6.2.2), for-each (Example 11.18), compose (Example 11.19), and apply (Section 11.3.5). We also saw a Haskell version of the higher-order function map in Section 11.5.2. The Scheme version of map is slightly more general. Like **EXAMPLE** 11.64
 
@@ -1008,9 +970,7 @@ General-purpose curry function ries” its (binary) function argument:
 
 **DESIGN & IMPLEMENTATION**
 
-## 11.6 Higher-order functions
-
-If higher-order functions are so powerful and useful, why aren’t they more common in imperative programming languages? There would appear to be at least two important answers. First, much of the power of ﬁrst-class func- tions depends on the ability to create new functions on the ﬂy, and for that we need a function* constructor*—something like Scheme’s lambda or OCaml’s fun. Though they appear in several recent languages, function constructors are a signiﬁcant departure from the syntax and semantics of traditional im- perative languages. Second, the ability to specify functions as return values, or to store them in variables (if the language has side effects), requires either that we eliminate function nesting (something that would again erode the abil- ity of programs to create functions with desired behaviors on the ﬂy) or that we give local variables unlimited extent, thereby increasing the cost of storage management.
+11.6 Higher-order functions If higher-order functions are so powerful and useful, why aren’t they more common in imperative programming languages? There would appear to be at least two important answers. First, much of the power of ﬁrst-class func- tions depends on the ability to create new functions on the ﬂy, and for that we need a function* constructor*—something like Scheme’s lambda or OCaml’s fun. Though they appear in several recent languages, function constructors are a signiﬁcant departure from the syntax and semantics of traditional im- perative languages. Second, the ability to specify functions as return values, or to store them in variables (if the language has side effects), requires either that we eliminate function nesting (something that would again erode the abil- ity of programs to create functions with desired behaviors on the ﬂy) or that we give local variables unlimited extent, thereby increasing the cost of storage management.
 
 ML and its descendants make it especially easy to deﬁne curried functions— a fact that we glossed over in Section 11.4. Consider the following function in **EXAMPLE** 11.70
 
@@ -1127,9 +1087,7 @@ Currying in OCaml vs Scheme argument—makes the use of a curried function more 
 
 fold_left (+) 0 [1; 2; 3; 4; 5]; (* OCaml *) (((curried-fold +) 0) '(1 2 3 4 5)) ; Scheme ■
 
-## 11.7
-
-### **Theoretical Foundations**
+11.7 **Theoretical Foundations**
 
 Mathematically, a function is a single-valued mapping: it associates every element in one set (the* domain*) with (at most) one element in another set (the* range*). In **EXAMPLE** 11.76
 
@@ -1151,9 +1109,7 @@ Lambda calculus is a* constructive* notation for function deﬁnitions. We consi
 
 a lambda expression. Computation amounts to macro substitution of arguments into the function deﬁnition, followed by reduction to simplest form via simple and mechanical rewrite rules. The order in which these rules are applied captures the distinction between applicative and normal-order evaluation, as described in Section 6.6.2. Conventions on the use of certain simple functions (e.g., the identity function) allow selection, structures, and even arithmetic to be captured as lambda expressions. Recursion is captured through the notion of* ﬁxed points*.
 
-## 11.8
-
-### **Functional Programming in Perspective**
+11.8 **Functional Programming in Perspective**
 
 Side-effect-free programming is a very appealing idea. As discussed in Sections 6.1.2 and 6.3, side effects can make programs both hard to read and hard to com- pile. By contrast, the lack of side effects makes expressions* referentially transpar-* *ent*—independent of evaluation order. Programmers and compilers of a purely functional language can employ* equational reasoning*, in which the equivalence of two expressions at any point in time implies their equivalence at all times. Equa- tional reasoning in turn is highly appealing for parallel execution: In a purely functional language, the arguments to a function can safely be evaluated in paral- lel with each other. In a lazy functional language, they can be evaluated in parallel with (the beginning of) the function to which they are passed. We will consider these possibilities further in Section 13.4.5. Unfortunately, there are common programming idioms in which the canonical side effect—assignment—plays a central role. Critics of functional programming often point to these idioms as evidence of the need for imperative language fea- tures. I/O is one example. We have seen (in Section 11.5) that sequential access to ﬁles can be modeled in a functional manner using streams. For graphics and random ﬁle access we have also seen that the monads of Haskell can cleanly isolate the invocation of actions from the bulk of the language, and allow the full power of equational reasoning to be applied to both the computation of values and the determination of the order in which I/O actions should occur. Other commonly cited examples of “naturally imperative” idioms include
 
@@ -1165,51 +1121,31 @@ These last three idioms are examples of what has been called the* trivial update
 
 **DESIGN & IMPLEMENTATION**
 
-## 11.7 Side effects and compilation
-
-As noted in Section 11.2, side-effect freedom has a strong conceptual appeal: it frees the programmer from concern over undocumented access to nonlo- cal variables, misordered updates, aliases, and dangling pointers. Side-effect freedom also has the potential, at least in theory, to allow the compiler to gen- erate faster code: like aliases, side effects often preclude the caching of values in registers (Section 3.5.1) or the use of constant and copy propagation (Sec- tions C 17.3 and C 17.4). So what are the technical obstacles to generating fast code for functional programs? The trivial update problem is certainly a challenge, as is the cost of heap management for values with unlimited extent. Type checking im- poses signiﬁcant run-time costs in languages descended from Lisp, but not in those descended from ML. Memoization is expensive in Miranda and Haskell, though so-called* strictness analysis* may allow the compiler to eliminate it in cases where applicative order evaluation is provably equivalent. These chal- lenges are all the subject of continuing research.
+11.7 Side effects and compilation As noted in Section 11.2, side-effect freedom has a strong conceptual appeal: it frees the programmer from concern over undocumented access to nonlo- cal variables, misordered updates, aliases, and dangling pointers. Side-effect freedom also has the potential, at least in theory, to allow the compiler to gen- erate faster code: like aliases, side effects often preclude the caching of values in registers (Section 3.5.1) or the use of constant and copy propagation (Sec- tions C 17.3 and C 17.4). So what are the technical obstacles to generating fast code for functional programs? The trivial update problem is certainly a challenge, as is the cost of heap management for values with unlimited extent. Type checking im- poses signiﬁcant run-time costs in languages descended from Lisp, but not in those descended from ML. Memoization is expensive in Miranda and Haskell, though so-called* strictness analysis* may allow the compiler to eliminate it in cases where applicative order evaluation is provably equivalent. These chal- lenges are all the subject of continuing research.
 
 was able to eliminate 99 to 100 percent of all copy operations in standard numeric benchmarks [Can92]. Scholz reports performance for SAC competitive with that of carefully optimized modern Fortran programs [Sch03]. Signiﬁcant strides in both the theory and practice of functional programming have been made in recent years. Wadler [Wad98b] argued in the late 1990s that the principal remaining obstacles to the widespread adoption of functional lan- guages were social and commercial, not technical: most programmers have been trained in an imperative style; software libraries and development environments for functional programming are not yet as mature as those of their imperative cousins. Experience over the past decade appears to have borne out this charac- terization: with the development of better tools and a growing body of practical experience, functional languages have begun to see much wider use. Functional features have also begun to appear in such mainstream imperative languages as C#, Python, and Ruby.
 
-### 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 19. What is the difference between* normal-order* and* applicative-order* evaluation? What is* lazy* evaluation?
 
-#### 19. What is the difference between normal-order and applicative-order evaluation?
+## 20. What is the difference between a function and a* special form* in Scheme? 21. What does it mean for a function to be* strict*? 22. What is* memoization*?
 
-What is* lazy* evaluation?
+* How can one accommodate I/O in a purely functional programming model?
+  24. What is a* higher-order* function (also known as a* functional form*)? Give three
+  examples.
+  25. What is* currying*? What purpose does it serve in practical programs?
+## 26. What is the* trivial update problem* in functional programming? 27. Summarize the arguments for and against side-effect-free programming.
 
-#### 20. What is the difference between a function and a special form in Scheme?
+## 28. Why do functional languages make such heavy use of lists?
 
-#### 21. What does it mean for a function to be strict?
-
-#### 22. What is* memoization*?
-
-#### 23. How can one accommodate I/O in a purely functional programming model?
-
-#### 24. What is a higher-order function (also known as a functional form)? Give three
-
-examples. 25. What is* currying*? What purpose does it serve in practical programs?
-
-#### 26. What is the trivial update problem in functional programming?
-
-* Summarize the arguments for and against side-effect-free programming.
-
-#### 28. Why do functional languages make such heavy use of lists?
-
-## 11.9
-
-#### **Summary and Concluding Remarks**
+11.9 **Summary and Concluding Remarks**
 
 In this chapter we have focused on the functional model of computing. Where an imperative program computes principally through iteration and side effects (i.e., the modiﬁcation of variables), a functional program computes principally through substitution of parameters into functions. We began by enumerating a list of key issues in functional programming, including ﬁrst-class and higher- order functions, polymorphism, control ﬂow and evaluation order, and support
 
 for list-based data. We then turned to a pair of concrete examples—the Scheme dialect of Lisp and the OCaml dialect of ML—to see how these issues may be addressed in a programming language. We also considered, more brieﬂy, the lazy evaluation and monads found in Haskell. For imperative programming languages, the underlying formal model is often taken to be a Turing machine. For functional languages, the model is the lambda calculus. Both models evolved in the mathematical community as a means of formalizing the notion of an effective procedure, as used in constructive proofs. Aside from hardware-imposed limits on arithmetic precision, disk and memory space, and so on, the full power of lambda calculus is available in functional languages. While a full treatment of the lambda calculus could easily consume another book, we provided an overview on the companion site. We considered rewrite rules, evaluation order, and the Church-Rosser theorem. We noted that conventions on the use of very simple notation provide the computational power of integer arithmetic, selection, recursion, and structured data types. For practical reasons, many functional languages extend the lambda calculus with additional features, including assignment, I/O, and iteration. Lisp dialects, moreover, are* homoiconic*: programs look like ordinary data structures, and can be created, modiﬁed, and executed on the ﬂy. Lists feature prominently in most functional programs, largely because they can easily be built incrementally, without the need to allocate and then modify state as separate operations. Many functional languages provide other structured data types as well. In Sisal and Single Assignment C, an emphasis on iterative syntax, tail-recursive semantics, and high-performance compilers allows multidi- mensional array-based functional programs to achieve performance comparable to that of imperative programs. 11.10 **Exercises**
 
-### 11.1
+11.1 Is the define primitive of Scheme an imperative language feature? Why or why not? 11.2 It is possible to write programs in a purely functional subset of an imper- ative language such as C, but certain limitations of the language quickly become apparent. What features would need to be added to your favorite imperative language to make it genuinely useful as a functional language? (Hint: What does Scheme have that C lacks?) 11.3 Explain the connection between short-circuit Boolean expressions and normal-order evaluation. Why is cond a special form in Scheme, rather than a function? 11.4 Write a program in your favorite imperative language that has the same in- put and output as the Scheme program of Figure 11.1. Can you make any general observations about the usefulness of Scheme for symbolic compu- tation, based on your experience?
 
-Is the define primitive of Scheme an imperative language feature? Why or why not? 11.2 It is possible to write programs in a purely functional subset of an imper- ative language such as C, but certain limitations of the language quickly become apparent. What features would need to be added to your favorite imperative language to make it genuinely useful as a functional language? (Hint: What does Scheme have that C lacks?) 11.3 Explain the connection between short-circuit Boolean expressions and normal-order evaluation. Why is cond a special form in Scheme, rather than a function? 11.4 Write a program in your favorite imperative language that has the same in- put and output as the Scheme program of Figure 11.1. Can you make any general observations about the usefulness of Scheme for symbolic compu- tation, based on your experience?
-
-## 11.5
-
-Suppose we wish to remove adjacent duplicate elements from a list (e.g., after sorting). The following Scheme function accomplishes this goal:
+## 11.5 Suppose we wish to remove adjacent duplicate elements from a list (e.g., after sorting). The following Scheme function accomplishes this goal:
 
 ```
 (define unique
@@ -1223,9 +1159,7 @@ Suppose we wish to remove adjacent duplicate elements from a list (e.g., after s
 
 Write a similar function that uses the imperative features of Scheme to modify L “in place,” rather than building a new list. Compare your func- tion to the code above in terms of brevity, conceptual clarity, and speed. 11.6 Write tail-recursive versions of the following: (a) ;; compute integer log, base 2 ;; (number of bits in binary representation) ;; works only for positive integers (define log2 (lambda (n) (if (= n 1) 1 (+ 1 (log2 (quotient n 2))))))
 
-## (b)
-
-;; find minimum element in a list (define min (lambda (l) (cond ((null? l) '()) ((null? (cdr l)) (car l)) (#t (let ((a (car l)) (b (min (cdr l)))) (if (< b a) b a)))))) 11.7 Write purely functional Scheme functions to (a) return all* rotations* of a given list. For example, (rotate ‚(a b c d e)) should return ((a b c d e) (b c d e a) (c d e a b) (d e a b c) (e a b c d)) (in some order). (b) return a list containing all elements of a given list that satisfy a given predicate. For example, (filter (lambda (x) (< x 5)) ‚(3 9 5 8 2 4 7)) should return (3 2 4). 11.8 Write a purely functional Scheme function that returns a list of all permu- tations of a given list. For example, given (a b c), it should return ((a b c) (b a c) (b c a) (a c b) (c a b) (c b a)) (in some order). 11.9 Modify the Scheme program of Figure 11.1 or the OCaml program of Fig- ure 11.3 to simulate an NFA (nondeterministic ﬁnite automaton), rather than a DFA. (The distinction between these automata is described in Sec- tion 2.2.1.) Since you cannot “guess” correctly in the face of a multivalued
+(b) ;; find minimum element in a list (define min (lambda (l) (cond ((null? l) '()) ((null? (cdr l)) (car l)) (#t (let ((a (car l)) (b (min (cdr l)))) (if (< b a) b a)))))) 11.7 Write purely functional Scheme functions to (a) return all* rotations* of a given list. For example, (rotate ‚(a b c d e)) should return ((a b c d e) (b c d e a) (c d e a b) (d e a b c) (e a b c d)) (in some order). (b) return a list containing all elements of a given list that satisfy a given predicate. For example, (filter (lambda (x) (< x 5)) ‚(3 9 5 8 2 4 7)) should return (3 2 4). 11.8 Write a purely functional Scheme function that returns a list of all permu- tations of a given list. For example, given (a b c), it should return ((a b c) (b a c) (b c a) (a c b) (c a b) (c b a)) (in some order). 11.9 Modify the Scheme program of Figure 11.1 or the OCaml program of Fig- ure 11.3 to simulate an NFA (nondeterministic ﬁnite automaton), rather than a DFA. (The distinction between these automata is described in Sec- tion 2.2.1.) Since you cannot “guess” correctly in the face of a multivalued
 
 transition function, you will need either to use explicitly coded backtrack- ing to search for an accepting series of moves (if there is one), or keep track of* all* possible states that the machine could be in at a given point in time. 11.10 Consider the problem of determining whether two trees have the same *fringe*: the same set of leaves in the same order, regardless of internal struc- ture. An obvious way to solve this problem is to write a function flatten that takes a tree as argument and returns an ordered list of its leaves. Then we can say
 
@@ -1251,9 +1185,7 @@ Now we can deﬁne the driver to expect an “ostream”—an empty list or a pa
 
 Note the use of force. Show how to write the function squares so that it takes an istream as argument and returns an ostream. You should then be able to type (driver (squares (input))) and see appropriate behavior. 11.12 Write new versions of cons, car, and cdr that operate on streams. Us- ing them, rewrite the code of the previous exercise to eliminate the calls to delay and force. Note that the stream version of cons will need to avoid evaluating its second argument; you will need to learn how to deﬁne macros (derived special forms) in Scheme.
 
-## 11.13
-
-Write the standard quicksort algorithm in Scheme, without using any im- perative language features. Be careful to avoid the trivial update problem; your code should run in expected time* n* log* n*. Rewrite your code using arrays (you will probably need to consult a Scheme manual for further information). Compare the running time and space requirements of your two sorts. 11.14 Write insert and find routines that manipulate binary search trees in Scheme (consult an algorithms text if you need more information). Ex- plain why the trivial update problem does* not* impact the asymptotic per- formance of insert. 11.15 Write an LL(1) parser generator in purely functional Scheme. If you con- sult Figure 2.24, remember that you will need to use tail recursion in place of iteration. Assume that the input CFG consists of a list of lists, one per nonterminal in the grammar. The ﬁrst element of each sublist should be the nonterminal; the remaining elements should be the right-hand sides of the productions for which that nonterminal is the left-hand side. You may assume that the sublist for the start symbol will be the ﬁrst one in the list. If we use quoted strings to represent grammar symbols, the calculator grammar of Figure 2.16 would look like this:
+11.13 Write the standard quicksort algorithm in Scheme, without using any im- perative language features. Be careful to avoid the trivial update problem; your code should run in expected time* n* log* n*. Rewrite your code using arrays (you will probably need to consult a Scheme manual for further information). Compare the running time and space requirements of your two sorts. 11.14 Write insert and find routines that manipulate binary search trees in Scheme (consult an algorithms text if you need more information). Ex- plain why the trivial update problem does* not* impact the asymptotic per- formance of insert. 11.15 Write an LL(1) parser generator in purely functional Scheme. If you con- sult Figure 2.24, remember that you will need to use tail recursion in place of iteration. Assume that the input CFG consists of a list of lists, one per nonterminal in the grammar. The ﬁrst element of each sublist should be the nonterminal; the remaining elements should be the right-hand sides of the productions for which that nonterminal is the left-hand side. You may assume that the sublist for the start symbol will be the ﬁrst one in the list. If we use quoted strings to represent grammar symbols, the calculator grammar of Figure 2.16 would look like this:
 
 ```
 '(("program"
@@ -1334,21 +1266,13 @@ head naturals;; =*⇒*1 head (rest naturals);; =*⇒*2 head (rest (rest naturals
 
 The delayed list naturals is effectively of unlimited length. It will be computed out only as far as actually needed. If a value is needed more than once, however, it will be recomputed every time. Show how to use pointers and assignment (Example 8.42) to memoize the values of a delayed_list, so that elements are computed only once. 11.19 Write an OCaml version of Example 11.67. Alternatively (or in addition), solve Exercises 11.5, 11.7, 11.8, 11.10, 11.13, 11.14, or 11.15 in OCaml.
 
-### 11.20–11.23 In More Depth.
-11.11
-**Explorations**
+11.20–11.23 In More Depth. 11.11 **Explorations**
 
-### 11.24
+11.24 Read the original self-deﬁnition of Lisp [MAE+65]. Compare it to a sim- ilar deﬁnition of Scheme [AS96, Chap. 4]. What is different? What has stayed the same? What is built into apply and eval in each deﬁnition? What do you think of the whole idea? Does a metacircular interpreter really deﬁne anything, or is it “circular reasoning”? 11.25 Read the Turing Award lecture of John Backus [Bac78], in which he argues for functional programming. How does his FP notation compare to the Lisp and ML language families? 11.26 Learn more about monads in Haskell. Pay particular attention to the def- inition of lists. Explain the relationship of the list monad to list com- prehensions (Example 8.58), iterators, continuations (Section 6.2.2), and backtracking search. 11.27 Read ahead and learn about* transactional memory* (Section 13.4.4). Then read up on STM Haskell [HMPH05]. Explain how monads facilitate the serialization of updates to locations shared between threads. 11.28 We have seen that Lisp and ML include such imperative features as assign- ment and iteration. How important are these? What do languages like Haskell give up (conversely, what do they gain) by insisting on a purely functional programming style? In a similar vein, what do you think of at- tempts in several recent imperative languages (notably Python and C#— see Sidebar 11.6) to facilitate functional programming with function con- structors and unlimited extent?
 
-Read the original self-deﬁnition of Lisp [MAE+65]. Compare it to a sim- ilar deﬁnition of Scheme [AS96, Chap. 4]. What is different? What has stayed the same? What is built into apply and eval in each deﬁnition? What do you think of the whole idea? Does a metacircular interpreter really deﬁne anything, or is it “circular reasoning”? 11.25 Read the Turing Award lecture of John Backus [Bac78], in which he argues for functional programming. How does his FP notation compare to the Lisp and ML language families? 11.26 Learn more about monads in Haskell. Pay particular attention to the def- inition of lists. Explain the relationship of the list monad to list com- prehensions (Example 8.58), iterators, continuations (Section 6.2.2), and backtracking search. 11.27 Read ahead and learn about* transactional memory* (Section 13.4.4). Then read up on STM Haskell [HMPH05]. Explain how monads facilitate the serialization of updates to locations shared between threads. 11.28 We have seen that Lisp and ML include such imperative features as assign- ment and iteration. How important are these? What do languages like Haskell give up (conversely, what do they gain) by insisting on a purely functional programming style? In a similar vein, what do you think of at- tempts in several recent imperative languages (notably Python and C#— see Sidebar 11.6) to facilitate functional programming with function con- structors and unlimited extent?
+11.29 Investigate the compilation of functional programs. What special issues arise? What techniques are used to address them? Starting places for your search might include the compiler texts of Appel [App97], Wilhelm and Maurer [WM95], and Grune et al. [GBJ+12].
 
-### 11.29
-
-Investigate the compilation of functional programs. What special issues arise? What techniques are used to address them? Starting places for your search might include the compiler texts of Appel [App97], Wilhelm and Maurer [WM95], and Grune et al. [GBJ+12].
-
-### 11.30–11.32 In More Depth.
-11.12
-**Bibliographic Notes**
+11.30–11.32 In More Depth. 11.12 **Bibliographic Notes**
 
 Lisp, the original functional programming language, dates from the work of Mc- Carthy and his associates in the late 1950s. Bibliographic references for Erlang, Haskell, Lisp, Miranda, ML, OCaml, Scheme, Single Assignment C, and Sisal can be found in Appendix A. Historically important dialects of Lisp include Lisp 1.5 [MAE+65], MacLisp [Moo78] (no relation to the Apple Macintosh), and In- terlisp [TM81]. The book by Abelson and Sussman [AS96], long used for introductory pro- gramming classes at MIT and elsewhere, is a classic guide to fundamental pro- gramming concepts, and to functional programming in particular. Additional historical references can be found in the paper by Hudak [Hud89], which surveys the ﬁeld from the point of view of Haskell. The lambda calculus was introduced by Church in 1941 [Chu41]. A classic reference is the text of Curry and Feys [CF58]. Barendregt’s book [Bar84] is a standard modern reference. Michaelson [Mic89] provides an accessible intro- duction to the formalism, together with a clear explanation of its relationship to Lisp and ML. Stansifer [Sta95, Sec. 7.6] provides a good informal discussion and correctness proof for the ﬁxed-point combinator** Y** (see Exercise C 11.21). John Backus, one of the original developers of Fortran, argued forcefully for a move to functional programming in his 1977 Turing Award lecture [Bac78]. His functional programming notation is known as FP. Peyton Jones [Pey87, Pey92], Wilhelm and Maurer [WM95, Chap. 3], Appel [App97, Chap. 15], and Grune et al. [GBJ+12, Chap. 7] discuss the implementation of functional languages. Pey- ton Jones’s paper on the “awkward squad” [Pey01] is widely considered the deﬁni- tive introduction to monads in Haskell. While Lisp dates from the early 1960s, it is only in recent years that functional languages have seen widespread use in large commercial systems. Wadler [Wad98a, Wad98b] describes the situation as of the late 1990s, when the tide began to turn. Descriptions of many subsequent projects can be found in the proceedings of the Commercial Users of Functional Programming workshop (*cufp.galois.com*), held annually since 2004. The* Journal of Functional Programming* also publishes a special category of articles on commercial use. Armstrong reports [Arm07] that the Ericsson AXD301, a telephone switching system comprising more than two million lines of Erlang code, has achieved an astonishing “nine nines” level of reliability—the equivalent of less than 32 ms of downtime per year.
 

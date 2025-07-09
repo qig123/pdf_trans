@@ -1,6 +1,6 @@
-## 1
+# Chapter 1: Introduction
 
-### **Introduction**
+**1** **Introduction**
 
 **The ﬁrst electronic computers were monstrous contraptions,** ﬁlling several rooms, consuming as much electricity as a good-size factory, and costing millions of 1940s dollars (but with much less computing power than even the sim- plest modern cell phone). The programmers who used these machines believed that the computer’s time was more valuable than theirs. They programmed in machine language. Machine language is the sequence of bits that directly controls a processor, causing it to add, compare, move data from one place to another, and so forth at appropriate times. Specifying programs at this level of detail is an enormously tedious task. The following program calculates the greatest common **EXAMPLE** 1.1
 
@@ -72,9 +72,7 @@ In the early days of computing the implementor’s viewpoint was predominant. Pr
 
 **DESIGN & IMPLEMENTATION**
 
-## 1.1 Introduction
-
-Throughout the book, sidebars like this one will highlight the interplay of language design and language implementation. Among other things, we will consider
+## 1.1 Introduction Throughout the book, sidebars like this one will highlight the interplay of language design and language implementation. Among other things, we will consider
 
 Cases (such as those mentioned in this section) in which ease or difﬁculty of implementation signiﬁcantly affected the success of a language Language features that many designers now believe were mistakes, at least in part because of implementation difﬁculties Potentially useful features omitted from some languages because of concern that they might be too difﬁcult or slow to implement Language features introduced at least in part to facilitate efﬁcient or elegant implementations Cases in which a machine architecture makes reasonable features unreason- ably expensive Various other tradeoffs in which implementation plays a signiﬁcant role
 
@@ -130,35 +128,19 @@ manipulate structured data can thus be found in almost any sophisticated pro- gr
 
 Finally, this book should help prepare you for further study in language de- sign or implementation, should you be so inclined. It will also equip you to un- derstand the interactions of languages with operating systems and architectures, should those areas draw your interest.
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 1. What is the difference between machine language and assembly language? 2. In what way(s) are high-level languages an improvement on assembly lan- guage? Are there circumstances in which it still make sense to program in assembler? 3. Why are there so many programming languages?
 
-* 
-  What is the difference between machine language and assembly language?
-  2.
-  In what way(s) are high-level languages an improvement on assembly lan-
-  guage? Are there circumstances in which it still make sense to program in
-  assembler?
-  3.
-  Why are there so many programming languages?
 * 
   What makes a programming language successful?
   5.
   Name three languages in each of the following categories: von Neumann,
   functional, object-oriented. Name two logic languages. Name two widely
   used concurrent languages.
-### 6.
-What distinguishes declarative languages from imperative languages?
-7.
-What organization spearheaded the development of Ada?
+## 6. What distinguishes declarative languages from imperative languages? 7. What organization spearheaded the development of Ada?
 
-* 
-  What is generally considered the ﬁrst high-level programming language?
-  9.
-  What was the ﬁrst functional language?
-  10. Why aren’t concurrent languages listed as a separate family in Figure 1.1?
-## 1.4
+## 8. What is generally considered the ﬁrst high-level programming language? 9. What was the ﬁrst functional language? 10. Why aren’t concurrent languages listed as a separate family in Figure 1.1?
 
-### **Compilation and Interpretation**
+1.4 **Compilation and Interpretation**
 
 At the highest level of abstraction, the compilation and execution of a program in **EXAMPLE** 1.7
 
@@ -198,9 +180,7 @@ We generally say that a language is “interpreted” when the initial translato
 
 **DESIGN & IMPLEMENTATION**
 
-## 1.2 Compiled and interpreted languages
-
-Certain languages (e.g., Smalltalk and Python) are sometimes referred to as “interpreted languages” because most of their semantic error checking must be performed at run time. Certain other languages (e.g., Fortran and C) are sometimes referred to as “compiled languages” because almost all of their semantic error checking can be performed statically. This terminology isn’t strictly correct: interpreters for C and Fortran can be built easily, and a com- piler can generate code to perform even the most extensive dynamic semantic checks. That said, language design has a profound effect on “compilability.”
+1.2 Compiled and interpreted languages Certain languages (e.g., Smalltalk and Python) are sometimes referred to as “interpreted languages” because most of their semantic error checking must be performed at run time. Certain other languages (e.g., Fortran and C) are sometimes referred to as “compiled languages” because almost all of their semantic error checking can be performed statically. This terminology isn’t strictly correct: interpreters for C and Fortran can be built easily, and a com- piler can generate code to perform even the most extensive dynamic semantic checks. That said, language design has a profound effect on “compilability.”
 
 In practice one sees a broad spectrum of implementation strategies:
 
@@ -294,9 +274,7 @@ In a more general context, suppose we were building one of the ﬁrst compil- er
 
 **DESIGN & IMPLEMENTATION**
 
-## 1.3 The early success of Pascal
-
-The P-code-based implementation of Pascal, and its use of bootstrapping, are largely responsible for the language’s remarkable success in academic circles in the 1970s. No single hardware platform or operating system of that era dominated the computer landscape the way the x86, Linux, and Windows do today.8 Wirth’s toolkit made it possible to get an implementation of Pascal up and running on almost any platform in a week or so. It was one of the ﬁrst great successes in system portability.
+1.3 The early success of Pascal The P-code-based implementation of Pascal, and its use of bootstrapping, are largely responsible for the language’s remarkable success in academic circles in the 1970s. No single hardware platform or operating system of that era dominated the computer landscape the way the x86, Linux, and Windows do today.8 Wirth’s toolkit made it possible to get an implementation of Pascal up and running on almost any platform in a week or so. It was one of the ﬁrst great successes in system portability.
 
 **8** Throughout this book we will use the term “x86” to refer to the instruction set architecture of the Intel 8086 and its descendants, including the various Pentium, “Core,” and Xeon processors. Intel calls this architecture the IA-32, but x86 is a more generic term that encompasses the offerings of competitors such as AMD as well.
 
@@ -334,43 +312,30 @@ Compilers and interpreters do not exist in isolation. Programmers are assisted i
 
 Modern environments provide more integrated tools. When an invalid address error occurs in an integrated development environment (IDE), a new window is likely to appear on the user’s screen, with the line of source code at which the error occurred highlighted. Breakpoints and tracing can then be set in this win- dow without explicitly invoking a debugger. Changes to the source can be made without explicitly invoking an editor. If the user asks to rerun the program af- ter making changes, a new version may be built without explicitly invoking the compiler or conﬁguration manager. The editor for an IDE may incorporate knowledge of language syntax, provid- ing templates for all the standard control structures, and checking syntax as it is typed in. Internally, the IDE is likely to maintain not only a program’s source and object code, but also a partially compiled internal representation. When the source is edited, the internal representation will be updated automatically—often incrementally (without reparsing large portions of the source). In some cases, structural changes to the program may be implemented ﬁrst in the internal rep- resentation, and then automatically reﬂected in the source. IDEs are fundamental to Smalltalk—it is nearly impossible to separate the lan- guage from its graphical environment—and have been routinely used for Com- mon Lisp since the 1980s. With the ubiquity of graphical interfaces, integrated environments have largely displaced command-line tools for many languages and systems. Popular open-source IDEs include Eclipse and NetBeans. Commercial systems include the Visual Studio environment from Microsoft and the XCode environment from Apple. Much of the appearance of integration can also be achieved within sophisticated editors such as emacs.
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 11. Explain the distinction between interpretation and compilation. What are the comparative advantages and disadvantages of the two approaches?
 
-### 11. Explain the distinction between interpretation and compilation. What are the
+## 12. Is Java compiled or interpreted (or both)? How do you know? 13. What is the difference between a compiler and a preprocessor?
 
-comparative advantages and disadvantages of the two approaches?
-
-### 12. Is Java compiled or interpreted (or both)? How do you know?
-
-### 13. What is the difference between a compiler and a preprocessor?
-
-### 14. What was the intermediate form employed by the original AT&T C++ com-
-
-piler?
+## 14. What was the intermediate form employed by the original AT&T C++ com- piler?
 
 **DESIGN & IMPLEMENTATION**
 
-### 1.4 Powerful development environments
+1.4 Powerful development environments Sophisticated development environments can be a two-edged sword. The quality of the Common Lisp environment has arguably contributed to its widespread acceptance. On the other hand, the particularity of the graphi- cal environment for Smalltalk (with its insistence on speciﬁc fonts, window styles, etc.) made it difﬁcult to port the language to systems accessed through a textual interface, or to graphical systems with a different “look and feel.”
 
-Sophisticated development environments can be a two-edged sword. The quality of the Common Lisp environment has arguably contributed to its widespread acceptance. On the other hand, the particularity of the graphi- cal environment for Smalltalk (with its insistence on speciﬁc fonts, window styles, etc.) made it difﬁcult to port the language to systems accessed through a textual interface, or to graphical systems with a different “look and feel.”
+## 15. What is P-code?
 
-### 15. What is P-code?
+## 16. What is bootstrapping? 17. What is a just-in-time compiler?
 
-### 16. What is bootstrapping?
+## 18. Name two languages in which a program can write new pieces of itself “on the ﬂy.”
 
-### 17. What is a just-in-time compiler?
-
-### 18. Name two languages in which a program can write new pieces of itself “on
-
-the ﬂy.”
-
-### 19. Brieﬂy describe three “unconventional” compilers—compilers whose pur-
-
-pose is not to prepare a high-level program for execution on a general- purpose processor. 20. List six kinds of tools that commonly support the work of a compiler within a larger programming environment. 21. Explain how an integrated development environment (IDE) differs from a collection of command-line tools.
-
-## 1.6
-
-### **An Overview of Compilation**
+* Brieﬂy describe three “unconventional” compilers—compilers whose pur-
+  pose is not to prepare a high-level program for execution on a general-
+  purpose processor.
+  20. List six kinds of tools that commonly support the work of a compiler within
+  a larger programming environment.
+  21. Explain how an integrated development environment (IDE) differs from a
+  collection of command-line tools.
+1.6 **An Overview of Compilation**
 
 Compilers are among the most well-studied computer programs. We will con- sider them repeatedly throughout the rest of the book, and in chapters 2, 4, 15, and 17 in particular. The remainder of this section provides an introductory overview. In a typical compiler, compilation proceeds through a series of well-deﬁned **EXAMPLE** 1.19
 
@@ -386,7 +351,7 @@ for more than one machine (target language), and so that the back end may be sha
 
 to the dramatic increases in memory sizes of the mid to late 1980s, compilers were also sometimes divided into passes to minimize memory usage: as each pass completed, the next could reuse its code space.
 
-## 1.6.1** Lexical and Syntax Analysis**
+1.6.1** Lexical and Syntax Analysis**
 
 Consider the greatest common divisor (GCD) problem introduced at the begin- **EXAMPLE** 1.20
 
@@ -448,13 +413,13 @@ GCD program parse tree tree for our GCD program (based on a full grammar not sho
 
 ident(j) *postfix-expression* 13
 
-## **B**
+**B**
 
 *declarator* = *initializer*
 
 *block-item*
 
-## **A**
+**A**
 
 } { *block-item-list_opt*
 
@@ -582,9 +547,7 @@ ident(j) 2 10
 
 *postfix-expression*
 
-## A
-
-## **B**
+**A** **B**
 
 *expression_opt*
 
@@ -663,7 +626,7 @@ ident(i) 2
 
 length, and (b) the use of the equally artiﬁcial* assignment-expression*,* additive-* *expression*,* multiplicative-expression*, and so on, to capture precedence and asso- ciativity in arithmetic expressions. We shall see in the following subsection that much of this complexity can be discarded once parsing is complete. ■ In the process of scanning and parsing, the compiler or interpreter checks to see that all of the program’s tokens are well formed, and that the sequence of tokens conforms to the syntax deﬁned by the context-free grammar. Any mal- formed tokens (e.g., 123abc or $@foo in C) should cause the scanner to produce an error message. Any syntactically invalid token sequence (e.g., A = X Y Z in C) should lead to an error message from the parser.
 
-## 1.6.2** Semantic Analysis and Intermediate Code Generation**
+1.6.2** Semantic Analysis and Intermediate Code Generation**
 
 Semantic analysis is the discovery of* meaning* in a program. Among other things, the semantic analyzer recognizes when multiple occurrences of the same identi- ﬁer are meant to refer to the same program entity, and ensures that the uses are consistent. In most languages it also tracks the* types* of both identiﬁers and ex- pressions, both to verify consistent usage and to guide the generation of code in the back end of a compiler. To assist in its work, the semantic analyzer typically builds and maintains a *symbol table* data structure that maps each identiﬁer to the information known about it. Among other things, this information includes the identiﬁer’s type, in- ternal structure (if any), and scope (the portion of the program in which it is valid). Using the symbol table, the semantic analyzer enforces a large variety of rules that are not captured by the hierarchical structure of the context-free grammar and the parse tree. In C, for example, it checks to make sure that
 
@@ -686,21 +649,11 @@ Interpreting the syntax tree preter would start at the root of Figure 1.6 and vi
 ![Figure 1.6 Syntax tree...](images/page_67_vector_325.png)
 *Figure 1.6 Syntax tree and symbol table for the GCD program. Note the contrast to Fig- ure 1.5: the syntax tree retains just the essential structure of the program, omitting details that were needed only to drive the parsing algorithm.*
 
-#### idealized machine. We will consider this option further in Chapter 15, where a
+idealized machine. We will consider this option further in Chapter 15, where a control ﬂow graph for our GCD program appears in Figure 15.3. In a suite of re- lated compilers, the front ends for several languages and the back ends for several machines would share a common intermediate form.
 
-#### control ﬂow graph for our GCD program appears in Figure 15.3. In a suite of re-
+1.6.3** Target Code Generation**
 
-#### lated compilers, the front ends for several languages and the back ends for several
-
-machines would share a common intermediate form.
-
-## 1.6.3** Target Code Generation**
-
-#### The code generation phase of a compiler translates the intermediate form into
-
-#### the target language. Given the information contained in the syntax tree, gener-
-
-ating correct code is usually not a difﬁcult task (generating* good* code is harder, as we shall see in Section 1.6.4). To generate assembly or machine language, the **EXAMPLE** 1.26
+The code generation phase of a compiler translates the intermediate form into the target language. Given the information contained in the syntax tree, gener- ating correct code is usually not a difﬁcult task (generating* good* code is harder, as we shall see in Section 1.6.4). To generate assembly or machine language, the **EXAMPLE** 1.26
 
 GCD program assembly code code generator traverses the symbol table to assign locations to variables, and then traverses the intermediate representation of the program, generating loads and stores for variable references, interspersed with appropriate arithmetic opera- tions, tests, and branches. Naive code for our GCD example appears in Figure 1.7, in x86 assembly language. It was generated automatically by a simple pedagogical compiler. The assembly language mnemonics may appear a bit cryptic, but the com- ments on each line (not generated by the compiler!) should make the correspon-
 
@@ -711,43 +664,31 @@ dence between Figures 1.6 and 1.7 generally apparent. A few hints: esp, ebp, eax
 
 Often a code generator will save the symbol table for later use by a symbolic debugger, by including it in a nonexecutable part of the target code.
 
-### 1.6.4** Code Improvement**
+1.6.4** Code Improvement**
 
 Code improvement is often referred to as* optimization*, though it seldom makes anything optimal in any absolute sense. It is an optional phase of compilation whose goal is to transform a program into a new version that computes the same result more efﬁciently—more quickly or using less memory, or both. Some improvements are machine independent. These can be performed as transformations on the intermediate form. Other improvements require an un- derstanding of the target machine (or of whatever will execute the program in the target language). These must be performed as transformations on the target pro- gram. Thus code improvement often appears twice in the list of compiler phases: once immediately after semantic analysis and intermediate code generation, and again immediately after target code generation. Applying a good code improver to the code in Figure 1.7 produces the code **EXAMPLE** 1.27
 
 GCD program optimization shown in Example 1.2. Comparing the two programs, we can see that the im- proved version is quite a lot shorter. Conspicuously absent are most of the loads and stores. The machine-independent code improver is able to verify that i and j can be kept in registers throughout the execution of the main loop. (This would not have been the case if, for example, the loop contained a call to a subrou- tine that might reuse those registers, or that might try to modify i or j.) The machine-speciﬁc code improver is then able to assign i and j to actual regis- ters of the target machine. For modern microprocessors, with complex internal behavior, compilers can usually generate better code than can human assembly language programmers. ■
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 22. List the principal phases of compilation, and describe the work performed by each. 23. List the phases that are also executed as part of interpretation.
 
-#### 22. List the principal phases of compilation, and describe the work performed by
+* Describe the form in which a program is passed from the scanner to the
+  parser; from the parser to the semantic analyzer; from the semantic analyzer
+  to the intermediate code generator.
+  25. What distinguishes the front end of a compiler from the back end?
+* What is the difference between a phase and a pass of compilation? Underwhat
+  circumstances does it make sense for a compiler to have multiple passes?
+  27. What is the purpose of the compiler’s symbol table?
+  28. What is the difference between static and dynamic semantics?
+## 29. On modern machines, do assembly language programmers still tend to write better code than a good compiler can? Why or why not?
 
-each. 23. List the phases that are also executed as part of interpretation.
-
-#### 24. Describe the form in which a program is passed from the scanner to the
-
-parser; from the parser to the semantic analyzer; from the semantic analyzer to the intermediate code generator. 25. What distinguishes the front end of a compiler from the back end?
-
-#### 26. What is the difference between a phase and a pass of compilation? Underwhat
-
-circumstances does it make sense for a compiler to have multiple passes? 27. What is the purpose of the compiler’s symbol table? 28. What is the difference between static and dynamic semantics?
-
-### 29. On modern machines, do assembly language programmers still tend to write
-
-better code than a good compiler can? Why or why not?
-
-## 1.7
-
-### **Summary and Concluding Remarks**
+1.7 **Summary and Concluding Remarks**
 
 In this chapter we introduced the study of programming language design and implementation. We considered why there are so many languages, what makes them successful or unsuccessful, how they may be categorized for study, and what beneﬁts the reader is likely to gain from that study. We noted that language design and language implementation are intimately tied to one another. Obviously an implementation must conform to the rules of the language. At the same time, a language designer must consider how easy or difﬁcult it will be to implement various features, and what sort of performance is likely to result. Language implementations are commonly differentiated into those based on interpretation and those based on compilation. We noted, however, that the dif- ference between these approaches is fuzzy, and that most implementations in- clude a bit of each. As a general rule, we say that a language is compiled if exe- cution is preceded by a translation step that (1) fully analyzes both the structure (syntax) and meaning (semantics) of the program, and (2) produces an equiva- lent program in a signiﬁcantly different form. The bulk of the implementation material in this book pertains to compilation. Compilers are generally structured as a series of* phases*. The ﬁrst few phases— scanning, parsing, and semantic analysis—serve to analyze the source program. Collectively these phases are known as the compiler’s* front end*. The ﬁnal few phases—target code generation and machine-speciﬁc code improvement—are known as the* back end*. They serve to build a target program—preferably a fast one—whose semantics match those of the source. Between the front end and the back end, a good compiler performs extensive machine-independent code im- provement; the phases of this “middle end” typically comprise the bulk of the code of the compiler, and account for most of its execution time. Chapters 3, 6, 7, 8, 9, and 10 form the core of the rest of this book. They cover fundamental issues of language design, both from the point of view of the pro- grammer and from the point of view of the language implementor. To support the discussion of implementations, Chapters 2 and 4 describe compiler front ends in more detail than has been possible in this introduction. Chapter 5 provides an overview of assembly-level architecture. Chapters 15 through 17 discuss com- piler back ends, including assemblers and linkers, run-time systems, and code improvement techniques. Additional language paradigms are covered in Chap- ters 11 through 14. Appendix A lists the principal programming languages men- tioned in the text, together with a genealogical chart and bibliographic references. Appendix B contains a list of “Design & Implementation” sidebars; Appendix C contains a list of numbered examples.
 
-## 1.8
+1.8 **Exercises**
 
-### **Exercises**
-
-### 1.1
-
-Errors in a computer program can be classiﬁed according to when they are detected and, if they are detected at compile time, what part of the compiler detects them. Using your favorite imperative language, give an example of each of the following. (a) A lexical error, detected by the scanner (b) A syntax error, detected by the parser (c) A static semantic error, detected by semantic analysis (d) A dynamic semantic error, detected by code generated by the compiler (e) An error that the compiler can neither catch nor easily generate code to catch (this should be a violation of the language deﬁnition, not just a program bug) 1.2 Consider again the Pascal tool set distributed by Niklaus Wirth (Exam- ple 1.15). After successfully building a machine language version of the Pascal compiler, one could in principle discard the P-code interpreter and the P-code version of the compiler. Why might one choose* not* to do so? 1.3 Imperative languages like Fortran and C are typically compiled, while scripting languages, in which many issues cannot be settled until run time, are typically interpreted. Is interpretation simply what one “has to do” when compilation is infeasible, or are there actually some* advantages* to interpret- ing a language, even when a compiler is available? 1.4 The gcd program of Example 1.20 might also be written
+1.1 Errors in a computer program can be classiﬁed according to when they are detected and, if they are detected at compile time, what part of the compiler detects them. Using your favorite imperative language, give an example of each of the following. (a) A lexical error, detected by the scanner (b) A syntax error, detected by the parser (c) A static semantic error, detected by semantic analysis (d) A dynamic semantic error, detected by code generated by the compiler (e) An error that the compiler can neither catch nor easily generate code to catch (this should be a violation of the language deﬁnition, not just a program bug) 1.2 Consider again the Pascal tool set distributed by Niklaus Wirth (Exam- ple 1.15). After successfully building a machine language version of the Pascal compiler, one could in principle discard the P-code interpreter and the P-code version of the compiler. Why might one choose* not* to do so? 1.3 Imperative languages like Fortran and C are typically compiled, while scripting languages, in which many issues cannot be settled until run time, are typically interpreted. Is interpretation simply what one “has to do” when compilation is infeasible, or are there actually some* advantages* to interpret- ing a language, even when a compiler is available? 1.4 The gcd program of Example 1.20 might also be written
 
 ```
 int main() {

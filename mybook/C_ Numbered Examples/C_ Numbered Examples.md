@@ -1,22 +1,22 @@
-## C
+# C: Numbered Examples
 
-### **Numbered Examples**
+**C** **Numbered Examples**
 
-#### **Chapter 1: Introduction**
+**Chapter 1: Introduction**
 
-1.25 Interpreting the syntax tree 33 1.26 GCD program assembly code 34 1.27 GCD program optimization 36
+## 1.25 Interpreting the syntax tree 33 1.26 GCD program assembly code 34 1.27 GCD program optimization 36
 
-1.1 GCD program in x86 machine language 5 1.2 GCD program in x86 assembler 5
+## 1.1 GCD program in x86 machine language 5 1.2 GCD program in x86 assembler 5
 
-#### **Chapter 2: Programming Language Syntax**
+**Chapter 2: Programming Language Syntax**
 
 The Art of Language Design
 
 The Programming Language Spectrum
 
-2.1 Syntax of Arabic numerals 43
+## 2.1 Syntax of Arabic numerals 43
 
-1.3 Classiﬁcation of programming languages 11 1.4 GCD function in C 13 1.5 GCD function in OCaml 13 1.6 GCD rules in Prolog 13
+## 1.3 Classiﬁcation of programming languages 11 1.4 GCD function in C 13 1.5 GCD function in OCaml 13 1.6 GCD rules in Prolog 13
 
 Specifying Syntax: Regular Expressions and Context-Free Grammars
 
@@ -40,19 +40,19 @@ An Overview of Compilation
 
 Parsing
 
-2.20 Top-down and bottom-up parsing 70 2.21 Bounding space with a bottom-up grammar 72
+## 2.20 Top-down and bottom-up parsing 70 2.21 Bounding space with a bottom-up grammar 72
 
 2.60 0*n*1*n* is not a regular language C*·*19 2.61 Separation of grammar classes C*·*20 2.62 Separation of language classes C*·*20
 
 2.22 Top-down grammar for a calculator language 73 2.23 Recursive descent parser for the calcula- tor language 75 2.24 Recursive descent parse of a “sum and average” program 75 2.25 Left recursion 79 2.26 Common preﬁxes 79 2.27 Eliminating left recursion 80 2.28 Left factoring 80 2.29 Parsing a “dangling else” 80 2.30 “Dangling else” program bug 81 2.31 End markers for structured statements 81 2.32 The need for elsif 82 2.33 Driver and table for top-down parsing 82 2.34 Table-driven parse of the “sum and average” program 83 2.35 Predict sets for the calculator language 84 2.36 Derivation of an id list 90 2.37 Bottom-up grammar for the calculator language 90 2.38 Bottom-up parse of the “sum and average” program 91 2.39 CFSM for the bottom-up calculator grammar 95 2.40 Epsilon productions in the bottom-up calculator grammar 95 2.41 CFSM with epsilon productions 101 2.42 A syntax error in C 102 2.43 Syntax error in C (reprise) C*·*1 2.44 The problem with panic mode C*·*1 2.45 Phrase-level recovery in recursive descent C*·*2 2.46 Cascading syntax errors C*·*3 2.47 Reducing cascading errors with context- speciﬁc look-ahead C*·*4 2.48 Recursive descent with full phrase-level recovery C*·*4 2.49 Exceptions in a recursive descent parser C*·*5 2.50 Error production for “; else” C*·*6 2.51 Insertion-only repair in FMQ C*·*8 2.52 FMQ with deletions C*·*8 2.53 Panic mode in yacc/bison C*·*11 2.54 Panic mode with statement terminators C*·*11 2.55 Phrase-level recovery in yacc/bison C*·*11
 
-### **Chapter 3: Names, Scopes, and Bindings**
+**Chapter 3: Names, Scopes, and Bindings**
 
 The Notion of Binding Time
 
 Object Lifetime and Storage Management
 
-3.1 Static allocation of local variables 119 3.2 Layout of the run-time stack 120 3.3 External fragmentation in the heap 122
+## 3.1 Static allocation of local variables 119 3.2 Layout of the run-time stack 120 3.3 External fragmentation in the heap 122
 
 Scope Rules
 
@@ -60,7 +60,7 @@ Scope Rules
 
 Implementing Scope
 
-3.45 The LeBlanc-Cook symbol table C*·*27 3.46 Symbol table for a sample program C*·*28 3.47 A-list lookup in Lisp C*·*31 3.48 Central reference table C*·*33 3.49 A-list closures C*·*33
+## 3.45 The LeBlanc-Cook symbol table C*·*27 3.46 Symbol table for a sample program C*·*28 3.47 A-list lookup in Lisp C*·*31 3.48 Central reference table C*·*33 3.49 A-list closures C*·*33
 
 The Meaning of Names within a Scope
 
@@ -76,7 +76,7 @@ The Binding of Referencing Environments
 
 3.30 Deep and shallow binding 152 3.31 Binding rules with static scoping 154 3.32 Returning a ﬁrst-class subroutine in Scheme 156 3.33 An object closure in Java 157 3.34 Delegates in C# 158 3.35 Delegates and unlimited extent 158 3.36 Function objects in C++ 158 3.37 A lambda expression in C# 159 3.38 Variety of lambda syntax 159 3.39 A simple lambda expression in C++11 160 3.40 Variable capture in C++ lambda expres- sions 161 3.41 Lambda expressions in Java 8 162
 
-4.12 Top-down action routines to build a syntax tree 198 4.13 Recursive descent and action routines 199
+## 4.12 Top-down action routines to build a syntax tree 198 4.13 Recursive descent and action routines 199
 
 Space Management for Attributes
 
@@ -84,7 +84,7 @@ Space Management for Attributes
 
 Macro Expansion
 
-3.42 A simple assembly macro 162 3.43 Preprocessor macros in C 163 3.44 “Gotchas” in C macros 163
+## 3.42 A simple assembly macro 162 3.43 Preprocessor macros in C 163 3.44 “Gotchas” in C macros 163
 
 Tree Grammars and Syntax Tree Decoration
 
@@ -92,27 +92,27 @@ Separate Compilation
 
 4.14 Bottom-up CFG for calculator language with types 201 4.15 Syntax tree to average an integer and a real 201 4.16 Tree grammar for the calculator language with types 201 4.17 Tree AG for the calculator language with types 203 4.18 Decorating a tree with the AG of Example 4.17 206
 
-3.50 Namespaces in C++ C*·*39 3.51 Using names from another namespace C*·*39 3.52 Packages in Java C*·*40 3.53 Using names from another package C*·*40 3.54 Multipart package names C*·*41
+## 3.50 Namespaces in C++ C*·*39 3.51 Using names from another namespace C*·*39 3.52 Packages in Java C*·*40 3.53 Using names from another package C*·*40 3.54 Multipart package names C*·*41
 
-### **Chapter 4: Semantic Analysis**
+**Chapter 4: Semantic Analysis**
 
 The Role of the Semantic Analyzer
 
-4.1 Assertions in Java 182 4.2 Assertions in C 183
+## 4.1 Assertions in Java 182 4.2 Assertions in C 183
 
-### **Chapter 5: Target Machine Architecture**
+**Chapter 5: Target Machine Architecture**
 
 The Memory Hierarchy
 
 Attribute Grammars
 
-5.1 Memory hierarchy stats C*·*61
+## 5.1 Memory hierarchy stats C*·*61
 
-4.3 Bottom-up CFG for constant expressions 184 4.4 Bottom-up AG for constant expressions 185 4.5 Top-down AG to count the elements of a list 185
+## 4.3 Bottom-up CFG for constant expressions 184 4.4 Bottom-up AG for constant expressions 185 4.5 Top-down AG to count the elements of a list 185
 
 Data Representation
 
-5.2 Big- and little-endian C*·*63 5.3 Hexadecimal numbers C*·*65 5.4 Two’s complement C*·*66 5.5 Overﬂow in two’s complement addition C*·*66 5.6 Biased exponents C*·*68 5.7 IEEE ﬂoating-point C*·*68
+## 5.2 Big- and little-endian C*·*63 5.3 Hexadecimal numbers C*·*65 5.4 Two’s complement C*·*66 5.5 Overﬂow in two’s complement addition C*·*66 5.6 Biased exponents C*·*68 5.7 IEEE ﬂoating-point C*·*68
 
 Evaluating Attributes
 
@@ -120,13 +120,13 @@ Evaluating Attributes
 
 Instruction Set Architecture (ISA)
 
-5.8 An if statement in x86 assembler C*·*72 5.9 Compare and test instructions C*·*73 5.10 Conditional move C*·*73
+## 5.8 An if statement in x86 assembler C*·*72 5.9 Compare and test instructions C*·*73 5.10 Conditional move C*·*73
 
 Architecture and Implementation
 
-6.34 Short-circuited expressions 243 6.35 Saving time with short-circuiting 243 6.36 Short-circuit pointer chasing 244 6.37 Short-circuiting and other errors 244 6.38 Optional short-circuiting 245
+## 6.34 Short-circuited expressions 243 6.35 Saving time with short-circuiting 243 6.36 Short-circuit pointer chasing 244 6.37 Short-circuiting and other errors 244 6.38 Optional short-circuiting 245
 
-5.11 The x86 ISA C*·*80 5.12 The ARM ISA C*·*81 5.13 x86 and ARM register sets C*·*82
+## 5.11 The x86 ISA C*·*80 5.12 The ARM ISA C*·*81 5.13 x86 and ARM register sets C*·*82
 
 Compiling for Modern Processors
 
@@ -136,13 +136,13 @@ Structured and Unstructured Flow
 
 6.39 Control ﬂow with gotos in Fortran 246 6.40 Escaping a nested subroutine 247 6.41 Structured nonlocal transfers 248 6.42 Error checking with status codes 249 6.43 A simple Ruby continuation 250 6.44 Continuation reuse and unlimited extent 251
 
-### **Chapter 6: Control Flow**
+**Chapter 6: Control Flow**
 
 Sequencing
 
 Expression Evaluation
 
-6.45 Side effects in a random number generator 252
+## 6.45 Side effects in a random number generator 252
 
 6.1 A typical function call 225 6.2 Typical operators 225 6.3 Cambridge Polish (preﬁx) notation 225 6.4 Juxtaposition in ML 225 6.5 Mixﬁx notation in Smalltalk 226 6.6 Conditional expressions 226 6.7 A complicated Fortran expression 226 6.8 Precedence in four inﬂuential languages 227 6.9 A “gotcha” in Pascal precedence 227 6.10 Common rules for associativity 227 6.11 User-deﬁned precedence and associativ- ity in Haskell 228 6.12 L-values and r-values 230 6.13 L-values in C 230 6.14 L-values in C++ 231 6.15 Variables as values and references 231 6.16 Wrapper classes 232 6.17 Boxing in Java 5 and C# 232 6.18 Expression orientation in Algol 68 233 6.19 A “gotcha” in C conditions 234 6.20 Updating assignments 234 6.21 Side effects and updates 235 6.22 Assignment operators 235 6.23 Preﬁx and postﬁx inc/dec 235 6.24 Advantages of postﬁx inc/dec 236 6.25 Simple multiway assignment 236 6.26 Advantages of multiway assignment 236 6.27 Programs outlawed by deﬁnite assign- ment 239 6.28 Indeterminate ordering 240 6.29 A value that depends on ordering 241 6.30 An optimization that depends on ordering 241 6.31 Optimization and mathematical “laws” 242 6.32 Overﬂow and arithmetic “identities” 243 6.33 Reordering and numerical stability 243
 
@@ -156,7 +156,7 @@ Iteration
 
 6.89 Simple generator in Icon C*·*107 6.90 A generator inside an expression C*·*107 6.91 Generating in search of success C*·*108 6.92 Backtracking with multiple generators C*·*108 6.74 while loop in Algol-W 275 6.75 Post-test loop in Pascal and Modula 275 6.76 Post-test loop in C 275 6.77 break statement in C 276 6.78 Exiting a nested loop in Ada 276 6.79 Exiting a nested loop in Perl 276
 
-7.13 Emulating distinguished enum values in Java 309 7.14 Subranges in Pascal 309 7.15 Subranges in Ada 310 7.16 Space requirements of subrange type 310
+## 7.13 Emulating distinguished enum values in Java 309 7.14 Subranges in Pascal 309 7.15 Subranges in Ada 310 7.16 Space requirements of subrange type 310
 
 Type Checking
 
@@ -166,9 +166,9 @@ Recursion
 
 6.80 A “naturally iterative” problem 278 6.81 A “naturally recursive” problem 278 6.82 Implementing problems “the other way” 278 6.83 Iterative implementation of tail recursion 279 6.84 By-hand creation of tail-recursive code 279 6.85 Naive recursive Fibonacci function 280 6.86 Linear iterative Fibonacci function 281 6.87 Efﬁcient tail-recursive Fibonacci function 281 6.88 Lazy evaluation of an inﬁnite data structure 283 6.93 Avoiding asymmetry with non- determinism C*·*110 6.94 Selection with guarded commands C*·*110 6.95 Looping with guarded commands C*·*111 6.96 Nondeterministic message receipt C*·*112 6.97 Nondeterministic server in SR C*·*112 6.98 Naive (unfair) implementation of non- determinism C*·*113 6.99 “Gotcha” in round-robin implementation of nondeterminism C*·*113
 
-### **Chapter 7: Type Systems**
+**Chapter 7: Type Systems**
 
-7.1 Operations that leverage type informa- tion 297 7.2 Errors captured by type information 297 7.3 Types as a source of “may alias” informa- tion 298
+## 7.1 Operations that leverage type informa- tion 297 7.2 Errors captured by type information 297 7.3 Types as a source of “may alias” informa- tion 298
 
 Parametric Polymorphism
 
@@ -184,17 +184,17 @@ Overview
 
 Strings
 
-8.29 Character escapes in C and C++ 375 8.30 char* assignment in C 376
+## 8.29 Character escapes in C and C++ 375 8.30 char* assignment in C 376
 
 Equality Testing and Assignment
 
 Sets
 
-7.57 Equality testing in Scheme 340
+## 7.57 Equality testing in Scheme 340
 
-8.31 Set types in Pascal 376 8.32 Emulating a set with a map in Go 377
+## 8.31 Set types in Pascal 376 8.32 Emulating a set with a map in Go 377
 
-### **Chapter 8: Composite Types**
+**Chapter 8: Composite Types**
 
 Records (Structures)
 
@@ -206,7 +206,7 @@ Pointers and Recursive Types
 
 Arrays
 
-8.13 Array declarations 359 8.14 Multidimensional arrays 360 8.15 Multidimensional vs built-up arrays 360 8.16 Arrays of arrays in C 361
+## 8.13 Array declarations 359 8.14 Multidimensional arrays 360 8.15 Multidimensional vs built-up arrays 360 8.16 Arrays of arrays in C 361
 
 Lists
 
@@ -214,9 +214,7 @@ Lists
 
 8.54 Lists in ML and Lisp 398 8.55 List notation 399 8.56 Basic list operations in Lisp 400 8.57 Basic list operations in OCaml 400 8.58 List comprehensions 400 8.70 Files as a built-in type C*·*150 8.71 The open operation C*·*150 8.72 The close operation C*·*150 8.73 Formatted output in Fortran C*·*152 8.74 Labeled formats C*·*152 8.75 Printing to standard output C*·*153 8.76 Formatted output in Ada C*·*153 8.77 Overloaded put routines C*·*154 8.78 Formatted output in C C*·*154 8.79 Text in format strings C*·*155 8.80 Formatted input in C C*·*155 8.81 Formatted output in C++ C*·*156 8.82 Stream manipulators C*·*157 8.83 Array output in C++ C*·*157 8.84 Changing default format C*·*158
 
-### Chapter 9: Subroutines and Control
-
-### **Abstraction**
+**Chapter 9: Subroutines and Control** **Abstraction**
 
 Exception Handling
 
@@ -224,7 +222,7 @@ Review of Stack Layout
 
 9.34 ON conditions in PL/I 441 9.35 A simple try block in C++ 441 9.36 Nested try blocks 442 9.37 Propagation of an exception out of a called routine 442 9.38 What is an exception? 444 9.39 Parameterized exceptions 444 9.40 Multiple handlers in C++ 445 9.41 Exception handler in OCaml 446 9.42 finally clause in Python 447 9.43 Stacked exception handlers 447 9.44 Multiple exceptions per handler 447 9.45 setjmp and longjmp in C 449
 
-9.1 Layout of run-time stack (reprise) 412 9.2 Offsets from frame pointer 412 9.3 Static and dynamic links 412 9.4 Visibility of nested routines 413
+## 9.1 Layout of run-time stack (reprise) 412 9.2 Offsets from frame pointer 412 9.3 Static and dynamic links 412 9.4 Visibility of nested routines 413
 
 Calling Sequences
 
@@ -252,9 +250,7 @@ Dynamic Method Binding
 
 10.37 Derived class objects in a base class context 505 10.38 Static and dynamic method binding 506 10.39 The need for dynamic binding 507 10.40 Virtual methods in C++ and C# 508 10.41 Class-wide types in Ada 95 508 10.42 Abstract methods in Java and C# 508 10.43 Abstract methods in C++ 509 10.44 Vtables 509 10.45 Implementation of a virtual method call 509 10.46 Implementation of single inheritance 510 10.47 Casts in C++ 511 10.48 Reverse assignment in Eiffel and C# 511 10.49 Virtual methods in an object closure 513 10.50 Encapsulating arguments 514
 
-### Chapter 10: Data Abstraction and Object
-
-### **Orientation**
+**Chapter 10: Data Abstraction and Object** **Orientation**
 
 Object-Oriented Programming
 
@@ -268,7 +264,7 @@ Encapsulation and Inheritance
 
 10.18 Data hiding in Ada 486 10.19 The hidden this parameter 487 10.20 Hiding inherited methods 488 10.21 protected base class in C++ 488 10.22 Inner classes in Java 490 10.23 List and queue abstractions in Ada 2005 491 10.24 Extension methods in C# 494
 
-10.65 Replicated inheritance in Eiffel C*·*199 10.66 Using replicated inheritance C*·*200 10.67 Overriding methods with shared inheri- tance C*·*201 10.68 Implementation of shared inheritance C*·*201
+## 10.65 Replicated inheritance in Eiffel C*·*199 10.66 Using replicated inheritance C*·*200 10.67 Overriding methods with shared inheri- tance C*·*201 10.68 Implementation of shared inheritance C*·*201
 
 11.28 A recursive nested function (reprise of Example 7.38) 555 11.29 Polymorphic list operators 555 11.30 List notation 556 11.31 Array notation 556 11.32 Strings as character arrays 557 11.33 Tuple notation 557 11.34 Record notation 557 11.35 Mutable ﬁelds 558 11.36 References 558 11.37 Variants as enumerations 558 11.38 Variants as unions 558 11.39 Recursive variants 559 11.40 Pattern matching of parameters 559 11.41 Pattern matching in local declarations 560 11.42 The match construct 560 11.43 Guards 561 11.44 The as keyword 561 11.45 The function keyword 561 11.46 Run-time pattern matching 562 11.47 Coverage of patterns 562 11.48 Pattern matching against a tuple returned from a function 562 11.49 An if without an else 563 11.50 Insertion sort in OCaml 563 11.51 A simple exception 564 11.52 An exception with arguments 564 11.53 Catching an exception 564 11.54 Simulating a DFA in OCaml 565
 
@@ -276,7 +272,7 @@ Object-Oriented Programming Revisited
 
 10.69 Operations as messages in Smalltalk C*·*204 10.70 Mixﬁx messages C*·*204 10.71 Selection as an ifTrue: ifFalse: message C*·*205 10.72 Iterating with messages C*·*205 10.73 Blocks as closures C*·*206 10.74 Logical looping with messages C*·*206 10.75 Deﬁning control abstractions C*·*206 10.76 Recursion in Smalltalk C*·*207
 
-### **Chapter 11: Functional Languages**
+**Chapter 11: Functional Languages**
 
 Historical Origins
 
@@ -306,37 +302,37 @@ Functional Programming in Perspective
 
 Logic Programming in Perspective
 
-### **Chapter 12: Logic Languages**
+**Chapter 12: Logic Languages**
 
-12.35 Sorting incredibly slowly 613 12.36 Quicksort in Prolog 614 12.37 Negation as failure 615 12.38 Negation and instantiation 616
+## 12.35 Sorting incredibly slowly 613 12.36 Quicksort in Prolog 614 12.37 Negation as failure 615 12.38 Negation and instantiation 616
 
 Logic Programming Concepts
 
-12.1 Horn clauses 592 12.2 Resolution 592 12.3 Uniﬁcation 592
+## 12.1 Horn clauses 592 12.2 Resolution 592 12.3 Uniﬁcation 592
 
-### **Chapter 13: Concurrency**
+**Chapter 13: Concurrency**
 
 Background and Motivation
 
 Prolog
 
-13.1 Independent tasks in C# 626 13.2 A simple race condition 626 13.3 Multithreaded web browser 627 13.4 Dispatch loop web browser 628 13.5 The cache coherence problem 632
+## 13.1 Independent tasks in C# 626 13.2 A simple race condition 626 13.3 Multithreaded web browser 627 13.4 Dispatch loop web browser 628 13.5 The cache coherence problem 632
 
 12.4 Atoms, variables, scope, and type 593 12.5 Structures and predicates 593 12.6 Facts and rules 593 12.7 Queries 594 12.8 Resolution in Prolog 595 12.9 Uniﬁcation in Prolog and ML 595 12.10 Equality and uniﬁcation 595 12.11 Uniﬁcation without instantiation 596 12.12 List notation in Prolog 596 12.13 Functions, predicates, and two-way rules 597 12.14 Arithmetic and the is predicate 597 12.15 Search tree exploration 598
 
 Concurrent Programming Fundamentals
 
-13.6 General form of co-begin 638 13.7 Co-begin in OpenMP 639 13.8 A parallel loop in OpenMP 639 13.9 A parallel loop in C# 639 13.10 Forall in Fortran 95 640
+## 13.6 General form of co-begin 638 13.7 Co-begin in OpenMP 639 13.8 A parallel loop in OpenMP 639 13.9 A parallel loop in C# 639 13.10 Forall in Fortran 95 640
 
 13.57 Datagram messages in Java C*·*238 13.58 Connection-based messages in Java C*·*238 13.59 Three main options for send semantics C*·*240 13.60 Buffering-dependent deadlock C*·*241 13.61 Acknowledgments C*·*242 13.62 Bounded buffer in Ada 83 C*·*245 13.63 Timeout and distributed termination C*·*246 13.64 Bounded buffer in Go C*·*246 13.65 Bounded buffer in Erlang C*·*247 13.66 Peeking at messages in Erlang C*·*247 13.67 An RPC server system C*·*251
 
 13.11 Reduction in OpenMP 641 13.12 Elaborated tasks in Ada 641 13.13 Co-begin vs fork/join 642 13.14 Task types in Ada 642 13.15 Thread creation in Java 2 643 13.16 Thread creation in C# 644 13.17 Thread pools in Java 5 645 13.18 Spawn and sync in Cilk 645 13.19 Modeling subroutines with fork/join 646 13.20 Multiplexing threads on processes 647 13.21 Cooperative multithreading on a unipro- cessor 648 13.22 A race condition in preemptive multi- threading 650 13.23 Disabling signals during context switch 651
 
-### **Chapter 14: Scripting Languages**
+**Chapter 14: Scripting Languages**
 
 What Is a Scripting Language?
 
-14.1 Trivial programs in conventional and scripting languages 702 14.2 Coercion in Perl 703
+## 14.1 Trivial programs in conventional and scripting languages 702 14.2 Coercion in Perl 703
 
 Implementing Synchronization
 
@@ -352,13 +348,13 @@ Language-Level Constructs
 
 Scripting the World Wide Web
 
-14.29 Remote monitoring with a CGI script 728 14.30 Adder web form with a CGI script 728 14.31 Remote monitoring with a PHP script 731 14.32 A fragmented PHP script 731
+## 14.29 Remote monitoring with a CGI script 728 14.30 Adder web form with a CGI script 728 14.31 Remote monitoring with a PHP script 731 14.32 A fragmented PHP script 731
 
 14.74 Inheritance in Perl 759 14.75 Inheritance via use base 759 14.76 Prototypes in JavaScript 760 14.77 Overriding instance methods in JavaScript 761 14.78 Inheritance in JavaScript 761 14.79 Constructors in Python and Ruby 762 14.80 Naming class members in Python and Ruby 762
 
 14.33 Adder web form with a PHP script 732 14.34 Self-posting Adder web form 732 14.35 Adder web form in JavaScript 734 14.36 Embedding an applet in a web page 735 14.81 Content versus presentation in HTML C*·*258 14.82 Well-formed XHTML C*·*259 14.83 XHTML to display a favorite quote C*·*261 14.84 XPath names for XHTML elements C*·*262 14.85 Creating a reference list with XSLT C*·*262
 
-### **Chapter 15: Building a Runnable Program**
+**Chapter 15: Building a Runnable Program**
 
 Innovative Features
 
@@ -366,19 +362,19 @@ Back-End Compiler Structure
 
 14.37 Scoping rules in Python 740 14.38 Superassignment in R 740 14.39 Static and dynamic scoping in Perl 741 14.40 Accessing globals in Perl 742 14.41 Basic operations in POSIX REs 744 14.42 Extra quantiﬁers in POSIX REs 744 14.43 Zero-length assertions 744 14.44 Character classes 744 14.45 The dot (.) character 745 14.46 Negation and quoting in character classes 745 14.47 Predeﬁned POSIX character classes 745 14.48 RE matching in Perl 745 14.49 Negating a match in Perl 746 14.50 RE substitution in Perl 746 14.51 Trailing modiﬁers on RE matches 746 14.52 Greedy and minimal matching 748 14.53 Minimal matching of HTML headers 748 14.54 Variable interpolation in extended REs 748 14.55 Variable capture in extended REs 749 14.56 Backreferences in extended REs 750 14.57 Dissecting a ﬂoating-point literal 750 14.58 Implicit capture of preﬁx, match, and sufﬁx 750 14.59 Coercion in Ruby and Perl 751 14.60 Coercion and context in Perl 751 14.61 Explicit conversion in Ruby 752 14.62 Perl arrays 753 14.63 Perl hashes 753 14.64 Arrays and hashes in Python and Ruby 754 14.65 Array access methods in Ruby 755 14.66 Tuples in Python 755 14.67 Sets in Python 755 14.68 Conﬂated types in PHP, Tcl, and JavaScript 755 14.69 Multidimensional arrays in Python and other languages 755 14.70 Scalar and list context in Perl 756 14.71 Using wantarray to determine calling context 757 14.72 A simple class in Perl 757 14.73 Invoking methods in Perl 758
 
-15.1 Phases of compilation 776 15.2 GCD program abstract syntax tree (reprise) 776
+## 15.1 Phases of compilation 776 15.2 GCD program abstract syntax tree (reprise) 776
 
 Intermediate Forms
 
-15.3 Intermediate forms in Figure 15.1 781 15.19 GCD program in GIMPLE C*·*273 15.20 An RTL insn sequence C*·*276 15.4 Computing Heron’s formula 783
+## 15.3 Intermediate forms in Figure 15.1 781 15.19 GCD program in GIMPLE C*·*273 15.20 An RTL insn sequence C*·*276 15.4 Computing Heron’s formula 783
 
 Code Generation
 
-15.5 Simpler compiler structure 784 15.6 An attribute grammar for code genera- tion 785 15.7 Stack-based register allocation 787 15.8 GCD program target code 788
+## 15.5 Simpler compiler structure 784 15.6 An attribute grammar for code genera- tion 785 15.7 Stack-based register allocation 787 15.8 GCD program target code 788
 
 Address Space Organization
 
-15.9 Linux address space layout 792
+## 15.9 Linux address space layout 792
 
 Assembly
 
@@ -388,17 +384,15 @@ Linking
 
 15.17 Static linking 798 15.18 Checksumming headers for consistency 799 15.21 PIC under x86/Linux C*·*280 15.22 PC-relative addressing on the x86 C*·*282 15.23 Dynamic linking in Linux on the x86 C*·*282
 
-### Chapter 16: Run-Time Program
+**Chapter 16: Run-Time Program** **Management**
 
-### **Management**
-
-### **Chapter 17: Code Improvement**
+**Chapter 17: Code Improvement**
 
 Virtual Machines
 
 17.1 Code improvement phases C*·*299 17.2 Elimination of redundant loads and stores C*·*301 17.3 Constant folding C*·*301 17.4 Constant propagation C*·*301 17.5 Common subexpression elimination C*·*302 17.6 Copy propagation C*·*302 17.7 Strength reduction C*·*302 17.8 Elimination of useless instructions C*·*303 17.9 Exploitation of the instruction set C*·*303 17.10 The combinations subroutine C*·*305 17.11 Syntax tree and naive control ﬂow graph C*·*305 17.12 Result of local redundancy elimination C*·*310 17.13 Conversion to SSA form C*·*313 17.14 Global value numbering C*·*313 17.15 Data ﬂow equations for available expressions C*·*317 17.16 Fixed point for available expressions C*·*317 17.17 Result of global common subexpression elimination C*·*318 17.18 Edge splitting transformations C*·*319 17.19 Data ﬂow equations for live variables C*·*321 17.20 Fixed point for live variables C*·*321 17.21 Data ﬂow equations for reaching deﬁnitions C*·*324 17.22 Result of hoisting loop invariants C*·*325 17.23 Induction variable strength reduction C*·*325 17.24 Induction variable elimination C*·*326 17.25 Result of induction variable optimization C*·*326 17.26 Remaining pipeline delays C*·*329 17.27 Value dependence DAG C*·*329 17.28 Result of instruction scheduling C*·*331 17.29 Result of loop unrolling C*·*332 17.30 Result of software pipelining C*·*333 17.31 Loop interchange C*·*337 17.32 Loop tiling (blocking) C*·*337 17.33 Loop distribution C*·*339 17.34 Loop fusion C*·*339 17.35 Obtaining a perfect loop nest C*·*339 17.36 Loop-carried dependences C*·*340 17.37 Loop reversal and interchange C*·*341 17.38 Loop skewing C*·*341 17.39 Coarse-grain parallelization C*·*343 17.40 Strip mining C*·*343 17.41 Live ranges of virtual registers C*·*344 17.42 Register coloring C*·*344 17.43 Optimized combinations subroutine C*·*346
 
-16.2 Constants for “Hello, world” 813 16.3 Bytecode for a list insert operation 818 16.39 Generics in the CLI and JVM C*·*291 16.40 CIL for a list insert operation C*·*292
+## 16.2 Constants for “Hello, world” 813 16.3 Bytecode for a list insert operation 818 16.39 Generics in the CLI and JVM C*·*291 16.40 CIL for a list insert operation C*·*292
 
 Late Binding of Machine Code
 

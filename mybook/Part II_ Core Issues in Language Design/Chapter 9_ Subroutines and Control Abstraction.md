@@ -1,6 +1,6 @@
-## 9
+# Chapter 9: Subroutines and Control Abstraction
 
-### **Subroutines and Control Abstraction**
+**9** **Subroutines and Control Abstraction**
 
 **In the introduction to Chapter 3,** we deﬁned* abstraction* as a process by which the programmer can associate a name with a potentially complicated pro- gram fragment, which can then be thought of in terms of its purpose or function, rather than in terms of its implementation. We sometimes distinguish between *control abstraction*, in which the principal purpose of the abstraction is to perform a well-deﬁned operation, and* data abstraction*, in which the principal purpose of the abstraction is to represent information.1 We will consider data abstraction in more detail in Chapter 10. Subroutines are the principal mechanism for control abstraction in most pro- gramming languages. A subroutine performs its operation on behalf of a* caller*, who waits for the subroutine to ﬁnish before continuing execution. Most sub- routines are parameterized: the caller passes arguments that inﬂuence the sub- routine’s behavior, or provide it with data on which to operate. Arguments are also called* actual parameters*. They are mapped to the subroutine’s* formal pa-* *rameters* at the time a call occurs. A subroutine that returns a value is usually called a* function*. A subroutine that does not return a value is usually called a* pro-* *cedure*. Statically typed languages typically require a declaration for every called subroutine, so the compiler can verify, for example, that every call passes the right number and types of arguments. As noted in Section 3.2.2, the storage consumed by parameters and local vari- ables can in most languages be allocated on a stack. We therefore begin this chap- ter, in Section 9.1, by reviewing the layout of the stack. We then turn in Section 9.2 to the* calling sequences* that serve to maintain this layout. In the process, we revisit the use of static chains to access nonlocal variables in nested subroutines, and con- sider (on the companion site) an alternative mechanism, known as a* display*, that serves a similar purpose. We also consider subroutine inlining and the represen- tation of closures. To illustrate some of the possible implementation alternatives, we present (again on the companion site) case studies of the LLVM compiler for
 
@@ -21,9 +21,7 @@ that are thus neither local nor global, can be found by maintaining a* static ch
 
 Visibility of nested routines for example, the subroutine nesting shown in Figure 9.1. If subroutine D is called directly from B, then clearly B’s frame will already be on the stack. How else could D be called? It is not visible in A or E, because it is nested inside of B. A moment’s thought makes clear that it is only when control enters B (placing B’s frame on the stack) that D comes into view. It can therefore be called by C, or by any other routine (not shown) that is nested inside C or D, but only because these are also within B. ■
 
-## 9.2
-
-### **Calling Sequences**
+9.2 **Calling Sequences**
 
 Maintenance of the subroutine call stack is the responsibility of the* calling se-* *quence*—the code executed by the caller immediately before and after a subroutine call—and of the* prologue* (code executed at the beginning) and* epilogue* (code exe- cuted at the end) of the subroutine itself. Sometimes the term “calling sequence” is used to refer to the combined operations of the caller, the prologue, and the epilogue. Tasks that must be accomplished on the way into a subroutine include passing parameters, saving the return address, changing the program counter, changing the stack pointer to allocate space, saving registers (including the frame pointer) that contain values that may be overwritten by the callee but are still* live* (poten- tially needed) in the caller, changing the frame pointer to refer to the new frame, and executing initialization code for any objects in the new frame that require it. Tasks that must be accomplished on the way out include passing return param- eters or function values, executing ﬁnalization code for any local objects that re- quire it, deallocating the stack frame (restoring the stack pointer), restoring other saved registers (including the frame pointer), and restoring the program counter. Some of these tasks (e.g., passing parameters) must be performed by the caller, because they differ from call to call. Most of the tasks, however, can be performed either by the caller or the callee. In general, we will save space if the callee does as much work as possible: tasks performed in the callee appear only once in the target program, but tasks performed in the caller appear at every call site, and the typical subroutine is called in more than one place.
 
@@ -57,7 +55,7 @@ Many parts of the calling sequence, prologue, and epilogue can be omitted in com
 
 leave it there; it does not need to save it in the stack. Likewise it need not save the static link or any caller-saves registers. A subroutine with no local variables and nothing to save or restore may not even need a stack frame on a RISC machine. The simplest subroutines (e.g., li- brary routines to compute the standard mathematical functions) may not touch memory at all, except to fetch instructions: they may take their arguments in registers, compute entirely in (caller-saves) registers, call no other routines, and return their results in registers. As a result they may be extremely fast.
 
-## 9.2.1** Displays**
+9.2.1** Displays**
 
 One disadvantage of static chains is that access to an object in a scope* k* levels out requires that the static chain be dereferenced* k* times. If a local object can be loaded into a register with a single (displacement mode) memory access, an object *k* levels out will require* k* + 1 memory accesses. This number can be reduced to a constant by use of a* display*.
 
@@ -65,7 +63,7 @@ One disadvantage of static chains is that access to an object in a scope* k* lev
 
 As described on the companion site, a display is a small array that replaces the static chain. The* j*th element of the display contains a reference to the frame of the most recently active subroutine at lexical nesting level* j*. If the currently active routine is nested* i** >* 3 levels deep, then elements* i** −*1,* i** −*2, and* i** −*3 of the display contain the values that would have been the ﬁrst three links of the static chain. An object* k* levels out can be found at a statically known offset from the address stored in element* j* =* i** −**k* of the display. For most programs the cost of maintaining a display in the subroutine calling sequence tends to be slightly higher than that of maintaining a static chain. At the same time, the cost of dereferencing the static chain has been reduced by modern compilers, which tend to do a good job of caching the links in registers when ap- propriate. These observations, combined with the trend toward languages (those descended from C in particular) in which subroutines do not nest, have made displays less common today than they were in the 1970s.
 
-## 9.2.2** Stack Case Studies: LLVM on ARM;**** gcc**** on x86**
+9.2.2** Stack Case Studies: LLVM on ARM;**** gcc**** on x86**
 
 Calling sequences differ signiﬁcantly from machine to machine and even com- piler to compiler, though hardware vendors typically publish suggested conven- tions for their respective architectures, to promote interoperability among pro- gram components produced by different compilers. Many of the most signiﬁ- cant differences reﬂect an evolution over time toward heavier use of registers and lighter use of memory. This evolution reﬂects at least three important technolog- ical trends: the increasing size of register sets, the increasing gap in speed between
 
@@ -75,7 +73,7 @@ registers and memory (even L1 cache), and the increasing ability of both compil-
 
 On the companion site we look in some detail at the stack layout conventions and calling sequences of a representative pair of compilers: the LLVM compiler for the 32-bit ARMv7 architecture, and the gcc compiler for the 32- and 64-bit x86. LLVM is a middle/back end combination originally developed at the University of Illinois and now used extensively in both academia and industry. Among other things, it forms the backbone of the standard tool chains for both iPhone (iOS) and Android devices. The GNU compiler collection, gcc, is a cornerstone of the open source movement, used across a huge variety of laptops, desktops, and servers. Both LLVM and gcc have back ends for many target architectures, and front ends for many programming languages. We focus on their support for C, whose conventions are in some sense a “lowest common denominator” for other languages.
 
-## 9.2.3** Register Windows**
+9.2.3** Register Windows**
 
 As an alternative to saving and restoring registers on subroutine calls and returns, the original Berkeley RISC machines [PD80, Pat85] introduced a hardware mech- anism known as* register windows*. The basic idea is to map the ISA’s limited set of register names onto some subset (window) of a much larger collection of physical registers, and to change the mapping when making subroutine calls. Old and new mappings overlap a bit, allowing arguments to be passed (and function results re- turned) in the intersection.
 
@@ -83,7 +81,7 @@ As an alternative to saving and restoring registers on subroutine calls and retu
 
 We consider register windows in more detail on the companion site. They have appeared in several commercial processors, most notably the Sun SPARC and the Intel IA-64 (Itanium).
 
-## 9.2.4** In-Line Expansion**
+9.2.4** In-Line Expansion**
 
 As an alternative to stack-based calling conventions, many language implemen- tations allow certain subroutines to be expanded in-line at the point of call. A copy of the “called” routine becomes a part of the “caller”; no actual subroutine call occurs. In-line expansion avoids a variety of overheads, including space al- location, branch delays from the call and return, maintaining the static chain or display, and (often) saving and restoring registers. It also allows the compiler to perform code improvements such as global register allocation, instruction sche- duling, and common subexpression elimination across the boundaries between subroutines—something that most compilers can’t do otherwise. In many implementations, the compiler chooses which subroutines to expand in-line and which to compile conventionally. In some languages, the program- mer can suggest that particular routines be in-lined. In C and C++, the keyword **EXAMPLE** 9.6
 
@@ -117,22 +115,12 @@ A compiler can expand this code in-line if it makes each nested invocation a tru
 
 **DESIGN & IMPLEMENTATION**
 
-## 9.1 Hints and directives
-
-The inline keyword in C and C++ suggests but does not require that the compiler expand the subroutine in-line. A conventional implementation may be used when inline has been speciﬁed—or an in-line implementation when inline has* not* been speciﬁed—if the compiler has reason to believe that this will result in better code. (In both languages, the inline keyword also has an impact on the rules regarding separate compilation. In particular, to facilitate their inclusion in header ﬁles, inline functions are allowed to have multiple deﬁnitions. C++ says all the deﬁnitions must be the same; in C, the choice among them is explicitly unspeciﬁed.) In effect, the inclusion of hints like inline in a programming language represents an acknowledgment that advice from the expert programmer may sometimes be useful with current compiler technology, but that this may change in the future. By contrast, the use of pointer arithmetic in place of array subscripts, as discussed in Sidebar 8.8, is more of a* directive* than a hint, and may complicate the generation of high-quality code from legacy programs.
+9.1 Hints and directives The inline keyword in C and C++ suggests but does not require that the compiler expand the subroutine in-line. A conventional implementation may be used when inline has been speciﬁed—or an in-line implementation when inline has* not* been speciﬁed—if the compiler has reason to believe that this will result in better code. (In both languages, the inline keyword also has an impact on the rules regarding separate compilation. In particular, to facilitate their inclusion in header ﬁles, inline functions are allowed to have multiple deﬁnitions. C++ says all the deﬁnitions must be the same; in C, the choice among them is explicitly unspeciﬁed.) In effect, the inclusion of hints like inline in a programming language represents an acknowledgment that advice from the expert programmer may sometimes be useful with current compiler technology, but that this may change in the future. By contrast, the use of pointer arithmetic in place of array subscripts, as discussed in Sidebar 8.8, is more of a* directive* than a hint, and may complicate the generation of high-quality code from legacy programs.
 
 calls but also (one level of) the two calls within the true subroutine version, only a quarter of the original dynamic calls will remain. ■
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 1. What is a subroutine* calling sequence*? What does it do? What is meant by the subroutine* prologue* and* epilogue*? 2. How do calling sequences typically differ in older (CISC) and newer (RISC) instruction sets? 3. Describe how to maintain the* static chain* during a subroutine call.
 
-* 
-  What is a subroutine* calling sequence*? What does it do? What is meant by the
-  subroutine* prologue* and* epilogue*?
-  2.
-  How do calling sequences typically differ in older (CISC) and newer (RISC)
-  instruction sets?
-  3.
-  Describe how to maintain the* static chain* during a subroutine call.
 * 
   What is a* display*? How does it differ from a static chain?
   5.
@@ -153,17 +141,13 @@ calls but also (one level of) the two calls within the true subroutine version, 
   10. List the optimizations that can be made to the subroutine calling sequence in
   important special cases (e.g.,* leaf routine*s).
   11. How does an* in-line subroutine* differ from a* macro*?
-### 12. Under what circumstances is it desirable to expand a subroutine in-line?
+## 12. Under what circumstances is it desirable to expand a subroutine in-line?
 
 **DESIGN & IMPLEMENTATION**
 
-### 9.2 In-lining and modularity
+9.2 In-lining and modularity Probably the most important argument for in-line expansion is that it allows programmers to adopt a very modular programming style, with lots of tiny subroutines, without sacriﬁcing performance. This modular programming style is essential for object-oriented languages, as we shall see in Chapter 10. The beneﬁt of in-lining is undermined to some degree by the fact that chang- ing the deﬁnition of an in-lined function forces the recompilation of every user of the function; changing the deﬁnition of an ordinary function (without changing its interface) forces relinking only. The best of both worlds may be achieved in systems with just-in-time compilation (Section 16.2.1).
 
-Probably the most important argument for in-line expansion is that it allows programmers to adopt a very modular programming style, with lots of tiny subroutines, without sacriﬁcing performance. This modular programming style is essential for object-oriented languages, as we shall see in Chapter 10. The beneﬁt of in-lining is undermined to some degree by the fact that chang- ing the deﬁnition of an in-lined function forces the recompilation of every user of the function; changing the deﬁnition of an ordinary function (without changing its interface) forces relinking only. The best of both worlds may be achieved in systems with just-in-time compilation (Section 16.2.1).
-
-## 9.3
-
-### **Parameter Passing**
+9.3 **Parameter Passing**
 
 Most subroutines are parameterized: they take arguments that control certain aspects of their behavior, or specify the data on which they are to operate. Pa- rameter names that appear in the declaration of a subroutine are known as* for-* *mal parameters*. Variables and expressions that are passed to a subroutine in a particular call are known as* actual parameters*. We have been referring to actual parameters as* arguments*. In the following two subsections, we discuss the most common parameter-passing* modes*, most of which are implemented by passing values, references, or closures. In Section 9.3.3 we will look at additional mecha- nisms, including default (optional) parameters, named parameters, and variable- length argument lists. Finally, in Section 9.3.4 we will consider mechanisms for returning values from functions. As we noted in Section 6.1, most languages use a preﬁx notation for calls to user-deﬁned subroutines, with the subroutine name followed by a parenthe- sized argument list. Lisp places the function name inside the parentheses, as in (max a b). ML dispenses with the parentheses entirely, except when needed for **EXAMPLE** 9.8
 
@@ -200,7 +184,7 @@ In Ada (as in most imperative languages) it is clear that if... then ... else is
 
 Smalltalk, on the other hand, the analogous conditional constructs are syntacti- cally indistinguishable from user-deﬁned operations. They are in fact deﬁned in terms of simpler concepts, rather than being built in, though they require a spe- cial mechanism to evaluate their arguments in normal, rather than applicative, order (Section 6.6.2). ■
 
-## 9.3.1** Parameter Modes**
+9.3.1** Parameter Modes**
 
 In our discussion of subroutines so far, we have glossed over the semantic rules that govern parameter passing, and that determine the relationship between ac- tual and formal parameters. Some languages, including C, Fortran, ML, and Lisp, deﬁne a single set of rules, which apply to all parameters. Other languages, in- cluding Ada, C++, and Swift, provide two or more sets of rules, corresponding to different parameter-passing* modes*. As in many aspects of language design, the semantic details are heavily inﬂuenced by implementation issues. Suppose for the moment that x is a global variable in a language with a value **EXAMPLE** 9.10
 
@@ -230,9 +214,7 @@ Fortran passes all parameters by reference, but does not require that every ac- 
 
 **DESIGN & IMPLEMENTATION**
 
-## 9.3 Parameter modes
-
-While it may seem odd to introduce parameter modes (a semantic issue) in terms of implementation, the distinction between value and reference parame- ters is fundamentally an implementation issue. Most languages with more than one mode (Ada and Swift are notable exceptions) might fairly be characterized as an attempt to paste acceptable semantics onto the desired implementation, rather than to ﬁnd an acceptable implementation of the desired semantics.
+9.3 Parameter modes While it may seem odd to introduce parameter modes (a semantic issue) in terms of implementation, the distinction between value and reference parame- ters is fundamentally an implementation issue. Most languages with more than one mode (Ada and Swift are notable exceptions) might fairly be characterized as an attempt to paste acceptable semantics onto the desired implementation, rather than to ﬁnd an acceptable implementation of the desired semantics.
 
 **Call by Sharing** Call by value and call by reference make the most sense in a language with a value model of variables: they determine whether we copy the variable or pass an alias for it. Neither option really makes sense in a language like Smalltalk, Lisp, ML, or Ruby, in which a variable is already a reference. Here it is most natural simply to pass the reference itself, and let the actual and formal parameters refer to the same object. Clu called this mode* call by sharing*. It is different from call by value because, although we do copy the actual parameter into the formal parameter, both of them are references; if we modify the object to which the formal parameter refers, the program will be able to see those changes through the actual parameter after the subroutine returns. Call by sharing is also different from call by reference, because although the called routine can change the value of the object to which the actual parameter refers, it cannot make the argument refer to a different object. As we noted in Sections 6.1.2 and 8.5.1, a reference model of variables does not necessarily require that every object be accessed indirectly by address: the imple- mentation can create multiple copies of immutable objects (numbers, characters, etc.) and access them directly. Call by sharing is thus commonly implemented the same as call by value for small objects of immutable type. In keeping with its hybrid model of variables, Java uses call by value for vari- ables of primitive, built-in types (all of which are values), and call by sharing for variables of user-deﬁned class types (all of which are references). An interesting consequence is that a Java subroutine cannot change the value of an actual pa- rameter of primitive type. A similar approach is the default in C#, but because the language allows users to create both value (struct) and reference (class) types, both cases are considered call by value. That is, whether a variable is a value or a reference, we always pass it by copying. (Some authors describe Java the same way.) When desired, parameters in C# can be passed by reference instead, by labeling both a formal parameter* and each corresponding argument* with the ref or out keyword. Both of these modes are implemented by passing an address; they differ in that a ref argument must be* deﬁnitely assigned* prior to the call, as described in Section 6.1.3; an out argument need not. In contrast to Java, therefore, a C# subroutine* can* change the value of an actual parameter of primitive type, if the parameter is passed ref or out. Similarly, if a variable of class (reference) type is passed as a ref or out parameter, it may end up referring to a different object as a result of subroutine execution—something that is not possible with call by sharing.
 
@@ -487,7 +469,7 @@ Variable number of arguments in C# static void print_lines(String foo, params St
 
 The calling syntax is the same. ■
 
-## 9.3.4** Function Returns**
+9.3.4** Function Returns**
 
 The syntax by which a function indicates the value to be returned varies greatly. In languages like Lisp, ML, and Algol 68, which do not distinguish between ex- pressions and statements, the value of a function is simply the value of its body, which is itself an expression. In several early imperative languages, including Algol 60, Fortran, and Pas- cal, a function speciﬁed its return value by executing an assignment statement whose left-hand side was the name of the function. This approach has an unfor- tunate interaction with the usual static scope rules (Section 3.3.1): the compiler must forbid any immediately nested declaration that would hide the name of the function, since the function would then be unable to return. This special case is **EXAMPLE** 9.30
 
@@ -527,47 +509,25 @@ def foo(): return 2, 3 ... i, j = foo() ■
 
 In functional languages, it is commonplace to return a subroutine as a closure. Many imperative languages permit this as well. C has no closures, but allows a function to return a pointer to a subroutine.
 
-### 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 13. What is the difference between* formal* and* actual* parameters? 14. Describe four common parameter-passing modes. How does a programmer choose which one to use when? 15. Explain the rationale for READONLY parameters in Modula-3.
 
-#### 13. What is the difference between formal and actual parameters?
+## 16. What parameter mode is typically used in languages with a reference model of variables?
 
-#### 14. Describe four common parameter-passing modes. How does a programmer
+## 17. Describe the parameter modes of Ada. How do they differ from the modes of other modern languages?
 
-choose which one to use when? 15. Explain the rationale for READONLY parameters in Modula-3.
+## 18. Give an example in which it is useful to return a reference from a function in C++.
 
-#### 16. What parameter mode is typically used in languages with a reference model
+* What is an* r-value reference*? Why might it be useful?
+  20. List three reasons why a language implementation might implement a param-
+  eter as a closure.
+  21. What is a* conformant* (*open*)* array*?
+## 22. What are* default* parameters? How are they implemented? 23. What are* named* (*keyword*)* parameters*? Why are they useful?
 
-of variables?
+## 24. Explain the value of variable-length argument lists. What distinguishes such lists in Java and C# from their counterparts in C and C++?
 
-#### 17. Describe the parameter modes of Ada. How do they differ from the modes of
+## 25. Describe three common mechanisms for specifying the return value of a func- tion. What are their relative strengths and drawbacks?
 
-other modern languages?
-
-#### 18. Give an example in which it is useful to return a reference from a function in
-
-C++.
-
-#### 19. What is an r-value reference? Why might it be useful?
-
-#### 20. List three reasons why a language implementation might implement a param-
-
-eter as a closure. 21. What is a* conformant* (*open*)* array*?
-
-#### 22. What are default parameters? How are they implemented?
-
-#### 23. What are* named* (*keyword*)* parameters*? Why are they useful?
-
-#### 24. Explain the value of variable-length argument lists. What distinguishes such
-
-lists in Java and C# from their counterparts in C and C++?
-
-#### 25. Describe three common mechanisms for specifying the return value of a func-
-
-tion. What are their relative strengths and drawbacks?
-
-## 9.4
-
-#### **Exception Handling**
+9.4 **Exception Handling**
 
 Several times in the preceding chapters and sections we have referred to* exception-* *handling* mechanisms. We have delayed detailed discussion of these mechanisms until now because exception handling generally requires the language implemen- tation to “unwind” the subroutine call stack. An exception can be deﬁned as an unexpected—or at least unusual—condition that arises during program execution, and that cannot easily be handled in the local context. It may be detected automatically by the language implementation, or the program may* raise* or* throw* it explicitly (the two terms are synonymous). The most common exceptions are various sorts of run-time errors. In an I/O library, for example, an input routine may encounter the end of its ﬁle before it can read a requested value, or it may ﬁnd punctuation marks or letters on the
 
@@ -629,7 +589,7 @@ throw my_error("oops!");
 
 If the exception is not handled in the calling routine, it continues to propagate back up the dynamic chain. If it is not handled in the program’s main routine, then a predeﬁned outermost handler is invoked, and usually terminates the pro- gram. ■ In a sense, the dependence of exception handling on the order of subroutine calls might be considered a form of dynamic binding, but it is a much more re- stricted form than is found in PL/I. Rather than say that a handler in a calling routine has been dynamically bound to an error in a called routine, we prefer to say that the handler is lexically bound to the expression or statement that* calls* the called routine. An exception that is not handled inside a called routine can then be modeled as an “exceptional return”; it causes the calling expression or statement to raise an exception, which is again handled lexically within its subroutine. In practice, exception handlers tend to perform three kinds of operations. First, ideally, a handler will* compensate* for the exception in a way that allows the program to recover and continue execution. For example, in response to an “out of memory” exception in a storage management routine, a handler might ask the operating system to allocate additional space to the application, after which it could complete the requested operation. Second, when an exception occurs in a given block of code but cannot be handled locally, it is often important to declare a local handler that cleans up any resources allocated in the local block, and then “reraises” the exception, so that it will continue to propagate back to a handler that can (hopefully) recover. Third, if recovery is not possible, a handler can at least print a helpful error message before the program terminates. As discussed in Section 6.2.1, exceptions are related to, but distinct from, the notion of multilevel returns. A routine that performs a multilevel return is func- tioning as expected; in Eiffel terminology, it is fulﬁlling its contract. A routine that raises an exception is* not* functioning as expected; it cannot fulﬁll its con- tract. Common Lisp and Ruby distinguish between these two related concepts, but most languages do not; in most, a multilevel return requires the outer caller to provide a trivial handler. Common Lisp is also unusual in providing four different versions of its exception-handling mechanism. Two of these provide the usual “exceptional re- turn” semantics; the others are designed to repair the problem and restart eval- uation of some dynamically enclosing expression. Orthogonally, two perform their work in the referencing environment where the handler is declared; the oth- ers perform their work in the environment where the exception ﬁrst arises. The latter option allows an abstraction to provide several alternative strategies for re- covery from exceptions. The user of the abstraction can then specify, dynamically, which of these strategies should be used in a given context. We will consider Com- mon Lisp further in Exercise 9.22 and Exploration 9.43. The “exceptional return” mechanism, with work performed in the environment of the handler, is known as handler-case; it provides semantics comparable to those of most other modern languages.
 
-## 9.4.1** Deﬁning Exceptions**
+9.4.1** Deﬁning Exceptions**
 
 In many languages, dynamic semantic errors automatically result in exceptions, which the program can then catch. The programmer can also deﬁne additional, application-speciﬁc exceptions. Examples of predeﬁned exceptions include arith- metic overﬂow, division by zero, end-of-ﬁle on input, subscript and subrange er- rors, and null pointer dereference. The rationale for deﬁning these as exceptions (rather than as fatal errors) is that they may arise in certain valid programs. Some other dynamic errors (e.g., return from a subroutine that has not yet designated a return value) are still fatal in most languages. In C++ and Common Lisp, excep- tions are all programmer deﬁned. In PHP, the set_error_handler function can be used to turn built-in semantic errors into ordinary exceptions. In Ada, some of the predeﬁned exceptions can be* suppressed* by means of a pragma. An Ada exception is simply an object of the built-in exception type: **EXAMPLE** 9.38
 
@@ -663,7 +623,7 @@ In Modula-3, the parameters are included in the exception declaration, much as t
 
 the exceptions that may propagate out of the routine. This list is mandatory in Modula-3: it is a run-time error if an exception arises that does not appear in the header and is not caught internally. The list is optional in C++: if it appears, the semantics are the same as in Modula-3; if it is omitted, all exceptions are permitted to propagate. Java adopts an intermediate approach: it segregates its exceptions into “checked” and “unchecked” categories. Checked exceptions must be declared in subroutine headers; unchecked exceptions need not. Unchecked exceptions are typically run-time errors that most programs will want to be fatal (e.g., subscript out of bounds)—and that would therefore be a nuisance to de- clare in every function—but that a highly robust program may want to catch if they occur in library routines.
 
-## 9.4.2** Exception Propagation**
+9.4.2** Exception Propagation**
 
 In most languages, a block of code can have a* list* of exception handlers. In C++: **EXAMPLE** 9.40
 
@@ -689,9 +649,7 @@ In the process of searching for a matching handler, the exception-handling mech-
 
 **DESIGN & IMPLEMENTATION**
 
-## 9.4 Structured exceptions
-
-Exception-handling mechanisms are among the most complex aspects of mod- ern language design, from both a semantic and a pragmatic point of view. Pro- grammers have used subroutines since before there were computers (they ap- pear, among other places, in the 19th-century notes of Countess Ada Augusta Byron). Structured exceptions, by contrast, were not invented until the 1970s, and did not become commonplace until the 1980s.
+9.4 Structured exceptions Exception-handling mechanisms are among the most complex aspects of mod- ern language design, from both a semantic and a pragmatic point of view. Pro- grammers have used subroutines since before there were computers (they ap- pear, among other places, in the 19th-century notes of Countess Ada Augusta Byron). Structured exceptions, by contrast, were not invented until the 1970s, and did not become commonplace until the 1980s.
 
 for any objects declared within that scope. Destructors (to be discussed in more detail in Section 10.3) are often used to deallocate heap space and other re- sources (e.g., open ﬁles). Similar functionality is provided in Common Lisp by an unwind-protect expression, and in Modula-3, Python, Java, and C# by means of try... finally constructs. Code in Python might look like this: **EXAMPLE** 9.42
 
@@ -699,7 +657,7 @@ finally clause in Python try: # protected block my_stream = open("foo.txt", "r")
 
 A finally clause will be executed whenever control escapes from the protected block, whether the escape is due to normal completion, an exit from a loop, a return from the current subroutine, or the propagation of an exception. We have assumed in our example that my_stream is not bound to anything at the begin- ning of the code, and that it is harmless to close a not-yet-opened stream. ■
 
-## 9.4.3** Implementation of Exceptions**
+9.4.3** Implementation of Exceptions**
 
 The most obvious implementation for exceptions maintains a linked-list stack of **EXAMPLE** 9.43
 
@@ -731,45 +689,27 @@ When initially called, setjmp returns a 0, and control enters the protected code
 
 **DESIGN & IMPLEMENTATION**
 
-## 9.5 setjmp
-
-Because it saves multiple registers to memory, the usual implementation of setjmp is quite expensive—more so than entry to a protected block in the “obvious” implementation of exceptions described above. While implemen- tors are free to use a more efﬁcient, table-driven approach if desired, the usual implementation minimizes the complexity of the run-time system and elimi- nates the need for linker-supported integration of tables from separately com- piled modules and libraries.
+9.5** setjmp** Because it saves multiple registers to memory, the usual implementation of setjmp is quite expensive—more so than entry to a protected block in the “obvious” implementation of exceptions described above. While implemen- tors are free to use a more efﬁcient, table-driven approach if desired, the usual implementation minimizes the complexity of the run-time system and elimi- nates the need for linker-supported integration of tables from separately com- piled modules and libraries.
 
 been written through to memory will be visible in the handler, but changes that were cached in registers will be lost. To address this limitation, C allows the pro- grammer to specify that certain variables are volatile. A volatile variable is one whose value in memory can change “spontaneously,” for example as the result of activity by an I/O device or a concurrent thread of control. C implementations are required to store volatile variables to memory whenever they are written, and to load them from memory whenever they are read. If a handler needs to see changes to a variable that may be modiﬁed by the protected code, then the pro- grammer must include the volatile keyword in the variable’s declaration.
 
-### 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 26. Describe three ways in which a language may allow programmers to declare exceptions.
 
-#### 26. Describe three ways in which a language may allow programmers to declare
+## 27. Explain why it is useful to deﬁne exceptions as classes in C++, Java, and C#. 28. Explain the behavior and purpose of a try... finally construct.
 
-exceptions.
+## 29. Describe the algorithm used to identify an appropriate handler when an ex- ception is raised in a language like Ada or C++.
 
-* Explain why it is useful to deﬁne exceptions as classes in C++, Java, and C#.
-  28. Explain the behavior and purpose of a try... finally construct.
-#### 29. Describe the algorithm used to identify an appropriate handler when an ex-
+## 30. Explain how to implement exceptions in a way that incurs no cost in the com- mon case (when exceptions don’t arise).
 
-ception is raised in a language like Ada or C++.
+## 31. How do the exception handlers of a functional language like ML differ from those of an imperative language like C++?
 
-#### 30. Explain how to implement exceptions in a way that incurs no cost in the com-
+## 32. Describe the operations that must be performed by the implicit handler for a subroutine.
 
-mon case (when exceptions don’t arise).
+## 33. Summarize the shortcomings of the setjmp and longjmp library routines of C.
 
-#### 31. How do the exception handlers of a functional language like ML differ from
+## 34. What is a volatile variable in C? Under what circumstances is it useful?
 
-those of an imperative language like C++?
-
-#### 32. Describe the operations that must be performed by the implicit handler for a
-
-subroutine.
-
-#### 33. Summarize the shortcomings of the setjmp and longjmp library routines
-
-of C.
-
-#### 34. What is a volatile variable in C? Under what circumstances is it useful?
-
-## 9.5
-
-#### **Coroutines**
+9.5 **Coroutines**
 
 Given an understanding of the layout of the run-time stack, we can now consider the implementation of more general control abstractions—*coroutines* in particu- lar. Like a continuation, a coroutine is represented by a closure (a code address and a referencing environment), into which we can jump by means of a nonlocal goto, in this case a special operation known as transfer. The principal differ- ence between the two abstractions is that a continuation is a constant—it does not change once created—while a coroutine changes every time it runs. When we goto a continuation, our old program counter is lost, unless we explicitly create a new continuation to hold it. When we transfer from one coroutine to another,
 
@@ -797,21 +737,17 @@ The syntax here is based loosely on that of Simula. When ﬁrst created, a corou
 
 **DESIGN & IMPLEMENTATION**
 
-## 9.6 Threads and coroutines
-
-As we shall see in Section 13.2.4, it is easy to build a simple thread package given coroutines. Most programmers would agree, however, that threads are substantially easier to use, because they eliminate the need for explicit transfer operations. This contrast—a lot of extra functionality for a little extra imple- mentation complexity—probably explains why coroutines as an explicit pro- gramming abstraction are relatively rare.
+9.6 Threads and coroutines As we shall see in Section 13.2.4, it is easy to build a simple thread package given coroutines. Most programmers would agree, however, that threads are substantially easier to use, because they eliminate the need for explicit transfer operations. This contrast—a lot of extra functionality for a little extra imple- mentation complexity—probably explains why coroutines as an explicit pro- gramming abstraction are relatively rare.
 
 eliminate the ﬁrst of these problems by ensuring that the screen updater receives a share of the processor on a regular basis, but would complicate the second prob- lem: we should need to synchronize the two routines explicitly if their references to ﬁles could interfere. ■
 
-## 9.5.1** Stack Allocation**
+9.5.1** Stack Allocation**
 
 Because they are concurrent (i.e., simultaneously started but not completed), coroutines cannot share a single stack: their subroutine calls and returns, taken as a whole, do not occur in last-in-ﬁrst-out order. If each coroutine is declared at the outermost level of lexical nesting (as was required in Modula-2), then their stacks are entirely disjoint: the only objects they share are global, and thus statically allo- cated. Most operating systems make it easy to allocate one stack, and to increase its portion of the virtual address space as necessary during execution. It is not as easy to allocate an arbitrary number of such stacks; space for coroutines was historically something of an implementation challenge, at least on machines with limited virtual address space (64-bit architectures ease the problem, by making virtual addresses relatively plentiful). The simplest approach is to give each coroutine a ﬁxed amount of statically allocated stack space. This approach was adopted in Modula-2, which required the programmer to specify the size and location of the stack when initializing a coroutine. It was a run-time error for the coroutine to need additional space. Some Modula-2 implementations would catch the overﬂow and halt with an er- ror message; others would display abnormal behavior. If the coroutine used less (virtual) space than it was given, the excess was simply wasted. If stack frames are allocated from the heap, as they are in most functional lan- guage implementations, then the problems of overﬂow and internal fragmenta- tion are avoided. At the same time, the overhead of each subroutine call increases. An intermediate option is to allocate the stack in large, ﬁxed-size “chunks.” At each call, the subroutine calling sequence checks to see whether there is sufﬁcient space in the current chunk to hold the frame of the called routine. If not, another chunk is allocated and the frame is put there instead. At each subroutine return, the epilogue code checks to see whether the current frame is the last one in its chunk. If so, the chunk is returned to a “free chunk” pool. To reduce the over- head of calls, the compiler can use the ordinary central stack if it is able to verify that a subroutine will not perform a transfer before returning [Sco91].
 
 **DESIGN & IMPLEMENTATION**
 
-### 9.7 Coroutine stacks
-
-Many languages require coroutines or threads to be declared at the outermost level of lexical nesting, to avoid the complexity of noncontiguous stacks. Most thread libraries for sequential languages (the POSIX standard pthread library among them) likewise require or at least permit the use of contiguous stacks.
+9.7 Coroutine stacks Many languages require coroutines or threads to be declared at the outermost level of lexical nesting, to avoid the complexity of noncontiguous stacks. Most thread libraries for sequential languages (the POSIX standard pthread library among them) likewise require or at least permit the use of contiguous stacks.
 
 ![Figure 9.4 A cactus...](images/page_487_vector_268.png)
 *Figure 9.4 A cactus stack. Each branch to the side represents the creation of a coroutine (A, B, C, and D). The static nesting of blocks is shown at right. Static links are shown with arrows. Dynamic links are indicated simply by vertical arrangement: each routine has called the one above it. (Coroutine B, for example, was created by the main program, M. B in turn called subroutine S and created coroutine D.)*
@@ -820,7 +756,7 @@ If coroutines can be created at arbitrary levels of lexical nesting (as they cou
 
 Cactus stacks in Simula), then two or more coroutines may be declared in the same nonglobal scope, and must thus share access to objects in that scope. To implement this sharing, the run-time system must employ a so-called* cactus stack* (named for its resemblance to the Saguaro cacti of the American Southwest; see Figure 9.4). Each branch off the stack contains the frames of a separate coroutine. The dy- namic chain of a given coroutine ends in the block in which the coroutine began execution. The* static* chain of the coroutine, however, extends down into the re- mainder of the cactus, through any lexically surrounding blocks. In addition to the coroutines of Simula, cactus stacks are needed for the threads of any language with lexically nested threads. “Returning” from the main block of a coroutine must generally terminate the program, as there is no indication of what routine to transfer to. Because a coroutine only runs when speciﬁed as the target of a transfer, there is never any need to terminate it explicitly. When a given corou- tine is no longer needed, the programmer can simply reuse its stack space or, in a language with garbage collection, allow the collector to reclaim it automati- cally. ■
 
-## 9.5.2** Transfer**
+9.5.2** Transfer**
 
 To transfer from one coroutine to another, the run-time system must change the program counter (PC), the stack, and the contents of the processor’s registers. These changes are encapsulated in the transfer operation: one coroutine calls
 
@@ -832,7 +768,7 @@ transfer: push all registers other than sp (including ra) *current coroutine := 
 
 The data structure that represents a coroutine or thread is called a* context* *block*. In a simple coroutine package, the context block contains a single value: the coroutine’s sp as of its most recent transfer. (A thread package generally places additional information in the context block, such as an indication of priority, or pointers to link the thread onto various scheduling queues. Some coroutine or thread packages choose to save registers in the context block, rather than at the top of the stack; either approach works ﬁne.) In Modula-2, the coroutine creation routine would initialize the coroutine’s stack to look like the frame of transfer, with a return address and register contents initialized to permit a “return” into the beginning of the coroutine’s code. The creation routine would set the sp value in the context block to point into this artiﬁcial frame, and return a pointer to the context block. To begin execution of the coroutine, some existing routine would need to transfer to it. In Simula (and in the code in Example 9.47), the coroutine creation routine would begin to execute the new coroutine immediately, as if it were a subroutine. After the coroutine completed any application-speciﬁc initialization, it would perform a detach operation. Detach would set up the coroutine stack to look like the frame of transfer, with a return address that pointed to the following statement. It would then allow the creation routine to return to its own caller. In all cases, transfer expects a pointer to a context block as argument; by deref- erencing the pointer it can ﬁnd the sp of the next coroutine to run. A global (static) variable, called current coroutine in the code of Example 9.49, contains a pointer to the context block of the currently running coroutine. This pointer allows transfer to ﬁnd the location in which it should save the old sp.
 
-### 9.5.3** Implementation of Iterators**
+9.5.3** Implementation of Iterators**
 
 Given an implementation of coroutines, iterators are almost trivial: one coroutine is used to represent the main program; a second is used to represent the iterator. Additional coroutines may be needed if iterators nest.
 
@@ -840,7 +776,7 @@ Given an implementation of coroutines, iterators are almost trivial: one corouti
 
 Additional details appear on the companion site. As it turns out, coroutines are overkill for iterator implementation. Most compilers use one of two simpler alter- natives. The ﬁrst of these keeps all state in a single stack, but sometimes executes in a frame other than the topmost. The second employs a compile-time code transformation to replace true iterators, transparently, with equivalent iterator objects.
 
-### 9.5.4** Discrete Event Simulation**
+9.5.4** Discrete Event Simulation**
 
 One of the most important applications of coroutines (and the one for which Simula was designed and named) is* discrete event simulation*. Simulation in gen- eral refers to any process in which we create an abstract model of some real-world system, and then experiment with the model in order to infer properties of the real-world system. Simulation is desirable when experimentation with the real world would be complicated, dangerous, expensive, or otherwise impractical. A *discrete event* simulation is one in which the model is naturally expressed in terms of events (typically interactions among various interesting objects) that happen at speciﬁc times. Discrete event simulation is usually not appropriate for contin- uous processes, such as the growth of crystals or the ﬂow of water over a surface, unless these processes are captured at the level of individual particles.
 
@@ -848,15 +784,13 @@ One of the most important applications of coroutines (and the one for which Simu
 
 On the companion site we consider a trafﬁc simulation, in which events model interactions among automobiles, intersections, and trafﬁc lights. We use a sep- arate coroutine for each trip to be taken by car. At any given time we run the coroutine with the earliest expected arrival time at an upcoming intersection. We keep inactive coroutines in a priority queue ordered by those arrival times.
 
-## 9.6
-
-#### **Events**
+9.6 **Events**
 
 An* event* is something to which a running program (a process) needs to respond, but which occurs outside the program, at an unpredictable time. Events are com- monly caused by inputs to a graphical user interface (GUI) system: keystrokes,
 
 mouse motions, button clicks. They may also be network operations or other asynchronous I/O activity: the arrival of a message, the completion of a previ- ously requested disk operation. In the I/O operations discussed in Section C 8.7, and in Section C 8.7.3 in par- ticular, we assumed that a program looking for input will request it explicitly, and will wait if it isn’t yet available. This sort of* synchronous* (at a speciﬁed time) and *blocking* (potentially wait-inducing) input is generally not acceptable for modern applications with graphical interfaces. Instead, the programmer usually wants a *handler*—a special subroutine—to be invoked when a given event occurs. Han- dlers are sometimes known as* callback* functions, because the run-time system calls back into the main program instead of being called* from* it. In an object- oriented language, the callback function may be a method of some* handler object*, rather than a static subroutine.
 
-## 9.6.1** Sequential Handlers**
+9.6.1** Sequential Handlers**
 
 Traditionally, event handlers were implemented in sequential programming lan- guages as “spontaneous” subroutine calls, typically using a mechanism deﬁned and implemented by the operating system, outside the language proper. To pre- pare to receive events through this mechanism, a program—call it* P*—invokes a setup handler library routine, passing as argument the subroutine it wants to have invoked when the event occurs. At the hardware level, asynchronous device activity during* P*’s execution will trigger an* interrupt* mechanism that saves* P*’s registers, switches to a different stack, and jumps to a predeﬁned address in the OS kernel. Similarly, if some other process* Q* is running when the interrupt occurs (or if some action in* Q* it- self needs to be reﬂected to* P* as an event), the kernel will have saved* P*’s state at the end of its last time slice. Either way, the kernel must arrange to invoke the appropriate event handler despite the fact that* P* may be at a place in its code where a subroutine call cannot normally occur (e.g., it may be halfway through the calling sequence for some other subroutine). Figure 9.5 illustrates the typical implementation of spontaneous subroutine **EXAMPLE** 9.50
 
@@ -867,7 +801,7 @@ Signal trampoline calls—as used, for example, by the Unix* signal* mechanism. 
 
 to the signal trampoline. Immediately before jumping back to the original pro- gram code, the trampoline performs a kernel call to reenable signals. Depending on the details of the operating system, the kernel may buffer some modest num- ber of signals while they are disabled, and deliver them once the handler reenables them. ■ In practice, most event handlers need to share data structures with the main program (otherwise, how would they get the program to do anything interesting in response to the event?). We must take care to make sure neither the handler nor the main program ever sees these shared structures in an inconsistent state. Speciﬁcally, we must prevent a handler from looking at data when the main pro- gram is halfway through modifying it, or modifying data when the main program is halfway through reading it. The typical solution is to* synchronize* access to such shared structures by bracketing blocks of code in the main program with kernel calls that disable and reenable signals. We will use a similar mechanism to im- plement threads on top of coroutines in Section 13.2.4. More general forms of synchronization will appear in Section 13.3.
 
-## 9.6.2** Thread-Based Handlers**
+9.6.2** Thread-Based Handlers**
 
 In modern programming languages and run-time systems, events are often han- dled by a separate thread of control, rather than by spontaneous subroutine calls. With a separate handler thread, input can again be synchronous: the handler thread makes a system call to request the next event, and waits for it to occur. Meanwhile, the main program continues to execute. If the program wishes to be able to handle multiple events concurrently, it may create multiple handler threads, each of which calls into the kernel to wait for an event. To protect the integrity of shared data structures, the main program and the handler thread(s) will generally require a full-ﬂedged synchronization mechanism, as discussed in Section 13.3: disabling signals will not sufﬁce. Many contemporary GUI systems are thread-based, though some have just one handler thread. Examples include the OpenGL Utility Toolkit (GLUT), the GNU Image Manipulation Program (GIMP) Tool Kit (Gtk), the JavaFX library, and the .NET Windows Presentation Foundation (WPF). In C#, an event handler is an in- **EXAMPLE** 9.51
 
@@ -914,40 +848,25 @@ Handling an event with a lambda expression pauseButton.setOnAction(e -> { // do 
 
 This example leverages the* functional interface* convention of Java lambda ex- pressions, described in Example 3.41. Using this convention, we have effectively matched the brevity of C#. ■ The action performed by a handler needs to be simple and brief, so the handler thread can call back into the kernel for another event. If the handler takes too long, the user is likely to ﬁnd the application nonresponsive. If an event needs to initiate something that is computationally demanding, or that may need to perform additional I/O, the handler may create a new thread to do the work; alternatively, it may pass a request to some existing worker thread.
 
-### 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 35. What was the ﬁrst high-level programming language to provide coroutines? 36. What is the difference between a* coroutine* and a* thread*?
 
-#### 35. What was the ﬁrst high-level programming language to provide coroutines?
+## 37. Why doesn’t the* transfer* library routine need to change the program counter when switching between coroutines?
 
-#### 36. What is the difference between a* coroutine* and a* thread*?
+## 38. Describe three alternative means of allocating coroutine stacks. What are their relative strengths and weaknesses?
 
-#### 37. Why doesn’t the transfer library routine need to change the program counter
+## 39. What is a* cactus stack*? What is its purpose? 40. What is* discrete event simulation*? What is its connection with coroutines?
 
-when switching between coroutines?
-
-#### 38. Describe three alternative means of allocating coroutine stacks. What are their
-
-relative strengths and weaknesses?
-
-#### 39. What is a cactus stack? What is its purpose?
-
-#### 40. What is* discrete event simulation*? What is its connection with coroutines?
-
-#### 41. What is an event in the programming language sense of the word?
-
-* Summarize the two main implementation strategies for events.
+* What is an* event* in the programming language sense of the word?
+  42. Summarize the two main implementation strategies for events.
   43. Explain the appeal of* anonymous delegates* (C#) and* anonymous inner classes*
   (Java) for handling events.
-## 9.7
-
-#### **Summary and Concluding Remarks**
+9.7 **Summary and Concluding Remarks**
 
 This chapter has focused on the subject of control abstraction, and on subroutines in particular. Subroutines allow the programmer to encapsulate code behind a narrow interface, which can then be used without regard to its implementation. We began our study of subroutines in Section 9.1 by reviewing the manage- ment of the subroutine call stack. We then considered the* calling sequences* used to maintain the stack, with extra sections on the companion site devoted to* dis-* *plays*; case studies of the LLVM and gcc compilers on ARM and x86, respectively; and the* register windows* of the SPARC. After a brief consideration of in-line ex- pansion, we turned in Section 9.3 to the subject of parameters. We ﬁrst consid- ered parameter-passing* modes*, all of which are implemented by passing values, references, or closures. We noted that the goals of semantic clarity and imple- mentation speed sometimes conﬂict: it is usually most efﬁcient to pass a large parameter by reference, but the aliasing that results can lead to program bugs. In Section 9.3.3 we considered special parameter-passing mechanisms, including default (optional) parameters, named parameters, and variable-length parameter lists. In the ﬁnal three major sections we considered exception-handling mecha- nisms, which allow a program to “unwind” in a well-structured way from a nested sequence of subroutine calls; coroutines, which allow a program to maintain (and switch between) two or more execution contexts; and events, which allow a pro- gram to respond to asynchronous external activity. On the companion site we explained how coroutines are used for discrete event simulation. We also noted
 
 that they could be used to implement iterators, but here simpler alternatives exist. In Chapter 13, we will build on coroutines to implement* threads*, which run (or appear to run) in parallel with one another. In several cases we can discern an evolving consensus about the sorts of con- trol abstractions that a language should provide. The limited parameter-passing modes of languages like Fortran and Algol 60 have been replaced by more ex- tensive or ﬂexible options. Several languages augment the standard positional notation for arguments with default and named parameters. Less-structured error-handling mechanisms, such as label parameters, nonlocal gotos, and dy- namically bound handlers, have been replaced by structured exception handlers that are lexically scoped within subroutines, and can be implemented at zero cost in the common (no-exception) case. The spontaneous subroutine call of tradi- tional signal-handling mechanisms have been replaced by callbacks in a dedicated thread. In many cases, implementing these newer features has required that com- pilers and run-time systems become more complex. Occasionally, as in the case of call-by-name parameters, label parameters, or nonlocal gotos, features that were semantically confusing were also difﬁcult to implement, and abandoning them has made compilers simpler. In yet other cases language features that are useful but difﬁcult to implement continue to appear in some languages but not in others. Examples in this category include ﬁrst-class subroutines, coroutines, iterators, continuations, and local objects with unlimited extent. 9.8 **Exercises**
 
-### 9.1
-
-Describe as many ways as you can in which functions in imperative pro- gramming languages differ from functions in mathematics. 9.2 Consider the following code in C++:
+## 9.1 Describe as many ways as you can in which functions in imperative pro- gramming languages differ from functions in mathematics. 9.2 Consider the following code in C++:
 
 ```
 class string_map {
@@ -968,9 +887,7 @@ return rtn_val;
 
 Suppose that string_map::operator[] contains the only call to complex_ lookup anywhere in the program. Explain why it would be unwise for the programmer to expand that call textually in-line and eliminate the separate function.
 
-## 9.3
-
-Using your favorite language and compiler, write a program that can tell the order in which certain subroutine parameters are evaluated. 9.4 Consider the following (erroneous) program in C:
+## 9.3 Using your favorite language and compiler, write a program that can tell the order in which certain subroutine parameters are evaluated. 9.4 Consider the following (erroneous) program in C:
 
 ```
 void foo() {
@@ -998,9 +915,7 @@ end
 
 Suppose we want to call shift(x, y, 0) but we don’t want to change the value of y. Knowing that built-up expressions are passed as temporaries, we decide to call shift(x, y+0, 0). Our code works ﬁne at ﬁrst, but then (with some compilers) fails when we enable optimization. What is going on? What might we do instead?
 
-## 9.9
-
-In some implementations of Fortran IV, the following code would print a 3. Can you suggest an explanation? How do you suppose more recent Fortran implementations get around the problem?
+## 9.9 In some implementations of Fortran IV, the following code would print a 3. Can you suggest an explanation? How do you suppose more recent Fortran implementations get around the problem?
 
 ```
 c
@@ -1015,9 +930,7 @@ return
 end
 ```
 
-## 9.10 Suppose you are writing a program in which all parameters must be passed
-
-by name. Can you write a subroutine that will swap the values of its actual parameters? Explain. (Hint: Consider mutually dependent parameters like i and A[i].) 9.11 Can you write a swap routine in Java, or in any other language with only call-by-sharing parameters? What exactly should swap* do* in such a lan- guage? (Hint: Think about the distinction between the object to which a variable refers and the value [contents] of that object.) 9.12 As noted in Section 9.3.1, out parameters in Ada 83 can be written by the callee but not read. In Ada 95 they can be both read and written, but they begin their life uninitialized. Why do you think the designers of Ada 95 made this change? Does it have any drawbacks? 9.13 Taking a cue from Ada, Swift provides an inout parameter mode. The lan- guage manual does not specify whether inout parameters are to be passed by reference or value-result. Write a program that determines the imple- mentation used by your local Swift compiler. 9.14 Fields of* packed* records (Example 8.8) cannot be passed by reference in Pas- cal. Likewise, when passing a subrange variable by reference, Pascal requires that all possible values of the corresponding formal parameter be valid for the subrange:
+9.10 Suppose you are writing a program in which all parameters must be passed by name. Can you write a subroutine that will swap the values of its actual parameters? Explain. (Hint: Consider mutually dependent parameters like i and A[i].) 9.11 Can you write a swap routine in Java, or in any other language with only call-by-sharing parameters? What exactly should swap* do* in such a lan- guage? (Hint: Think about the distinction between the object to which a variable refers and the value [contents] of that object.) 9.12 As noted in Section 9.3.1, out parameters in Ada 83 can be written by the callee but not read. In Ada 95 they can be both read and written, but they begin their life uninitialized. Why do you think the designers of Ada 95 made this change? Does it have any drawbacks? 9.13 Taking a cue from Ada, Swift provides an inout parameter mode. The lan- guage manual does not specify whether inout parameters are to be passed by reference or value-result. Write a program that determines the imple- mentation used by your local Swift compiler. 9.14 Fields of* packed* records (Example 8.8) cannot be passed by reference in Pas- cal. Likewise, when passing a subrange variable by reference, Pascal requires that all possible values of the corresponding formal parameter be valid for the subrange:
 
 ```
 type small = 1..100;
@@ -1057,25 +970,17 @@ Describe in English the type of foo. 9.16 Does a program run faster when the pro
 ![Figure 9.6 A problematic...](images/page_499_vector_276.png)
 *Figure 9.6 A problematic program in C to illustrate the use of signals. In most Unix systems, the SIGTSTP signal is generated by typing control-Z at the keyboard.*
 
-## 9.23 Compile and run the program in Figure 9.6. Explain its behavior. Create a
-
-new version that behaves more predictably. 9.24 In C#, Java, or some other language with thread-based event handling, build a simple program around the “pause button” of Examples 9.51–9.54. Your program should open a small window containing a text ﬁeld and two but- tons, one labeled “pause”, the other labeled “resume”. It should then display an integer in the text ﬁeld, starting with zero and counting up once per sec- ond. If the pause button is pressed, the count should suspend; if the resume button is pressed, it should continue. Note that your program will need at least two threads—one to do the counting, one to handle events. In Java, the JavaFX package will create the handler thread automatically, and your main program can do the counting. In C#, some existing thread will need to call Application.Run in order to become a handler thread. In this case you’ll need a second thread to do the counting. 9.25 Extend your answer to the previous problem by adding a “clone” button. Pushing this button should create an additional window containing another counter. This will, of course, require additional threads.
+9.23 Compile and run the program in Figure 9.6. Explain its behavior. Create a new version that behaves more predictably. 9.24 In C#, Java, or some other language with thread-based event handling, build a simple program around the “pause button” of Examples 9.51–9.54. Your program should open a small window containing a text ﬁeld and two but- tons, one labeled “pause”, the other labeled “resume”. It should then display an integer in the text ﬁeld, starting with zero and counting up once per sec- ond. If the pause button is pressed, the count should suspend; if the resume button is pressed, it should continue. Note that your program will need at least two threads—one to do the counting, one to handle events. In Java, the JavaFX package will create the handler thread automatically, and your main program can do the counting. In C#, some existing thread will need to call Application.Run in order to become a handler thread. In this case you’ll need a second thread to do the counting. 9.25 Extend your answer to the previous problem by adding a “clone” button. Pushing this button should create an additional window containing another counter. This will, of course, require additional threads.
 
 9.26–9.36 In More Depth.
 
-## 9.9
+9.9 **Explorations**
 
-### **Explorations**
-
-### 9.37 Explore the details of subroutine calls in the GNU Ada translator gnat. Pay
-
-particular attention to the more complex language features, including decla- rations in nested blocks (Section 3.3.2), dynamic-size arrays (Section 8.2.2), in/out parameters (Section 9.3.1), optional and named parameters (Sec- tion 9.3.3), generic subroutines (Section 7.3.1), exceptions (Section 9.4), and concurrency (“Launch-at-Elaboration,” Section 13.2.3). 9.38 If you were designing a new imperative language, what set of parameter modes would you pick? Why? 9.39 Learn about references and the reference assignment operator in PHP. Dis- cuss the similarities and differences between these and the references of C++. In particular, note that assignments in PHP can change the object to which a reference variable refers. Why does PHP allow this but C++ does not? 9.40 Learn about pointers to methods in C++. What are they useful for? How do they differ from a C# delegate that encapsulates a method? 9.41 Find manuals for several languages with exceptions and look up the set of predeﬁned exceptions—those that may be raised automatically by the lan- guage implementation. Discuss the differences among the sets deﬁned by different languages. If you were designing an exception-handling facility, what exceptions, if any, would you make predeﬁned? Why? 9.42 Eiffel is an exception to the “replacement model” of exception handling. Its rescue clause is superﬁcially similar to a catch block, but it must either retry the routine to which it is attached or allow the exception to propa- gate up the call chain. Put another way, the default behavior when control falls off the end of the rescue clause is to* reraise* the exception. Read up on “Design by Contract,” the programming methodology supported by this exception-handling mechanism. Do you agree or disagree with the argu- ment against replacement? Explain. 9.43 Learn the details of nonlocal control transfer in Common Lisp. Write a tu- torial that explains tagbody and go; block and return-from; catch and throw; and restart-case, restart-bind, handler-case, handler- bind, find-restart, invoke-restart, ignore-errors, signal, and error. What do you think of all this machinery? Is it over-kill? Be sure to give an example that illustrates the use of handler-bind. 9.44 For Common Lisp, Modula-3, and Java, compare the semantics of unwind- protect and try...finally. Speciﬁcally, what happens if an exception arises within a cleanup clause? 9.45 As noted near the end of Section 9.6.2, an event-handler needs either to execute quickly or to pass its work off to another thread. A particularly ele- gant mechanism for the latter can be found in the async and await prim-
+9.37 Explore the details of subroutine calls in the GNU Ada translator gnat. Pay particular attention to the more complex language features, including decla- rations in nested blocks (Section 3.3.2), dynamic-size arrays (Section 8.2.2), in/out parameters (Section 9.3.1), optional and named parameters (Sec- tion 9.3.3), generic subroutines (Section 7.3.1), exceptions (Section 9.4), and concurrency (“Launch-at-Elaboration,” Section 13.2.3). 9.38 If you were designing a new imperative language, what set of parameter modes would you pick? Why? 9.39 Learn about references and the reference assignment operator in PHP. Dis- cuss the similarities and differences between these and the references of C++. In particular, note that assignments in PHP can change the object to which a reference variable refers. Why does PHP allow this but C++ does not? 9.40 Learn about pointers to methods in C++. What are they useful for? How do they differ from a C# delegate that encapsulates a method? 9.41 Find manuals for several languages with exceptions and look up the set of predeﬁned exceptions—those that may be raised automatically by the lan- guage implementation. Discuss the differences among the sets deﬁned by different languages. If you were designing an exception-handling facility, what exceptions, if any, would you make predeﬁned? Why? 9.42 Eiffel is an exception to the “replacement model” of exception handling. Its rescue clause is superﬁcially similar to a catch block, but it must either retry the routine to which it is attached or allow the exception to propa- gate up the call chain. Put another way, the default behavior when control falls off the end of the rescue clause is to* reraise* the exception. Read up on “Design by Contract,” the programming methodology supported by this exception-handling mechanism. Do you agree or disagree with the argu- ment against replacement? Explain. 9.43 Learn the details of nonlocal control transfer in Common Lisp. Write a tu- torial that explains tagbody and go; block and return-from; catch and throw; and restart-case, restart-bind, handler-case, handler- bind, find-restart, invoke-restart, ignore-errors, signal, and error. What do you think of all this machinery? Is it over-kill? Be sure to give an example that illustrates the use of handler-bind. 9.44 For Common Lisp, Modula-3, and Java, compare the semantics of unwind- protect and try...finally. Speciﬁcally, what happens if an exception arises within a cleanup clause? 9.45 As noted near the end of Section 9.6.2, an event-handler needs either to execute quickly or to pass its work off to another thread. A particularly ele- gant mechanism for the latter can be found in the async and await prim-
 
 itives of C# 5 and the similar async and let! of F#. Read up on the* asyn-* *chronous* programming model supported by these promitives. Explain their (implementation-level) connection to iterators (Section C 9.5.3). Write a GUI-based program or a network server that makes good use of them. 9.46 Compare and contrast the event-handling mechanisms of several GUI sys- tems. How are handlers bound to events? Can you control the order in which they are invoked? How many event-handling threads does each sys- tem support? How and when are handler threads created? How do they synchronize with the rest of the program?
 
-### 9.47–9.52 In More Depth.
-9.10
-**Bibliographic Notes**
+9.47–9.52 In More Depth. 9.10 **Bibliographic Notes**
 
 Recursive subroutines became known primarily through McCarthy’s work on Lisp [McC60].7 Stack-based space management for recursive subroutines devel- oped with compilers for Algol 60 (see, e.g., Randell and Russell [RR64]). (Because of issues of extent, subroutine space in Lisp requires more general, heap-based al- location.) Dijkstra [Dij60] presents an early discussion of the use of displays to access nonlocal data. Hanson [Han81] argues that nested subroutines are unnec- essary. Calling sequences and stack conventions for gcc are partially documented in the texinfo ﬁles distributed with the compiler (see* www.gnu.org/software/gcc*). Documentation for LLVM can be found at* llvm.org*. Several of the details de- scribed on the companion site were “reverse engineered” by examining the output of the two compilers. The Ada language rationale [IBFW91, Chap. 8] contains an excellent discus- sion of parameter-passing modes. Harbison [Har92, Secs. 6.2–6.3] describes the Modula-3 modes and compares them to those of other languages. Liskov and Guttag [LG86, p. 25] liken call-by-sharing in Clu to parameter passing in Lisp. Call-by-name parameters have their roots in the lambda calculus of Alonzo Church [Chu41], which we consider in more detail in Section C 11.7.1. Thunks were ﬁrst described by Ingerman [Ing61]. Fleck [Fle76] discusses the problems involved in trying to write a swap routine with call-by-name parameters (Exer- cise 9.10). MacLaren [Mac77] describes exception handling in PL/I. The lexically scoped alternative of Ada, and of most more recent languages, draws heavily on the work of Goodenough [Goo75]. Ada’s semantics are described formally by Luckam and
 

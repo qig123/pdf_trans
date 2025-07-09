@@ -1,4 +1,6 @@
-## **Bibliography**
+# Bibliography
+
+**Bibliography**
 
 [ACD+96] Cristiana Amza, Alan L. Cox, Sandhya Dwarkadas, Pete Keleher, Honghui Lu, Ramakrish- nan Rajamony, Weimin Yu, and Willy Zwaenepoel. TreadMarks: Shared memory computing on networks of workstations.* IEEE Computer*, 29(2):18–28, February 1996.
 
@@ -466,9 +468,8 @@ ley/IEEE Computer Society Press, New York, NY, 1997. Available at* columbia.edu/
 
 [KWS97] Leonidas I. Kontothanassis, Robert Wisniewski, and Michael L. Scott. Scheduler-conscious synchroniza- tion.* ACM Transactions on Computer Systems*, 15(1):3–40, February 1997.
 
-* 
-  Available as* conferences.idealliance.org/extreme/*
-  *html/2004/Kepser01/EML2004Kepser01.html*.
+## 2004. Available as* conferences.idealliance.org/extreme/* *html/2004/Kepser01/EML2004Kepser01.html*.
+
 [Ker81] Brian W. Kernighan. Why Pascal is not my favorite programming language. Technical Report 100, Comput- ing Science, AT&T Bell Laboratories, Murray Hill, NJ, 1981. Reprinted as pages 170–186 of Feuer and Gehani [FG84].
 
 [Lam78] Leslie Lamport. Time, clocks, and the ordering of events in a distributed system. *Communications of the* *ACM*, 21(7):558–565, July 1978.

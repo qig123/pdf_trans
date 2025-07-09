@@ -5,7 +5,6 @@ import json
 import shutil
 from urllib.parse import quote
 from datetime import datetime
-from collections import Counter
 
 # --- 辅助函数 ---
 
@@ -15,15 +14,17 @@ def clean_filename(name):
     name = re.sub(r'[\x00-\x1f\x7f]', '', name)
     name = name.strip(' .')
     return (name[:100] if len(name) > 100 else name) or "untitled"
-# REGEX for matching typical heading formats like "1.2", "1.2.3", "A.1", "Chapter 1" etc.
+
+# REGEX for matching numbered heading formats. Now this is our PRIMARY heading detector.
 TITLE_REGEX = re.compile(
-    r'^\s*('
-    r'(Chapter|Part|Section|Appendix|Kapitel|Teil)\s+[\dIVXLC]+\s*[:.\-]?|'  # "Chapter 1", "Part A"
-    r'(\d+(\.\d+)*\.?)|'  # "3.1", "3.2.1", "4.2."
-    r'[A-Z]\.[\d\.]*'  # "A.1", "B.2.3"
-    r')\s+', 
-    flags=re.IGNORECASE
+    # Matches patterns like "3.1", "3.2.1", "A.1", etc. followed by text.
+    # It requires the line to start with this pattern and be relatively short.
+    r'^\s*((\d+(\.\d+)*\.?)|([A-Z]\.[\d\.]*))\s+[A-Za-z].*'
 )
+
+# REGEX for un-numbered, but likely headings (like "Introduction", "Conclusion")
+KEYWORD_HEADING_REGEX = re.compile(r'^\s*(Introduction|Conclusion|Summary|Abstract|References|Appendix)\s*$', flags=re.IGNORECASE)
+
 
 def is_header_or_footer(block_bbox, page_rect, header_margin=0.12, footer_margin=0.12):
     """判断文本块是否位于页眉或页脚区域"""
@@ -33,7 +34,6 @@ def is_header_or_footer(block_bbox, page_rect, header_margin=0.12, footer_margin
 
 def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, processed_blocks):
     """为标题查找对应的图像"""
-    # 检查前一个块是否是图像
     if caption_block_idx > 0:
         prev_block = blocks[caption_block_idx - 1]
         if prev_block["type"] == 1:
@@ -48,11 +48,9 @@ def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, proc
                     return {"filename": filename, "bbox": fitz.Rect(prev_block["bbox"])}
                 except Exception: return None
     
-    # 在标题上方搜索矢量图或组合图
     caption_bbox = fitz.Rect(blocks[caption_block_idx]["bbox"])
     search_area = fitz.Rect(page.rect.x0, caption_bbox.y0 - 400, page.rect.x1, caption_bbox.y0 - 5)
     search_area.intersect(page.rect)
-    
     if not search_area.is_empty and search_area.height > 10:
         filename = f"page_{page.number+1}_vector_{int(caption_bbox.y0)}.png"
         pix = page.get_pixmap(clip=search_area, dpi=150)
@@ -60,80 +58,17 @@ def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, proc
         return {"filename": filename, "bbox": search_area}
     return None
 
-# --- 新增的Markdown格式推断函数 ---
-
-def analyze_page_fonts(page):
+# --- 全新简化的Markdown格式推断函数 ---
+# 不再需要 analyze_page_fonts
+def get_markdown_from_block(block):
     """
-    分析页面上的字体大小，确定正文和各级标题的字体大小。
-    返回: (正文字体大小, {标题字体大小: 标题级别})
-    """
-    sizes = []
-    for block in page.get_text("dict")["blocks"]:
-        if block['type'] == 0: # 文本块
-            for line in block['lines']:
-                for span in line['spans']:
-                    sizes.append(round(span['size']))
-    
-    if not sizes:
-        return 12, {} # 默认值
-
-    # 计算最常见的字体大小作为正文大小
-    most_common_size = Counter(sizes).most_common(1)[0][0]
-    
-    # 找出所有比正文大的字体大小，作为标题大小
-    heading_sizes = sorted([s for s in set(sizes) if s > most_common_size + 1], reverse=True)
-    
-    # 创建标题级别映射
-    heading_map = {size: f"##{'#' * i}" for i, size in enumerate(heading_sizes)}
-    
-    return most_common_size, heading_map
-
-def get_markdown_from_block(block, body_size, heading_map):
-    """
-    根据文本块的属性（字体、大小、内容）推断其Markdown格式。
-    **New:** Now includes logic to split a block if its first line is a heading.
+    根据文本块的内容模式推断其Markdown格式。
+    不再依赖字体大小，主要依靠正则表达式。
     """
     if block['type'] != 0 or not block.get('lines'):
         return ""
 
-    # --- NEW: Block Splitting Logic ---
-    # Check if the first line of the block looks like a standalone heading.
-    first_line = block['lines'][0]
-    first_line_spans = first_line.get('spans', [])
-    if not first_line_spans:
-        return "" # Empty line
-
-    first_line_text = "".join(s['text'] for s in first_line_spans).strip()
-    first_line_size = round(first_line_spans[0]['size'])
-    is_first_line_bold = all(s['flags'] & 16 for s in first_line_spans) # Check if all spans are bold
-
-    # Heuristic for a heading-like first line:
-    # 1. It matches our title regex, OR it's significantly larger than body text.
-    # 2. It's relatively short.
-    # 3. It doesn't look like a list item starting a long paragraph.
-    is_potential_heading = (
-        (TITLE_REGEX.match(first_line_text) and is_first_line_bold) or 
-        (first_line_size in heading_map)
-    ) and len(first_line_text) < 150 and not first_line_text.endswith(('.', ','))
-
-    if is_potential_heading and len(block['lines']) > 1:
-        # This block contains a heading AND a subsequent paragraph. Split them.
-        heading_level = heading_map.get(first_line_size, '##') # Use ## as default for regex match
-        
-        # Format the heading
-        heading_md = f"{heading_level} {first_line_text}\n\n"
-        
-        # Format the rest of the block as a normal paragraph
-        rest_of_block = {'type': 0, 'lines': block['lines'][1:]}
-        # Recursively call this function for the rest, but it will now fail the split-check
-        # and be treated as a normal paragraph block.
-        paragraph_md = get_markdown_from_block(rest_of_block, body_size, heading_map)
-        
-        return heading_md + paragraph_md
-
-    # --- Fallback to Original Logic (if no split is needed) ---
-    # This handles blocks that are entirely a heading, entirely a paragraph, a list, etc.
-    
+    # 组合文本块内的所有span，并处理加粗/斜体
     full_text_parts = []
     is_monospace_block = all(
         ("mono" in span['font'].lower() or "courier" in span['font'].lower())
@@ -144,39 +79,48 @@ def get_markdown_from_block(block, body_size, heading_map):
         line_parts = []
         for span in line['spans']:
             text = span['text']
+            # 保留基本的加粗和斜体格式
             if span['flags'] & 16: text = f"**{text}**" # Bold
             if span['flags'] & 2: text = f"*{text}*"   # Italic
             line_parts.append(text)
         full_text_parts.append("".join(line_parts))
     
+    # 我们主要处理单行文本块作为标题，但也可以拼接多行后判断
     full_text = "\n".join(full_text_parts).strip()
     if not full_text: return ""
 
-    # Code block detection
+    # --- 核心标题识别逻辑 ---
+    # 规则1: 如果文本匹配编号标题模式，且比较短，则视为H2标题 (##)
+    if TITLE_REGEX.match(full_text) and len(full_text) < 200:
+        # 将标题内的换行符替换为空格
+        return f"## {full_text.replace(chr(10), ' ')}\n\n"
+        
+    # 规则2: 如果文本是常见的无编号标题（如 "Introduction"），也视为H2标题
+    if KEYWORD_HEADING_REGEX.match(full_text):
+        return f"## {full_text}\n\n"
+
+    # 规则3: 识别为代码块 (基于等宽字体)
     if is_monospace_block and len(full_text.splitlines()) > 1:
         return f"```\n{full_text}\n```\n\n"
 
-    # Whole-block heading detection (for cases like "Introduction")
-    block_size = round(block['lines'][0]['spans'][0]['size'])
-    if block_size in heading_map and len(full_text) < 150 and not full_text.strip().endswith('.'):
-        return f"{heading_map[block_size]} {full_text}\n\n"
-
-    # List detection
+    # 规则4: 识别为列表
     list_match = re.match(r'^\s*([•*-]|\d+\.|[a-zA-Z]\))\s+', full_text)
     if list_match:
         lines = full_text.split('\n')
         first_line = lines[0][list_match.end():].strip()
         rest_of_lines = "\n".join(["  " + l.strip() for l in lines[1:]])
+        # 连续的列表项应该只隔一个换行
         return f"* {first_line}\n{rest_of_lines}\n"
 
-    # Default paragraph
+    # 规则5: 默认作为普通段落
+    # 将段落内的换行符替换为空格，以形成连续的文本流
     return full_text.replace('\n', ' ') + "\n\n"
 
 
 # --- 主处理函数 (已更新) ---
 def run_extraction_stable(pdf_path, output_dir="mybook"):
     """
-    处理PDF文件，提取1级和2级书签内容，并智能推断Markdown格式。
+    处理PDF文件。使用书签作为H1标题，使用内容模式匹配作为H2标题。
     """
     if os.path.exists(output_dir):
         print(f"发现旧输出目录 '{output_dir}'。正在删除...")
@@ -211,8 +155,7 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
                 break
 
         if start_page >= end_page:
-            print(f"{'  ' * (level-1)}  - 跳过空章节。")
-            if is_parent_node: 
+            if is_parent_node:
                 current_content_dir = os.path.join(output_dir, safe_title)
                 os.makedirs(current_content_dir, exist_ok=True)
             continue
@@ -223,7 +166,7 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
         if level == 1:
             current_content_dir = os.path.join(parent_dir, safe_title)
             output_filepath = os.path.join(current_content_dir, f"{safe_title}.md")
-        else:
+        else: # level == 2
             current_content_dir = parent_dir
             output_filepath = os.path.join(current_content_dir, f"{safe_title}.md")
 
@@ -231,15 +174,16 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
         current_image_dir = os.path.join(md_file_containing_dir, "images")
         os.makedirs(current_image_dir, exist_ok=True)
         
-        chapter_content = ""
+        # --- 恢复使用书签作为H1标题 ---
+        chapter_content = f"# {title}\n\n"
         processed_img_xrefs = set()
 
         for page_num in range(start_page - 1, end_page - 1):
             if page_num >= doc.page_count: continue
             page = doc.load_page(page_num)
             
-            # **核心改动：先分析字体，再处理内容**
-            body_size, heading_map = analyze_page_fonts(page)
+            # --- 移除字体分析 ---
+            # body_size, heading_map = analyze_page_fonts(page)
             
             page_data = page.get_text("dict")
             blocks = sorted(page_data["blocks"], key=lambda b: (b["bbox"][1], b["bbox"][0]))
@@ -248,48 +192,35 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
             page_content_parts = {}
             ignored_text_areas = []
 
-            # 1. 优先处理图片和图注
+            # 1. 优先处理图片和图注 (逻辑不变)
             caption_blocks_indices = {idx for idx, b in enumerate(blocks) if b["type"] == 0 and "lines" in b and CAPTION_REGEX.match(''.join(s["text"] for s in b["lines"][0]["spans"]).strip())}
             for idx in sorted(list(caption_blocks_indices)):
                 b = blocks[idx]
                 full_caption = ' '.join(''.join(s["text"] for s in l["spans"]) for l in b["lines"]).replace('\n', ' ').strip()
                 short_alt = ' '.join(full_caption.split()[:4]) + "..."
                 image_info = find_image_for_caption(doc, page, blocks, idx, current_image_dir, processed_img_xrefs)
-                content = ""
                 if image_info:
                     relative_path = os.path.join("images", quote(image_info["filename"]))
-                    content = f"![{short_alt}]({relative_path})\n*{full_caption}*\n\n"
-                    if image_info.get("bbox"):
-                        ignored_text_areas.append(image_info["bbox"])
+                    page_content_parts[idx] = f"![{short_alt}]({relative_path})\n*{full_caption}*\n\n"
+                    if image_info.get("bbox"): ignored_text_areas.append(image_info["bbox"])
                 else:
-                    content = f"*{full_caption}*\n\n"
-                page_content_parts[idx] = content
+                    page_content_parts[idx] = f"*{full_caption}*\n\n"
                 processed_block_indices.add(idx)
 
-            # 2. 处理所有文本块 (使用新的格式化函数)
+            # 2. 处理所有文本块
             for idx, b in enumerate(blocks):
-                # 如果块已经被处理过（比如，被识别为图注），或者不是文本块，就跳过
-                if idx in processed_block_indices or b['type'] != 0:
-                    continue
-                
+                if idx in processed_block_indices or b['type'] != 0: continue
                 block_bbox = fitz.Rect(b["bbox"])
+                if is_header_or_footer(block_bbox, page.rect): continue
+                if any(area.intersects(block_bbox) for area in ignored_text_areas): continue
 
-                # 忽略页眉页脚
-                if is_header_or_footer(block_bbox, page.rect):
-                    continue
-
-                # 忽略图片区域内的文本
-                if any(area.intersects(block_bbox) for area in ignored_text_areas):
-                    continue
-
-                # **核心逻辑：直接将块转换为Markdown**
-                markdown_text = get_markdown_from_block(b, body_size, heading_map)
+                # --- 调用新的、简化的格式化函数 ---
+                markdown_text = get_markdown_from_block(b)
                 if markdown_text:
                     page_content_parts[idx] = markdown_text
-                
-                # 标记此块已处理
                 processed_block_indices.add(idx)
-            # 3. 处理未被图注关联的图片
+
+             # 3. 处理未被图注关联的图片
             for img in page.get_images(full=True):
                 xref = img[0]
                 if xref not in processed_img_xrefs:
@@ -338,9 +269,10 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
     print("\n提取完成!")
     doc.close()
 
+
 if __name__ == "__main__":
-    pdf_file = "your_file.pdf" # 请将这里替换成你的PDF文件名
+    pdf_file = "your_file.pdf"
     if os.path.exists(pdf_file):
         run_extraction_stable(pdf_file)
     else:
-        print(f"错误: 文件 '{pdf_file}' 未找到。请确保文件在当前目录下，或者提供完整路径。")
+        print(f"错误: 文件 '{pdf_file}' 未找到。")

@@ -1,12 +1,10 @@
-## I
+# Part I: Foundations
 
-### **Foundations**
+**I** **Foundations**
 
 A central premise of* Programming Language Pragmatics* is that language design and implemen- tation are intimately connected; it’s hard to study one without the other. The bulk of the text—Parts II and III—is organized around topics in language design, but with detailed coverage throughout of the many ways in which design decisions have been shaped by implementation concerns. The ﬁrst ﬁve chapters—Part I—set the stage by covering foundational material in both design and implementation. Chapter 1 motivates the study of programming languages, in- troduces the major language families, and provides an overview of the compilation process. Chapter 3 covers the high-level structure of programs, with an emphasis on* names*, the* bind-* *ing* of names to objects, and the* scope rules* that govern which bindings are active at any given time. In the process it touches on storage management; subroutines, modules, and classes; polymorphism; and separate compilation. Chapters 2, 4, and 5 are more implementation oriented. They provide the background needed to understand the implementation issues mentioned in Parts II and III. Chapter 2 discusses the* syntax*, or textual structure, of programs. It introduces* regular expressions* and *context-free grammars*, which designers use to describe program syntax, together with the* scan-* *ning* and* parsing* algorithms that a compiler or interpreter uses to recognize that syntax. Given an understanding of syntax, Chapter 4 explains how a compiler (or interpreter) determines the* semantics*, or meaning of a program. The discussion is organized around the notion of* at-* *tribute grammars*, which serve to map a program onto something else that has meaning, such as mathematics or some other existing language. Finally, Chapter 5 (entirely on the companion site) provides an overview of assembly-level computer architecture, focusing on the features of modern microprocessors most relevant to compilers. Programmers who understand these fea- tures have a better chance not only of understanding why the languages they use were designed the way they were, but also of using those languages as fully and effectively as possible.
 
-## 1
-
-### **Introduction**
+**1** **Introduction**
 
 **The ﬁrst electronic computers were monstrous contraptions,** ﬁlling several rooms, consuming as much electricity as a good-size factory, and costing millions of 1940s dollars (but with much less computing power than even the sim- plest modern cell phone). The programmers who used these machines believed that the computer’s time was more valuable than theirs. They programmed in machine language. Machine language is the sequence of bits that directly controls a processor, causing it to add, compare, move data from one place to another, and so forth at appropriate times. Specifying programs at this level of detail is an enormously tedious task. The following program calculates the greatest common **EXAMPLE** 1.1
 
@@ -78,9 +76,7 @@ In the early days of computing the implementor’s viewpoint was predominant. Pr
 
 **DESIGN & IMPLEMENTATION**
 
-## 1.1 Introduction
-
-Throughout the book, sidebars like this one will highlight the interplay of language design and language implementation. Among other things, we will consider
+## 1.1 Introduction Throughout the book, sidebars like this one will highlight the interplay of language design and language implementation. Among other things, we will consider
 
 Cases (such as those mentioned in this section) in which ease or difﬁculty of implementation signiﬁcantly affected the success of a language Language features that many designers now believe were mistakes, at least in part because of implementation difﬁculties Potentially useful features omitted from some languages because of concern that they might be too difﬁcult or slow to implement Language features introduced at least in part to facilitate efﬁcient or elegant implementations Cases in which a machine architecture makes reasonable features unreason- ably expensive Various other tradeoffs in which implementation plays a signiﬁcant role
 
@@ -136,35 +132,19 @@ manipulate structured data can thus be found in almost any sophisticated pro- gr
 
 Finally, this book should help prepare you for further study in language de- sign or implementation, should you be so inclined. It will also equip you to un- derstand the interactions of languages with operating systems and architectures, should those areas draw your interest.
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 1. What is the difference between machine language and assembly language? 2. In what way(s) are high-level languages an improvement on assembly lan- guage? Are there circumstances in which it still make sense to program in assembler? 3. Why are there so many programming languages?
 
-* 
-  What is the difference between machine language and assembly language?
-  2.
-  In what way(s) are high-level languages an improvement on assembly lan-
-  guage? Are there circumstances in which it still make sense to program in
-  assembler?
-  3.
-  Why are there so many programming languages?
 * 
   What makes a programming language successful?
   5.
   Name three languages in each of the following categories: von Neumann,
   functional, object-oriented. Name two logic languages. Name two widely
   used concurrent languages.
-### 6.
-What distinguishes declarative languages from imperative languages?
-7.
-What organization spearheaded the development of Ada?
+## 6. What distinguishes declarative languages from imperative languages? 7. What organization spearheaded the development of Ada?
 
-* 
-  What is generally considered the ﬁrst high-level programming language?
-  9.
-  What was the ﬁrst functional language?
-  10. Why aren’t concurrent languages listed as a separate family in Figure 1.1?
-## 1.4
+## 8. What is generally considered the ﬁrst high-level programming language? 9. What was the ﬁrst functional language? 10. Why aren’t concurrent languages listed as a separate family in Figure 1.1?
 
-### **Compilation and Interpretation**
+1.4 **Compilation and Interpretation**
 
 At the highest level of abstraction, the compilation and execution of a program in **EXAMPLE** 1.7
 
@@ -204,9 +184,7 @@ We generally say that a language is “interpreted” when the initial translato
 
 **DESIGN & IMPLEMENTATION**
 
-## 1.2 Compiled and interpreted languages
-
-Certain languages (e.g., Smalltalk and Python) are sometimes referred to as “interpreted languages” because most of their semantic error checking must be performed at run time. Certain other languages (e.g., Fortran and C) are sometimes referred to as “compiled languages” because almost all of their semantic error checking can be performed statically. This terminology isn’t strictly correct: interpreters for C and Fortran can be built easily, and a com- piler can generate code to perform even the most extensive dynamic semantic checks. That said, language design has a profound effect on “compilability.”
+1.2 Compiled and interpreted languages Certain languages (e.g., Smalltalk and Python) are sometimes referred to as “interpreted languages” because most of their semantic error checking must be performed at run time. Certain other languages (e.g., Fortran and C) are sometimes referred to as “compiled languages” because almost all of their semantic error checking can be performed statically. This terminology isn’t strictly correct: interpreters for C and Fortran can be built easily, and a com- piler can generate code to perform even the most extensive dynamic semantic checks. That said, language design has a profound effect on “compilability.”
 
 In practice one sees a broad spectrum of implementation strategies:
 
@@ -300,9 +278,7 @@ In a more general context, suppose we were building one of the ﬁrst compil- er
 
 **DESIGN & IMPLEMENTATION**
 
-## 1.3 The early success of Pascal
-
-The P-code-based implementation of Pascal, and its use of bootstrapping, are largely responsible for the language’s remarkable success in academic circles in the 1970s. No single hardware platform or operating system of that era dominated the computer landscape the way the x86, Linux, and Windows do today.8 Wirth’s toolkit made it possible to get an implementation of Pascal up and running on almost any platform in a week or so. It was one of the ﬁrst great successes in system portability.
+1.3 The early success of Pascal The P-code-based implementation of Pascal, and its use of bootstrapping, are largely responsible for the language’s remarkable success in academic circles in the 1970s. No single hardware platform or operating system of that era dominated the computer landscape the way the x86, Linux, and Windows do today.8 Wirth’s toolkit made it possible to get an implementation of Pascal up and running on almost any platform in a week or so. It was one of the ﬁrst great successes in system portability.
 
 **8** Throughout this book we will use the term “x86” to refer to the instruction set architecture of the Intel 8086 and its descendants, including the various Pentium, “Core,” and Xeon processors. Intel calls this architecture the IA-32, but x86 is a more generic term that encompasses the offerings of competitors such as AMD as well.
 
@@ -340,43 +316,30 @@ Compilers and interpreters do not exist in isolation. Programmers are assisted i
 
 Modern environments provide more integrated tools. When an invalid address error occurs in an integrated development environment (IDE), a new window is likely to appear on the user’s screen, with the line of source code at which the error occurred highlighted. Breakpoints and tracing can then be set in this win- dow without explicitly invoking a debugger. Changes to the source can be made without explicitly invoking an editor. If the user asks to rerun the program af- ter making changes, a new version may be built without explicitly invoking the compiler or conﬁguration manager. The editor for an IDE may incorporate knowledge of language syntax, provid- ing templates for all the standard control structures, and checking syntax as it is typed in. Internally, the IDE is likely to maintain not only a program’s source and object code, but also a partially compiled internal representation. When the source is edited, the internal representation will be updated automatically—often incrementally (without reparsing large portions of the source). In some cases, structural changes to the program may be implemented ﬁrst in the internal rep- resentation, and then automatically reﬂected in the source. IDEs are fundamental to Smalltalk—it is nearly impossible to separate the lan- guage from its graphical environment—and have been routinely used for Com- mon Lisp since the 1980s. With the ubiquity of graphical interfaces, integrated environments have largely displaced command-line tools for many languages and systems. Popular open-source IDEs include Eclipse and NetBeans. Commercial systems include the Visual Studio environment from Microsoft and the XCode environment from Apple. Much of the appearance of integration can also be achieved within sophisticated editors such as emacs.
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 11. Explain the distinction between interpretation and compilation. What are the comparative advantages and disadvantages of the two approaches?
 
-### 11. Explain the distinction between interpretation and compilation. What are the
+## 12. Is Java compiled or interpreted (or both)? How do you know? 13. What is the difference between a compiler and a preprocessor?
 
-comparative advantages and disadvantages of the two approaches?
-
-### 12. Is Java compiled or interpreted (or both)? How do you know?
-
-### 13. What is the difference between a compiler and a preprocessor?
-
-### 14. What was the intermediate form employed by the original AT&T C++ com-
-
-piler?
+## 14. What was the intermediate form employed by the original AT&T C++ com- piler?
 
 **DESIGN & IMPLEMENTATION**
 
-### 1.4 Powerful development environments
+1.4 Powerful development environments Sophisticated development environments can be a two-edged sword. The quality of the Common Lisp environment has arguably contributed to its widespread acceptance. On the other hand, the particularity of the graphi- cal environment for Smalltalk (with its insistence on speciﬁc fonts, window styles, etc.) made it difﬁcult to port the language to systems accessed through a textual interface, or to graphical systems with a different “look and feel.”
 
-Sophisticated development environments can be a two-edged sword. The quality of the Common Lisp environment has arguably contributed to its widespread acceptance. On the other hand, the particularity of the graphi- cal environment for Smalltalk (with its insistence on speciﬁc fonts, window styles, etc.) made it difﬁcult to port the language to systems accessed through a textual interface, or to graphical systems with a different “look and feel.”
+## 15. What is P-code?
 
-### 15. What is P-code?
+## 16. What is bootstrapping? 17. What is a just-in-time compiler?
 
-### 16. What is bootstrapping?
+## 18. Name two languages in which a program can write new pieces of itself “on the ﬂy.”
 
-### 17. What is a just-in-time compiler?
-
-### 18. Name two languages in which a program can write new pieces of itself “on
-
-the ﬂy.”
-
-### 19. Brieﬂy describe three “unconventional” compilers—compilers whose pur-
-
-pose is not to prepare a high-level program for execution on a general- purpose processor. 20. List six kinds of tools that commonly support the work of a compiler within a larger programming environment. 21. Explain how an integrated development environment (IDE) differs from a collection of command-line tools.
-
-## 1.6
-
-### **An Overview of Compilation**
+* Brieﬂy describe three “unconventional” compilers—compilers whose pur-
+  pose is not to prepare a high-level program for execution on a general-
+  purpose processor.
+  20. List six kinds of tools that commonly support the work of a compiler within
+  a larger programming environment.
+  21. Explain how an integrated development environment (IDE) differs from a
+  collection of command-line tools.
+1.6 **An Overview of Compilation**
 
 Compilers are among the most well-studied computer programs. We will con- sider them repeatedly throughout the rest of the book, and in chapters 2, 4, 15, and 17 in particular. The remainder of this section provides an introductory overview. In a typical compiler, compilation proceeds through a series of well-deﬁned **EXAMPLE** 1.19
 
@@ -392,7 +355,7 @@ for more than one machine (target language), and so that the back end may be sha
 
 to the dramatic increases in memory sizes of the mid to late 1980s, compilers were also sometimes divided into passes to minimize memory usage: as each pass completed, the next could reuse its code space.
 
-## 1.6.1** Lexical and Syntax Analysis**
+1.6.1** Lexical and Syntax Analysis**
 
 Consider the greatest common divisor (GCD) problem introduced at the begin- **EXAMPLE** 1.20
 
@@ -454,13 +417,13 @@ GCD program parse tree tree for our GCD program (based on a full grammar not sho
 
 ident(j) *postfix-expression* 13
 
-## **B**
+**B**
 
 *declarator* = *initializer*
 
 *block-item*
 
-## **A**
+**A**
 
 } { *block-item-list_opt*
 
@@ -588,9 +551,7 @@ ident(j) 2 10
 
 *postfix-expression*
 
-## A
-
-## **B**
+**A** **B**
 
 *expression_opt*
 
@@ -669,7 +630,7 @@ ident(i) 2
 
 length, and (b) the use of the equally artiﬁcial* assignment-expression*,* additive-* *expression*,* multiplicative-expression*, and so on, to capture precedence and asso- ciativity in arithmetic expressions. We shall see in the following subsection that much of this complexity can be discarded once parsing is complete. ■ In the process of scanning and parsing, the compiler or interpreter checks to see that all of the program’s tokens are well formed, and that the sequence of tokens conforms to the syntax deﬁned by the context-free grammar. Any mal- formed tokens (e.g., 123abc or $@foo in C) should cause the scanner to produce an error message. Any syntactically invalid token sequence (e.g., A = X Y Z in C) should lead to an error message from the parser.
 
-## 1.6.2** Semantic Analysis and Intermediate Code Generation**
+1.6.2** Semantic Analysis and Intermediate Code Generation**
 
 Semantic analysis is the discovery of* meaning* in a program. Among other things, the semantic analyzer recognizes when multiple occurrences of the same identi- ﬁer are meant to refer to the same program entity, and ensures that the uses are consistent. In most languages it also tracks the* types* of both identiﬁers and ex- pressions, both to verify consistent usage and to guide the generation of code in the back end of a compiler. To assist in its work, the semantic analyzer typically builds and maintains a *symbol table* data structure that maps each identiﬁer to the information known about it. Among other things, this information includes the identiﬁer’s type, in- ternal structure (if any), and scope (the portion of the program in which it is valid). Using the symbol table, the semantic analyzer enforces a large variety of rules that are not captured by the hierarchical structure of the context-free grammar and the parse tree. In C, for example, it checks to make sure that
 
@@ -692,21 +653,11 @@ Interpreting the syntax tree preter would start at the root of Figure 1.6 and vi
 ![Figure 1.6 Syntax tree...](images/page_67_vector_325.png)
 *Figure 1.6 Syntax tree and symbol table for the GCD program. Note the contrast to Fig- ure 1.5: the syntax tree retains just the essential structure of the program, omitting details that were needed only to drive the parsing algorithm.*
 
-#### idealized machine. We will consider this option further in Chapter 15, where a
+idealized machine. We will consider this option further in Chapter 15, where a control ﬂow graph for our GCD program appears in Figure 15.3. In a suite of re- lated compilers, the front ends for several languages and the back ends for several machines would share a common intermediate form.
 
-#### control ﬂow graph for our GCD program appears in Figure 15.3. In a suite of re-
+1.6.3** Target Code Generation**
 
-#### lated compilers, the front ends for several languages and the back ends for several
-
-machines would share a common intermediate form.
-
-## 1.6.3** Target Code Generation**
-
-#### The code generation phase of a compiler translates the intermediate form into
-
-#### the target language. Given the information contained in the syntax tree, gener-
-
-ating correct code is usually not a difﬁcult task (generating* good* code is harder, as we shall see in Section 1.6.4). To generate assembly or machine language, the **EXAMPLE** 1.26
+The code generation phase of a compiler translates the intermediate form into the target language. Given the information contained in the syntax tree, gener- ating correct code is usually not a difﬁcult task (generating* good* code is harder, as we shall see in Section 1.6.4). To generate assembly or machine language, the **EXAMPLE** 1.26
 
 GCD program assembly code code generator traverses the symbol table to assign locations to variables, and then traverses the intermediate representation of the program, generating loads and stores for variable references, interspersed with appropriate arithmetic opera- tions, tests, and branches. Naive code for our GCD example appears in Figure 1.7, in x86 assembly language. It was generated automatically by a simple pedagogical compiler. The assembly language mnemonics may appear a bit cryptic, but the com- ments on each line (not generated by the compiler!) should make the correspon-
 
@@ -717,43 +668,31 @@ dence between Figures 1.6 and 1.7 generally apparent. A few hints: esp, ebp, eax
 
 Often a code generator will save the symbol table for later use by a symbolic debugger, by including it in a nonexecutable part of the target code.
 
-### 1.6.4** Code Improvement**
+1.6.4** Code Improvement**
 
 Code improvement is often referred to as* optimization*, though it seldom makes anything optimal in any absolute sense. It is an optional phase of compilation whose goal is to transform a program into a new version that computes the same result more efﬁciently—more quickly or using less memory, or both. Some improvements are machine independent. These can be performed as transformations on the intermediate form. Other improvements require an un- derstanding of the target machine (or of whatever will execute the program in the target language). These must be performed as transformations on the target pro- gram. Thus code improvement often appears twice in the list of compiler phases: once immediately after semantic analysis and intermediate code generation, and again immediately after target code generation. Applying a good code improver to the code in Figure 1.7 produces the code **EXAMPLE** 1.27
 
 GCD program optimization shown in Example 1.2. Comparing the two programs, we can see that the im- proved version is quite a lot shorter. Conspicuously absent are most of the loads and stores. The machine-independent code improver is able to verify that i and j can be kept in registers throughout the execution of the main loop. (This would not have been the case if, for example, the loop contained a call to a subrou- tine that might reuse those registers, or that might try to modify i or j.) The machine-speciﬁc code improver is then able to assign i and j to actual regis- ters of the target machine. For modern microprocessors, with complex internal behavior, compilers can usually generate better code than can human assembly language programmers. ■
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 22. List the principal phases of compilation, and describe the work performed by each. 23. List the phases that are also executed as part of interpretation.
 
-#### 22. List the principal phases of compilation, and describe the work performed by
+* Describe the form in which a program is passed from the scanner to the
+  parser; from the parser to the semantic analyzer; from the semantic analyzer
+  to the intermediate code generator.
+  25. What distinguishes the front end of a compiler from the back end?
+* What is the difference between a phase and a pass of compilation? Underwhat
+  circumstances does it make sense for a compiler to have multiple passes?
+  27. What is the purpose of the compiler’s symbol table?
+  28. What is the difference between static and dynamic semantics?
+## 29. On modern machines, do assembly language programmers still tend to write better code than a good compiler can? Why or why not?
 
-each. 23. List the phases that are also executed as part of interpretation.
-
-#### 24. Describe the form in which a program is passed from the scanner to the
-
-parser; from the parser to the semantic analyzer; from the semantic analyzer to the intermediate code generator. 25. What distinguishes the front end of a compiler from the back end?
-
-#### 26. What is the difference between a phase and a pass of compilation? Underwhat
-
-circumstances does it make sense for a compiler to have multiple passes? 27. What is the purpose of the compiler’s symbol table? 28. What is the difference between static and dynamic semantics?
-
-### 29. On modern machines, do assembly language programmers still tend to write
-
-better code than a good compiler can? Why or why not?
-
-## 1.7
-
-### **Summary and Concluding Remarks**
+1.7 **Summary and Concluding Remarks**
 
 In this chapter we introduced the study of programming language design and implementation. We considered why there are so many languages, what makes them successful or unsuccessful, how they may be categorized for study, and what beneﬁts the reader is likely to gain from that study. We noted that language design and language implementation are intimately tied to one another. Obviously an implementation must conform to the rules of the language. At the same time, a language designer must consider how easy or difﬁcult it will be to implement various features, and what sort of performance is likely to result. Language implementations are commonly differentiated into those based on interpretation and those based on compilation. We noted, however, that the dif- ference between these approaches is fuzzy, and that most implementations in- clude a bit of each. As a general rule, we say that a language is compiled if exe- cution is preceded by a translation step that (1) fully analyzes both the structure (syntax) and meaning (semantics) of the program, and (2) produces an equiva- lent program in a signiﬁcantly different form. The bulk of the implementation material in this book pertains to compilation. Compilers are generally structured as a series of* phases*. The ﬁrst few phases— scanning, parsing, and semantic analysis—serve to analyze the source program. Collectively these phases are known as the compiler’s* front end*. The ﬁnal few phases—target code generation and machine-speciﬁc code improvement—are known as the* back end*. They serve to build a target program—preferably a fast one—whose semantics match those of the source. Between the front end and the back end, a good compiler performs extensive machine-independent code im- provement; the phases of this “middle end” typically comprise the bulk of the code of the compiler, and account for most of its execution time. Chapters 3, 6, 7, 8, 9, and 10 form the core of the rest of this book. They cover fundamental issues of language design, both from the point of view of the pro- grammer and from the point of view of the language implementor. To support the discussion of implementations, Chapters 2 and 4 describe compiler front ends in more detail than has been possible in this introduction. Chapter 5 provides an overview of assembly-level architecture. Chapters 15 through 17 discuss com- piler back ends, including assemblers and linkers, run-time systems, and code improvement techniques. Additional language paradigms are covered in Chap- ters 11 through 14. Appendix A lists the principal programming languages men- tioned in the text, together with a genealogical chart and bibliographic references. Appendix B contains a list of “Design & Implementation” sidebars; Appendix C contains a list of numbered examples.
 
-## 1.8
+1.8 **Exercises**
 
-### **Exercises**
-
-### 1.1
-
-Errors in a computer program can be classiﬁed according to when they are detected and, if they are detected at compile time, what part of the compiler detects them. Using your favorite imperative language, give an example of each of the following. (a) A lexical error, detected by the scanner (b) A syntax error, detected by the parser (c) A static semantic error, detected by semantic analysis (d) A dynamic semantic error, detected by code generated by the compiler (e) An error that the compiler can neither catch nor easily generate code to catch (this should be a violation of the language deﬁnition, not just a program bug) 1.2 Consider again the Pascal tool set distributed by Niklaus Wirth (Exam- ple 1.15). After successfully building a machine language version of the Pascal compiler, one could in principle discard the P-code interpreter and the P-code version of the compiler. Why might one choose* not* to do so? 1.3 Imperative languages like Fortran and C are typically compiled, while scripting languages, in which many issues cannot be settled until run time, are typically interpreted. Is interpretation simply what one “has to do” when compilation is infeasible, or are there actually some* advantages* to interpret- ing a language, even when a compiler is available? 1.4 The gcd program of Example 1.20 might also be written
+1.1 Errors in a computer program can be classiﬁed according to when they are detected and, if they are detected at compile time, what part of the compiler detects them. Using your favorite imperative language, give an example of each of the following. (a) A lexical error, detected by the scanner (b) A syntax error, detected by the parser (c) A static semantic error, detected by semantic analysis (d) A dynamic semantic error, detected by code generated by the compiler (e) An error that the compiler can neither catch nor easily generate code to catch (this should be a violation of the language deﬁnition, not just a program bug) 1.2 Consider again the Pascal tool set distributed by Niklaus Wirth (Exam- ple 1.15). After successfully building a machine language version of the Pascal compiler, one could in principle discard the P-code interpreter and the P-code version of the compiler. Why might one choose* not* to do so? 1.3 Imperative languages like Fortran and C are typically compiled, while scripting languages, in which many issues cannot be settled until run time, are typically interpreted. Is interpretation simply what one “has to do” when compilation is infeasible, or are there actually some* advantages* to interpret- ing a language, even when a compiler is available? 1.4 The gcd program of Example 1.20 might also be written
 
 ```
 int main() {
@@ -778,9 +717,7 @@ The compiler-oriented chapters of this book attempt to convey a sense of what th
 
 et al. [ALSU07], Cooper and Torczon [CT04], and Fischer et al. [FCL10]. Other excellent, though less current texts include those of Appel [App97] and Grune et al. [GBJ+12]. Popular texts on programming language design include those of Louden [LL12], Sebesta [Seb15], and Sethi [Set96]. Some of the best information on the history of programming languages can be found in the proceedings of conferences sponsored by the Association for Com- puting Machinery in 1978, 1993, and 2007 [Wex78, Ass93, Ass07]. Another excel- lent referenceis Horowitz’s 1987 text [Hor87]. A broader range of historical mate- rial can be found in the quarterly* IEEE Annals of the History of Computing*. Given the importance of personal taste in programming language design, it is inevitable that some language comparisons should be marked by strongly worded opin- ions. Early examples include the writings of Dijkstra [Dij82], Hoare [Hoa81], Kernighan [Ker81], and Wirth [Wir85a]. Much modern software development takes place in integrated programming environments. Inﬂuential precursors to these environments include the Genera Common Lisp environment from Symbolics Corp. [WMWM87] and the Small- talk [Gol84], Interlisp [TM81], and Cedar [SZBH86] environments at the Xerox Palo Alto Research Center.
 
-## 2
-
-### **Programming Language Syntax**
+**2** **Programming Language Syntax**
 
 **Unlike natural languages such as English or Chinese,** computer languages must be precise. Both their form (syntax) and meaning (semantics) must be spec- iﬁed without ambiguity, so that both programmers and computers can tell what a program is supposed to do. To provide the needed degree of precision, lan- guage designers and implementors use formal syntactic and semantic notation. To facilitate the discussion of language features in later chapters, we will cover this notation ﬁrst: syntax in the current chapter and semantics in Chapter 4. As a motivating example, consider the Arabic numerals with which we repre- **EXAMPLE** 2.1
 
@@ -804,7 +741,7 @@ Formal speciﬁcation of syntax requires a set of rules. How complicated (expres
 
 (repetition an arbitrary number of times). Specifying most of the rest of what we intuitively think of as syntax requires one additional kind of rule: recursion (creation of a construct from simpler instances of the same construct). Any set of strings that can be deﬁned in terms of the ﬁrst three rules is called a* regular set*, or sometimes a* regular language*. Regular sets are generated by* regular expressions* and recognized by scanners. Any set of strings that can be deﬁned if we add recur- sion is called a* context-free language* (CFL). Context-free languages are generated by* context-free grammars* (CFGs) and recognized by parsers. (Terminology can be confusing here. The meaning of the word “language” varies greatly, depending on whether we’re talking about “formal” languages [e.g., regular or context-free], or programming languages. A formal language is just a set of strings, with no accompanying semantics.)
 
-## 2.1.1** Tokens and Regular Expressions**
+2.1.1** Tokens and Regular Expressions**
 
 Tokens are the basic building blocks of programs—the shortest strings of char- acters with individual meaning. Tokens come in many* kinds*, including key- words, identiﬁers, symbols, and constants of various types. Some kinds of token (e.g., the increment operator) correspond to only one string of characters. Oth- ers (e.g.,* identiﬁer*) correspond to a set of strings that share some common form. (In most languages, keywords are special strings of characters that have the right form to be identiﬁers, but are reserved for special purposes.) We will use the word “token” informally to refer to both the generic kind (an identiﬁer, the increment operator) and the speciﬁc string (foo, ++); the distinction between these should be clear from context. Some languages have only a few kinds of token, of fairly simple form. Other languages are more complex. C, for example, has more than 100 kinds of **EXAMPLE** 2.2
 
@@ -834,9 +771,7 @@ The symbols to the left of the* −→*signs provide names for the regular expre
 
 **DESIGN & IMPLEMENTATION**
 
-## 2.1 Contextual keywords
-
-In addition to distinguishing between keywords and identiﬁers, some lan- guages deﬁne so-called* contextual keywords*, which function as keywords in certain speciﬁc places in a program, but as identiﬁers elsewhere. In C#, for ex- ample, the word yield can appear immediately before return or break—a place where an identiﬁer can never appear. In this context, it is interpreted as a keyword; anywhere else it is an identiﬁer. It is therefore perfectly acceptable to have a local variable named yield: the compiler can distinguish it from the keyword by where it appears in the program. C++11 has a small handful of contextual keywords. C# 4.0 has 26. Most were introduced in the course of revising the language to create a new stan- dard version. Given a large user community, any short, intuitively appealing word is likely to have been used as an identiﬁer by someone, in some existing program. Making that word a contextual keyword in the new version of the language, rather than a full keyword, reduces the risk that existing programs will suddenly fail to compile.
+2.1 Contextual keywords In addition to distinguishing between keywords and identiﬁers, some lan- guages deﬁne so-called* contextual keywords*, which function as keywords in certain speciﬁc places in a program, but as identiﬁers elsewhere. In C#, for ex- ample, the word yield can appear immediately before return or break—a place where an identiﬁer can never appear. In this context, it is interpreted as a keyword; anywhere else it is an identiﬁer. It is therefore perfectly acceptable to have a local variable named yield: the compiler can distinguish it from the keyword by where it appears in the program. C++11 has a small handful of contextual keywords. C# 4.0 has 26. Most were introduced in the course of revising the language to create a new stan- dard version. Given a large user community, any short, intuitively appealing word is likely to have been used as an identiﬁer by someone, in some existing program. Making that word a contextual keyword in the new version of the language, rather than a full keyword, reduces the risk that existing programs will suddenly fail to compile.
 
 **3** Some authors use* λ* to represent the empty string. Some use a period (**.**), rather than juxtaposi- tion, to indicate concatenation. Some use a plus sign (**+**), rather than a vertical bar, to indicate alternation.
 
@@ -854,7 +789,7 @@ There are a few noteworthy exceptions to these rules. Some language imple- menta
 
 Many readers will be familiar with regular expressions from the grep family of tools in Unix, the search facilities of various text editors, or such scripting lan- guages and tools as Perl, Python, Ruby, awk, and sed. Most of these provide a rich set of extensions to the notation of regular expressions. Some extensions, such as shorthand for “zero or one occurrences” or “anything other than white space,” do not change the power of the notation. Others, such as the ability to require a second occurrence, later in the input string, of the same character sequence that matched an earlier part of the expression, increase the power of the notation, so that it is no longer restricted to generating regular sets. Still other extensions are designed not to increase the expressiveness of the notation but rather to tie it to other language facilities. In many tools, for example, one can bracket portions of a regular expression in such a way that when a string is matched against it the con- tents of the corresponding substrings are assigned into named local variables. We will return to these issues in Section 14.4.2, in the context of scripting languages.
 
-## 2.1.2** Context-Free Grammars**
+2.1.2** Context-Free Grammars**
 
 Regular expressions work well for deﬁning tokens. They are unable, however, to specify* nested* constructs, which are central to programming languages. Consider **EXAMPLE** 2.4
 
@@ -862,9 +797,7 @@ Syntactic nesting in expressions for example the structure of an arithmetic expr
 
 **DESIGN & IMPLEMENTATION**
 
-### 2.2 Formatting restrictions
-
-Formatting limitations inspired by implementation concerns—as in the punch-card-oriented rules of Fortran 77 and its predecessors—have a ten- dency to become unwanted anachronisms as implementation techniques im- prove. Given the tendency of certain word processors to “ﬁll” or auto-format text, the line break and indentation rules of languages like Haskell, Occam, and Python are somewhat controversial.
+2.2 Formatting restrictions Formatting limitations inspired by implementation concerns—as in the punch-card-oriented rules of Fortran 77 and its predecessors—have a ten- dency to become unwanted anachronisms as implementation techniques im- prove. Given the tendency of certain word processors to “ﬁll” or auto-format text, the line break and indentation rules of languages like Haskell, Occam, and Python are somewhat controversial.
 
 *expr** −→*id** |** number** |** -* expr*** |** (* expr* ) **|*** expr op expr* *op** −→*+** |** -** |** *** |** /
 
@@ -910,7 +843,7 @@ which is also sometimes written
 
 Many tokens, such as id and number above, have many possible spellings (i.e., may be represented by many possible strings of characters). The parser is obliv- ious to these; it does not distinguish one identiﬁer from another. The semantic analyzer does distinguish them, however; the scanner must save the spelling of each such “interesting” token for later use.
 
-## 2.1.3** Derivations and Parse Trees**
+2.1.3** Derivations and Parse Trees**
 
 A context-free grammar shows us how to generate a syntactically valid string of terminals: Begin with the start symbol. Choose a production with the start sym- bol on the left-hand side; replace the start symbol with the right-hand side of that production. Now choose a nonterminal* A* in the resulting string, choose a pro- duction* P* with* A* on its left-hand side, and replace* A* with the right-hand side of *P*. Repeat this process until no nonterminals remain. As an example, we can use our grammar for expressions to generate the string **EXAMPLE** 2.6
 
@@ -962,18 +895,8 @@ This grammar is unambiguous. It captures precedence in the way* factor*,* term*,
 ![Figure 2.4 Parse tree...](images/page_86_vector_342.png)
 *Figure 2.4 Parse tree for 10 – 4 – 3, with left associativity (grammar in Example 2.8).*
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 1. What is the difference between syntax and semantics? 2. What are the three basic operations that can be used to build complex regular expressions from simpler regular expressions? 3. What additional operation (beyond the three of regular expressions) is pro- vided in context-free grammars? 4. What is* Backus-Naur form*? When and why was it devised?
 
-* 
-  What is the difference between syntax and semantics?
-  2.
-  What are the three basic operations that can be used to build complex regular
-  expressions from simpler regular expressions?
-  3.
-  What additional operation (beyond the three of regular expressions) is pro-
-  vided in context-free grammars?
-  4.
-  What is* Backus-Naur form*? When and why was it devised?
 * 
   Name a language in which indentation affects program syntax.
   6.
@@ -982,13 +905,9 @@ This grammar is unambiguous. It captures precedence in the way* factor*,* term*,
   7.
   What is the difference between a* right-most* derivation and a* left-most* deriva-
   tion?
-* 
-  What does it mean for a context-free grammar to be* ambiguous*?
-  9.
-  What are* associativity* and* precedence*? Why are they signiﬁcant in parse trees?
-## 2.2
+## 8. What does it mean for a context-free grammar to be* ambiguous*? 9. What are* associativity* and* precedence*? Why are they signiﬁcant in parse trees?
 
-### **Scanning**
+2.2 **Scanning**
 
 Together, the scanner and parser for a programming language are responsible for discovering the syntactic structure of a program. This process of discovery, or *syntax analysis*, is a necessary ﬁrst step toward translating the program into an equivalent program in the target language. (It’s also the ﬁrst step toward inter- preting the program directly. In general, we will focus on compilation, rather than interpretation, for the remainder of the book. Most of what we shall dis- cuss either has an obvious application to interpretation, or is obviously irrelevant to it.) By grouping input characters into tokens, the scanner dramatically reduces the number of individual items that must be inspected by the more computationally intensive parser. In addition, the scanner typically removes comments (so the parser doesn’t have to worry about them appearing throughout the context-free grammar—see Exercise 2.20); saves the text of “interesting” tokens like identiﬁers, strings, and numeric literals; and tags tokens with line and column numbers, to make it easier to generate high-quality error messages in subsequent phases. In Examples 2.4 and 2.8 we considered a simple language for arithmetic expres- **EXAMPLE** 2.9
 
@@ -1024,41 +943,19 @@ Finite automaton for a calculator scanner form in Figure 2.6. The automaton star
 
 **DESIGN & IMPLEMENTATION**
 
-## 2.3 Nested comments
-
-Nested comments can be handy for the programmer (e.g., for temporarily “commenting out” large blocks of code). Scanners normally deal only with nonrecursive constructs, however, so nested comments require special treat- ment. Some languages disallow them. Others require the language implemen- tor to augment the scanner with special-purpose comment-handling code. C and C++ strike a compromise: /* ... */ style comments are not allowed to nest, but /* ... */ and //... style comments can appear inside each other. The programmer can thus use one style for “normal” comments and the other for “commenting out.” (The C99 designers note, however, that conditional compilation (#if) is preferable [Int03a, p. 58].)
+2.3 Nested comments Nested comments can be handy for the programmer (e.g., for temporarily “commenting out” large blocks of code). Scanners normally deal only with nonrecursive constructs, however, so nested comments require special treat- ment. Some languages disallow them. Others require the language implemen- tor to augment the scanner with special-purpose comment-handling code. C and C++ strike a compromise: /* ... */ style comments are not allowed to nest, but /* ... */ and //... style comments can appear inside each other. The programmer can thus use one style for “normal” comments and the other for “commenting out.” (The C99 designers note, however, that conditional compilation (#if) is preferable [Int03a, p. 58].)
 
 ![Figure 2.5 Outline of...](images/page_89_vector_379.png)
 *Figure 2.5 Outline of an ad hoc scanner for tokens in our calculator language.*
 
-## 2.2.1** Generating a Finite Automaton**
+2.2.1** Generating a Finite Automaton**
 
-#### While a ﬁnite automaton can in principle be written by hand, it is more com-
-
-#### mon to build one automatically from a set of regular expressions, using a scanner
-
-#### generator tool. For our calculator language, we should like to covert the regular
-
-#### expressions of Example 2.9 into the automaton of Figure 2.6. That automaton has
-
-#### the desirable property that its actions are deterministic: in any given state with a
-
-#### given input character there is never more than one possible outgoing transition
-
-#### (arrow) labeled by that character. As it turns out, however, there is no obvious
-
-#### one-step algorithm to convert a set of regular expressions into an equivalent de-
-
-#### terministic ﬁnite automaton (DFA). The typical scanner generator implements
-
-the conversion as a series of three separate steps. The ﬁrst step converts the regular expressions into a* nondeterministic* ﬁnite automaton (NFA). An NFA is like a DFA except that (1) there may be more than one transition out of a given state labeled by a given character, and (2) there may be so-called* epsilon transitions*: arrows labeled by the empty string symbol,* ϵ*. The NFA is said to accept an input string (token) if there exists a path from the start
+While a ﬁnite automaton can in principle be written by hand, it is more com- mon to build one automatically from a set of regular expressions, using a* scanner* *generator* tool. For our calculator language, we should like to covert the regular expressions of Example 2.9 into the automaton of Figure 2.6. That automaton has the desirable property that its actions are* deterministic*: in any given state with a given input character there is never more than one possible outgoing transition (arrow) labeled by that character. As it turns out, however, there is no obvious one-step algorithm to convert a set of regular expressions into an equivalent de- terministic ﬁnite automaton (DFA). The typical scanner generator implements the conversion as a series of three separate steps. The ﬁrst step converts the regular expressions into a* nondeterministic* ﬁnite automaton (NFA). An NFA is like a DFA except that (1) there may be more than one transition out of a given state labeled by a given character, and (2) there may be so-called* epsilon transitions*: arrows labeled by the empty string symbol,* ϵ*. The NFA is said to accept an input string (token) if there exists a path from the start
 
 ![Figure 2.6 Pictorial representation...](images/page_90_vector_415.png)
 *Figure 2.6 Pictorial representation of a scanner for calculator tokens, in the form of a ﬁnite automaton. This ﬁgure roughly parallels the code in Figure 2.5. States are numbered for reference in Figure 2.12. Scanning for each token begins in the state marked “Start.” The ﬁnal states, in which a token is recognized, are indicated by double circles. Comments, when recognized, send the scanner back to its start state, rather than a ﬁnal state.*
 
-### state to a ﬁnal state whose non-epsilon transitions are labeled, in order, by the
-
-characters of the token. To avoid the need to search all possible paths for one that “works,” the second step of a scanner generatortranslates the NFA into an equivalentDFA: an automa- ton that accepts the same language, but in which there are no epsilon transitions, and no states with more than one outgoing transition labeled by the same char- acter. The third step is a space optimization that generates a ﬁnal DFA with the minimum possible number of states.
+state to a ﬁnal state whose non-epsilon transitions are labeled, in order, by the characters of the token. To avoid the need to search all possible paths for one that “works,” the second step of a scanner generatortranslates the NFA into an equivalentDFA: an automa- ton that accepts the same language, but in which there are no epsilon transitions, and no states with more than one outgoing transition labeled by the same char- acter. The third step is a space optimization that generates a ﬁnal DFA with the minimum possible number of states.
 
 ![Figure 2.7 Construction of...](images/page_91_vector_409.png)
 *Figure 2.7 Construction of an NFA equivalent to a given regular expression. Part (a) shows the base case: the automaton for the single letter c. Parts (b), (c), and (d), respectively, show the constructions for concatenation, alternation, and Kleene closure. Each construction retains a unique start state and a single ﬁnal state. Internal detail is hidden in the diamond-shaped center regions.*
@@ -1093,34 +990,26 @@ Minimal DFA for *d****(** .*d*** |*** d*.** )*** d****** should exist. In partic
 
 We can formalize this intuition, allowing us to apply it to any DFA, via the fol- lowing inductive construction. Initially we place the states of the (not necessarily minimal) DFA into two equivalence classes: ﬁnal states and nonﬁnal states. We then repeatedly search for an equivalence class* X* and an input symbol c such that when given c as input, the states in* X* make transitions to states in* k** >* 1 different equivalence classes. We then partition* X* into* k* classes in such a way that all states in a given new class would move to a member of the same old class on c. When we are unable to ﬁnd a class to partition in this fashion we are done. In our example, the original placement puts States* D*,* E*,* F*, and* G* in one class (ﬁnal states) and States* A*,* B*, and* C* in another, as shown in the upper left of Figure 2.10. Unfortunately, the start state has ambiguous transitions on both* d* and .. To address the* d* ambiguity, we split* ABC* into* AB* and* C*, as shown in the upper right. New State* AB* has a self-loop on* d*; new State* C* moves to State* DEFG*. State* AB* still has an ambiguity on ., however, which we resolve by splitting it into States* A* and* B*, as shown at the bottom of the ﬁgure. At this point there are no further ambiguities, and we are left with a four-state minimal DFA. ■
 
-## 2.2.2** Scanner Code**
+2.2.2** Scanner Code**
 
 We can implement a scanner that explicitly captures the “circles-and-arrows” structure of a DFA in either of two main ways. One embeds the automaton in the control ﬂow of the program using gotos or nested case (switch) statements; the other, described in the following subsection, uses a table and a driver. As a general rule, handwritten automata tend to use nested case statements, while
 
 ![Figure 2.10 Minimization of...](images/page_95_vector_263.png)
 *Figure 2.10 Minimization of the DFA of Figure 2.9. In each step we split a set of states to eliminate a transition ambiguity.*
 
-### most automatically generated automata use tables. Tables are hard to create by
-
-### hand, but easier than code to create from within a program. Likewise, nested
-
-case statements are easier to write and to debug than the ad hoc approach of Fig- ure 2.5, if not quite as efﬁcient. Unix’s lex/flex tool produces C language output containing tables and a customized driver. The nested case statement style of automaton has the following general struc- **EXAMPLE** 2.16
+most automatically generated automata use tables. Tables are hard to create by hand, but easier than code to create from within a program. Likewise, nested case statements are easier to write and to debug than the ad hoc approach of Fig- ure 2.5, if not quite as efﬁcient. Unix’s lex/flex tool produces C language output containing tables and a customized driver. The nested case statement style of automaton has the following general struc- **EXAMPLE** 2.16
 
 Nested case statement automaton ture:
 
 state := 1 –– start state loop read cur char case state of 1 : case cur char of ‘ ’, ‘*\*t’, ‘*\*n’ : . . . ‘a’. . . ‘z’ : . . . ‘0’. . . ‘9’ : . . . ‘>’ : . . . . . . 2 : case cur char of . . . . . . *n*: case cur char of . . .
 
-### The outer case statement covers the states of the ﬁnite automaton. The inner
-
-case statements cover the transitions out of each state. Most of the inner clauses simply set a new state. Some return from the scanner with the current token. (If
+The outer case statement covers the states of the ﬁnite automaton. The inner case statements cover the transitions out of each state. Most of the inner clauses simply set a new state. Some return from the scanner with the current token. (If
 
 the current character should not be part of that token, it is pushed back onto the input stream before returning.) ■ Two aspects of the code typically deviate from the strict form of a formal ﬁnite automaton. One is the handling of keywords. The other is the need to peek ahead when a token can validly be extended by two or more additional characters, but not by only one. As noted at the beginning of Section 2.1.1, keywords in most languages look just like identiﬁers, but are reserved for a special purpose (some authors use the term* reserved word* instead of keyword). It is possible to write a ﬁnite automaton that distinguishes between keywords and identiﬁers, but it requires a* lot* of states (see Exercise 2.3). Most scanners, both handwritten and automatically generated, therefore treat keywords as “exceptions” to the rule for identiﬁers. Before return-
 
 **DESIGN & IMPLEMENTATION**
 
-### 2.4 Recognizing multiple kinds of token
-
-One of the chief ways in which a scanner differs from a formal DFA is that it *identiﬁes* tokens in addition to recognizing them. That is, it not only deter- mines whether characters constitute a valid token; it also indicates* which one*. In practice, this means that it must have separate ﬁnal states for every kind of token. We glossed over this issue in our RE-to-DFA constructions. To build a scanner for a language with *n* different kinds of tokens, we begin with an NFA of the sort suggested in the ﬁgure here. Given NFAs* M**i**,* 1* ≤**i** ≤**n* (one au- tomaton for each kind of token), we cre- ate a new start state with epsilon transi- tions to the start states of the* M**i*s. In con- trast to the alternation construction of Fig- ure 2.7(c), however, we do* not* create a single ﬁnal state; we keep the existing ones, each labeled by the token for which it is ﬁnal.
+2.4 Recognizing multiple kinds of token One of the chief ways in which a scanner differs from a formal DFA is that it *identiﬁes* tokens in addition to recognizing them. That is, it not only deter- mines whether characters constitute a valid token; it also indicates* which one*. In practice, this means that it must have separate ﬁnal states for every kind of token. We glossed over this issue in our RE-to-DFA constructions. To build a scanner for a language with *n* different kinds of tokens, we begin with an NFA of the sort suggested in the ﬁgure here. Given NFAs* M**i**,* 1* ≤**i** ≤**n* (one au- tomaton for each kind of token), we cre- ate a new start state with epsilon transi- tions to the start states of the* M**i*s. In con- trast to the alternation construction of Fig- ure 2.7(c), however, we do* not* create a single ﬁnal state; we keep the existing ones, each labeled by the token for which it is ﬁnal.
 
 *M*1
 
@@ -1146,9 +1035,7 @@ Look-ahead in Fortran scanning statements up to the one labeled 5 for values of 
 
 **DESIGN & IMPLEMENTATION**
 
-## 2.5 Longest possible tokens
-
-A little care in syntax design—avoiding tokens that are nontrivial preﬁxes of other tokens—can dramatically simplify scanning. In straightforward cases of preﬁx ambiguity, the scanner can enforce the “longest possible token” rule automatically. In Fortran, however, the rules are sufﬁciently complex that no purely lexical solution sufﬁces. Some of the problems, and a possible solution, are discussed in an article by Dyadkin [Dya95].
+2.5 Longest possible tokens A little care in syntax design—avoiding tokens that are nontrivial preﬁxes of other tokens—can dramatically simplify scanning. In straightforward cases of preﬁx ambiguity, the scanner can enforce the “longest possible token” rule automatically. In Fortran, however, the rules are sufﬁciently complex that no purely lexical solution sufﬁces. Some of the problems, and a possible solution, are discussed in an article by Dyadkin [Dya95].
 
 **10** Many languages include* predeﬁned* identiﬁers (e.g., for standard library functions), but these are not keywords. The programmer can redeﬁne them, so the scanner must treat them the same as other identiﬁers. Contextual keywords, similarly, must be treated by the scanner as identiﬁers.
 
@@ -1156,13 +1043,13 @@ A little care in syntax design—avoiding tokens that are nontrivial preﬁxes o
 
 syntax for loop headers, in which an extra comma makes misinterpretation less likely: DO 5,I = 1,25. ■ In C, the dot character problem can easily be handled as a special case. In languages requiring larger amounts of look-ahead, the scanner can take a more general approach. In any case of ambiguity, it assumes that a longer token will be possible, but remembers that a shorter token could have been recognized at some point in the past. It also buffers all characters read beyond the end of the shorter token. If the optimistic assumption leads the scanner into an error state, it “unreads” the buffered characters so that they will be seen again later, and returns the shorter token.
 
-## 2.2.3** Table-Driven Scanning**
+2.2.3** Table-Driven Scanning**
 
 In the preceding subsection we sketched how control ﬂow—a loop and nested case statements—can be used to represent a ﬁnite automaton. An alternative ap- **EXAMPLE** 2.19
 
 Table-driven scanning proach representsthe automaton as a data structure: a two-dimensional* transition* *table*. A driver program (Figure 2.11) uses the current state and input character to index into the table. Each entry in the table speciﬁes whether to move to a new state (and if so, which one), return a token, or announce an error. A second table indicates, for each state, whether we might be at the end of a token (and if so, which one). Separating this second table from the ﬁrst allows us to notice when we pass a state that might have been the end of a token, so we can back up if we hit an error state. Example tables for our calculator tokens appear in Figure 2.12. Like a handwritten scanner, the table-driven code of Figure 2.11 looks tokens up in a table of keywords immediately before returning. An outer loop serves to ﬁlter out comments and “white space”—spaces, tabs, and newlines. ■
 
-## 2.2.4** Lexical Errors**
+2.2.4** Lexical Errors**
 
 The code in Figure 2.11 explicitly recognizes the possibility of* lexical errors*. In some cases the next character of input may be neither an acceptable continuation of the current token nor the start of another token. In such cases the scanner must print an error message and perform some sort of recovery so that compilation can continue, if only to look for additional errors. Fortunately, lexical errors are rel- atively rare—most character sequences do correspond to token sequences—and relatively easy to handle. The most common approach is simply to (1) throw away the current, invalid token; (2) skip forward until a character is found that can le- gitimately begin a new token; (3) restart the scanning algorithm; and (4) count on the error-recovery mechanism of the parser to cope with any cases in which the resulting sequence of tokens is not syntactically valid. Of course the need for error recovery is not unique to table-driven scanners; any scanner must cope with errors. We did not show the code in Figure 2.5, but it would have to be there in practice.
 
@@ -1174,7 +1061,7 @@ The code in Figure 2.11 explicitly recognizes the possibility of* lexical errors
 
 The code in Figure 2.11 also shows that the scanner must return both the kind of token found and its character-string image (spelling); again this requirement applies to all types of scanners. For some tokens the character-string image is redundant: all semicolons look the same, after all, as do all while keywords. For other tokens, however (e.g., identiﬁers, character strings, and numeric constants), the image is needed for semantic analysis. It is also useful for error messages: “undeclared identiﬁer” is not as nice as “foo has not been declared.”
 
-## 2.2.5** Pragmas**
+2.2.5** Pragmas**
 
 Some languages and language implementations allow a program to contain con- structs called* pragmas* that provide directives or hints to the compiler. Prag- mas that do not change program semantics—only the compilation process—are sometimes called* signiﬁcant comments*. In some languages the name is also ap- propriate because, like comments, pragmas can appear anywhere in the source program. In this case they are usually processed by the scanner: allowing them anywhere in the grammar would greatly complicate the parser. In most languages,
 
@@ -1188,31 +1075,19 @@ Variable x is very heavily used (it may be a good idea to keep it in a register)
 
 The compiler may ignore these in the interest of simplicity, or in the face of con- tradictory information. Standard syntax for pragmas was introduced in C++11 (where they are known as “attributes”). A function that prints an error message and terminates execu- tion, for example, can be labeled [[noreturn]], to allow the compiler to opti- mize code around calls, or to issue more helpful error or warning messages. As of this writing, the set of supported attributes can be extended by vendors (by modifying the compiler), but not by ordinary programmers. The extent to which these attributes should be limited to hints (rather than directives) has been some- what controversial. New pragmas in Java (which calls them “annotations”) and C# (which calls them “attributes”)* can* be deﬁned by the programmer; we will return to these in Section 16.3.1.
 
-### 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 10. List the tasks performed by the typical scanner. 11. What are the advantages of an automatically generated scanner, in compari- son to a handwritten one? Why do many commercial compilers use a hand- written scanner anyway?
 
-* List the tasks performed by the typical scanner.
-  11. What are the advantages of an automatically generated scanner, in compari-
-  son to a handwritten one? Why do many commercial compilers use a hand-
-  written scanner anyway?
-#### 12. Explain the difference between deterministic and nondeterministic ﬁnite au-
+## 12. Explain the difference between deterministic and nondeterministic ﬁnite au- tomata. Why do we prefer the deterministic variety for scanning?
 
-tomata. Why do we prefer the deterministic variety for scanning?
+* Outline the constructions used to turn a set of regular expressions into a min-
+  imal DFA.
+  14. What is the “longest possible token” rule?
+  15. Why must a scanner sometimes “peek” at upcoming characters?
+## 16. What is the difference between a* keyword* and an* identiﬁer*? 17. Why must a scanner save the text of tokens?
 
-#### 13. Outline the constructions used to turn a set of regular expressions into a min-
+## 18. How does a scanner identify lexical errors? How does it respond? 19. What is a* pragma*?
 
-imal DFA. 14. What is the “longest possible token” rule? 15. Why must a scanner sometimes “peek” at upcoming characters?
-
-#### 16. What is the difference between a keyword and an identiﬁer?
-
-#### 17. Why must a scanner save the text of tokens?
-
-#### 18. How does a scanner identify lexical errors? How does it respond?
-
-#### 19. What is a* pragma*?
-
-## 2.3
-
-#### **Parsing**
+2.3 **Parsing**
 
 The parser is the heart of a typical compiler. It calls the scanner to obtain the tokens of the input program, assembles the tokens together into a syntax tree, and passes the tree (perhaps one subroutine at a time) to the later phases of the compiler, which perform semantic analysis and code generation and improve- ment. In effect, the parser is “in charge” of the entire compilation process; this style of compilation is sometimes referred to as* syntax-directed translation*. As noted in the introduction to this chapter, a context-free grammar (CFG) is a* generator* for a CF language. A parser is a language* recognizer*. It can be shown that for any CFG we can create a parser that runs in* O*(*n*3) time, where* n* is the length of the input program.12 There are two well-known parsing algorithms that achieve this bound: Earley’s algorithm [Ear70] and the Cocke-Younger-Kasami (CYK) algorithm [Kas65, You67]. Cubic time is much too slow for parsing siz- able programs, but fortunately not all grammars require such a general and slow parsing algorithm. There are large classes of grammars for which we can build parsers that run in linear time. The two most important of these classes are called LL and LR (Figure 2.13).
 
@@ -1242,15 +1117,7 @@ id(A) ,
 ![Figure 2.14 Top-down (left)...](images/page_104_vector_502.png)
 *Figure 2.14 Top-down (left) and bottom-up parsing (right) of the input string A, B, C;. Grammar appears at lower left.*
 
-### to peek at the upcoming token (a comma), which allows it to choose between the
-
-### two possible expansions for id list tail. It then matches the comma and the id
-
-### and moves down into the next id list tail. In a similar, recursive fashion, the top-
-
-### down parser works down the tree, left-to-right, predicting and expanding nodes
-
-and tracing out a left-most derivation of the fringe of the tree.
+to peek at the upcoming token (a comma), which allows it to choose between the two possible expansions for* id list tail*. It then matches the comma and the id and moves down into the next* id list tail*. In a similar, recursive fashion, the top- down parser works down the tree, left-to-right, predicting and expanding nodes and tracing out a left-most derivation of the fringe of the tree.
 
 The bottom-up parser, by contrast, begins by noting that the left-most leaf of the tree is an id. The next leaf is a comma and the one after that is another id. The parser continues in this fashion, shifting new leaves from the scanner into a forest of partially completed parse tree fragments, until it realizes that some of those fragments constitute a complete right-hand side. In this grammar, that doesn’t occur until the parser has seen the semicolon—the right-hand side of *id list tail** −→*;. With this right-hand side in hand, the parser reduces the semi- colon to an* id list tail*. It then reduces , id* id list tail* into another* id list tail*. After doing this one more time it is able to reduce id* id list tail* into the root of the parse tree,* id list*. At no point does the bottom-up parser predict what it will see next. Rather, it shifts tokens into its forest until it recognizes a right-hand side, which it then reduces to a left-hand side. Because of this behavior, bottom-up parsers are some- times called* shift-reduce* parsers. Moving up the ﬁgure, from bottom to top, we can see that the shift-reduce parser traces out a right-most derivation, in reverse. Because bottom-up parsers were the ﬁrst to receive careful formal study, right- most derivations are sometimes called* canonical*. ■ There are several important subclasses of LR parsers, including SLR, LALR, and “full LR.” SLR and LALR are important for their ease of implementation, full LR for its generality. LL parsers can also be grouped into SLL and “full LL” subclasses. We will cover the differences among them only brieﬂy here; for fur- ther information see any of the standard compiler-construction or parsing theory textbooks [App97, ALSU07, AU72, CT04, FCL10, GBJ+12]. One commonly sees LL or LR (or whatever) written with a number in paren- theses after it: LL(2) or LALR(1), for example. This number indicates how many tokens of look-ahead are required in order to parse. Most real compilers use just one token of look-ahead, though more can sometimes be helpful. The open- source ANTLR tool, in particular, uses multitoken look-ahead to enlarge the class of languages amenable to top-down parsing [PQ95]. In Section 2.3.1 we will look at LL(1) grammars and handwritten parsers in more detail. In Sections 2.3.3 and 2.3.4 we will consider automatically generated LL(1) and LR(1) (ac- tually SLR(1)) parsers. The problem with our example grammar, for the purposes of bottom-up pars- **EXAMPLE** 2.21
 
@@ -1267,15 +1134,11 @@ This grammar cannot be parsed top-down, because when we see an id on the input a
 ![Figure 2.15 Bottom-up parse...](images/page_106_vector_432.png)
 *Figure 2.15 Bottom-up parse of A, B, C; using a grammar (lower left) that allows lists to be collapsed incrementally.*
 
-#### possible productions we should predict (more on this dilemma in Section 2.3.2).
-As shown in Figure 2.15, however, the grammar works well bottom-up.
-■
+possible productions we should predict (more on this dilemma in Section 2.3.2). As shown in Figure 2.15, however, the grammar works well bottom-up. ■
 
-## 2.3.1** Recursive Descent**
+2.3.1** Recursive Descent**
 
-#### To illustrate top-down (predictive) parsing, let us consider the grammar for a sim-
-
-**EXAMPLE** 2.22
+To illustrate top-down (predictive) parsing, let us consider the grammar for a sim- **EXAMPLE** 2.22
 
 Top-down grammar for a calculator language ple “calculator” language, shown in Figure 2.16. The calculator allows values to be read into named variables, which may then be used in expressions. Expressions in turn may be written to the output. Control ﬂow is strictly linear (no loops, if statements, or other jumps). In a pattern that will repeat in many of our examples, we have included an initial* augmenting* production,* program** −→**stmt list* $$,
 
@@ -1312,54 +1175,27 @@ procedure match(expected) if input token = expected then consume input token() e
 ![Figure 2.17 (continued)...](images/page_110_vector_349.png)
 *Figure 2.17 (continued)*
 
-### save the parse tree or some other representation of program fragments as an ex-
-
-### plicit data structure. To save the parse tree itself, we can allocate and link together
-
-### records to represent the children of a node immediately before executing the re-
-
-### cursive subroutines and match invocations that represent those children. We shall
-
-### need to pass each recursive routine an argument that points to the record that is
-
-### to be expanded (i.e., whose children are to be discovered). Procedure match will
-
-### also need to save information about certain tokens (e.g., character-string repre-
-
-sentations of identiﬁers and literals) in the leaves of the tree. As we saw in Chapter 1, the parse tree contains a great deal of irrelevant detail that need not be saved for the rest of the compiler. It is therefore rare for a parser to construct a full parse tree explicitly. More often it produces an abstract syntax tree or some other more terse representation. In a recursive descent compiler, a syntax tree can be created by allocating and linking together records in only a subset of the recursive calls. The trickiest part of writing a recursive descent parser is ﬁguring out which tokens should label the arms of the case statements. Each arm represents one production: one possible expansion of the symbol for which the subroutine was named. The tokens that label a given arm are those that* predict* the production. A token X may predict a production for either of two reasons: (1) the right-hand
+save the parse tree or some other representation of program fragments as an ex- plicit data structure. To save the parse tree itself, we can allocate and link together records to represent the children of a node immediately before executing the re- cursive subroutines and match invocations that represent those children. We shall need to pass each recursive routine an argument that points to the record that is to be expanded (i.e., whose children are to be discovered). Procedure match will also need to save information about certain tokens (e.g., character-string repre- sentations of identiﬁers and literals) in the leaves of the tree. As we saw in Chapter 1, the parse tree contains a great deal of irrelevant detail that need not be saved for the rest of the compiler. It is therefore rare for a parser to construct a full parse tree explicitly. More often it produces an abstract syntax tree or some other more terse representation. In a recursive descent compiler, a syntax tree can be created by allocating and linking together records in only a subset of the recursive calls. The trickiest part of writing a recursive descent parser is ﬁguring out which tokens should label the arms of the case statements. Each arm represents one production: one possible expansion of the symbol for which the subroutine was named. The tokens that label a given arm are those that* predict* the production. A token X may predict a production for either of two reasons: (1) the right-hand
 
 ![Figure 2.18 Parse tree...](images/page_111_vector_388.png)
 *Figure 2.18 Parse tree for the sum-and-average program of Example 2.24, using the grammar of Figure 2.16.*
 
 side of the production, when recursively expanded, may yield a string beginning with X, or (2) the right-hand side may yield nothing (i.e., it is* ϵ*, or a string of nonterminals that may recursively yield* ϵ*), and X may begin the yield of what comes* next*. We will formalize this notion of prediction in Section 2.3.3, using sets called FIRST and FOLLOW, and show how to derive them automatically from an LL(1) CFG.
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 20. What is the inherent “big-O” complexity of parsing? What is the complexity of parsers used in real compilers?
 
-### 20. What is the inherent “big-O” complexity of parsing? What is the complexity
+* Summarize the difference between LL and LR parsing. Which one of them is
+  also called “bottom-up”? “Top-down”? Which one is also called “predictive”?
+  “Shift-reduce”? What do “LL” and “LR” stand for?
+## 22. What kind of parser (top-down or bottom-up) is most common in produc- tion compilers? 23. Why are right-most derivations sometimes called* canonical*?
 
-of parsers used in real compilers?
+## 24. What is the signiﬁcance of the “1” in LR(1)? 25. Why might we want (or need) different grammars for different parsing algo- rithms? 26. What is an* epsilon production*?
 
-### 21. Summarize the difference between LL and LR parsing. Which one of them is
+## 27. What are* recursive descent* parsers? Why are they used mostly for small lan- guages?
 
-also called “bottom-up”? “Top-down”? Which one is also called “predictive”? “Shift-reduce”? What do “LL” and “LR” stand for?
+## 28. How might a parser construct an explicit parse tree or syntax tree?
 
-### 22. What kind of parser (top-down or bottom-up) is most common in produc-
-
-tion compilers? 23. Why are right-most derivations sometimes called* canonical*?
-
-### 24. What is the signiﬁcance of the “1” in LR(1)?
-
-### 25. Why might we want (or need) different grammars for different parsing algo-
-
-rithms? 26. What is an* epsilon production*?
-
-### 27. What are recursive descent parsers? Why are they used mostly for small lan-
-
-guages?
-
-### 28. How might a parser construct an explicit parse tree or syntax tree?
-
-## 2.3.2** Writing an LL(1) Grammar**
+2.3.2** Writing an LL(1) Grammar**
 
 When designing a recursive-descent parser, one has to acquire a certain facility in writing and modifying LL(1) grammars. The two most common obstacles to “LL(1)-ness” are* left recursion* and* common preﬁxes*. A grammar is said to be left recursive if there is a nonterminal* A* such that* A* **EXAMPLE** 2.25
 
@@ -1439,9 +1275,7 @@ End markers for structured statements in Modula-2 looks something like this:
 
 **DESIGN & IMPLEMENTATION**
 
-## 2.6 The dangling else
-
-A simple change in language syntax—eliminating the dangling else—not only reduces the chance of programming errors, but also signiﬁcantly sim- pliﬁes parsing. For more on the dangling else problem, see Exercise 2.24 and Section 6.4.
+2.6 The dangling** else** A simple change in language syntax—eliminating the dangling else—not only reduces the chance of programming errors, but also signiﬁcantly sim- pliﬁes parsing. For more on the dangling else problem, see Exercise 2.24 and Section 6.4.
 
 *stmt** −→*IF* condition then clause else clause* END** |*** other stmt* *then clause** −→*THEN* stmt list* *else clause** −→*ELSE* stmt list*** |*** ϵ*
 
@@ -1472,7 +1306,7 @@ To avoid this awkwardness, languages with end markers generally provide an elsif
 
 if A = B then ... elsif A = C then ... elsif A = D then ... elsif A = E then ... else ... end ■
 
-## 2.3.3** Table-Driven Top-Down Parsing**
+2.3.3** Table-Driven Top-Down Parsing**
 
 In a recursive descent parser, each arm of a case statement corresponds to a **EXAMPLE** 2.33
 
@@ -1481,34 +1315,9 @@ Driver and table for top-down parsing production, and contains parsing routine a
 ![Figure 2.19 Driver for...](images/page_116_vector_360.png)
 *Figure 2.19 Driver for a table-driven LL(1) parser.*
 
-### Pseudocode for such a parser appears in Figure 2.19. The code is language
+Pseudocode for such a parser appears in Figure 2.19. The code is language independent. It requires a language-*dependent* parsing table, generally produced by an automatic tool. For the calculator grammar of Figure 2.16, the table appears in Figure 2.20. ■ To illustrate the algorithm, Figure 2.21 shows a trace of the stack and the input **EXAMPLE** 2.34
 
-### independent. It requires a language-dependent parsing table, generally produced
-
-### by an automatic tool. For the calculator grammar of Figure 2.16, the table appears
-
-### in Figure 2.20.
-■
-To illustrate the algorithm, Figure 2.21 shows a trace of the stack and the input
-**EXAMPLE** 2.34
-
-### over time, for the sum-and-average program of Example 2.24. The parser iter-
-
-### ates around a loop in which it pops the top symbol off the stack and performs
-
-### the following actions: If the popped symbol is a terminal, the parser attempts
-
-### to match it against an incoming token from the scanner. If the match fails, the
-
-### parser announces a syntax error and initiates some sort of error recovery (see Sec-
-
-### tion 2.3.5). If the popped symbol is a nonterminal, the parser uses that nontermi-
-
-### nal together with the next available input token to index into a two-dimensional
-
-### table that tells it which production to predict (or whether to announce a syntax
-
-error and initiate recovery). Initially, the parse stack contains the start symbol of the grammar (in our case, *program*). When it predicts a production, the parser pushes the right-hand-side symbols onto the parse stack in reverse order, so the ﬁrst of those symbols ends up at top-of-stack. The parse completes successfully when we match the end marker
+over time, for the sum-and-average program of Example 2.24. The parser iter- ates around a loop in which it pops the top symbol off the stack and performs the following actions: If the popped symbol is a terminal, the parser attempts to match it against an incoming token from the scanner. If the match fails, the parser announces a syntax error and initiates some sort of error recovery (see Sec- tion 2.3.5). If the popped symbol is a nonterminal, the parser uses that nontermi- nal together with the next available input token to index into a two-dimensional table that tells it which production to predict (or whether to announce a syntax error and initiate recovery). Initially, the parse stack contains the start symbol of the grammar (in our case, *program*). When it predicts a production, the parser pushes the right-hand-side symbols onto the parse stack in reverse order, so the ﬁrst of those symbols ends up at top-of-stack. The parse completes successfully when we match the end marker
 
 Table-driven parse of the “sum and average” program
 
@@ -1529,9 +1338,7 @@ Predict sets for the calculator language grammar (Figure 2.16). We begin with �
 
 **DESIGN & IMPLEMENTATION**
 
-## 2.7 Recursive descent and table-driven LL parsing
-
-When trying to understand the connection between recursive descent and table-driven LL parsing, it is tempting to imagine that the explicit stack of the table-driven parser mirrors the implicit call stack of the recursive descent parser, but this is not the case. A better way to visualize the two implementa- tions of top-down parsing is to remember that both are discovering a parse tree via depth-ﬁrst left-to- right traversal. When we are at a given point in the parse—say the circled node in the tree shown here—the implicit call stack of a recursive descent parser holds a frame for each of the nodes on the path back to the root, created when the routine cor- responding to that node was called. (This path is shown in grey.)
+2.7 Recursive descent and table-driven LL parsing When trying to understand the connection between recursive descent and table-driven LL parsing, it is tempting to imagine that the explicit stack of the table-driven parser mirrors the implicit call stack of the recursive descent parser, but this is not the case. A better way to visualize the two implementa- tions of top-down parsing is to remember that both are discovering a parse tree via depth-ﬁrst left-to- right traversal. When we are at a given point in the parse—say the circled node in the tree shown here—the implicit call stack of a recursive descent parser holds a frame for each of the nodes on the path back to the root, created when the routine cor- responding to that node was called. (This path is shown in grey.)
 
 But these nodes are immaterial. What matters for the rest of the parse—as shown on the white path here—are the* upcoming calls* on the case statement arms of the recursive descent routines. Those calls—those parse tree nodes— are precisely the contents of the explicit stack of a table-driven LL parser.
 
@@ -1555,27 +1362,17 @@ The deﬁnition of PREDICT assumes that the language has been augmented with an 
 
 not stored explicitly. The algorithm is guaranteed to terminate (i.e., converge on a solution), because the sizes of the FIRST and FOLLOW sets are bounded by the number of terminals in the grammar. If in the process of calculating PREDICT sets we ﬁnd that some token belongs to the PREDICT set of more than one production with the same left-hand side, then the grammar is not LL(1), because we will not be able to choose which of the productions to employ when the left-hand side is at the top of the parse stack (or we are in the left-hand side’s subroutine in a recursive descent parser) and we see the token coming up in the input. This sort of ambiguity is known as a* predict-* *predict conﬂict*; it can arise either because the same token can begin more than one right-hand side, or because it can begin one right-hand side and can also appear after the left-hand side in some valid program, and one possible right-hand side can generate* ϵ*.
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 29. Describe two common idioms in context-free grammars that cannot be parsed top-down. 30. What is the “dangling else” problem? How is it avoided in modern lan- guages? 31. Discuss the similarities and differences between recursive descent and table- driven top-down parsing. 32. What are FIRST and FOLLOW sets? What are they used for?
 
-#### 29. Describe two common idioms in context-free grammars that cannot be
+## 33. Under what circumstances does a top-down parser predict the production *A** −→**α*?
 
-parsed top-down. 30. What is the “dangling else” problem? How is it avoided in modern lan- guages? 31. Discuss the similarities and differences between recursive descent and table- driven top-down parsing. 32. What are FIRST and FOLLOW sets? What are they used for?
+## 34. What sorts of “obvious” facts form the basis of FIRST set and FOLLOW set construction?
 
-#### 33. Under what circumstances does a top-down parser predict the production
+## 35. Outline the algorithm used to complete the construction of FIRST and FOLLOW sets. How do we know when we are done?
 
-*A** −→**α*?
+## 36. How do we know when a grammar is not LL(1)?
 
-#### 34. What sorts of “obvious” facts form the basis of FIRST set and FOLLOW set
-
-construction?
-
-#### 35. Outline the algorithm used to complete the construction of FIRST and
-
-FOLLOW sets. How do we know when we are done?
-
-#### 36. How do we know when a grammar is not LL(1)?
-
-### 2.3.4** Bottom-Up Parsing**
+2.3.4** Bottom-Up Parsing**
 
 Conceptually, as we saw at the beginning of Section 2.3, a bottom-up parser works by maintaining a forest of partially completed subtrees of the parse tree, which it joins together whenever it recognizes the symbols on the right-hand side of some production used in the right-most derivation of the input string. It creates a new internal node and makes the roots of the joined-together trees the children of that node. In practice, a bottom-up parser is almost always table-driven. It keeps the roots of its partially completed subtrees on a stack. When it accepts a new token from
 
@@ -1774,27 +1571,15 @@ The look-ahead for item
 
 is FOLLOW(*stmt list*), which is the end-marker, $$. Since $$ does not appear in the look-aheads for any other item in this state, our grammar is still SLR(1). It is worth noting that epsilon productions commonly prevent a grammar from being LR(0): if such a production shares a state with an item in which the dot precedes a terminal, we won’t be able to tell whether to “recognize”* ϵ* without peeking ahead. ■
 
-### 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 37. What is the* handle* of a right sentential form? 38. Explain the signiﬁcance of the characteristic ﬁnite-state machine in LR pars- ing. 39. What is the signiﬁcance of the dot (.) in an LR item?
 
-#### 37. What is the handle of a right sentential form?
+## 40. What distinguishes the* basis* from the* closure* of an LR state? 41. What is a* shift-reduce conﬂict*? How is it resolved in the various kinds of LR- family parsers?
 
-#### 38. Explain the signiﬁcance of the characteristic ﬁnite-state machine in LR pars-
+## 42. Outline the steps performed by the driver of a bottom-up parser.
 
-ing. 39. What is the signiﬁcance of the dot (.) in an LR item?
+## 43. What kind of parser is produced by yacc/bison? By ANTLR? 44. Why are there never any epsilon productions in an LR(0) grammar?
 
-#### 40. What distinguishes the basis from the closure of an LR state?
-
-#### 41. What is a shift-reduce conﬂict? How is it resolved in the various kinds of LR-
-
-family parsers?
-
-* Outline the steps performed by the driver of a bottom-up parser.
-
-### 43. What kind of parser is produced by yacc/bison? By ANTLR?
-
-### 44. Why are there never any epsilon productions in an LR(0) grammar?
-
-## 2.3.5** Syntax Errors**
+2.3.5** Syntax Errors**
 
 Suppose we are parsing a C program and see the following code fragment in a **EXAMPLE** 2.42
 
@@ -1810,9 +1595,7 @@ On the companion site we explore several possible approaches to syntax error re-
 
 syntax tree. To respond gracefully to certain common programming errors, the compiler writer may augment the grammar with* error productions* that capture language-speciﬁc idioms that are incorrect but are often written by mistake. Niklaus Wirth published an elegant implementation of phrase-level and context-speciﬁc recovery for recursive descent parsers in 1976 [Wir76, Sec. 5.9]. *Exceptions* (to be discussed further in Section 9.4) provide a simpler alternative if supported by the language in which the compiler is written. For table-driven top-down parsers, Fischer, Milton, and Quiring published an algorithm in 1980 that automatically implements a well-deﬁned notion of* locally least-cost syntax* *repair*. Locally least-cost repair is also possible in bottom-up parsers, but it is sig- niﬁcantly more difﬁcult. Most bottom-up parsers rely on more straightforward phrase-level recovery; a typical example can be found in yacc/bison.
 
-## 2.4
-
-### **Theoretical Foundations**
+2.4 **Theoretical Foundations**
 
 Our understanding of the relative roles and computational power of scanners, parsers, regular expressions, and context-free grammars is based on the formal- isms of* automata theory*. In automata theory, a* formal language* is a set of strings of symbols drawn from a ﬁnite* alphabet*. A formal language can be speciﬁed ei- ther by a set of rules (such as regular expressions or a context-free grammar) that generates the language, or by a* formal machine* that* accepts* (*recognizes*) the lan- guage. A formal machine takes strings of symbols as input and outputs either “yes” or “no.” A machine is said to accept a language if it says “yes” to all and only those strings that are in the language. Alternatively, a language can be deﬁned as the set of strings for which a particular machine says “yes.” Formal languages can be grouped into a series of successively larger classes known as the* Chomsky hierarchy*.14 Most of the classes can be characterized in two ways: by the types of rules that can be used to generate the set of strings, or by the type of formal machine that is capable of recognizing the language. As we have seen,* regular languages* are deﬁned by using concatenation, alternation, and Kleene closure, and are recognized by a scanner.* Context-free languages* are a proper superset of the regular languages. They are deﬁned by using concatena- tion, alternation, and recursion (which subsumes Kleene closure), and are recog- nized by a parser. A scanner is a concrete realization of a* ﬁnite automaton*, a type of formal machine. A parser is a concrete realization of a* push-down automaton*. Just as context-free grammars add recursion to regular expressions, push-down automata add a stack to the memory of a ﬁnite automaton. There are additional levels in the Chomsky hierarchy, but they are less directly applicable to compiler construction, and are not covered here.
 
@@ -1822,25 +1605,17 @@ It can be proven, constructively, that regular expressions and ﬁnite automata 
 
 On the companion site we consider ﬁnite and pushdown automata in more detail. We give an algorithm to convert a DFA into an equivalent regular expression. Combined with the constructions in Section 2.2.1, this algorithm demonstrates the equivalence of regular expressions and ﬁnite automata. We also consider the sets of grammars and languages that can and cannot be parsed by the various linear-time parsing algorithms.
 
-## 2.5
-
-### **Summary and Concluding Remarks**
+2.5 **Summary and Concluding Remarks**
 
 In this chapter we have introduced the formalisms of regular expressions and context-free grammars, and the algorithms that underlie scanning and parsing in practical compilers. We also mentioned syntax error recovery, and presented a quick overview of relevant parts of automata theory. Regular expressions and context-free grammars are language* generators*: they specify how to construct valid strings of characters or tokens. Scanners and parsers are language* recogniz-* *ers*: they indicate whether a given string is valid. The principal job of the scanner is to reduce the quantity of information that must be processed by the parser, by grouping characters together into tokens, and by removing comments and white space. Scanner and parser generators automatically translate regular expressions and context-free grammars into scanners and parsers. Practical parsers for programming languages (parsers that run in linear time) fall into two principal groups: top-down (also called LL or predictive) and bottom-up (also called LR or shift-reduce). A top-down parser constructs a parse tree starting from the root and proceeding in a left-to-right depth-ﬁrst traversal. A bottom-up parser constructs a parse tree starting from the leaves, again working left-to-right, and combining partial trees together when it recognizes the children of an internal node. The stack of a top-down parser contains a prediction of what will be seen in the future; the stack of a bottom-up parser contains a record of what has been seen in the past.
 
 Top-down parsers tend to be simple, both in the parsing of valid strings and in the recovery from errors in invalid strings. Bottom-up parsers are more power- ful, and in some cases lend themselves to more intuitively structured grammars, though they suffer from the inability to embed action routines at arbitrary points in a right-hand side (we discuss this point in more detail in Section C 4.5.1). Both varieties of parser are used in real compilers, though bottom-up parsers are more common. Top-down parsers tend to be smaller in terms of code and data size, but modern machines provide ample memory for either. Both scanners and parsers can be built by hand if an automatic tool is not available. Handbuilt scanners are simple enough to be relatively common. Hand- built parsers are generally limited to top-down recursive descent, and are most commonly used for comparatively simple languages. Automatic generation of the scanner and parser has the advantage of increased reliability, reduced devel- opment time, and easy modiﬁcation and enhancement. Various features of language design can have a major impact on the complex- ity of syntax analysis. In many cases, features that make it difﬁcult for a compiler to scan or parse also make it difﬁcult for a human being to write correct, main- tainable code. Examples include the lexical structure of Fortran and the if... then ... else statement of languages like Pascal. This interplay among language design, implementation, and use will be a recurring theme throughout the re- mainder of the book. 2.6 **Exercises**
 
-### 2.1
-
-Write regular expressions to capture the following. (a) Strings in C. These are delimited by double quotes ("), and may not contain newline characters. They may contain double-quote or back- slash characters if and only if those characters are “escaped” by a pre- ceding backslash. You may ﬁnd it helpful to introduce shorthand nota- tion to represent any character that is* not* a member of a small speciﬁed set. (b) Comments in Pascal. These are delimited by (* and *) or by { and }. They are not permitted to nest. (c) Numeric constants in C. These are octal, decimal, or hexadecimal inte- gers, or decimal or hexadecimal ﬂoating-point values. An octal integer begins with 0, and may contain only the digits 0–7. A hexadecimal integer begins with 0x or 0X, and may contain the digits 0–9 and a/A– f/F. A decimal ﬂoating-point value has a fractional portion (beginning with a dot) or an exponent (beginning with E or e). Unlike a decimal integer, it is allowed to start with 0. A hexadecimal ﬂoating-point value has an optional fractional portion and a mandatory exponent (begin- ning with P or p). In either decimal or hexadecimal, there may be digits
+2.1 Write regular expressions to capture the following. (a) Strings in C. These are delimited by double quotes ("), and may not contain newline characters. They may contain double-quote or back- slash characters if and only if those characters are “escaped” by a pre- ceding backslash. You may ﬁnd it helpful to introduce shorthand nota- tion to represent any character that is* not* a member of a small speciﬁed set. (b) Comments in Pascal. These are delimited by (* and *) or by { and }. They are not permitted to nest. (c) Numeric constants in C. These are octal, decimal, or hexadecimal inte- gers, or decimal or hexadecimal ﬂoating-point values. An octal integer begins with 0, and may contain only the digits 0–7. A hexadecimal integer begins with 0x or 0X, and may contain the digits 0–9 and a/A– f/F. A decimal ﬂoating-point value has a fractional portion (beginning with a dot) or an exponent (beginning with E or e). Unlike a decimal integer, it is allowed to start with 0. A hexadecimal ﬂoating-point value has an optional fractional portion and a mandatory exponent (begin- ning with P or p). In either decimal or hexadecimal, there may be digits
 
 to the left of the dot, the right of the dot, or both, and the exponent it- self is given in decimal, with an optional leading + or - sign. An integer may end with an optional U or u (indicating “unsigned”), and/or L or l (indicating “long”) or LL or ll (indicating “long long”). A ﬂoating- point value may end with an optional F or f (indicating “ﬂoat”—single precision) or L or l (indicating “long”—double precision). (d) Floating-point constants in Ada. These match the deﬁnition of* real* in Example 2.3, except that (1) a digit is required on both sides of the dec- imal point, (2) an underscore is permitted between digits, and (3) an alternative numeric base may be speciﬁed by surrounding the nonex- ponent part of the number with pound signs, preceded by a base in decimal (e.g., 16#6.a7#e+2). In this latter case, the letters a . . f (both upper- and lowercase) are permitted as digits. Use of these letters in an inappropriate (e.g., decimal) number is an error, but need not be caught by the scanner. (e) Inexact constants in Scheme. Scheme allows real numbers to be ex- plicitly* inexact* (imprecise). A programmer who wants to express all constants using the same number of characters can use sharp signs (#) in place of any lower-signiﬁcance digits whose values are not known. A base-10 constant without exponent consists of one or more digits fol- lowed by zero of more sharp signs. An optional decimal point can be placed at the beginning, the end, or anywhere in-between. (For the record, numbers in Scheme are actually a good bit more complicated than this. For the purposes of this exercise, please ignore anything you may know about sign, exponent, radix, exactness and length speciﬁers, and complex or rational values.) (f) Financial quantities in American notation. These have a leading dollar sign ($), an optional string of asterisks (*—used on checks to discour- age fraud), a string of decimal digits, and an optional fractional part consisting of a decimal point (.) and two decimal digits. The string of digits to the left of the decimal point may consist of a single zero (0). Otherwise it must not start with a zero. If there are more than three digits to the left of the decimal point, groups of three (counting from the right) must be separated by commas (,). Example: $**2,345.67. (Feel free to use “productions” to deﬁne abbreviations, so long as the language remains regular.) 2.2 Show (as “circles-and-arrows” diagrams) the ﬁnite automata for Exer- cise 2.1. 2.3 Build a regular expression that captures all nonempty sequences of letters other than file, for, and from. For notational convenience, you may assume the existence of a** not** operator that takes a set of letters as argument and matches any* other* letter. Comment on the practicality of constructing a regular expression for all sequences of letters other than the keywords of a large programming language.
 
-## 2.4
-
-## (a) Show the NFA that results from applying the construction of Figure 2.7
-
-to the regular expression* letter*** (*** letter*** |*** digit*** )***. (b) Apply the transformation illustrated by Example 2.14 to create an equivalent DFA. (c) Apply the transformation illustrated by Example 2.15 to minimize the DFA. 2.5 Starting with the regular expressions for* integer* and* decimal* in Exam- ple 2.3, construct an equivalent NFA, the set-of-subsets DFA, and the min- imal equivalent DFA. Be sure to keep separate the ﬁnal states for the two different kinds of token (see Sidebar 2.4). You may ﬁnd the exercise easier if you undertake it by modifying the machines in Examples 2.13 through 2.15. 2.6 Build an ad hoc scanner for the calculator language. As output, have it print a list, in order, of the input tokens. For simplicity, feel free to simply halt in the event of a lexical error. 2.7 Write a program in your favorite scripting language to remove comments from programs in the calculator language (Example 2.9). 2.8 Build a nested-case-statements ﬁnite automaton that converts all letters in its input to lower case, except within Pascal-style comments and strings. A Pascal comment is delimited by { and }, or by (* and *). Comments do not nest. A Pascal string is delimited by single quotes (‚ ... ‚). A quote character can be placed in a string by doubling it (‚Madam, I‚‚m Adam.‚). This upper-to-lower mapping can be useful if feeding a program written in standard Pascal (which ignores case) to a compiler that considers upper- and lowercase letters to be distinct. 2.9 (a) Describe in English the language deﬁned by the regular expression a***** **(** b a***** b a*** )***. Your description should be a high-level characteriza- tion—one that would still make sense if we were using a different regu- lar expression for the same language. (b) Write an unambiguous context-free grammar that generates the same language. (c) Using your grammar from part (b), give a canonical (right-most) derivation of the string b a a b a a a b b. 2.10 Give an example of a grammar that captures right associativity for an expo- nentiation operator (e.g., ** in Fortran). 2.11 Prove that the following grammar is LL(1):
+2.4 (a) Show the NFA that results from applying the construction of Figure 2.7 to the regular expression* letter*** (*** letter*** |*** digit*** )***. (b) Apply the transformation illustrated by Example 2.14 to create an equivalent DFA. (c) Apply the transformation illustrated by Example 2.15 to minimize the DFA. 2.5 Starting with the regular expressions for* integer* and* decimal* in Exam- ple 2.3, construct an equivalent NFA, the set-of-subsets DFA, and the min- imal equivalent DFA. Be sure to keep separate the ﬁnal states for the two different kinds of token (see Sidebar 2.4). You may ﬁnd the exercise easier if you undertake it by modifying the machines in Examples 2.13 through 2.15. 2.6 Build an ad hoc scanner for the calculator language. As output, have it print a list, in order, of the input tokens. For simplicity, feel free to simply halt in the event of a lexical error. 2.7 Write a program in your favorite scripting language to remove comments from programs in the calculator language (Example 2.9). 2.8 Build a nested-case-statements ﬁnite automaton that converts all letters in its input to lower case, except within Pascal-style comments and strings. A Pascal comment is delimited by { and }, or by (* and *). Comments do not nest. A Pascal string is delimited by single quotes (‚ ... ‚). A quote character can be placed in a string by doubling it (‚Madam, I‚‚m Adam.‚). This upper-to-lower mapping can be useful if feeding a program written in standard Pascal (which ignores case) to a compiler that considers upper- and lowercase letters to be distinct. 2.9 (a) Describe in English the language deﬁned by the regular expression a***** **(** b a***** b a*** )***. Your description should be a high-level characteriza- tion—one that would still make sense if we were using a different regu- lar expression for the same language. (b) Write an unambiguous context-free grammar that generates the same language. (c) Using your grammar from part (b), give a canonical (right-most) derivation of the string b a a b a a a b b. 2.10 Give an example of a grammar that captures right associativity for an expo- nentiation operator (e.g., ** in Fortran). 2.11 Prove that the following grammar is LL(1):
 
 *decl** −→*ID* decl tail*
 
@@ -1894,13 +1669,9 @@ to the regular expression* letter*** (*** letter*** |*** digit*** )***. (b) Appl
 
 *−→**ϵ*
 
-## (a) Construct a parse tree for the input string
+(a) Construct a parse tree for the input string foo(a, b). (b) Give a canonical (right-most) derivation of this same string. (c) Prove that the grammar is not LL(1). (d) Modify the grammar so that it* is* LL(1).
 
-foo(a, b). (b) Give a canonical (right-most) derivation of this same string. (c) Prove that the grammar is not LL(1). (d) Modify the grammar so that it* is* LL(1).
-
-## 2.14 Consider the language consisting of all strings of properly balanced paren-
-
-theses and brackets. (a) Give LL(1) and SLR(1) grammars for this language. (b) Give the corresponding LL(1) and SLR(1) parsing tables. (c) For each grammar, show the parse tree for ([]([]))[](()). (d) Give a trace of the actions of the parsers in constructing these trees. 2.15 Consider the following context-free grammar.
+2.14 Consider the language consisting of all strings of properly balanced paren- theses and brackets. (a) Give LL(1) and SLR(1) grammars for this language. (b) Give the corresponding LL(1) and SLR(1) parsing tables. (c) For each grammar, show the parse tree for ([]([]))[](()). (d) Give a trace of the actions of the parsers in constructing these trees. 2.15 Consider the following context-free grammar.
 
 *G** −→**G B*
 
@@ -1922,13 +1693,9 @@ theses and brackets. (a) Give LL(1) and SLR(1) grammars for this language. (b) G
 
 *−→**ϵ*
 
-## (a) Describe, in English, the language generated by this grammar. (Hint:
+(a) Describe, in English, the language generated by this grammar. (Hint: *B* stands for “balanced”;* N* stands for “nonbalanced”.) (Your descrip- tion should be a high-level characterization of the language—one that is independent of the particular grammar chosen.) (b) Give a parse tree for the string (( ]( ). (c) Give a canonical (right-most) derivation of this same string. (d) What is FIRST(*E*) in our grammar? What is FOLLOW(*E*)? (Recall that FIRST and FOLLOW sets are deﬁned for symbols in an arbitrary CFG, regardless of parsing algorithm.) (e) Given its use of left recursion, our grammar is clearly not LL(1). Does this language have an LL(1) grammar? Explain.
 
-*B* stands for “balanced”;* N* stands for “nonbalanced”.) (Your descrip- tion should be a high-level characterization of the language—one that is independent of the particular grammar chosen.) (b) Give a parse tree for the string (( ]( ). (c) Give a canonical (right-most) derivation of this same string. (d) What is FIRST(*E*) in our grammar? What is FOLLOW(*E*)? (Recall that FIRST and FOLLOW sets are deﬁned for symbols in an arbitrary CFG, regardless of parsing algorithm.) (e) Given its use of left recursion, our grammar is clearly not LL(1). Does this language have an LL(1) grammar? Explain.
-
-## 2.16 Give a grammar that captures all levels of precedence for arithmetic expres-
-
-sions in C, as shown in Figure 6.1. (Hint: This exercise is somewhat tedious. You’ll probably want to attack it with a text editor rather than a pencil.) 2.17 Extend the grammar of Figure 2.25 to include if statements and while loops, along the lines suggested by the following examples:
+2.16 Give a grammar that captures all levels of precedence for arithmetic expres- sions in C, as shown in Figure 6.1. (Hint: This exercise is somewhat tedious. You’ll probably want to attack it with a text editor rather than a pencil.) 2.17 Extend the grammar of Figure 2.25 to include if statements and while loops, along the lines suggested by the following examples:
 
 ```
 abs := n
@@ -1962,13 +1729,9 @@ Your grammar should support the six standard comparison operations in conditions
 
 *−→*
 
-## (a) What is FIRST(Es)? FOLLOW(E)? PREDICT(Es −→ϵ)?
+(a) What is FIRST(*Es*)? FOLLOW(*E*)? PREDICT(*Es** −→**ϵ*)? (b) Give a parse tree for the string (cdr ‚(a b c)) $$. (c) Show the left-most derivation of (cdr ‚(a b c)) $$. (d) Show a trace, in the style of Figure 2.21, of a table-driven top-down parse of this same input. (e) Now consider a recursive descent parser running on the same input. At the point where the quote token (’) is matched, which recursive descent routines will be active (i.e., what routines will have a frame on the parser’s run-time stack)?
 
-(b) Give a parse tree for the string (cdr ‚(a b c)) $$. (c) Show the left-most derivation of (cdr ‚(a b c)) $$. (d) Show a trace, in the style of Figure 2.21, of a table-driven top-down parse of this same input. (e) Now consider a recursive descent parser running on the same input. At the point where the quote token (’) is matched, which recursive descent routines will be active (i.e., what routines will have a frame on the parser’s run-time stack)?
-
-## 2.19 Write top-down and bottom-up grammars for the language consisting of
-
-all well-formed regular expressions. Arrange for all operators to be left- associative. Give Kleene closure the highest precedence and alternation the lowest precedence. 2.20 Suppose that the expression grammar in Example 2.8 were to be used in conjunction with a scanner that did* not* remove comments from the input, but rather returned them as tokens. How would the grammar need to be modiﬁed to allow comments to appear at arbitrary places in the input? 2.21 Build a complete recursive descent parser for the calculator language. As output, have it print a trace of its matches and predictions. 2.22 Extend your solution to Exercise 2.21 to build an explicit parse tree. 2.23 Extend your solution to Exercise 2.21 to build an abstract syntax tree di- rectly, without constructing a parse tree ﬁrst. 2.24 The dangling else problem of Pascal was not shared by its predecessor Al- gol 60. To avoid ambiguity regarding which then is matched by an else, Algol 60 prohibited if statements immediately inside a then clause. The Pascal fragment
+2.19 Write top-down and bottom-up grammars for the language consisting of all well-formed regular expressions. Arrange for all operators to be left- associative. Give Kleene closure the highest precedence and alternation the lowest precedence. 2.20 Suppose that the expression grammar in Example 2.8 were to be used in conjunction with a scanner that did* not* remove comments from the input, but rather returned them as tokens. How would the grammar need to be modiﬁed to allow comments to appear at arbitrary places in the input? 2.21 Build a complete recursive descent parser for the calculator language. As output, have it print a trace of its matches and predictions. 2.22 Extend your solution to Exercise 2.21 to build an explicit parse tree. 2.23 Extend your solution to Exercise 2.21 to build an abstract syntax tree di- rectly, without constructing a parse tree ﬁrst. 2.24 The dangling else problem of Pascal was not shared by its predecessor Al- gol 60. To avoid ambiguity regarding which then is matched by an else, Algol 60 prohibited if statements immediately inside a then clause. The Pascal fragment
 
 if C1 then if C2 then S1 else S2
 
@@ -1992,9 +1755,7 @@ in Algol 60. Show how to write a grammar for conditional statements that enforce
 
 *factor** −→*(* expr* )** |** id
 
-## 2.27 Construct the CFSM for the id list grammar in Example 2.20 and verify that
-
-it can be parsed bottom-up with* zero* tokens of look-ahead. 2.28 Modify the grammar in Exercise 2.27 to allow an* id list* to be empty. Is the grammar still LR(0)? 2.29 Repeat Example 2.36 using the grammar of Figure 2.15. 2.30 Consider the following grammar for a declaration list:
+2.27 Construct the CFSM for the* id list* grammar in Example 2.20 and verify that it can be parsed bottom-up with* zero* tokens of look-ahead. 2.28 Modify the grammar in Exercise 2.27 to allow an* id list* to be empty. Is the grammar still LR(0)? 2.29 Repeat Example 2.36 using the grammar of Figure 2.15. 2.30 Consider the following grammar for a declaration list:
 
 *decl list** −→**decl list decl* ;** |*** decl* ;
 
@@ -2015,17 +1776,11 @@ b : array 1 .. 2 of real;
 end;
 ```
 
-## 2.7
+2.7 **Explorations**
 
-### **Explorations**
+2.38 Some languages (e.g., C) distinguish between upper- and lowercase letters in identiﬁers. Others (e.g., Ada) do not. Which convention do you prefer? Why? 2.39 The syntax for type casts in C and its descendants introduces potential am- biguity: is (x)-y a subtraction, or the unary negation of y, cast to type x? Find out how C, C++, Java, and C# answer this question. Discuss how you would implement the answer(s). 2.40 What do you think of Haskell, Occam, and Python’s use of indentation to delimit control constructs (Section 2.1.1)? Would you expect this con- vention to make program construction and maintenance easier or harder? Why? 2.41 Skip ahead to Section 14.4.2 and learn about the “regular expressions” used in scripting languages, editors, search tools, and so on. Are these really regular? What can they express that cannot be expressed in the notation introduced in Section 2.1.1? 2.42 Rebuild the automaton of Exercise 2.8 using lex/flex. 2.43 Find a manual for yacc/bison, or consult a compiler textbook [ALSU07, Secs. 4.8.1 and 4.9.2] to learn about* operator precedence parsing*. Explain how it could be used to simplify the grammar of Exercise 2.16. 2.44 Use lex/flex and yacc/bison to construct a parser for the calculator lan- guage. Have it output a trace of its shifts and reductions. 2.45 Repeat the previous exercise using ANTLR.
 
-### 2.38 Some languages (e.g., C) distinguish between upper- and lowercase letters
-
-in identiﬁers. Others (e.g., Ada) do not. Which convention do you prefer? Why? 2.39 The syntax for type casts in C and its descendants introduces potential am- biguity: is (x)-y a subtraction, or the unary negation of y, cast to type x? Find out how C, C++, Java, and C# answer this question. Discuss how you would implement the answer(s). 2.40 What do you think of Haskell, Occam, and Python’s use of indentation to delimit control constructs (Section 2.1.1)? Would you expect this con- vention to make program construction and maintenance easier or harder? Why? 2.41 Skip ahead to Section 14.4.2 and learn about the “regular expressions” used in scripting languages, editors, search tools, and so on. Are these really regular? What can they express that cannot be expressed in the notation introduced in Section 2.1.1? 2.42 Rebuild the automaton of Exercise 2.8 using lex/flex. 2.43 Find a manual for yacc/bison, or consult a compiler textbook [ALSU07, Secs. 4.8.1 and 4.9.2] to learn about* operator precedence parsing*. Explain how it could be used to simplify the grammar of Exercise 2.16. 2.44 Use lex/flex and yacc/bison to construct a parser for the calculator lan- guage. Have it output a trace of its shifts and reductions. 2.45 Repeat the previous exercise using ANTLR.
-
-### 2.46–2.47 In More Depth.
-2.8
-**Bibliographic Notes**
+2.46–2.47 In More Depth. 2.8 **Bibliographic Notes**
 
 Our coverage of scanning and parsing in this chapter has of necessity been brief. Considerably more detail can be found in texts on parsing theory [AU72] and compiler construction [ALSU07, FCL10, App97, GBJ+12, CT04]. Many compilers of the early 1960s employed recursive descent parsers. Lewis and Stearns [LS68] and Rosenkrantz and Stearns [RS70] published early formal stud- ies of LL grammars and parsing. The original formulation of LR parsing is due to Knuth [Knu65]. Bottom-up parsing became practical with DeRemer’s discovery of the SLR and LALR algorithms [DeR71]. W. L. Johnson et al. [JPAR68] describe an early scanner generator. The Unix lex tool is due to Lesk [Les75]. Yacc is due to S. C. Johnson [Joh75]. Further details on formal language theory can be found in a variety of textbooks, including those of Hopcroft, Motwani, and Ullman [HMU07] and
 
@@ -2033,9 +1788,7 @@ Sipser [Sip13]. Kleene [Kle56] and Rabin and Scott [RS59] proved the equiva- len
 
 **15** Dana Scott (1932–), Professor Emeritus at Carnegie Mellon University, is known principally for inventing domain theory and launching the ﬁeld of denotational semantics, which provides a mathematically rigorous way to formalize the meaning of programming languages. Michael Ra- bin (1931–), of Harvard University, has made seminal contributions to the concepts of nondeter- minism and randomization in computer science. Scott and Rabin shared the ACM Turing Award in 1976.
 
-## 3
-
-### **Names, Scopes, and Bindings**
+**3** **Names, Scopes, and Bindings**
 
 **Early languages such as Fortran, Algol, and Lisp** were termed “high level” because their syntax and semantics were signiﬁcantly more* abstract*—farther from the hardware—than those of the assembly languages they were intended to supplant. Abstraction made it possible to write programs that would run well on a wide variety of machines. It also made programs signiﬁcantly easier for hu- man beings to understand. While machine independence remains important, it is primarily ease of programming that continues to drive the design of modern languages. This chapter is the ﬁrst of six to address core issues in language de- sign. (The others are Chapters 6 through 10.) Much of the current discussion will revolve around the notion of* names*. A name is a mnemonic character string used to represent something else. Names in most languages are identiﬁers (alphanumeric tokens), though certain other symbols, such as + or :=, can also be names. Names allow us to refer to variables, constants, operations, types, and so on using symbolic identiﬁers rather than low-level concepts like addresses. Names are also essential in the context of a second meaning of the word* abstraction*. In this second meaning, abstraction is a process by which the programmer associates a name with a potentially compli- cated program fragment, which can then be thought of in terms of its purpose or function, rather than in terms of how that function is achieved. By hiding irrel- evant details, abstraction reduces conceptual complexity, making it possible for the programmer to focus on a manageable subset of the program text at any par- ticular time. Subroutines are* control abstractions*: they allow the programmer to hide arbitrarily complicated code behind a simple interface. Classes are* data ab-* *stractions*: they allow the programmer to hide data representation details behind a (comparatively) simple set of operations. We will look at severalmajor issues related to names. Section 3.1 introduces the notion of* binding time*, which refers not only to the binding of a name to the thing it represents, but also in general to the notion of resolving any design decision in a language implementation. Section 3.2 outlines the various mechanisms used to allocate and deallocate storage space for objects, and distinguishes between
 
@@ -2053,9 +1806,7 @@ The terms* static* and* dynamic* are generally used to refer to things bound bef
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.1 Binding time
-
-It is difﬁcult to overemphasize the importance of binding times in the design and implementation of programming languages. In general, early binding times are associated with greater efﬁciency, while later binding times are as- sociated with greater ﬂexibility. The tension between these goals provides a recurring theme for later chapters of this book.
+3.1 Binding time It is difﬁcult to overemphasize the importance of binding times in the design and implementation of programming languages. In general, early binding times are associated with greater efﬁciency, while later binding times are as- sociated with greater ﬂexibility. The tension between these goals provides a recurring theme for later chapters of this book.
 
 the following section, a compiler will not usually be able to predict the address of a local variable at compile time, since space for the variable will be allocated dy- namically on a stack, but it can arrange for the variable to appear at a ﬁxed offset from the location pointed to by a certain register at run time. Some languages are difﬁcult to compile because their semantics require funda- mental decisions to be postponed until run time, generally in order to increase the ﬂexibility or expressiveness of the language. Most scripting languages, for exam- ple, delay all type checking until run time. References to objects of arbitrary types (classes) can be assigned into arbitrary named variables, as long as the program never ends up applying an operator to (invoking a method of) an object that is not prepared to handle it. This form of* polymorphism*—applicability to objects or expressions of multiple types—allows the programmer to write unusually ﬂexi- ble and general-purpose code. We will mention polymorphism again in several future sections, including 7.1.2, 7.3, 10.1.1, and 14.4.4. 3.2 **Object Lifetime and Storage Management**
 
@@ -2067,7 +1818,7 @@ The period of time between the creation and the destruction of a name-to- object
 
 **2.*** Stack* objects are allocated and deallocated in last-in, ﬁrst-out order, usually in conjunction with subroutine calls and returns. **3.*** Heap* objects may be allocated and deallocated at arbitrary times. They require a more general (and expensive) storage management algorithm.
 
-## 3.2.1** Static Allocation**
+3.2.1** Static Allocation**
 
 Global variables are the obvious example of static objects, but not the only one. The instructions that constitute a program’s machine code can also be thought of as statically allocated objects. We shall see examples in Section 3.3.1 of vari- ables that are local to a single subroutine, but retain their values from one invo- cation to the next; their space is statically allocated. Numeric and string-valued constant literals are also statically allocated, for statements such as A = B/14.7 or printf("hello, world\n"). (Small constants are often stored within the instruction itself; larger ones are assigned a separate location.) Finally, most compilers produce a variety of tables that are used by run-time support routines for debugging, dynamic type checking, garbage collection, exception handling, and other purposes; these are also statically allocated. Statically allocated ob- jects whose value should not change during program execution (e.g., instructions, constants, and certain run-time tables) are often allocated in protected, read-only memory, so that any inadvertent attempt to write to them will cause a processor interrupt, allowing the operating system to announce a run-time error. Logically speaking, local variables are created when their subroutine is called, and destroyed when it returns. If the subroutine is called repeatedly, each invo- cation is said to create and destroy a separate* instance* of each local variable. It is not always the case, however, that a language implementation must perform work at run time corresponding to these create and destroy operations. Recursion was **EXAMPLE** 3.1
 
@@ -2075,13 +1826,11 @@ Static allocation of local variables not originally supported in Fortran (it was
 
 **DESIGN & IMPLEMENTATION**
 
-### 3.2 Recursion in Fortran
-
-The lack of recursion in (pre-Fortran 90) Fortran is generally attributed to the expense of stack manipulation on the IBM 704, on which the language was ﬁrst implemented. Many (perhaps most) Fortran implementations choose to use a stack for local variables, but because the language deﬁnition permits the use of static allocation instead, Fortran programmers were denied the beneﬁts of language-supported recursion for over 30 years.
+3.2 Recursion in Fortran The lack of recursion in (pre-Fortran 90) Fortran is generally attributed to the expense of stack manipulation on the IBM 704, on which the language was ﬁrst implemented. Many (perhaps most) Fortran implementations choose to use a stack for local variables, but because the language deﬁnition permits the use of static allocation instead, Fortran programmers were denied the beneﬁts of language-supported recursion for over 30 years.
 
 In many languages a named constant is required to have a value that can be determined at compile time. Usually the expression that speciﬁes the constant’s value is permitted to include only other known constants and built-in functions and arithmetic operators. Named constants of this sort, together with constant literals, are sometimes called* manifest constants* or* compile-time constants*. Mani- fest constants can always be allocated statically, even if they are local to a recursive subroutine: multiple instances can share the same location. In other languages (e.g., C and Ada), constants are simply variables that cannot be changed after elaboration (initialization) time. Their values, though unchang- ing, can sometimes depend on other values that are not known until run time. Such* elaboration-time constants*, when local to a recursive subroutine, must be allocated on the stack. C# distinguishes between compile-time and elaboration- time constants using the const and readonly keywords, respectively.
 
-## 3.2.2** Stack-Based Allocation**
+3.2.2** Stack-Based Allocation**
 
 If a language permits recursion, static allocation of local variables is no longer an option, since the number of instances of a variable that may need to exist at the same time is conceptually unbounded. Fortunately, the natural nesting of sub- routine calls makes it easy to allocate space for locals on a stack. A simpliﬁed **EXAMPLE** 3.2
 
@@ -2097,7 +1846,7 @@ can do so by adding a predetermined offset to the value in the frame pointer. As
 
 subroutines, active or not. A stack may therefore require substantially less mem- ory at run time than would be required for static allocation.
 
-## 3.2.3** Heap-Based Allocation**
+3.2.3** Heap-Based Allocation**
 
 A* heap* is a region of storage in which subblocks can be allocated and deallocated at arbitrary times.2 Heaps are required for the dynamically allocated pieces of linked data structures, and for objects such as fully general character strings, lists, and sets, whose size may change as a result of an assignment statement or other update operation. There are many possible strategies to manage space in a heap. We review the major alternatives here; details can be found in any data-structures textbook. The principal concerns are speed and space, and as usual there are tradeoffs between them. Space concerns can be further subdivided into issues of internal and ex- ternal* fragmentation*. Internal fragmentation occurs when a storage-management algorithm allocates a block that is larger than required to hold a given object; the extra space is then unused. External fragmentation occurs when the blocks that **EXAMPLE** 3.3
 
@@ -2105,42 +1854,21 @@ External fragmentation in the heap have been assigned to active objects are scat
 
 request. In either case, if the chosen block is signiﬁcantly larger than required, then we divide it into two and return the unneeded portion to the free list as a smaller block. (If the unneeded portion is below some minimum threshold in size, we may leave it in the allocated block as internal fragmentation.) When a block is deallocated and returned to the free list, we check to see whether either or both of the physically adjacent blocks are free; if so, we coalesce them. Intuitively, one would expect a best ﬁt algorithm to do a better job of reserving large blocks for large requests. At the same time, it has higher allocation cost than a ﬁrst ﬁt algorithm, because it must always search the entire list, and it tends to result in a larger number of very small “left-over” blocks. Which approach—ﬁrst ﬁt or best ﬁt—results in lower external fragmentation depends on the distribution of size requests. In any algorithm that maintains a single free list, the cost of allocation is lin- ear in the number of free blocks. To reduce this cost to a constant, some stor- age management algorithms maintain separate free lists for blocks of different sizes. Each request is rounded up to the next standard size (at the cost of inter- nal fragmentation) and allocated from the appropriate list. In effect, the heap is divided into “pools,” one for each standard size. The division may be static or dynamic. Two common mechanisms for dynamic pool adjustment are known as the* buddy system* and the* Fibonacci heap*. In the buddy system, the standard block sizes are powers of two. If a block of size 2*k* is needed, but none is available, a block of size 2*k*+1 is split in two. One of the halves is used to satisfy the request; the other is placed on the* k*th free list. When a block is deallocated, it is coa- lesced with its “buddy”—the other half of the split that created it—if that buddy is free. Fibonacci heaps are similar, but use Fibonacci numbers for the standard sizes, instead of powers of two. The algorithm is slightly more complex, but leads to slightly lower internal fragmentation, because the Fibonacci sequence grows more slowly than 2*k*. The problem with external fragmentation is that the ability of the heap to sat- isfy requests may degrade over time. Multiple free lists may help, by clustering small blocks in relatively close physical proximity, but they do not eliminate the problem. It is always possible to devise a sequence of requests that cannot be satisﬁed, even though the total space required is less than the size of the heap. If memory is partitioned among size pools statically, one need only exceed the maxi- mum number of requests of a given size. If pools are dynamically readjusted, one can “checkerboard” the heap by allocating a large number of small blocks and then deallocating every other one, in order of physical address, leaving an alter- nating pattern of small free and allocated blocks. To eliminate external fragmen- tation, we must be prepared to* compact* the heap, by moving already-allocated blocks. This task is complicated by the need to ﬁnd and update all outstanding references to a block that is being moved. We will discuss compaction further in Section 8.5.3.
 
-### 3.2.4** Garbage Collection**
+3.2.4** Garbage Collection**
 
 Allocation of heap-based objects is always triggered by some speciﬁc operation in a program: instantiating an object, appending to the end of a list, assigning a long value into a previously short string, and so on. Deallocation is also explicit in some languages (e.g., C, C++, and Rust). As we shall see in Section 8.5, however, many languages specify that objects are to be deallocated implicitly when it is no longer possible to reach them from any program variable. The run-time library for such a language must then provide a* garbage collection* mechanism to identify and reclaim unreachable objects. Most functional and scripting languages require garbage collection, as do many more recent imperative languages, including Java and C#. The traditional arguments in favor of explicit deallocation are implementa- tion simplicity and execution speed. Even naive implementations of automatic garbage collection add signiﬁcant complexity to the implementation of a lan- guage with a rich type system, and even the most sophisticated garbage collector can consume nontrivial amounts of time in certain programs. If the programmer can correctly identify the end of an object’s lifetime, without too much run-time bookkeeping, the result is likely to be faster execution. The argument in favor of automatic garbage collection, however, is compel- ling: manual deallocation errors are among the most common and costly bugs in real-world programs. If an object is deallocated too soon, the program may follow a* dangling reference*, accessing memory now used by another object. If an object is* not* deallocated at the end of its lifetime, then the program may “leak memory,” eventually running out of heap space. Deallocation errors are notoriously difﬁ- cult to identify and ﬁx. Over time, many language designers and programmers have come to consider automatic garbage collection an essential language feature. Garbage-collection algorithms have improved, reducing their run-time overhead; language implementations have become more complex in general, reducing the marginal complexity of automatic collection; and leading-edge applications have become larger and more complex, making the beneﬁts of automatic collection ever more compelling.
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 1. What is* binding time*? 2. Explain the distinction between decisions that are bound statically and those that are bound dynamically. 3. What is the advantage of binding things as early as possible? What is the advantage of delaying bindings? 4. Explain the distinction between the* lifetime* of a name-to-object binding and its* visibility*.
 
-* 
-  What is* binding time*?
-  2.
-  Explain the distinction between decisions that are bound statically and those
-  that are bound dynamically.
-  3.
-  What is the advantage of binding things as early as possible? What is the
-  advantage of delaying bindings?
-  4.
-  Explain the distinction between the* lifetime* of a name-to-object binding and
-  its* visibility*.
-* 
-  What determines whether an object is allocated statically, on the stack, or in
-  the heap?
-  6.
-  List the objects and information commonly found in a stack frame.
-### 7.
-What is a* frame pointer*? What is it used for?
-8.
-What is a* calling sequence*?
+## 5. What determines whether an object is allocated statically, on the stack, or in the heap? 6. List the objects and information commonly found in a stack frame.
 
-### 9.
-What are internal and external* fragmentation*?
-10. What is* garbage collection*?
+## 7. What is a* frame pointer*? What is it used for? 8. What is a* calling sequence*?
 
-### 11. What is a* dangling reference*?
+## 9. What are internal and external* fragmentation*? 10. What is* garbage collection*?
 
-## 3.3
+## 11. What is a* dangling reference*?
 
-### **Scope Rules**
+3.3 **Scope Rules**
 
 The textual region of the program in which a binding is active is its* scope*. In most modern languages, the scope of a binding is determined statically, that is, at compile time. In C, for example, we introduce a new scope upon entry to a subroutine. We create bindings for local objects and deactivate bindings for global objects that are hidden (made invisible) by local objects of the same name. On subroutine exit, we destroy bindings for local variables and reactivate bindings for any global objects that were hidden. These manipulations of bindings may at ﬁrst glance appear to be run-time operations, but they do not require the execution of any code: the portions of the program in which a binding is active are completely determined at compile time. We can look at a C program and know which names refer to which objects at which points in the program based on purely textual rules. For this reason, C is said to be* statically scoped* (some authors say* lexically* *scoped* 3). Other languages, including APL, Snobol, Tcl, and early dialects of Lisp, are* dynamically scoped*: their bindings depend on the ﬂow of execution at run time. We will examine static and dynamic scoping in more detail in Sections 3.3.1 and 3.3.6. In addition to talking about the “scope of a binding,” we sometimes use the word “scope” as a noun all by itself, without a speciﬁc binding in mind. Infor- mally, a scope is a program region of maximal size in which no bindings change (or at least none are destroyed—more on this in Section 3.3.3). Typically, a scope is the body of a module, class, subroutine, or structured control-ﬂow statement, sometimes called a* block*. In C family languages it would be delimited with {...} braces.
 
@@ -2148,7 +1876,7 @@ The textual region of the program in which a binding is active is its* scope*. I
 
 Algol 68 and Ada use the term* elaboration* to refer to the process by which declarations become active when control ﬁrst enters a scope. Elaboration entails the creation of bindings. In many languages, it also entails the allocation of stack space for local objects, and possibly the assignment of initial values. In Ada it can entail a host of other things, including the execution of error-checking or heap-space-allocating code, the propagation of exceptions, and the creation of concurrently executing* tasks* (to be discussed in Chapter 13). At any given point in a program’s execution, the set of active bindings is called the current* referencing environment*. The set is principally determined by static or dynamic* scope rules*. We shall see that a referencing environment generally corresponds to a sequence of scopes that can be examined (in order) to ﬁnd the current binding for a given name. In some cases, referencing environments also depend on what are (in a con- fusing use of terminology) called* binding rules*. Speciﬁcally, when a reference to a subroutine* S* is stored in a variable, passed as a parameter to another subroutine, or returned as a function value, one needs to determine when the referencing en- vironment for* S* is chosen—that is, when the binding between the reference to *S* and the referencing environment of* S* is made. The two principal options are *deep binding*, in which the choice is made when the reference is ﬁrst created, and *shallow binding*, in which the choice is made when the reference is ﬁnally used. We will examine these options in more detail in Section 3.6.
 
-## 3.3.1** Static Scoping**
+3.3.1** Static Scoping**
 
 In a language with static (lexical) scoping, the bindings between names and ob- jects can be determined at compile time by examining the text of the program, without consideration of the ﬂow of control at run time. Typically, the “current” binding for a given name is found in the matching declaration whose block most closely surrounds a given point in the program, though as we shall see there are many variants on this basic theme. The simplest static scope rule is probably that of early versions of Basic, in which there was only a single, global scope. In fact, there were only a few hundred possible names, each of which consisted of a letter optionally followed by a digit. There were no explicit declarations; variables were declared implicitly by virtue of being used. Scope rules are somewhat more complex in (pre-Fortran 90) Fortran, though not much more. Fortran distinguishes between global and local variables. The scope of a local variable is limited to the subroutine in which it appears; it is not visible elsewhere. Variable declarations are optional. If a variable is not declared, it is assumed to be local to the current subroutine and to be of type integer if its name begins with the letters I–N, or real otherwise. (Different conventions for implicit declarations can be speciﬁed by the programmer. In Fortran 90 and its successors, the programmer can also turn off implicit declarations, so that use of an undeclared variable becomes a compile-time error.)
 
@@ -2159,7 +1887,7 @@ Semantically, the lifetime of a local Fortran variable (both the object itself a
 
 Static variables in C The subroutine label_name can be used to generate a series of distinct character- string names: L1, L2, .... A compiler might use these names in its assembly language output. ■
 
-## 3.3.2** Nested Subroutines**
+3.3.2** Nested Subroutines**
 
 The ability to nest subroutines inside each other, introduced in Algol 60, is a fea- ture of many subsequent languages, including Ada, ML, Common Lisp, Python, Scheme, Swift, and (to a limited extent) Fortran 90. Other languages, including C and its descendants, allow classes or other scopes to nest. Just as the local variables of a Fortran subroutine are not visible to other subroutines, any constants, types, variables, or subroutines declared within a scope are not visible outside that scope in Algol-family languages. More formally, Algol-style nesting gives rise to the* clos-* *est nested scope rule* for bindings from names to objects: a name that is introduced in a declaration is known in the scope in which it is declared, and in each inter- nally nested scope, unless it is* hidden* by another declaration of the same name in one or more nested scopes. To ﬁnd the object corresponding to a given use of a name, we look for a declaration with that name in the current, innermost scope. If there is one, it deﬁnes the active binding for the name. Otherwise, we look for a declaration in the immediately surrounding scope. We continue outward,
 
@@ -2178,33 +1906,7 @@ We have already seen (Section 3.2.2) that the compiler can arrange for a frame p
 ![Figure 3.4 Example of...](images/page_162_vector_393.png)
 *Figure 3.4 Example of nested subroutines, shown in pseudocode. Vertical bars indicate the scope of each name, for a language in which declarations are visible throughout their subroutine. Note the hole in the scope of the outer X.*
 
-### time. Using this register as a base for displacement (register plus offset) address-
-
-### ing, target code can access objects within the current subroutine. But what about
-
-### objects in lexically surrounding subroutines? To ﬁnd these we need a way to ﬁnd
-
-### the frames corresponding to those scopes at run time. Since a nested subroutine
-
-### may call a routine in an outer scope, the order of stack frames at run time may not
-
-### necessarily correspond to the order of lexical nesting. Nonetheless, we can be sure
-
-### that there is some frame for the surrounding scope already in the stack, since the
-
-### current subroutine could not have been called unless it was visible, and it could
-
-### not have been visible unless the surrounding scope was active. (It is actually pos-
-
-### sible in some languages to save a reference to a nested subroutine, and then call
-
-### it when the surrounding scope is no longer active. We defer this possibility to
-
-### Section 3.6.2.)
-
-### The simplest way in which to ﬁnd the frames of surrounding scopes is to main-
-
-### tain a* static link* in each frame that points to the “parent” frame: the frame of the
+time. Using this register as a base for* displacement* (register plus offset) address- ing, target code can access objects within the current subroutine. But what about objects in lexically surrounding subroutines? To ﬁnd these we need a way to ﬁnd the frames corresponding to those scopes at run time. Since a nested subroutine may call a routine in an outer scope, the order of stack frames at run time may not necessarily correspond to the order of lexical nesting. Nonetheless, we can be sure that there* is* some frame for the surrounding scope already in the stack, since the current subroutine could not have been called unless it was visible, and it could not have been visible unless the surrounding scope was active. (It is actually pos- sible in some languages to save a reference to a nested subroutine, and then call it when the surrounding scope is no longer active. We defer this possibility to Section 3.6.2.) The simplest way in which to ﬁnd the frames of surrounding scopes is to main- tain a* static link* in each frame that points to the “parent” frame: the frame of the
 
 ![Figure 3.5 Static chains....](images/page_163_vector_287.png)
 *Figure 3.5 Static chains. Subroutines A, B, C, D, and E are nested as shown on the left. If the sequence of nested calls at run time is A, E, B, D, and C, then the static links in the stack will look as shown on the right. The code for subroutine C can ﬁnd local objects at known offsets from the frame pointer. It can ﬁnd local objects of the surrounding scope, B, by dereferencing its static chain once and then applying an offset. It can ﬁnd local objects in B’s surrounding scope, A, by dereferencing its static chain twice and then applying an offset.*
@@ -2213,7 +1915,7 @@ most recent invocation of the lexically surrounding subroutine. If a subroutine 
 
 Static chains will discuss the code required to maintain them in Section 9.2. ■
 
-## 3.3.3** Declaration Order**
+3.3.3** Declaration Order**
 
 In our discussion so far we have glossed over an important subtlety: suppose an object x is declared somewhere within block B. Does the scope of x include the portion of B before the declaration, and if so can x actually be used in that portion of the code? Put another way, can an expression* E* refer to any name declared in the current scope, or only to names that are declared* before E* in the scope? Several early languages, including Algol 60 and Lisp, required that all declara- tions appear at the beginning of their scope. One might at ﬁrst think that this rule
 
@@ -2221,22 +1923,8 @@ would avoid the questions in the preceding paragraph, but it does not, because d
 
 A “gotcha” in declare-before-use cal modiﬁed the requirement to say that names must be declared before they are used. There are special mechanisms to accommodate recursive types and sub- routines, but in general, a* forward reference* (an attempt to use a name before its declaration) is a static semantic error. At the same time, however, Pascal retained the notion that the scope of a declaration is the entire surrounding block. Taken together, whole-block scope and declare-before-use rules can interact in surpris- ing ways:
 
-* 
-  const N = 10;
-  2.
-  ...
-  3.
-  procedure foo;
-  4.
-  const
-  5.
-  M = N;
-  (* static semantic error! *)
-  6.
-  ...
-  7.
-  N = 20;
-  (* local constant declaration; hides the outer N *)
+## 1. const N = 10; 2. ... 3. procedure foo; 4. const 5. M = N; (* static semantic error! *) 6. ... 7. N = 20; (* local constant declaration; hides the outer N *)
+
 Pascal says that the second declaration of N covers all of foo, so the semantic analyzer should complain on line 5 that N is being used before its declaration. The error has the potential to be highly confusing, particularly if the programmer meant to use the outer N:
 
 ```
@@ -2256,9 +1944,7 @@ Here the pair of messages “N used before declaration” and “N is not a cons
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.3 Mutual recursion
-
-Some Algol 60 compilers were known to process the declarations of a scope in program order. This strategy had the unfortunate effect of implicitly outlawing mutually recursive subroutines and types, something the language designers clearly did not intend [Atk73].
+3.3 Mutual recursion Some Algol 60 compilers were known to process the declarations of a scope in program order. This strategy had the unfortunate effect of implicitly outlawing mutually recursive subroutines and types, something the language designers clearly did not intend [Atk73].
 
 **6** We saw an example of mutually recursive subroutines in the recursive descent parsing of Sec- tion 2.3.1. Mutually recursive types frequently arise in linked data structures, where nodes of two types may need to point to each other.
 
@@ -2337,9 +2023,7 @@ In many languages, including Algol 60, C89, and Ada, local variables can be de- 
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.4 Redeclarations
-
-Some languages, particularly those that are intended for interactive use, permit the programmer to redeclare an object: to create a new binding for a given name in a given scope. Interactive programmers commonly use redeclarations to experiment with alternative implementations or to ﬁx bugs during early development. In most interactive languages, the new meaning of the name replaces the old in all contexts. In ML dialects, however, the old meaning of the name may remain accessible to functions that were elaborated before the name was redeclared. This design choice can sometimes be counterintuitive. Here’s an example in OCaml (the lines beginning with # are user input; the others are printed by the interpreter):
+3.4 Redeclarations Some languages, particularly those that are intended for interactive use, permit the programmer to redeclare an object: to create a new binding for a given name in a given scope. Interactive programmers commonly use redeclarations to experiment with alternative implementations or to ﬁx bugs during early development. In most interactive languages, the new meaning of the name replaces the old in all contexts. In ML dialects, however, the old meaning of the name may remain accessible to functions that were elaborated before the name was redeclared. This design choice can sometimes be counterintuitive. Here’s an example in OCaml (the lines beginning with # are user input; the others are printed by the interpreter):
 
 ```
 # let x = 1;;
@@ -2368,25 +2052,18 @@ b = temp;
 
 Keeping the declaration of temp lexically adjacent to the code that uses it makes the program easier to read, and eliminates any possibility that this code will in- terfere with another variable named temp. ■ No run-time work is needed to allocate or deallocate space for variables de- clared in nested blocks; their space can be included in the total space for local variables allocated in the subroutine prologue and deallocated in the epilogue. Exercise 3.9 considers how to minimize the total space required.
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 12. What do we mean by the* scope* of a name-to-object binding?
 
-#### 12. What do we mean by the* scope* of a name-to-object binding?
+## 13. Describe the difference between static and dynamic scoping. 14. What is* elaboration*?
 
-#### 13. Describe the difference between static and dynamic scoping.
-14. What is* elaboration*?
+## 15. What is a* referencing environment*? 16. Explain the* closest nested scope rule*. 17. What is the purpose of a* scope resolution operator*?
 
-#### 15. What is a referencing environment?
-
-#### 16. Explain the* closest nested scope rule*.
-17. What is the purpose of a* scope resolution operator*?
-
-#### 18. What is a static chain? What is it used for?
-
-#### 19. What are forward references? Why are they prohibited or restricted in many
-
-programming languages? 20. Explain the difference between a* declaration* and a* deﬁnition*. Why is the dis- tinction important?
-
-### 3.3.4** Modules**
+* What is a* static chain*? What is it used for?
+  19. What are* forward references*? Why are they prohibited or restricted in many
+  programming languages?
+  20. Explain the difference between a* declaration* and a* deﬁnition*. Why is the dis-
+  tinction important?
+3.3.4** Modules**
 
 An important challenge in the construction of any large body of software is to divide the effort among programmers in such a way that work can proceed on multiple fronts simultaneously. This modularization of effort depends critically on the notion of* information hiding*, which makes objects and algorithms invisi- ble, whenever possible, to portions of the system that do not need them. Properly modularized code reduces the “cognitive load” on the programmer by minimiz- ing the amount of information required to understand any given portion of the
 
@@ -2457,7 +2134,7 @@ int r2 = rand_int(g2);
 
 In more complex programs, it may make sense for a module to export several related types, instances of which can then be passed to its subroutines. ■
 
-## 3.3.5** Module Types and Classes**
+3.3.5** Module Types and Classes**
 
 construct. Given a module type, the programmer could declare an arbitrary number of similar module objects. As it turns out, the classes of modern object- oriented languages are an extension of module types. Access to a module instance typically looks like access to an object, and we can illustrate the ideas in any object-oriented language. For our C++ pseudorandom number example, the **EXAMPLE** 3.16
 
@@ -2481,9 +2158,7 @@ where the rand_gen class is declared as in Figure 3.8. Module types or classes a
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.5 Modules and separate compilation
-
-One of the hallmarks of a good abstraction is that it tends to be useful in multi- ple contexts. To facilitate code reuse, many languages make modules the basis of separate compilation. Modula-2 actually provided two different kinds of modules: one (external modules) for separate compilation, the other (internal modules) for textual nesting within a larger scope. Experience with these op- tions eventually led Niklaus Wirth, the designer of Modula-2, to conclude that external modules were by far the more useful variety; he omitted the internal version from his subsequent language, Oberon. Many would argue, however, that internal modules ﬁnd their real utility only when extended with instan- tiation and inheritance. Indeed, as noted near the end of this section, many object-oriented languages provide both modules* and* classes. The former sup- port separate compilation and serve to minimize name conﬂicts; the latter are for data abstraction. To facilitate separate compilation, modules in many languages (Modula-2 and Oberon among them) can be divided into a declaration part (*header*) and an implementation part (*body*), each of which occupies a separate ﬁle. Code that uses the exports of a given module can be compiled as soon as the header exists; it is not dependent on the body. In particular, work on the bodies of cooperating modules can proceed concurrently once the headers exist. We will return to the subjects of separate compilation and code reuse in Sections C 3.8 and 10.1, respectively.
+3.5 Modules and separate compilation One of the hallmarks of a good abstraction is that it tends to be useful in multi- ple contexts. To facilitate code reuse, many languages make modules the basis of separate compilation. Modula-2 actually provided two different kinds of modules: one (external modules) for separate compilation, the other (internal modules) for textual nesting within a larger scope. Experience with these op- tions eventually led Niklaus Wirth, the designer of Modula-2, to conclude that external modules were by far the more useful variety; he omitted the internal version from his subsequent language, Oberon. Many would argue, however, that internal modules ﬁnd their real utility only when extended with instan- tiation and inheritance. Indeed, as noted near the end of this section, many object-oriented languages provide both modules* and* classes. The former sup- port separate compilation and serve to minimize name conﬂicts; the latter are for data abstraction. To facilitate separate compilation, modules in many languages (Modula-2 and Oberon among them) can be divided into a declaration part (*header*) and an implementation part (*body*), each of which occupies a separate ﬁle. Code that uses the exports of a given module can be compiled as soon as the header exists; it is not dependent on the body. In particular, work on the bodies of cooperating modules can proceed concurrently once the headers exist. We will return to the subjects of separate compilation and code reuse in Sections C 3.8 and 10.1, respectively.
 
 ![Figure 3.8 Pseudorandom number...](images/page_174_vector_222.png)
 *Figure 3.8 Pseudorandom number generator class in C++.*
@@ -2502,7 +2177,7 @@ While there is a clear progression from modules to module types to classes, it i
 
 Modules and classes in a large application hierarchies may be just what we need to represent characters, possessions, build- ings, goals, and a host of other data abstractions. At the same time, especially on a project with a large team of programmers, we will probably want to divide the functionality of the game into large-scale subsystems such as graphics and ren- dering, physics, and strategy. These subsystems are really not data abstractions, and we probably don’t* want* the option to create multiple instances of them. They are naturally captured with traditional modules, particularly if those modules are designed for separate compilation (Section 3.8). Recognizing the need for both multi-instance abstractions and functional subdivision, many languages, includ- ing C++, Java, C#, Python, and Ruby, provide separate class and module mecha- nisms. ■
 
-## 3.3.6** Dynamic Scoping**
+3.3.6** Dynamic Scoping**
 
 In a language with dynamic scoping, the bindings between names and objects depend on the ﬂow of control at run time, and in particular on the order in which subroutines are called. In comparison to the static scope rules discussed in the previous section, dynamic scope rules are generally quite simple: the “current” binding for a given name is the one encountered most recently* during execution*, and not yet destroyed by returning from its scope. Languages with dynamic scoping include APL, Snobol, Tcl, TEX (the type- setting language with which this book was created), and early dialects of Lisp [MAE+65, Moo78, TM81] and Perl.9 Because the ﬂow of control cannot in gen- eral be predicted in advance, the bindings between names and objects in a lan- guage with dynamic scoping cannot in general be determined by a compiler. As a
 
@@ -2517,9 +2192,7 @@ Static vs dynamic scoping prints a 1. If dynamic scoping is in effect, the outpu
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.6 Dynamic scoping
-
-It is not entirely clear whether the use of dynamic scoping in Lisp and other early interpreted languages was deliberate or accidental. One reason to think that it may have been deliberate is that it makes it very easy for an interpreter to look up the meaning of a name: all that is required is a stack of declarations (we examine this stack more closely in Section C 3.4.2). Unfortunately, this simple implementation has a very high run-time cost, and experience indicates that dynamic scoping makes programs harder to understand. The modern consen- sus seems to be that dynamic scoping is usually a bad idea (see Exercise 3.17 and Exploration 3.36 for two exceptions).
+3.6 Dynamic scoping It is not entirely clear whether the use of dynamic scoping in Lisp and other early interpreted languages was deliberate or accidental. One reason to think that it may have been deliberate is that it makes it very easy for an interpreter to look up the meaning of a name: all that is required is a stack of declarations (we examine this stack more closely in Section C 3.4.2). Unfortunately, this simple implementation has a very high run-time cost, and experience indicates that dynamic scoping makes programs harder to understand. The modern consen- sus seems to be that dynamic scoping is usually a bad idea (see Exercise 3.17 and Exploration 3.36 for two exceptions).
 
 We create a binding for n when we enter the main program. We create another when and if we enter procedure second. When we execute the assignment state- ment at line 3, the n to which we are referring will depend on whether we entered ﬁrst through second or directly from the main program. If we entered through second, we will assign the value 1 to second’s local n. If we entered from the main program, we will assign the value 1 to the global n. In either case, the write at line 12 will refer to the global n, since second’s local n will be destroyed, along with its binding, when control returns to the main program. ■ With dynamic scoping, errors associated with the referencing environment **EXAMPLE** 3.19
 
@@ -2536,13 +2209,11 @@ A symbol table with visibility support can be implemented in several different w
 
 An association list (or* A-list* for short) is simply a list of name/value pairs. When used to implement dynamic scoping it functions as a stack: new declara- tions are pushed as they are encountered, and popped at the end of the scope in which they appeared. Bindings are found by searching down the list from the top. A central reference table avoids the need for linear-time search by maintaining an explicit mapping from names to their current meanings. Lookup is faster, but scope entry and exit are somewhat more complex, and it becomes substantially more difﬁcult to save a referencing environment for future use (we discuss this issue further in Section 3.6.1).
 
-## 3.5
-
-#### **The Meaning of Names within a Scope**
+3.5 **The Meaning of Names within a Scope**
 
 So far in our discussion of naming and scopes we have assumed that there is a one-to-one mapping between names and visible objects at any given point in a program. This need not be the case. Two or more names that refer to the same object at the same point in the program are said to be* aliases*. A name that can refer to more than one object at a given point in the program is said to be* overloaded*. Overloading is in turn related to the more general subject of *polymorphism*, which allows a subroutine or other program fragment to behave in different ways depending on the types of its arguments.
 
-### 3.5.1** Aliases**
+3.5.1** Aliases**
 
 Simple examples of aliases occur in the variant records and unions of many pro- gramming languages (we will discuss these features detail in Section C 8.1.3).
 
@@ -2577,16 +2248,14 @@ b = *p;
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.7 Pointers in C and Fortran
-
-The tendency of pointers to introduce aliases is one of the reasons why For- tran compilers tended, historically, to produce faster code than C compilers: pointers are heavily used in C, but missing from Fortran 77 and its predeces- sors. It is only in recent years that sophisticated alias analysis algorithms have allowed C compilers to rival their Fortran counterparts in speed of generated code. Pointer analysis is sufﬁciently important that the designers of the C99 standard decided to add a new keyword to the language. The restrict qual- iﬁer, when attached to a pointer declaration, is an assertion on the part of the programmer that the object to which the pointer refers has no alias in the cur- rent scope. It is the programmer’s responsibility to ensure that the assertion is correct; the compiler need not attempt to check it. C99 also introduced* strict* *aliasing*. This allows the compiler to assume that pointers of different types will never refer to the same location in memory. Most compilers provide a command-line option to disable optimizations that exploit this rule; other- wise (poorly written) legacy programs may behave incorrectly when compiled at higher optimization levels.
+3.7 Pointers in C and Fortran The tendency of pointers to introduce aliases is one of the reasons why For- tran compilers tended, historically, to produce faster code than C compilers: pointers are heavily used in C, but missing from Fortran 77 and its predeces- sors. It is only in recent years that sophisticated alias analysis algorithms have allowed C compilers to rival their Fortran counterparts in speed of generated code. Pointer analysis is sufﬁciently important that the designers of the C99 standard decided to add a new keyword to the language. The restrict qual- iﬁer, when attached to a pointer declaration, is an assertion on the part of the programmer that the object to which the pointer refers has no alias in the cur- rent scope. It is the programmer’s responsibility to ensure that the assertion is correct; the compiler need not attempt to check it. C99 also introduced* strict* *aliasing*. This allows the compiler to assume that pointers of different types will never refer to the same location in memory. Most compilers provide a command-line option to disable optimizations that exploit this rule; other- wise (poorly written) legacy programs may behave incorrectly when compiled at higher optimization levels.
 
 ![Figure 3.11 Overloading of...](images/page_180_vector_198.png)
 *Figure 3.11 Overloading of enumeration constants in Ada.*
 
 The initial assignment to a will, on most machines, require that *p be loaded into a register. Since accessing memory is expensive, the compiler will want to hang on to the loaded value and reuse it in the assignment to b. It will be unable to do so, however, unless it can verify that p and q cannot refer to the same object—that is, that *p and *q are not aliases. While compile-time veriﬁcation of this sort is possible in many common cases, in general it’s undecidable. ■
 
-## 3.5.2** Overloading**
+3.5.2** Overloading**
 
 Most programming languages provide at least a limited form of overloading. In C, for example, the plus sign (+) is used to name several different functions, in- cluding signed and unsigned integer and ﬂoating-point addition. Most program- mers don’t worry about the distinction between these two functions—both are based on the same mathematical concept, after all—but they take arguments of different types and perform very different operations on the underlying bits. A **EXAMPLE** 3.22
 
@@ -2654,9 +2323,7 @@ Overloading with type classes mechanism known as* type classes*. Among the simpl
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.8 User-deﬁned operators in OCaml
-
-OCaml does not support overloading, but it does allow the user to create new operators, whose names—as in Haskell—consist of non-alphanumeric char- acters. Each such name must begin with the name of one of the built-in op- erators, from which the new operator inherits its syntactic role (preﬁx, inﬁx, or postﬁx) and precedence. So, for example,+.is used for ﬂoating-point addi- tion; +/ is used for “bignum” (arbitrary precision) integer addition.
+3.8 User-deﬁned operators in OCaml OCaml does not support overloading, but it does allow the user to create new operators, whose names—as in Haskell—consist of non-alphanumeric char- acters. Each such name must begin with the name of one of the built-in op- erators, from which the new operator inherits its syntactic role (preﬁx, inﬁx, or postﬁx) and precedence. So, for example,+.is used for ﬂoating-point addi- tion; +/ is used for “bignum” (arbitrary precision) integer addition.
 
 ```
 class Eq a, where
@@ -2680,39 +2347,23 @@ Printing objects of multiple types put stream, and suppose that we wish to be ab
 
 Finally, suppose we have a language in which many types support a to string operation that will generate a character-string representation of an object of that type. We might then be able to write a polymorphic print routine that accepts an argument of any type for which to string is deﬁned. The to string operation might itself be polymorphic, built in, or simply overloaded; in any of these cases, print could call it and output the result. ■ In short, overloading allows the programmerto give the same name to multiple objects, and to disambiguate (*resolve*) them based on context—for subroutines, on the number or types of arguments. Coercion allows the compiler to perform an automatic type conversion to make an argument conform to the expected type of some existing routine. Polymorphism allows a single routine to accept argu- ments of multiple types, provided that it attempts to use them only in ways that their types support.
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 21. Explain the importance of information hiding.
 
-* Explain the importance of information hiding.
+## 22. What is an* opaque* export? 23. Why might it be useful to distinguish between the* header* and the* body* of a module? 24. What does it mean for a scope to be* closed*?
 
-### 22. What is an opaque export?
+## 25. Explain the distinction between “modules as managers” and “modules as types.”
 
-### 23. Why might it be useful to distinguish between the header and the body of a
+## 26. How do classes differ from modules? 27. Why might it be useful to have modules and classes in the same language?
 
-module? 24. What does it mean for a scope to be* closed*?
-
-### 25. Explain the distinction between “modules as managers” and “modules as
-
-types.”
-
-### 26. How do classes differ from modules?
-
-### 27. Why might it be useful to have modules and classes in the same language?
-
-### 28. Why does the use of dynamic scoping imply the need for run-time type check-
-
-ing?
+## 28. Why does the use of dynamic scoping imply the need for run-time type check- ing?
 
 * Explain the purpose of a compiler’s symbol table.
   30. What are* aliases*? Why are they considered a problem in language design and
   implementation?
   31. Explain the value of the restrict qualiﬁer in C.
-### 32. What is overloading? How does it differ from coercion and polymorphism?
+## 32. What is* overloading*? How does it differ from* coercion* and* polymorphism*? 33. What are* type classes* in Haskell? What purpose do they serve?
 
-### 33. What are* type classes* in Haskell? What purpose do they serve?
-
-## 3.6
-
-### **The Binding of Referencing Environments**
+3.6 **The Binding of Referencing Environments**
 
 We have seen in Section 3.3 how scope rules determine the referencing environ- ment of a given statement in a program. Static scope rules specify that the refer- encing environment depends on the lexical nesting of program blocks in which names are declared. Dynamic scope rules specify that the referencing environ- ment depends on the order in which declarations are encountered at run time. An additional issue that we have not yet considered arises in languages that allow one to create a* reference* to a subroutine—for example, by passing it as a parame- ter. When should scope rules be applied to such a subroutine: when the reference is ﬁrst created, or when the routine is ﬁnally called? The answer is particularly im- portant for languages with dynamic scoping, though we shall see that it matters even in languages with static scoping. A dynamic scoping example appears as pseudocode in Figure 3.13. Procedure **EXAMPLE** 3.30
 
@@ -2721,21 +2372,9 @@ Deep and shallow binding print selected records is assumed to be a general-purpo
 ![Figure 3.13 Program (in...](images/page_186_vector_431.png)
 *Figure 3.13 Program (in pseudocode) to illustrate the importance of binding rules. One might argue that deep binding is appropriate for the environment of function older than threshold (for access to threshold), while shallow binding is appropriate for the environment of procedure print person (for access to line length).*
 
-## 3.6.1** Subroutine Closures**
+3.6.1** Subroutine Closures**
 
-#### Deep binding is implemented by creating an explicit representation of a refer-
-
-#### encing environment (generally the one in which the subroutine would execute
-
-#### if called at the present time) and bundling it together with a reference to the
-
-#### subroutine. The bundle as a whole is referred to as a closure. Usually the sub-
-
-#### routine itself can be represented in the closure by a pointer to its code. In a lan-
-
-#### guage with dynamic scoping, the representation of the referencing environment
-
-#### depends on whether the language implementation uses an association list or a
+Deep binding is implemented by creating an explicit representation of a refer- encing environment (generally the one in which the subroutine would execute if called at the present time) and bundling it together with a reference to the subroutine. The bundle as a whole is referred to as a* closure*. Usually the sub- routine itself can be represented in the closure by a pointer to its code. In a lan- guage with dynamic scoping, the representation of the referencing environment depends on whether the language implementation uses an association list or a
 
 ![Figure 3.14 Deep binding...](images/page_187_vector_225.png)
 *Figure 3.14 Deep binding in Python. At right is a conceptual view of the run-time stack. Referencing environments captured in closures are shown as dashed boxes and arrows. When B is called via formal parameter P, two instances of I exist. Because the closure for P was created in the initial invocation of A, B’s static link (solid arrow) points to the frame of that earlier invocation. B uses that invocation’s instance of I in its print statement, and the output is a 1.*
@@ -2746,7 +2385,7 @@ Binding rules with static scoping trates the impact of binding rules in the pres
 
 It should be noted that binding rules matter with static scoping only when accessing objects that are neither local nor global, but are deﬁned at some inter- mediate level of nesting. If an object is local to the currently executing subroutine, then it does not matter whether the subroutine was called directly or through a closure; in either case local objects will have been created when the subroutine started running. If an object is global, there will never be more than one instance, since the main body of the program is not recursive. Binding rules are therefore irrelevant in languages like C, which has no nested subroutines, or Modula-2, which allows only outermost subroutines to be passed as parameters, thus ensur- ing that any variable deﬁned outside the subroutine is global. (Binding rules are also irrelevant in languages like PL/I and Ada 83, which do not permit subroutines to be passed as parameters at all.) Suppose then that we have a language with static scoping in which nested sub- routines can be passed as parameters, with deep binding. To represent a closure for subroutine* S*, we can simply save a pointer to* S*’s code together with the static link that* S* would use if it were called right now, in the current environment. When* S* is ﬁnally called, we temporarily restore the saved static link, rather than creating a new one. When* S* follows its static chain to access a nonlocal object, it will ﬁnd the object instance that was current at the time the closure was created. This instance may not have the* value* it had at the time the closure was created, but its identity, at least, will reﬂect the intent of the closure’s creator.
 
-## 3.6.2** First-Class Values and Unlimited Extent**
+3.6.2** First-Class Values and Unlimited Extent**
 
 In general, a value in a programming language is said to have* ﬁrst-class* status if it can be passed as a parameter, returned from a subroutine, or assigned into a variable. Simple types such as integers and characters are ﬁrst-class values in most programming languages. By contrast, a “second-class” value can be passed as a parameter, but not returned from a subroutine or assigned into a variable, and a “third-class” value cannot even be passed as a parameter. As we shall see in Section 9.3.2, labels (in languages that have them) are usually third-class val- ues, but they are second-class values in Algol. Subroutines display the most vari- ation. They are ﬁrst-class values in all functional programming languages and most scripting languages. They are also ﬁrst-class values in C# and, with some restrictions, in several other imperative languages, including Fortran, Modula-2 and -3, Ada 95, C, and C++.10 They are second-class values in most other imper- ative languages, and third-class values in Ada 83. Our discussion of binding so far has considered only second-class subroutines. First-class subroutines in a language with nested scopes introduce an additional level of complexity: they raise the possibility that a reference to a subroutine may
 
@@ -2773,16 +2412,14 @@ Here the let construct on line 5 declares a new function, f, which is the result
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.9 Binding rules and extent
-
-Binding mechanisms and the notion of extent are closely tied to implementa- tion issues. A-lists make it easy to build closures (Section C 3.4.2), but so do the non-nested subroutines of C and the rule against passing nonglobal sub- routines as parameters in Modula-2. In a similar vein, the lack of ﬁrst-class subroutines in many imperative languages reﬂects in large part the desire to avoid heap allocation, which would be needed for local variables with unlim- ited extent.
+3.9 Binding rules and extent Binding mechanisms and the notion of extent are closely tied to implementa- tion issues. A-lists make it easy to build closures (Section C 3.4.2), but so do the non-nested subroutines of C and the rule against passing nonglobal sub- routines as parameters in Modula-2. In a similar vein, the lack of ﬁrst-class subroutines in many imperative languages reﬂects in large part the desire to avoid heap allocation, which would be needed for local variables with unlim- ited extent.
 
 ![Figure 3.15 The need...](images/page_190_vector_150.png)
 *Figure 3.15 The need for unlimited extent. When function plus-x is called in Example 3.32, it returns (left side of the ﬁgure) a closure containing an anonymous function. The referencing environment of that function encompasses both plus-x and main—including the local variables of plus-x itself. When the anonymous function is subsequently called (right side of the ﬁgure), it must be able to access variables in the closure’s environment—in particular, the x inside plus-x—despite the fact that plus-x is no longer active.*
 
 most routines to be returned or stored in variables (outermost routines are ﬁrst- class values; nested routines are second-class values). Ada 95 allows a nested rou- tine to be returned, but only if the scope in which it was declared is the same as, or larger than, the scope of the declared return type. This containment rule, while more conservative than strictly necessary (it forbids the Ada equivalent of Figure 3.14), makes it impossible to propagate a subroutine reference to a portion of the program in which the routine’s referencing environment is not active.
 
-## 3.6.3** Object Closures**
+3.6.3** Object Closures**
 
 As noted in Section 3.6.1, the referencing environment in a closure will be non- trivial only when passing a nested subroutine. This means that the implementa- tion of ﬁrst-class subroutines is trivial in a language without nested subroutines. At the same time, it means that a programmer working in such a language is missing a useful feature: the ability to pass a subroutine* with context*. In object- oriented languages, there is an alternative way to achieve a similar effect: we can encapsulate our subroutine as a method of a simple object, and let the object’s ﬁelds hold context for the method. In Java we might write the equivalent of Ex- **EXAMPLE** 3.33
 
@@ -2855,7 +2492,7 @@ cout << f(3) << "\n";
 
 Object f could also be passed to any function that expected a parameter of class int_func. ■
 
-## 3.6.4** Lambda Expressions**
+3.6.4** Lambda Expressions**
 
 In most of our examples so far, closures have corresponded to subroutines that were declared—and named—in the usual way. In the Scheme code of Exam- ple 3.32, however, we saw an anonymous function—a* lambda expression*. Simi- larly, in Example 3.35, we saw an anonymous delegate in C#. That example can **EXAMPLE** 3.37
 
@@ -2942,9 +2579,7 @@ Both of these cause the compiler to create an object closure (a* function object
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.10 Functions and function objects
-
-The astute reader may be wondering: In Example 3.40, how does for_each manage to “do the right thing” with two different implementations of its third parameter? After all, sometimes that parameter is implemented as a simple pointer; other times it is a pointer to an object with an operator(), which re- quires a different kind of call. The answer is that for_each is a* generic* routine (a* template* in C++). The compiler generates customized implementations of for_each on demand. We will discuss generics in more detail in Section 7.3.1. In some situations, it may be difﬁcult to use generics to distinguish among “function-like” parameters. As an alternative, C++ provides a standard function* class*, with constructors that allow it to be instantiated from a func- tion, a function pointer, a function object, or a manually created object closure. Something like for_each could then be written as an ordinary (nongeneric) subroutine whose third parameter was a object of class function. In any given call, the compiler would coerce the provided argument to be a function object.
+3.10 Functions and function objects The astute reader may be wondering: In Example 3.40, how does for_each manage to “do the right thing” with two different implementations of its third parameter? After all, sometimes that parameter is implemented as a simple pointer; other times it is a pointer to an object with an operator(), which re- quires a different kind of call. The answer is that for_each is a* generic* routine (a* template* in C++). The compiler generates customized implementations of for_each on demand. We will discuss generics in more detail in Section 7.3.1. In some situations, it may be difﬁcult to use generics to distinguish among “function-like” parameters. As an alternative, C++ provides a standard function* class*, with constructors that allow it to be instantiated from a func- tion, a function pointer, a function object, or a manually created object closure. Something like for_each could then be written as an ordinary (nongeneric) subroutine whose third parameter was a object of class function. In any given call, the compiler would coerce the provided argument to be a function object.
 
 Lambda expressions appear in Java 8 as well, but in a restricted form. In situa- tions where they might be useful, Java has traditionally relied on an idiom known as a* functional interface*. The Arrays.sort routine, for example, expects a pa- **EXAMPLE** 3.41
 
@@ -2967,9 +2602,7 @@ Arrays.sort(People, (p1, p2) -> Integer.compare(p1.age, p2.age));
 
 The key to the simpler syntax is that Comparator is a functional interface, and thus has only a single abstract method. When a variable or formal parameter is declared to be of some functional interface type, Java 8 allows a lambda ex- pression whose parameter and return types match those of the interface’s single method to be assigned into the variable or passed as the parameter. In effect, the compiler uses the lambda expression to create an instance of an anonymous class that implements the interface. ■ As it turns out, coercion to functional interface types is the* only* use of lambda expressions in Java. In particular, lambda expressions have no types of their own: they are not really objects, and cannot be directly manipulated. Their behav- ior with respect to variable capture is entirely determined by the usual rules for nested classes. We will consider these rules in more detail in Section 10.2.3; for now, sufﬁce it to note that Java, like C++, does not support unlimited extent.
 
-## 3.7
-
-### **Macro Expansion**
+3.7 **Macro Expansion**
 
 Prior to the development of high-level programming languages, assembly lan- guage programmers could ﬁnd themselves writing highly repetitive code. To ease the burden, many assemblers provided sophisticated* macro expansion* facilities. Consider the task of loading an element of a two-dimensional array from memory **EXAMPLE** 3.42
 
@@ -2991,31 +2624,22 @@ Macros like LINE_LEN avoided the need (in early versions of C) to support named 
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.11 Generics as macros
-
-In some sense, the ability to import names into an ordinary module provides a primitive sort of generic facility. A stack module that imports its element type, for example, can be inserted (with a text editor) into any context in which the appropriate type name has been declared, and will produce a “customized” stack for that context when compiled. Early versions of C++ formalized this mechanism by using macros to implement templates. Later versions of C++ have made templates (generics) a fully supported language feature, giving them much of the ﬂavor of hygienic macros. (More on templates and on* template* *metaprogramming* can be found in Section C 7.3.2.)
+3.11 Generics as macros In some sense, the ability to import names into an ordinary module provides a primitive sort of generic facility. A stack module that imports its element type, for example, can be inserted (with a text editor) into any context in which the appropriate type name has been declared, and will produce a “customized” stack for that context when compiled. Early versions of C++ formalized this mechanism by using macros to implement templates. Later versions of C++ have made templates (generics) a fully supported language feature, giving them much of the ﬂavor of hygienic macros. (More on templates and on* template* *metaprogramming* can be found in Section C 7.3.2.)
 
 in standard C we cannot avoid the extra side effects by assigning the parameters into temporary variables: a C macro that “returns” a value must be an expression, and declarations are one of many language constructs that cannot appear inside (see also Exercise 3.23). ■ Modern languages and compilers have, for the most part, abandoned macros as an anachronism. Named constants are type-safe and easy to implement, and *in-line* subroutines (to be discussed in Section 9.2.4) provide almost all the per- formance of parameterized macros without their limitations. A few languages (notably Scheme and Common Lisp) take an alternative approach, and integrate macros into the language in a safe and consistent way. So-called* hygienic* macros implicitly encapsulate their arguments, avoiding unexpected interactions with as- sociativity and precedence. They rename variables when necessary to avoid the capture problem, and they can be used in any expression context. Unlike subrou- tines, however, they are expanded during semantic analysis, making them gen- erally unsuitable for unbounded recursion. Their appeal is that, like all macros, they take* unevaluated* arguments, which they evaluate lazily on demand. Among other things, this means that they preserve the multiple side effect “gotcha” of our MAX example. Delayed evaluation was a bug in this context, but can sometimes be a feature. We will return to it in Sections 6.1.5 (short-circuit Boolean eval- uation), 9.3.2 (call-by-name parameters), and 11.5 (normal-order evaluation in functional programming languages).
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 34. Describe the difference between deep and shallow* binding* of referencing en- vironments. 35. Why are binding rules particularly important for languages with dynamic scoping? 36. What are* ﬁrst-class* subroutines? What languages support them? 37. What is a* subroutine closure*? What is it used for? How is it implemented?
 
-### 34. Describe the difference between deep and shallow binding of referencing en-
+* What is an* object closure*? How is it related to a subroutine closure?
+  39. Describe how the* delegates* of C# extend and unify both subroutine and object
+  closures.
+  40. Explain the distinction between limited and unlimited* extent* of objects in a
+  local scope.
+  41. What is a* lambda expression*? How does the support for lambda expressions in
+  functional languages compare to that of C# or Ruby? To that of C++ or Java?
+## 42. What are* macros*? What was the motivation for including them in C? What problems may they cause?
 
-vironments. 35. Why are binding rules particularly important for languages with dynamic scoping? 36. What are* ﬁrst-class* subroutines? What languages support them? 37. What is a* subroutine closure*? What is it used for? How is it implemented?
-
-### 38. What is an object closure? How is it related to a subroutine closure?
-
-### 39. Describe how the delegates of C# extend and unify both subroutine and object
-
-closures. 40. Explain the distinction between limited and unlimited* extent* of objects in a local scope. 41. What is a* lambda expression*? How does the support for lambda expressions in functional languages compare to that of C# or Ruby? To that of C++ or Java?
-
-### 42. What are macros? What was the motivation for including them in C? What
-
-problems may they cause?
-
-## 3.8
-
-### **Separate Compilation**
+3.8 **Separate Compilation**
 
 Since most large programs are constructed and tested incrementally, and since the compilation of a very large program can be a multihour operation, any language designed to support large programs must provide for separate compilation.
 
@@ -3023,9 +2647,7 @@ Since most large programs are constructed and tested incrementally, and since th
 
 On the companion site we consider the relationship between modules and sepa- rate compilation. Because they are designed for encapsulation and provide a nar- row interface, modules are the natural choice for the “compilation units” of many programming languages. The separate module headers and bodies of Modula-3 and Ada, for example, are explicitly intended for separate compilation, and reﬂect experience gained with more primitive facilities in other languages. C and C++, by contrast, must maintain backward compatibility with mechanisms designed in the early 1970s. Modern versions of C and C++ include a* namespace* mechanism that provides module-like data hiding, but names must still be declared before they are used in every compilation unit, and the mechanisms used to accom- modate this rule are purely a matter of convention. Java and C# break with the C tradition by requiring the compiler to infer header information automatically from separately compiled class deﬁnitions; no header ﬁles are required.
 
-## 3.9
-
-### **Summary and Concluding Remarks**
+3.9 **Summary and Concluding Remarks**
 
 This chapter has addressed the subject of names, and the* binding* of names to ob- jects (in a broad sense of the word). We began with a general discussion of the notion of* binding time*—the time at which a name is associated with a particular object or, more generally, the time at which an answer is associated with any open question in language or program design or implementation. We deﬁned the no- tion of* lifetime* for both objects and name-to-object bindings, and noted that they need not be the same. We then introduced the three principal storage allocation mechanisms—static, stack, and heap—used to manage space for objects. In Section 3.3 we described how the binding of names to objects is governed by *scope rules*. In some languages, scope rules are dynamic: the meaning of a name is found in the most recently entered scope that contains a declaration and that has not yet been exited. In most modern languages, however, scope rules are static, or *lexical*: the meaning of a name is found in the closest lexically surrounding scope that contains a declaration. We found that lexical scope rules vary in important but sometimes subtle ways from one language to another. We considered what sorts of scopes are allowed to nest, whether scopes are* open* or* closed*, whether the scope of a name encompasses the entire block in which it is declared, and whether
 
@@ -3033,24 +2655,16 @@ a name must be declared before it is used. We explored the implementation of sco
 
 implementation do not always go together. Many easy-to-compile features (e.g., goto statements) are of questionable value at best. We will also see several ex- amples of highly useful and (conceptually) simple features, such as garbage col- lection (Section 8.5.3) and uniﬁcation (Sections 7.2.4, C 7.3.2, and 12.2.1), whose implementations are quite complex. 3.10 **Exercises**
 
-### 3.1
-
-Indicate the binding time (when the language is designed, when the pro- gram is linked, when the program begins execution, etc.) for each of the following decisions in your favorite programming language and implemen- tation. Explain any answers you think are open to interpretation.
+3.1 Indicate the binding time (when the language is designed, when the pro- gram is linked, when the program begins execution, etc.) for each of the following decisions in your favorite programming language and implemen- tation. Explain any answers you think are open to interpretation.
 
 The number of built-in functions (math, type queries, etc.) The variable declaration that corresponds to a particular variable refer- ence (use) The maximum length allowed for a constant (literal) character string The referencing environment for a subroutine that is passed as a pa- rameter The address of a particular library routine The total amount of space occupied by program code and data 3.2 In Fortran 77, local variables were typically allocated statically. In Algol and its descendants (e.g., Ada and C), they are typically allocated in the stack. In Lisp they are typically allocated at least partially in the heap. What accounts for these differences? Give an example of a program in Ada or C that would not work correctly if local variables were allocated statically. Give an example of a program in Scheme or Common Lisp that would not work correctly if local variables were allocated on the stack. 3.3 Give two examples in which it might make sense to delay the binding of an implementation decision, even though sufﬁcient information exists to bind it early. 3.4 Give three concrete examples drawn from programming languages with which you are familiar in which a variable is live but not in scope. 3.5 Consider the following pseudocode:
 
-* 
-  procedure main()
-  2.
-  a : integer := 1
-  3.
-  b : integer := 2
-* 
-  procedure middle()
-  5.
-  b : integer := a
-* 
-  a : integer := 3
+## 1. procedure main() 2. a : integer := 1 3. b : integer := 2
+
+## 4. procedure middle() 5. b : integer := a
+
+## 8. a : integer := 3
+
 * 
   –– body of middle
   10.
@@ -3063,9 +2677,7 @@ The number of built-in functions (math, type queries, etc.) The variable declara
   middle()
   14.
   print a, b
-### Suppose this was code for a language with the declaration-order rules of C
-
-(but with nested subroutines)—that is, names must be declared before use, and the scope of a name extends from its declaration through the end of the block. At each print statement, indicate which declarations of a and b are in the referencing environment. What does the program print (or will the compiler identify static semantic errors)? Repeat the exercise for the declaration-order rules of C# (names must be declared before use, but the scope of a name is the entire block in which it is declared) and of Modula-3 (names can be declared in any order, and their scope is the entire block in which they are declared). 3.6 Consider the following pseudocode, assuming nested subroutines and static scope:
+Suppose this was code for a language with the declaration-order rules of C (but with nested subroutines)—that is, names must be declared before use, and the scope of a name extends from its declaration through the end of the block. At each print statement, indicate which declarations of a and b are in the referencing environment. What does the program print (or will the compiler identify static semantic errors)? Repeat the exercise for the declaration-order rules of C# (names must be declared before use, but the scope of a name is the entire block in which it is declared) and of Modula-3 (names can be declared in any order, and their scope is the entire block in which they are declared). 3.6 Consider the following pseudocode, assuming nested subroutines and static scope:
 
 procedure main() g : integer
 
@@ -3082,17 +2694,11 @@ procedure R(m : integer) write integer(x) x /:= 2 –– integer division if x >
 ![Figure 3.16 List management...](images/page_202_vector_397.png)
 *Figure 3.16 List management routines for Exercise 3.7.*
 
-## (b) Show the frames on the stack when A has just been called. For each
+(b) Show the frames on the stack when A has just been called. For each frame, show the static and dynamic links. (c) Explain how A ﬁnds g.
 
-frame, show the static and dynamic links. (c) Explain how A ﬁnds g.
+## 3.7 As part of the development team at MumbleTech.com, Janet has written a list manipulation library for C that contains, among other things, the code in Figure 3.16.
 
-## 3.7
-
-As part of the development team at MumbleTech.com, Janet has written a list manipulation library for C that contains, among other things, the code in Figure 3.16.
-
-## (a) Accustomed to Java, new team member Brad includes the following
-
-code in the main loop of his program:
+(a) Accustomed to Java, new team member Brad includes the following code in the main loop of his program:
 
 ```
 list_node* L = 0;
@@ -3116,9 +2722,7 @@ L = T;
 
 This seems to solve the insufﬁcient memory problem, but where the program used to produce correct results (before running out of mem- ory), now its output is strangely corrupted, and Brad goes back to Janet for advice. What will she tell him this time?
 
-## 3.8
-
-Rewrite Figures 3.6 and 3.7 in C. You will need to use separate compilation for name hiding. 3.9 Consider the following fragment of code in C:
+## 3.8 Rewrite Figures 3.6 and 3.7 in C. You will need to use separate compilation for name hiding. 3.9 Consider the following fragment of code in C:
 
 ```
 {
@@ -3142,13 +2746,9 @@ int g, h, i;
 }
 ```
 
-## (a) Assume that each integer variable occupies four bytes. How much total
+(a) Assume that each integer variable occupies four bytes. How much total space is required for the variables in this code? (b) Describe an algorithm that a compiler could use to assign stack frame offsets to the variables of arbitrary nested blocks, in a way that mini- mizes the total space required.
 
-space is required for the variables in this code? (b) Describe an algorithm that a compiler could use to assign stack frame offsets to the variables of arbitrary nested blocks, in a way that mini- mizes the total space required.
-
-## 3.10 Consider the design of a Fortran 77 compiler that uses static allocation for
-
-the local variables of subroutines. Expanding on the solution to the pre- vious question, describe an algorithm to minimize the total space required for these variables. You may ﬁnd it helpful to construct a* call graph* data
+3.10 Consider the design of a Fortran 77 compiler that uses static allocation for the local variables of subroutines. Expanding on the solution to the pre- vious question, describe an algorithm to minimize the total space required for these variables. You may ﬁnd it helpful to construct a* call graph* data
 
 structure in which each node represents a subroutine, and each directed arc indicates that the subroutine at the tail may sometimes call the subroutine at the head. 3.11 Consider the following pseudocode:
 
@@ -3251,25 +2851,19 @@ bugs arise? How do you ﬁnd them? How much effort does it take? Learn about ope
 
 by placing it after the end of the argument list (in which case it become an extra, ﬁnal parameter); by passing it to Proc.new; or, within the argument list, by preﬁxing it with the keyword lambda or by writing it in -> lambda notation. Investigate these options. Which came ﬁrst? Which came later? What are their comparative advantages? Are their any minor differences in their behavior? 3.41 Lambda expressions were a late addition to the Java programming language: they were strongly resisted for many years. Research the controversy sur- rounding them. Where do your sympathies lie? What alternative proposals were rejected? Do you ﬁnd any of them appealing? 3.42 Give three examples of features that are* not* provided in some language with which you are familiar, but that are common in other languages. Why do you think these features are missing? Would they complicate the implemen- tation of the language? If so, would the complication (in your judgment) be justiﬁed?
 
-### 3.43–3.47 In More Depth.
-3.12
-**Bibliographic Notes**
+3.43–3.47 In More Depth. 3.12 **Bibliographic Notes**
 
 This chapter has traced the evolution of naming and scoping mechanisms through a very large number of languages, including Fortran (several versions), Basic, Algol 60 and 68, Pascal, Simula, C and C++, Euclid, Turing, Modula (1, 2, and 3), Ada (83 and 95), Oberon, Eiffel, Perl, Tcl, Python, Ruby, Rust, Java, and C#. Bibliographic references for all of these can be found in Appendix A. Both modules and objects trace their roots to Simula, which was developed by Dahl, Nygaard, Myhrhaug, and others at the Norwegian Computing Center in the mid-1960s. (Simula I was implemented in 1964; descriptions in this book pertain to Simula 67.) The encapsulation mechanisms of Simula were reﬁned in the 1970s by the developers of Clu, Modula, Euclid, and related languages. Other Simula innovations—inheritance and dynamic method binding in particular— provided the inspiration for Smalltalk, the original and arguably purest of the object-oriented languages. Modern object-oriented languages, including Eiffel, C++, Java, C#, Python, and Ruby, represent to a large extent a reintegration of the evolutionary lines of encapsulation on the one hand and inheritance and dynamic method binding on the other. The notion of information hiding originates in Parnas’s classic paper, “On the Criteria to be Used in Decomposing Systems into Modules” [Par72]. Compara- tive discussions of naming, scoping, and abstraction mechanisms can be found, among other places, in Liskov et al.’s discussion of Clu [LSAS77], Liskov and Gut- tag’s text [LG86, Chap. 4], the Ada Rationale [IBFW91, Chaps. 9–12], Harbison’s text on Modula-3 [Har92, Chaps. 8–9], Wirth’s early work on modules [Wir80], and his later discussion of Modula and Oberon [Wir88a, Wir07]. Further infor- mation on object-oriented languages can be found in Chapter 10.
 
 For a detailed discussion of overloading and polymorphism, see the survey by Cardelli and Wegner [CW85]. Cailliau [Cai82] provides a lighthearted discus- sion of many of the scoping pitfalls noted in Section 3.3.3. Abelson and Suss- man [AS96, p. 11n] attribute the term “syntactic sugar” to Peter Landin. Lambda expressions for C++ are described in the paper of Järvi and Free- man [JF10]. Lambda expressions for Java were developed under JSR 335 of the Java Community Process (documentation at* jcp.org*).
 
-## 4
-
-### **Semantic Analysis**
+**4** **Semantic Analysis**
 
 **In Chapter 2 we considered the topic** of programming language syntax. In the current chapter we turn to the topic of semantics. Informally, syntax con- cerns the* form* of a valid program, while semantics concerns its* meaning*. Meaning is important for at least two reasons: it allows us to enforce rules (e.g., type con- sistency) that go beyond mere form, and it provides the information we need in order to generate an equivalent output program. It is conventional to say that the syntax of a language is precisely that portion of the language deﬁnition that can be described conveniently by a context-free grammar, while the semantics is that portion of the deﬁnition that cannot. This convention is useful in practice, though it does not always agree with intuition. When we require, for example, that the number of arguments contained in a call to a subroutine match the number of formal parameters in the subroutine deﬁni- tion, it is tempting to say that this requirement is a matter of syntax. After all, we can count arguments without knowing what they mean. Unfortunately, we can- not count them with context-free rules. Similarly, while it is possible to write a context-free grammar in which every function must contain at least one return statement, the required complexity makes this strategy very unattractive. In gen- eral, any rule that requires the compiler to compare things that are separated by long distances, or to count things that are not properly nested, ends up being a matter of semantics. Semantic rules are further divided into* static* and* dynamic* semantics, though again the line between the two is somewhat fuzzy. The compiler enforces static semantic rules at compile time. It generates code to enforce dynamic semantic rules at run time (or to call library routines that do so). Certain errors, such as division by zero, or attempting to index into an array with an out-of-bounds sub- script, cannot in general be caught at compile time, since they may occur only for certain input values, or certain behaviors of arbitrarily complex code. In special cases, a compiler may be able to tell that a certain error will always or never occur, regardless of run-time input. In these cases, the compiler can generate an error message at compile time, or refrain from generating code to perform the check at run time, as appropriate. Basic results from computability theory, however, tell us that no algorithm can make these predictions correctly for arbitrary programs:
 
 there will inevitably be cases in which an error will always occur, but the compiler cannot tell, and must delay the error message until run time; there will also be cases in which an error can never occur, but the compiler cannot tell, and must incur the cost of unnecessary run-time checks. Both semantic analysis and intermediate code generation can be described in terms of annotation, or* decoration* of a parse tree or syntax tree. The annotations themselves are known as* attributes*. Numerous examples of static and dynamic semantic rules will appear in subsequent chapters. In this current chapter we focus primarily on the mechanisms a compiler uses to enforce the static rules. We will consider intermediate code generation (including the generation of code for dynamic semantic checks) in Chapter 15. In Section 4.1 we consider the role of the semantic analyzer in more detail, considering both the rules it needs to enforce and its relationship to other phases of compilation. Most of the rest of the chapter is then devoted to the subject of* attribute grammars*. Attribute grammars provide a formal framework for the decoration of a tree. This framework is a useful conceptual tool even in compilers that do not build a parse tree or syntax tree as an explicit data structure. We introduce the notion of an attribute grammar in Section 4.2. We then consider various ways in which such grammars can be applied in practice. Section 4.3 discusses the issue of* attribute ﬂow*, which constrains the order(s) in which nodes of a tree can be decorated. In practice, most compilers require decoration of the parse tree (or the evaluation of attributes that would reside in a parse tree if there were one) to occur in the process of an LL or LR parse. Section 4.4 presents* action* *routines* as an ad hoc mechanism for such “on-the-ﬂy” evaluation. In Section 4.5 (mostly on the companion site) we consider the management of space for parse tree attributes. Because they have to reﬂect the structure of the CFG, parse trees tend to be very complicated (recall the example in Figure 1.5). Once parsing is complete, we typically want to replace the parse tree with a syntax tree that reﬂects the input program in a more straightforward way (Figure 1.6). One particularly common compiler organization uses action routines during parsing solely for the purpose of constructing the syntax tree. The syntax tree is then decorated during a sepa- rate traversal, which can be formalized, if desired, with a separate attribute gram- mar. We consider the decoration of syntax trees in Section 4.6.
 
-## 4.1
-
-### **The Role of the Semantic Analyzer**
+4.1 **The Role of the Semantic Analyzer**
 
 Programming languages vary dramatically in their choice of semantic rules. Lisp dialects, for example, allow “mixed-mode” arithmetic on arbitrary numeric types, which they will automatically promote from integer to rational to ﬂoating-point or “bignum” (extended) precision, as required to maintain precision. Ada, by contract, assigns a speciﬁc type to every numeric variable, and requires the pro- grammer to convert among these explicitly when combining them in expressions.
 
@@ -3289,9 +2883,7 @@ Assertions in Java is a statement that a speciﬁed condition is expected to be 
 
 **DESIGN & IMPLEMENTATION**
 
-## 4.1 Dynamic semantic checks
-
-In the past, language theorists and researchers in programming methodology and software engineering tended to argue for more extensive semantic checks, while “real-world” programmers “voted with their feet” for languages like C and Fortran, which omitted those checks in the interest of execution speed. As computers have become more powerful, and as companies have come to ap- preciate the enormous costs of software maintenance, the “real-world” camp has become much more sympathetic to checking. Languages like Ada and Java have been designed from the outset with safety in mind, and languages like C and C++ have evolved (to the extent possible) toward increasingly strict deﬁ- nitions. In scripting languages, where many semantic checks are deferred until run time in order to avoid the need for explicit types and variable declarations, there has been a similar trend toward stricter rules. Perl, for example (one of the older scripting languages), will typically attempt to infer a possible mean- ing for expressions (e.g., 3 + "four") that newer languages (e.g., Python or Ruby) will ﬂag as run-time errors.
+4.1 Dynamic semantic checks In the past, language theorists and researchers in programming methodology and software engineering tended to argue for more extensive semantic checks, while “real-world” programmers “voted with their feet” for languages like C and Fortran, which omitted those checks in the interest of execution speed. As computers have become more powerful, and as companies have come to ap- preciate the enormous costs of software maintenance, the “real-world” camp has become much more sympathetic to checking. Languages like Ada and Java have been designed from the outset with safety in mind, and languages like C and C++ have evolved (to the extent possible) toward increasingly strict deﬁ- nitions. In scripting languages, where many semantic checks are deferred until run time in order to avoid the need for explicit types and variable declarations, there has been a similar trend toward stricter rules. Perl, for example (one of the older scripting languages), will typically attempt to infer a possible mean- ing for expressions (e.g., 3 + "four") that newer languages (e.g., Python or Ruby) will ﬂag as run-time errors.
 
 **1** Among other things, C. A. R. Hoare (1934–) invented the quicksort algorithm and the case statement, contributed to the design of Algol W, and was one of the leaders in the development of axiomatic semantics. In the area of concurrent programming, he reﬁned and formalized the *monitor* construct (to be described in Section 13.4.1), and designed the CSP programming model and notation. He received the ACM Turing Award in 1980.
 
@@ -3415,7 +3007,7 @@ const
 
 *expr_tail* -
 
-4 const
+## 4 const
 
 5 2
 
@@ -3467,9 +3059,7 @@ Bottom-up and top-down AGs to build a syntax tree contain bottom-up and top-down
 
 **DESIGN & IMPLEMENTATION**
 
-## 4.2 Forward references
-
-In Sections 3.3.3 and C 3.4.1 we noted that the scope rules of many languages require names to be declared before they are used, and provide special mech- anisms to introduce the forward references needed for recursive deﬁnitions. While these rules may help promote the creation of clear, maintainable code, an equally important motivation, at least historically, was to facilitate the con- struction of one-pass compilers. With increases in memory size, processing speed, and programmer expectations regarding the quality of code improve- ment, multipass compilers have become ubiquitous, and language designers have felt free (as, for example, in the class declarations of C++, Java, and C#) to abandon the requirement that declarations precede uses.
+4.2 Forward references In Sections 3.3.3 and C 3.4.1 we noted that the scope rules of many languages require names to be declared before they are used, and provide special mech- anisms to introduce the forward references needed for recursive deﬁnitions. While these rules may help promote the creation of clear, maintainable code, an equally important motivation, at least historically, was to facilitate the con- struction of one-pass compilers. With increases in memory size, processing speed, and programmer expectations regarding the quality of code improve- ment, multipass compilers have become ubiquitous, and language designers have felt free (as, for example, in the class declarations of C++, Java, and C#) to abandon the requirement that declarations precede uses.
 
 **3** Most authors use the term* one-pass* only for compilers that translate all the way from source to target code in a single pass. Some authors insist only that intermediate code be generated in a single pass, and permit additional pass(es) to translate intermediate code to target code.
 
@@ -3478,38 +3068,20 @@ In Sections 3.3.3 and C 3.4.1 we noted that the scope rules of many languages re
 
 binary operator, respectively, and pointers to the supplied operand(s). Figures 4.7 and 4.8 show stages in the decoration of parse trees for (1 + 3) * 2, using the grammars of Figures 4.5 and 4.6, respectively. Note that the ﬁnal syntax tree is the same in each case. ■
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 1. What determines whether a language rule is a matter of syntax or of static semantics? 2. Why is it impossible to detect certain program errors at compile time, even though they can be detected at run time?
 
-* 
-  What determines whether a language rule is a matter of syntax or of static
-  semantics?
-  2.
-  Why is it impossible to detect certain program errors at compile time, even
-  though they can be detected at run time?
-* 
-  What is an* attribute grammar*?
-  4.
-  What are programming* assertions*? What is their purpose?
-  5.
-  What is the difference between* synthesized* and* inherited* attributes?
-* 
-  Give two examples of information that is typically passed through inherited
-  attributes.
-### 7.
-What is* attribute ﬂow*?
-8.
-What is a* one-pass* compiler?
+## 3. What is an* attribute grammar*? 4. What are programming* assertions*? What is their purpose? 5. What is the difference between* synthesized* and* inherited* attributes?
+
+## 6. Give two examples of information that is typically passed through inherited attributes.
+
+## 7. What is* attribute ﬂow*? 8. What is a* one-pass* compiler?
 
 ![Figure 4.6 Top-down (L-attributed)...](images/page_228_vector_431.png)
 *Figure 4.6 Top-down (L-attributed) attribute grammar to construct a syntax tree. Here the st attribute, like the ptr attribute (and unlike the st attribute of Figure 4.3), is a pointer to a syntax tree node.*
 
-### 9.
-What does it mean for an attribute grammar to be* S-attributed*?* L-attributed*?
-*Noncircular*? What is the signiﬁcance of these grammar classes?
+## 9. What does it mean for an attribute grammar to be* S-attributed*?* L-attributed*? *Noncircular*? What is the signiﬁcance of these grammar classes?
 
-## 4.4
-
-### **Action Routines**
+4.4 **Action Routines**
 
 Just as there are automatic tools that will construct a parser for a given context- free grammar, there are automatic tools that will construct a semantic analyzer (attribute evaluator) for a given attribute grammar. Attribute evaluator gen-
 
@@ -3541,9 +3113,7 @@ Top-down action routines to build a syntax tree constant expressions. Action rou
 
 **DESIGN & IMPLEMENTATION**
 
-## 4.3 Attribute evaluators
-
-Automatic evaluators based on formal attribute grammars are popular in lan- guage research projects because they save developer time when the language deﬁnition changes. They are popular in syntax-based editors and incremental compilers because they save execution time: when a small change is made to a program, the evaluator may be able to “patch up” tree decorations signiﬁ- cantly faster than it could rebuild them from scratch. For the typical compiler, however, semantic analysis based on a formal attribute grammar is overkill: it has higher overhead than action routines, and doesn’t really save the compiler writer that much work.
+4.3 Attribute evaluators Automatic evaluators based on formal attribute grammars are popular in lan- guage research projects because they save developer time when the language deﬁnition changes. They are popular in syntax-based editors and incremental compilers because they save execution time: when a small change is made to a program, the evaluator may be able to “patch up” tree decorations signiﬁ- cantly faster than it could rebuild them from scratch. For the typical compiler, however, semantic analysis based on a formal attribute grammar is overkill: it has higher overhead than action routines, and doesn’t really save the compiler writer that much work.
 
 ![Figure 4.9 LL(1) grammar...](images/page_232_vector_232.png)
 *Figure 4.9 LL(1) grammar with action routines to build a syntax tree.*
@@ -3570,9 +3140,7 @@ Any attribute evaluation method requires space to hold the attributes of the gra
 
 We consider attribute space management in more detail on the companion site. Using bottom-up and top-down grammars for arithmetic expressions, we illus- trate automatic management for both bottom-up and top-down parsers, as well as the ad hoc option for top-down parsers.
 
-## 4.6
-
-### **Tree Grammars and Syntax Tree Decoration**
+4.6 **Tree Grammars and Syntax Tree Decoration**
 
 In our discussion so far we have used attribute grammars solely to decorate parse trees. As we mentioned in the chapter introduction, attribute grammars can also be used to decorate syntax trees. If our compiler uses action routines simply to build a syntax tree, then the bulk of semantic analysis and intermediate code gen- eration will use the syntax tree as base. Figure 4.11 contains a bottom-up CFG for a calculator language with types and **EXAMPLE** 4.14
 
@@ -3628,9 +3196,7 @@ Tree AG for the calculator language with types be constructed using the node cla
 ![Figure 4.14 (continued on...](images/page_238_vector_478.png)
 *Figure 4.14 (continued on next page)*
 
-### we associate with any symbol table entry or expression for which we have already
-
-generated a message. Though it takes a bit of checking to verify the fact, our attribute grammar is noncircular and well deﬁned. No attribute is ever assigned a value more than once. (The helper routines at the end of Figure 4.14 should be thought of as macros, rather than semantic functions. For the sake of brevity we have passed them entire tree nodes as arguments. Each macro calculates the values of two dif- ferent attributes. Under a strict formulation of attribute grammars each macro
+we associate with any symbol table entry or expression for which we have already generated a message. Though it takes a bit of checking to verify the fact, our attribute grammar is noncircular and well deﬁned. No attribute is ever assigned a value more than once. (The helper routines at the end of Figure 4.14 should be thought of as macros, rather than semantic functions. For the sake of brevity we have passed them entire tree nodes as arguments. Each macro calculates the values of two dif- ferent attributes. Under a strict formulation of attribute grammars each macro
 
 ![Figure 4.14 (continued)...](images/page_239_vector_355.png)
 *Figure 4.14 (continued)*
@@ -3642,55 +3208,35 @@ Decorating a tree with the AG of Example 4.17 Figure 4.12. The pattern of attrib
 ![Figure 4.15 Decoration of...](images/page_240_vector_434.png)
 *Figure 4.15 Decoration of the syntax tree of Figure 4.12, using the grammar of Figure 4.14. Location information, which we assume has been initialized in every node by the parser, con- tributes to error messages, but does not otherwise propagate through the tree.*
 
-### tice, however, particularly in a multipass compiler, it makes sense to buffer the
+tice, however, particularly in a multipass compiler, it makes sense to buffer the messages, so they can be interleaved with messages produced by other phases of the compiler, and printed in program order at the end of compilation. One could convert our attribute grammar into executable code using an au- tomatic attribute evaluator generator. Alternatively, one could create an ad hoc evaluator in the form of mutually recursive subroutines (Exercise 4.20). In the lat- ter case attribute ﬂow would be explicit in the calling sequence of the routines. We could then choose if desired to keep the symbol table in global variables, rather than passing it from node to node through attributes. Most compilers employ the ad hoc approach.
 
-### messages, so they can be interleaved with messages produced by other phases of
+3**CHECK YOUR UNDERSTANDING** 10. What is the difference between a semantic function and an action routine? 11. Why can’t action routines be placed at arbitrary locations within the right- hand side of productions in an LR CFG? 12. What patterns of attribute ﬂow can be captured easily with action routines?
 
-the compiler, and printed in program order at the end of compilation. One could convert our attribute grammar into executable code using an au- tomatic attribute evaluator generator. Alternatively, one could create an ad hoc evaluator in the form of mutually recursive subroutines (Exercise 4.20). In the lat- ter case attribute ﬂow would be explicit in the calling sequence of the routines. We could then choose if desired to keep the symbol table in global variables, rather than passing it from node to node through attributes. Most compilers employ the ad hoc approach.
+* Some compilers perform all semantic checks and intermediate code genera-
+  tion in action routines. Others use action routines to build a syntax tree and
+  then perform semantic checks and intermediate code generation in separate
+  traversals of the syntax tree. Discuss the tradeoffs between these two strate-
+  gies.
+## 14. What sort of information do action routines typically keep in global variables, rather than in attributes?
 
-### 3CHECK YOUR UNDERSTANDING
+## 15. Describe the similarities and differences between context-free grammars and tree grammars.
 
-#### 10. What is the difference between a semantic function and an action routine?
+## 16. How can a semantic analyzer avoid the generation of cascading error mes- sages?
 
-#### 11. Why can’t action routines be placed at arbitrary locations within the right-
-
-hand side of productions in an LR CFG? 12. What patterns of attribute ﬂow can be captured easily with action routines?
-
-#### 13. Some compilers perform all semantic checks and intermediate code genera-
-
-tion in action routines. Others use action routines to build a syntax tree and then perform semantic checks and intermediate code generation in separate traversals of the syntax tree. Discuss the tradeoffs between these two strate- gies.
-
-#### 14. What sort of information do action routines typically keep in global variables,
-rather than in attributes?
-
-#### 15. Describe the similarities and differences between context-free grammars and
-
-tree grammars.
-
-#### 16. How can a semantic analyzer avoid the generation of cascading error mes-
-
-sages?
-
-## 4.7
-
-#### **Summary and Concluding Remarks**
+4.7 **Summary and Concluding Remarks**
 
 This chapter has discussed the task of semantic analysis. We reviewed the sorts of language rules that can be classiﬁed as syntax, static semantics, and dynamic se- mantics, and discussed the issue of whether to generate code to perform dynamic semantic checks. We also considered the role that the semantic analyzer plays in a typical compiler. We noted that both the enforcement of static semantic rules and the generation of intermediate code can be cast in terms of annotation, or *decoration*, of a parse tree or syntax tree. We then presented attribute grammars as a formal framework for this decoration process. An attribute grammar associates* attributes* with each symbol in a context-free grammar or tree grammar, and* attribute rules* with each production. In a CFG, *synthesized* attributes are calculated only in productions in which their symbol appears on the left-hand side. The synthesized attributes of tokens are initialized by the scanner.* Inherited* attributes are calculated in productions in which their symbol appears within the right-hand side; they allow calculations in the subtree below a symbol to depend on the context in which the symbol appears. Inher- ited attributes of the start symbol (goal) can represent the external environment of the compiler. Strictly speaking, attribute grammars allow only* copy rules* (as- signments of one attribute to another) and simple calls to* semantic functions*, but we usually relax this restriction to allow more or less arbitrary code fragments in some existing programming language.
 
 Just as context-free grammars can be categorized according to the parsing al- gorithm(s) that can use them, attribute grammars can be categorized according to the complexity of their pattern of* attribute ﬂow*. S-attributed grammars, in which all attributes are synthesized, can naturally be evaluated in a single bottom-up pass over a parse tree, in precisely the order the tree is discovered by an LR-family parser. L-attributed grammars, in which all attribute ﬂow is depth-ﬁrst left-to- right, can be evaluated in precisely the order that the parse tree is predicted and matched by an LL-family parser. Attribute grammars with more complex pat- terns of attribute ﬂow are not commonly used for the parse trees of production compilers, but are valuable for syntax-based editors, incremental compilers, and various other tools. While it is possible to construct automatic tools to analyze attribute ﬂow and decorate parse trees, most compilers rely on* action routines*, which the compiler writer embeds in the right-hand sides of productions to evaluate attribute rules at speciﬁc points in a parse. In an LL-family parser, action routines can be embed- ded at arbitrary points in a production’s right-hand side. In an LR-family parser, action routines must follow the production’s* left corner*. Space for attributes in a bottom-up compiler is naturally allocated in parallel with the parse stack, but this complicates the management of inherited attributes. Space for attributes in a top-down compiler can be allocated automatically, or managed explicitly by the writer of action routines. The automatic approach has the advantage of regularity, and is easier to maintain; the ad hoc approach is slightly faster and more ﬂexible. In a* one-pass* compiler, which interleaves scanning, parsing, semantic analysis, and code generation in a single traversal of its input, semantic functions or action routines are responsible for all of semantic analysis and code generation. More commonly, action routines simply build a syntax tree, which is then decorated during separate traversal(s) in subsequent pass(es). The code for these traversals is usually written by hand, in the form of mutually recursive subroutines, allowing the compiler to accommodate essentially arbitrary attribute ﬂow on the syntax tree. In subsequent chapters (6–10 in particular) we will consider a wide variety of programming language constructs. Rather than present the actual attribute grammars required to implement these constructs, we will describe their seman- tics informally, and give examples of the target code. We will return to attribute grammars in Chapter 15, when we consider the generation of intermediate code in more detail. 4.8 **Exercises**
 
-### 4.1
-
-Basic results from automata theory tell us that the language* L* = a*n*b*n*c*n* = *ϵ*, abc, aabbcc, aaabbbccc, ... is not context free. It can be captured, however, using an attribute grammar. Give an underlying CFG and a set of attribute rules that associates a Boolean attribute ok with the root R of each
+4.1 Basic results from automata theory tell us that the language* L* = a*n*b*n*c*n* = *ϵ*, abc, aabbcc, aaabbbccc, ... is not context free. It can be captured, however, using an attribute grammar. Give an underlying CFG and a set of attribute rules that associates a Boolean attribute ok with the root R of each
 
 ![Figure 4.16 Natural syntax...](images/page_243_vector_243.png)
 *Figure 4.16 Natural syntax tree for the Lisp expression (cdr ‚(a b c)).*
 
 parse tree, such that R.ok = true if and only if the string corresponding to the fringe of the tree is in* L*. 4.2 Modify the grammar of Figure 2.25 so that it accepts only programs that contain at least one write statement. Make the same change in the solution to Exercise 2.17. Based on your experience, what do you think of the idea of using the CFG to enforce the rule that every function in C must contain at least one return statement? 4.3 Give two examples of reasonable semantic rules that* cannot* be checked at reasonable cost, either statically or by compiler-generated code at run time. 4.4 Write an S-attributed attribute grammar, based on the CFG of Example 4.7, that accumulates the value of the overall expression into the root of the tree. You will need to use dynamic memory allocation so that individual attributes can hold an arbitrary amount of information. 4.5 Lisp has the unusual property that its programs take the form of parenthe- sized lists. The natural syntax tree for a Lisp program is thus a tree of binary cells (known in Lisp as cons cells), where the ﬁrst child represents the ﬁrst element of the list and the second child represents the rest of the list. The syntax tree for (cdr ‚(a b c)) appears in Figure 4.16. (The notation ‚L is syntactic sugar for (quote L).) Extend the CFG of Exercise 2.18 to create an attribute grammar that will build such trees. When a parse tree has been fully decorated, the root should have an attribute v that refers to the syntax tree. You may assume that each atom has a synthesized attribute v that refers to a syntax tree node that holds information from the scanner. In your semantic functions, you may assume the availability of a cons function that takes two references as arguments and returns a reference to a new cons cell containing those references.
 
-## 4.6
-
-Refer back to the context-free grammar of Exercise 2.13. Add attribute rules to the grammar to accumulate into the root of the tree a count of the max- imum depth to which parentheses are nested in the program string. For example, given the string f1(a, f2(b * (c + (d - (e - f))))), the* stmt* at the root of the tree should have an attribute with a count of 3 (the paren- theses surrounding argument lists don’t count). 4.7 Suppose that we want to translate constant expressions into the postﬁx, or “reverse Polish” notation of logician Jan Łukasiewicz. Postﬁx notation does not require parentheses. It appears in stack-based languages such as Postscript, Forth, and the P-code and Java bytecode intermediate forms mentioned in Section 1.4. It also served, historically, as the input language of certain hand-held calculators made by Hewlett-Packard. When given a number, a postﬁx calculator would push the number onto an internal stack. When given an operator, it would pop the top two numbers from the stack, apply the operator, and push the result. The display would show the value at the top of the stack. To compute 2* ×* (15* −*3)*/*4, for example, one would push 2 E 1 5 E 3 E - * 4 E / (here E is the “enter” key, used to end the string of digits that constitute a number). Using the underlying CFG of Figure 4.1, write an attribute grammar that will associate with the root of the parse tree a sequence of postﬁx calculator button pushes, seq, that will compute the arithmetic value of the tokens derived from that symbol. You may assume the existence of a function buttons(c) that returns a sequence of button pushes (ending with E on a postﬁx calculator) for the constant c. You may also assume the existence of a concatenation function for sequences of button pushes. 4.8 Repeat the previous exercise using the underlying CFG of Figure 4.3. 4.9 Consider the following grammar for reverse Polish arithmetic expressions:
+4.6 Refer back to the context-free grammar of Exercise 2.13. Add attribute rules to the grammar to accumulate into the root of the tree a count of the max- imum depth to which parentheses are nested in the program string. For example, given the string f1(a, f2(b * (c + (d - (e - f))))), the* stmt* at the root of the tree should have an attribute with a count of 3 (the paren- theses surrounding argument lists don’t count). 4.7 Suppose that we want to translate constant expressions into the postﬁx, or “reverse Polish” notation of logician Jan Łukasiewicz. Postﬁx notation does not require parentheses. It appears in stack-based languages such as Postscript, Forth, and the P-code and Java bytecode intermediate forms mentioned in Section 1.4. It also served, historically, as the input language of certain hand-held calculators made by Hewlett-Packard. When given a number, a postﬁx calculator would push the number onto an internal stack. When given an operator, it would pop the top two numbers from the stack, apply the operator, and push the result. The display would show the value at the top of the stack. To compute 2* ×* (15* −*3)*/*4, for example, one would push 2 E 1 5 E 3 E - * 4 E / (here E is the “enter” key, used to end the string of digits that constitute a number). Using the underlying CFG of Figure 4.1, write an attribute grammar that will associate with the root of the parse tree a sequence of postﬁx calculator button pushes, seq, that will compute the arithmetic value of the tokens derived from that symbol. You may assume the existence of a function buttons(c) that returns a sequence of button pushes (ending with E on a postﬁx calculator) for the constant c. You may also assume the existence of a concatenation function for sequences of button pushes. 4.8 Repeat the previous exercise using the underlying CFG of Figure 4.3. 4.9 Consider the following grammar for reverse Polish arithmetic expressions:
 
 *E** −→**E E op*** |** id
 
@@ -3716,25 +3262,17 @@ Show a parse tree for the string A, B : C;. Then, using arrows and textual descr
 
 so. Be sure to think carefully about your coercion rules. In the expression my_int + my_real, for example, how will you know whether to coerce the integer to be a real, or to coerce the real to be an integer? 4.24 Explain the need for the* A : B* notation on the left-hand sides of produc- tions in a tree grammar. Why isn’t similar notation required for context-free grammars? 4.25 A potential objection to the tree attribute grammar of Example 4.17 is that it repeatedly copies the entire symbol table from one node to another. In this particular tiny language, it is easy to see that the referencing environment never shrinks: the symbol table changes only with the addition of new iden- tiﬁers. Exploiting this observation, show how to modify the pseudocode of Figure 4.14 so that it copies only pointers, rather than the entire symbol table. 4.26 Your solution to the previous exercise probably doesn’t generalize to lan- guages with nontrivial scoping rules. Explain how an AG such as that in Figure 4.14 might be modiﬁed to use a global symbol table similar to the one described in Section C 3.4.1. Among other things, you should consider nested scopes, the hiding of names in outer scopes, and the requirement (not enforced by the table of Section C 3.4.1) that variables be declared be- fore they are used.
 
-### 4.27–4.31 In More Depth.
-4.9
-**Explorations**
+4.27–4.31 In More Depth. 4.9 **Explorations**
 
-### 4.32 One of the most inﬂuential applications of attribute grammars was the Cor-
-
-nell Synthesizer Generator [Rep84, RT88]. Learn how the Generator used attribute grammars not only for incremental update of semantic informa- tion in a program under edit, but also for automatic creation of language based editors from formal language speciﬁcations. How general is this tech- nique? What applications might it have beyond syntax-directed editing of computer programs? 4.33 The attribute grammars used in this chapter are all quite simple. Most are S- or L-attributed. All are noncircular. Are there any practical uses for more complex attribute grammars? How about automatic attribute eval- uators? Using the Bibliographic Notes as a starting point, conduct a survey of attribute evaluation techniques. Where is the line between practical tech- niques and intellectual curiosities? 4.34 The ﬁrst validated Ada implementation was the Ada/Ed interpreter from New York University [DGAFS+80]. The interpreter was written in the set- based language SETL [SDDS86] using a denotational semantics deﬁnition of Ada. Learn about the Ada/Ed project, SETL, and denotational semantics. Discuss how the use of a formal deﬁnition aided the development process.
+4.32 One of the most inﬂuential applications of attribute grammars was the Cor- nell Synthesizer Generator [Rep84, RT88]. Learn how the Generator used attribute grammars not only for incremental update of semantic informa- tion in a program under edit, but also for automatic creation of language based editors from formal language speciﬁcations. How general is this tech- nique? What applications might it have beyond syntax-directed editing of computer programs? 4.33 The attribute grammars used in this chapter are all quite simple. Most are S- or L-attributed. All are noncircular. Are there any practical uses for more complex attribute grammars? How about automatic attribute eval- uators? Using the Bibliographic Notes as a starting point, conduct a survey of attribute evaluation techniques. Where is the line between practical tech- niques and intellectual curiosities? 4.34 The ﬁrst validated Ada implementation was the Ada/Ed interpreter from New York University [DGAFS+80]. The interpreter was written in the set- based language SETL [SDDS86] using a denotational semantics deﬁnition of Ada. Learn about the Ada/Ed project, SETL, and denotational semantics. Discuss how the use of a formal deﬁnition aided the development process.
 
 Also discuss the limitations of Ada/Ed, and expand on the potential role of formal semantics in language design, development, and prototype imple- mentation. 4.35 Version 5 of the Scheme language manual [KCR+98] included a formal def- inition of Scheme in denotational semantics. How long is this deﬁnition, compared to the more conventional deﬁnition in English? How readable is it? What do the length and the level of readability say about Scheme? About denotational semantics? (For more on denotational semantics, see the texts of Stoy [Sto77] or Gordon [Gor79].) Version 6 of the manual [SDF+07] switched to operational semantics. How does this compare to the denotational version? Why do you suppose the standards committee made the change? (For more information, see the paper by Matthews and Findler [MF08].)
 
-### 4.36–4.37 In More Depth.
-4.10
-**Bibliographic Notes**
+4.36–4.37 In More Depth. 4.10 **Bibliographic Notes**
 
 Much of the early theory of attribute grammars was developed by Knuth [Knu68]. Lewis, Rosenkrantz, and Stearns [LRS74] introduced the notion of an L- attributed grammar. Watt [Wat77] showed how to use marker symbols to em- ulate inherited attributes in a bottom-up parser. Jazayeri, Ogden, and Rounds [JOR75] showed that exponential time may be required in the worst case to dec- orate a parse tree with arbitrary attribute ﬂow. Articles by Courcelle [Cou84] and Engelfriet [Eng84] survey the theory and practice of attribute evaluation. Language-based program editing based on attribute grammars was pioneered by the Synthesizer Generator [RT88] (a follow-on to the language-speciﬁc Cor- nell Program Synthesizer [TR81]) of Reps and Teitelbaum. Magpie [SDB84] was an early incremental compiler, again based on attribute grammars. Meyerovich et al. [MTAB13] have recently used attribute grammars to parallelize a variety of tree-traversal tasks—notably for web page rendering and GPU-accelerated ani- mation. Action routines to implement many language features can be found in the texts of Fischer et al. or Appel [App97]. Further notes on attribute grammars can be found in the texts of Cooper and Torczon [CT04, pp. 171–188] or Aho et al. [ALSU07, Chap. 5]. Marcotty, Ledgard, and Bochmann [MLB76] provide an early survey of formal notations for programming language semantics. More detailed but still somewhat dated treatment can be found in the texts of Winskel [Win93] and Slonneger and Kurtz [SK95]. Nipkow and Klein cover the topic from a modern and mathe- matically rigorous perspective, integrating their text with an executable theorem- proving system [NK15]. The seminal paper on axiomatic semantics is by Hoare [Hoa69]. An excellent book on the subject is Gries’s* The Science of Programming* [Gri81]. The seminal paper on denotational semantics is by Scott and Strachey [SS71]. Early texts on the subject include those of Stoy [Sto77] and Gordon [Gor79].
 
-## 5
-
-### **Target Machine Architecture**
+**5** **Target Machine Architecture**
 
 **As described in Chapter 1,** a compiler is simply a translator. It translates programs written in one language into programs written in another language. This second language can be almost anything—some other high-level language, phototypesetting commands, VLSI (chip) layouts—but most of the time it’s the machine language for some available computer. Just as there are many different programming languages, there are many differ- ent machine languages, though the latter tend to display considerably less diver- sity than the former. Each machine language corresponds to a different* processor* *architecture*. Formally, an architecture is the interface between the hardware and the software—that is, the language generated by a compiler, or by a programmer writing for the bare machine. The* implementation* of the processor is a concrete realization of the architecture, generally in hardware. To generate correct code, it sufﬁces for a compiler writer to understand the target architecture. To generate *fast* code, it is generally necessary to understand the implementation as well, be- cause it is the implementation that determines the relative speeds of alternative translations of a given language construct.
 
@@ -3744,9 +3282,7 @@ Chapter 5 can be found in its entirety on the companion site. It provides a brie
 
 **DESIGN & IMPLEMENTATION**
 
-## 5.1 Pseudo-assembly notation
-
-At various times throughout the remainder of this book, we shall need to con- sider sequences of machine instructions corresponding to some high-level lan- guage construct. Rather than present these sequences in the assembly language of some particular processor architecture, we will (in most cases) rely on a sim- ple notation designed to represent a generic RISC machine. The following is a brief example that sums the elements of an n-element ﬂoating-point vector, V, and places the results in s:
+5.1 Pseudo-assembly notation At various times throughout the remainder of this book, we shall need to con- sider sequences of machine instructions corresponding to some high-level lan- guage construct. Rather than present these sequences in the assembly language of some particular processor architecture, we will (in most cases) rely on a sim- ple notation designed to represent a generic RISC machine. The following is a brief example that sums the elements of an n-element ﬂoating-point vector, V, and places the results in s:
 
 r1 = &V r2 := n f1 := 0 goto L2 L1: f2 := *r1 –– load f1 +:= f2 r1 +:= 8 –– ﬂoating-point numbers are 8 bytes long r2 −:= 1 L2: if r2 > 0 goto L1 s := f1
 

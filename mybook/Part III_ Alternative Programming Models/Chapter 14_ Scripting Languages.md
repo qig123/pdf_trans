@@ -1,6 +1,6 @@
-## 14
+# Chapter 14: Scripting Languages
 
-### **Scripting Languages**
+**14** **Scripting Languages**
 
 **Traditional programming languages are intended** primarily for the con- struction of self-contained applications: programs that accept some sort of input, manipulate it in some well-understood way, and generate appropriate output. But most actual* uses* of computers require the coordination of multiple programs. A large institutional payroll system, for example, must process time-reporting data from card readers, scanned paper forms, and manual (keyboard) entry; execute thousands of database queries; enforce hundreds of legal and institutional rules; create an extensive “paper trail” for record-keeping, auditing, and tax preparation purposes; print paychecks; and communicate with servers around the world for on-line direct deposit, tax withholding, retirement accumulation, medical insur- ance, and so on. These tasks are likely to involve dozens or hundreds of separately executable programs. Coordination among these programs is certain to require tests and conditionals, loops, variables and types, subroutines and abstractions— the same sorts of logical tools that a conventional language provides* inside* an application. On a much smaller scale, a graphic artist or photojournalist may routinely download pictures from a digital camera; convert them to a favorite format; rotate the pictures that were shot in vertical orientation; down-sample them to create browsable thumbnail versions; index them by date, subject, and color histogram; back them up to a remote archive; and then reinitialize the camera’s memory. Performing these steps by hand is likely to be both tedious and error-prone. In a similar vein, the creation of a dynamic web page may require authentication and authorization, database lookup, image manipulation, remote communica- tion, and the reading and writing of HTML text. All these scenarios suggest a need for programs that coordinate other programs. It is of course possible to write coordination code in Java, C, or some other conventional language, but it isn’t always easy. Conventional languages tend to stress efﬁciency, maintainability, portability, and the static detection of errors. Their type systems tend to be built around such hardware-level concepts as ﬁxed- size integers, ﬂoating-point numbers, characters, and arrays. By contrast* scripting* *languages* tend to stress ﬂexibility, rapid development, local customization, and
 
@@ -10,7 +10,7 @@ Modern scripting languages have two principal sets of ancestors. In one set are 
 
 PowerShell. For scripting on the client computer, all major browsers implement JavaScript, a language developed by Netscape Corporation in the mid 1990s, and standardized by ECMA (the European standards body) in 1999 [ECM11]. In a classic paper on scripting [Ous98], John Ousterhout, the creator of Tcl, suggested that “Scripting languages assume that a collection of useful components already exist in other languages. They are intended not for writing applications from scratch but rather for combining components.” Ousterhout envisioned a future in which programmers would increasingly rely on scripting languages for the top-level structure of their systems, where clarity, reusability, and ease of de- velopment are crucial. Traditional “systems languages” like C, C++, or Java, he argued, would be used for self-contained, reusable system components, which emphasize complex algorithms or execution speed. As a general rule of thumb that still seems reasonable today, he suggested that code could be developed 5 to 10 times faster in a scripting language, but would run 10 to 20 times faster in a traditional systems language. Some authors reserve the term “scripting” for the glue languages used to coor- dinate multiple programs. In common usage, however, scripting is a broader and vaguer concept, encompassing not only web scripting but also* extension* *languages*. These are typically embedded within some larger host program, which they can then control. Many readers will be familiar with the Visual Ba- sic “macros” of Microsoft Ofﬁce and related applications. Others may be fa- miliar with the Lisp-based extension language of the emacs text editor, or the widespread use of Lua in the computer gaming industry. Several other languages, including Tcl, Rexx, Python, and the Guile and Elk dialects of Scheme, have im- plementations designed to be embedded in other applications. In a similar vein, several widely used commercial applications provide their own proprietary exten- sion languages. For graphical user interface (GUI) programming, the Tk toolkit, originally designed for use with Tcl, has been incorporated into several scripting languages, including Perl, Python, and Ruby. One can also view XSLT (extensible stylesheet language transformations) as a scripting language, albeit somewhat different from the others considered in this chapter. XSLT is part of the growing family of XML (extensible markup language) tools. We consider it further in Section 14.3.5.
 
-## 14.1.1** Common Characteristics**
+14.1.1** Common Characteristics**
 
 While it is difﬁcult to deﬁne scripting languages precisely, there are several char- acteristics that they tend to have in common:
 
@@ -38,9 +38,7 @@ print "Hello, world!\n" ■
 
 **DESIGN & IMPLEMENTATION**
 
-## 14.1 Compiling interpreted languages
-
-Several times in this chapter we will make reference to “the compiler” for a scripting language. As we saw in Examples 1.9 and 1.10, interpreters almost never work with source code; a front-end translator ﬁrst replaces that source with some sort of intermediate form. For most implementations of most of the languages described in this chapter, the front end is sufﬁciently complex to deserve the name “compiler.” Intermediate forms are typically internal data structures (e.g., a syntax tree) or “byte-code” representations reminiscent of those of Java.
+14.1 Compiling interpreted languages Several times in this chapter we will make reference to “the compiler” for a scripting language. As we saw in Examples 1.9 and 1.10, interpreters almost never work with source code; a front-end translator ﬁrst replaces that source with some sort of intermediate form. For most implementations of most of the languages described in this chapter, the front end is sufﬁciently complex to deserve the name “compiler.” Intermediate forms are typically internal data structures (e.g., a syntax tree) or “byte-code” representations reminiscent of those of Java.
 
 *Flexible dynamic typing.* In keeping with the lack of declarations, most script- ing languages are dynamically typed. In some (e.g., PHP, Python, Ruby, and Scheme), the type of a variable is checked immediately prior to use. In others (e.g., Rexx, Perl, and Tcl), a variable will be interpreted differently in different contexts. In Perl, for example, the program **EXAMPLE** 14.2
 
@@ -57,9 +55,7 @@ This contextual interpretation is similar to coercion, except that there isn’t
 
 **DESIGN & IMPLEMENTATION**
 
-## 14.2 Canonical implementations
-
-Because they are usually implemented with interpreters, scripting languages tend to be easy to port from one machine to another—substantially easier than compilers for which one must write a new code generator. Given a native com- piler for the language in which the interpreter is written, the only difﬁcult part (and it may indeed be difﬁcult) is to implement any necessary modiﬁcations to the part of the interpreter that provides the interface to the operating system. At the same time, the ease of porting an interpreter means that many script- ing languages, including Perl, Python, and Ruby, have a single widely used implementation, which serves as the de facto language deﬁnition. Reading a book on Perl, it can be difﬁcult to tell how a subtle program will behave. When in doubt, one may need to “try it out.” Rexx and JavaScript are arguably the only widely used scripting languages that have both a formal deﬁnition codi- ﬁed by an international standards body and a nontrivial number of indepen- dent implementations. (Lua [and Scheme, if you count it as scripting] have detailed reference manuals and multiple implementations, though no formal blessing from a standards body. Dart has an ECMA standard, but as of 2015, only Google implementations. Sed, awk, and sh have all been standardized by POSIX [Int03b], but none of them can really be described as a full-ﬂedged scripting language.)
+14.2 Canonical implementations Because they are usually implemented with interpreters, scripting languages tend to be easy to port from one machine to another—substantially easier than compilers for which one must write a new code generator. Given a native com- piler for the language in which the interpreter is written, the only difﬁcult part (and it may indeed be difﬁcult) is to implement any necessary modiﬁcations to the part of the interpreter that provides the interface to the operating system. At the same time, the ease of porting an interpreter means that many script- ing languages, including Perl, Python, and Ruby, have a single widely used implementation, which serves as the de facto language deﬁnition. Reading a book on Perl, it can be difﬁcult to tell how a subtle program will behave. When in doubt, one may need to “try it out.” Rexx and JavaScript are arguably the only widely used scripting languages that have both a formal deﬁnition codi- ﬁed by an international standards body and a nontrivial number of indepen- dent implementations. (Lua [and Scheme, if you count it as scripting] have detailed reference manuals and multiple implementations, though no formal blessing from a standards body. Dart has an ECMA standard, but as of 2015, only Google implementations. Sed, awk, and sh have all been standardized by POSIX [Int03b], but none of them can really be described as a full-ﬂedged scripting language.)
 
 much more fundamental, and have much more direct support. Perl, for one, provides well over 100 built-in commands that access operating system func- tions for input and output, ﬁle and directory manipulation, process manage- ment, database access, sockets, interprocess communication and synchroniza- tion, protection and authorization, time-of-day clock, and network commu- nication. These built-in commands are generally a good bit easier to use than corresponding library calls in languages like C. *Sophisticated pattern matching and string manipulation.* In keeping with their text processing and report generation ancestry, and to facilitate the manip- ulation of textual input and output for external programs, scripting languages tend to have extraordinarily rich facilities for pattern matching, search, and string manipulation. Typically these are based on* extended regular expressions*. We discuss them further in Section 14.4.2. *High-level data types.* High-level data types like sets, bags, dictionaries, lists, and tuples are increasingly common in the standard library packages of conven- tional programming languages. A few languages (notably C++) allow users to redeﬁne standard inﬁx operators to make these types as easy to use as more primitive, hardware-centric types. Scripting languages go one step further by building high-level types into the syntax and semantics of the language itself. In most scripting languages, for example, it is commonplace to have an “array” that is indexed by character strings, with an underlying implementation based on hash tables. Storage is invariably garbage collected.
 
@@ -67,7 +63,7 @@ Much of the most rapid change in programming languages today is occurring in scr
 
 Python, and Ruby, are intended by their designers for general-purpose use, with features intended to support “programming in the large”: modules, separate compilation, reﬂection, program development environments, and so on. For the most part, however, scripting languages tend to see their principal use in well- deﬁned problem domains. We consider some of these in the following subsec- tions.
 
-## 14.2.1** Shell (Command) Languages**
+14.2.1** Shell (Command) Languages**
 
 In the days of punch-card computing (through perhaps the mid 1970s), simple command languages allowed the user to “script” the processing of a card deck. A control card at the front of the deck, for example, might indicate that the upcom- ing cards represented a program to be compiled, or perhaps machine language for the compiler itself, or input for a program already compiled and stored on disk. A control card embedded later in the deck might test the exit status of the most recently executed program and choose what to do next based on whether that program completed successfully. Given the linear nature of a card deck, however (one can’t in general back up), command languages for batch processing tended not to be very sophisticated. JCL, for example, had no iteration constructs. With the development of interactive timesharing in the 1960s and early 1970s, command languages became much more sophisticated. Louis Pouzin wrote a simple command interpreter for CTSS, the Compatible Time Sharing System at MIT, in 1963 and 1964. When work began on the groundbreaking Multics sys- tem in 1964, Pouzin sketched the design of an extended command language, with quoting and argument-passing mechanisms, for which he coined the term “shell.” The subsequent implementation served as inspiration for Ken Thompson in the design of the original Unix shell in 1973. In the mid-1970s, Stephen Bourne and John Mashey separately extended the Thompson shell with control ﬂow and vari- ables; Bourne’s design was adopted as the Unix standard, taking the place (and the name) of the Thompson shell, sh. In the late 1970s Bill Joy developed the so-called “C shell” (csh), inspired at least in part by Mashey’s syntax, and introducing signiﬁcant enhancementsfor in- teractive use, including history, aliases, and job control. The tcsh version of csh adds command-line editing and command completion. David Korn incorpo- rated these mechanisms into a direct descendant of the Bourne shell, ksh, which is very similar to the standard POSIX shell [Int03b]. The popular “Bourne-again” shell, bash, is an open-source version of ksh. While tcsh is still popular in some quarters, ksh/bash/POSIX sh is substantially better for writing shell scripts, and comparable for interactive use. In addition to features designed for interactive use, which we will not consider further here, shell languages provide a wealth of mechanisms to manipulate ﬁle- names, arguments, and commands, and to glue together other programs. Most of these features are retained by more general scripting languages. We consider a few of them here, using bash syntax. The discussion is of necessity heavily simpliﬁed; full details can be found in the bash man page, or in various on-line tutorials.
 
@@ -116,9 +112,7 @@ The third line of this script is a variable assignment. The expression ${fig%.ep
 
 **DESIGN & IMPLEMENTATION**
 
-## 14.3 Built-in commands in the shell
-
-Commands in the shell generally take the form of a sequence of* words*, the ﬁrst of which is the name of the command. Most commands are executable pro- grams, found in directories on the shell’s* search path*. A large number, however (about 50 in bash), are* builtin*s—commands that the shell recognizes and ex- ecutes itself, rather than starting an external program. Interestingly, several commands that are available as separate programs are duplicated as builtins, either for the sake of efﬁciency or to provide additional semantics. Conditional tests, for example, were originally supported by the external test command (for which square brackets are syntactic sugar), but these occur sufﬁciently often in scripts that execution speed improved signiﬁcantly when a built-in version was added. By contrast, while the kill command is not used very often, the built-in version allows processes to be identiﬁed by small integer or symbolic names from the shell’s* job control* mechanism. The external ver- sion supports only the longer and comparatively unintuitive process identiﬁers supplied by the operating system.
+14.3 Built-in commands in the shell Commands in the shell generally take the form of a sequence of* words*, the ﬁrst of which is the name of the command. Most commands are executable pro- grams, found in directories on the shell’s* search path*. A large number, however (about 50 in bash), are* builtin*s—commands that the shell recognizes and ex- ecutes itself, rather than starting an external program. Interestingly, several commands that are available as separate programs are duplicated as builtins, either for the sake of efﬁciency or to provide additional semantics. Conditional tests, for example, were originally supported by the external test command (for which square brackets are syntactic sugar), but these occur sufﬁciently often in scripts that execution speed improved signiﬁcantly when a built-in version was added. By contrast, while the kill command is not used very often, the built-in version allows processes to be identiﬁed by small integer or symbolic names from the shell’s* job control* mechanism. The external ver- sion supports only the longer and comparatively unintuitive process identiﬁers supplied by the operating system.
 
 ***Pipes and Redirection***
 
@@ -225,38 +219,21 @@ Two steps are required. First, the ﬁle must be marked* executable* in the eyes
 
 Specifying the full path name is a safety feature: it anticipates the possibility that the user may have a search path for commands on which some other program named bash appears before the shell. (Unfortunately, the requirement for full path names makes #! lines nonportable, since shells and other interpreters may be installed in different places on different machines.) ■
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 1. Give a plausible one-sentence deﬁnition of “scripting language.” 2. List the principal ways in which scripting languages differ from conventional “systems” languages. 3. From what two principal sets of ancestors are modern scripting languages descended?
 
-* 
-  Give a plausible one-sentence deﬁnition of “scripting language.”
-  2.
-  List the principal ways in which scripting languages differ from conventional
-  “systems” languages.
-  3.
-  From what two principal sets of ancestors are modern scripting languages
-  descended?
-### 4.
-What IBM creation is generally considered the ﬁrst general-purpose scripting
-language?
+## 4. What IBM creation is generally considered the ﬁrst general-purpose scripting language?
 
-### 6.
-How does the notion of* context* in Perl differ from coercion?
+## 6. How does the notion of* context* in Perl differ from coercion?
 
-### 7.
-What is* globbing*? What is a* wildcard*?
-8.
-What is a* pipe* in Unix? What is* redirection*?
+## 7. What is* globbing*? What is a* wildcard*? 8. What is a* pipe* in Unix? What is* redirection*?
 
-* 
-  Describe the three standard I/O streams provided to every Unix process.
-  10. Explain the signiﬁcance of the #! convention in Unix shell scripts.
+## 9. Describe the three standard I/O streams provided to every Unix process. 10. Explain the signiﬁcance of the #! convention in Unix shell scripts.
+
 **DESIGN & IMPLEMENTATION**
 
-### 14.4 Magic numbers
+14.4 Magic numbers When the Unix kernel is asked to execute a ﬁle (via the execve system call), it checks the ﬁrst few bytes of the ﬁle for a “magic number” that indicates the ﬁle’s type. Some values correspond to directly executable object ﬁle formats. UnderLinux, for example, the ﬁrst four bytes of an object ﬁle are 0x7f45_4c46 (*⟨*del*⟩*ELF in ASCII). Under Mac OS X they are 0xfeed_face. If the ﬁrst two bytes are 0x2321 (#! in ASCII), the kernel assumes that the ﬁle is a script, and reads subsequent characters to ﬁnd the name of the interpreter. The #! convention in Unix is the main reason that most scripting languages use # as the opening comment delimiter. Early versions of sh used the no-op command (:) as a way to introduce comments. Joy’s C shell introduced #, whereupon some versions of sh were modiﬁed to launch csh when asked to execute a script that appeared to begin with a C shell comment. This mecha- nism evolved into the more general mechanism used in many (though not all) variants of Unix today.
 
-When the Unix kernel is asked to execute a ﬁle (via the execve system call), it checks the ﬁrst few bytes of the ﬁle for a “magic number” that indicates the ﬁle’s type. Some values correspond to directly executable object ﬁle formats. UnderLinux, for example, the ﬁrst four bytes of an object ﬁle are 0x7f45_4c46 (*⟨*del*⟩*ELF in ASCII). Under Mac OS X they are 0xfeed_face. If the ﬁrst two bytes are 0x2321 (#! in ASCII), the kernel assumes that the ﬁle is a script, and reads subsequent characters to ﬁnd the name of the interpreter. The #! convention in Unix is the main reason that most scripting languages use # as the opening comment delimiter. Early versions of sh used the no-op command (:) as a way to introduce comments. Joy’s C shell introduced #, whereupon some versions of sh were modiﬁed to launch csh when asked to execute a script that appeared to begin with a C shell comment. This mecha- nism evolved into the more general mechanism used in many (though not all) variants of Unix today.
-
-## 14.2.2** Text Processing and Report Generation**
+14.2.2** Text Processing and Report Generation**
 
 Shell languages tend to be heavily string-oriented. Commands are strings, parsed into lists of words. Variables are string-valued. Variable expansion mechanisms allow the user to extract preﬁxes, sufﬁxes, or arbitrary substrings. Concatenation is indicated by simple juxtaposition. There are elaborate quoting conventions. Few more conventional languages have similar support for strings. At the same time, shell languages are clearly not intended for the sort of text manipulation commonly performed in editors like emacs or vim. Search and substitution, in particular, are missing, and many other tasks that editors accom- plish with a single keystroke—insertion, deletion, replacement, bracket match- ing, forward and backward motion—would be awkward to implement, or simply make no sense, in the context of the shell. For repetitive text manipulation it is natural to want to automate the editing process. Tools to accomplish this task constitute the second principal class of ancestors for modern scripting languages.
 
@@ -306,13 +283,13 @@ Extracting HTML headers with Perl example, again to extract headers from an HTML
 
 The next statement is similar to continue in C or Fortran: it jumps to the bottom of the innermost loop and begins the next iteration. The redo statement also skips the remainder of the current iteration, but returns to the top of the loop,* without* reevaluating the control expression. In our example program, redo allows us to append additional input to the current line, rather than reading a new line. Because end-of-ﬁle is normally detected by an undeﬁned return value from <>, and because that failure will happen only once per ﬁle, we must explicitly test for eof when using redo here. Note that if and its symmetric opposite, unless, can be used as either a preﬁx or a postﬁx test. Readers familiar with Perl may have noticed two subtle but key innovations in the substitution command of line 4 of the script. First, where the expression .* (in sed, awk, and Perl) matches the longest possible string of characters that permits subsequent portions of the match to succeed, the expression .*? in Perl matches the* shortest* possible such string. This distinction allows us to easily iso- late the ﬁrst header in a given line. Second, much as sed allows later portions of a regular expression to refer back to earlier, parenthesized portions (line 4 of Figure 14.1), Perl allows such* captured* strings to be used* outside* the regular ex- pression. We have leveraged this feature to print matched headers in line 6 of Figure 14.4. In general, the regular expressions of Perl are signiﬁcantly more pow- erful than those of sed and awk; we will return to this subject in more detail in Section 14.4.2. ■
 
-## 14.2.3** Mathematics and Statistics**
+14.2.3** Mathematics and Statistics**
 
 As we noted in our discussions of sed and awk, one of the distinguishing charac- teristics of text processing and report generation is the frequent use of “one-line programs” and other simple scripts. Anyone who has ever entered formulas in the cells of a spreadsheet realizes that similar needs arise in mathematics and statis- tics. And just as shell and report generation tools have evolved into powerful languages for general-purpose computing, so too have notations and tools for mathematical and statistical computing. In Section 8.2.1 (“Slices and Array Operations”), we mentioned APL, one of the more unusual languages of the 1960s. Originally conceived as a pen-and- paper notation for teaching applied mathematics, APL retained its emphasis on the concise, elegant expression of mathematical algorithms when it evolved into a programming language. Though it lacked both easy access to other programs and sophisticated string manipulation, APL displayed all the other characteristics of scripting described in Section 14.1.1, and one sometimes ﬁnds it listed as a scripting language. The modern successors to APL include a trio of commercial packages for math- ematical computing: Maple, Mathematica, and Matlab. Though their design philosophies differ, each provides extensive support for numerical methods, sym- bolic mathematics (formula manipulation), data visualization, and mathematical
 
 modeling. All three provide powerful scripting languages, with a heavy orienta- tion toward scientiﬁc and engineering applications. As the “3 Ms” are to mathematical computing, so the S and R languages are to statistical computing. Originally developed at Bell Labs by John Chambers and colleagues in the late 1970s, S is a commercial package widely used in the statistics community and in quantitative branches of the social and behavioral sciences. R is an open-source alternative to S that is largely though not entirely compatible with its commercial cousin. Among other things, R supports multidimensional array and list types, array slice operations, user-deﬁned inﬁx operators, call-by- need parameters, ﬁrst-class functions, and unlimited extent.
 
-## 14.2.4** “Glue” Languages and General-Purpose Scripting**
+14.2.4** “Glue” Languages and General-Purpose Scripting**
 
 From their text-processing ancestors, scripting languages inherit a rich set of pat- tern matching and string manipulation mechanisms. From command interpreter shells they inherit a wide variety of additional features including simple syntax; ﬂexible typing; easy creation and management of subprograms, with I/O redirec- tion and access to completion status; ﬁle queries; easy interactive and ﬁle-based I/O; easy access to command-line arguments, environment strings, process iden- tiﬁers, time-of-day clock, and so on; and automatic interpreter start-up (the #! convention). As noted in Section 14.1.1, many scripting languages have inter- preters that will accept commands interactively. The combination of shell and text-processing mechanisms allows a scripting language to prepare input to, and parse output from, subsidiary processes. As a **EXAMPLE** 14.24
 
@@ -365,7 +342,7 @@ In addition to (true) iterators, Ruby provides continuations, ﬁrst-class and h
 
 rather than instance methods; they have no notion of “current object.” Variables stdin and stderr refer to global objects of class IO. Regular expression operations in Ruby are methods of class Regexp, and can be invoked with standard object-oriented syntax. For convenience, Perl-like nota- tion is also supported as syntactic sugar; we have used this notation in Figure 14.7. The rescue clause of the innermost begin ... end block is an exception han- dler. As in the Python code of Figure 14.6, it allows us to determine whether the kill operation has succeeded by catching the (expected) exception that arises when we attempt to refer to a process after it has died. ■
 
-## 14.2.5** Extension Languages**
+14.2.5** Extension Languages**
 
 Most applications accept some sort of* commands*, which tell them what to do. Sometimes these commands are entered textually; more often they are triggered by user interface events such as mouse clicks, menu selections, and keystrokes. Commands in a graphical drawing program might save or load a drawing; select, insert, delete, or modify its parts; choose a line style, weight, or color; zoom or rotate the display; or modify user preferences. An* extension language* serves to increase the usefulness of an application by al- lowing the user to create new commands, generally using the existing commands as building blocks. Extension languages are widely regarded as an essential feature of sophisticated tools. Adobe’s graphics suite (Illustrator, Photoshop, InDesign, etc.) can be extended (scripted) using JavaScript, Visual Basic (on Windows), or AppleScript (on the Mac). Disney and Industrial Light & Magic use Python to extend their internal (proprietary) tools. The computer gaming industry makes heavy use of Lua for scripting of both commercial and open-source game en- gines. Many commercially available tools, including AutoCAD, Maya, Director, and Flash, have their own unique scripting languages. This list barely scratches the surface. To admit extension, a tool must
 
@@ -386,38 +363,25 @@ line help system. The interactive speciﬁcation controls how arguments are pass
 
 This one-line script, executed in any of the ways described above, binds our number-region command to key combination “control-number-sign”. ■
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 11. What is meant by the* pattern space* in sed? 12. Brieﬂy describe the* ﬁelds* and* associative arrays* of awk.
 
-### 11. What is meant by the pattern space in sed?
-
-* Brieﬂy describe the* ﬁelds* and* associative arrays* of awk.
-
-### 13. In what ways did even early versions of Perl improve on sed and awk?
-
-* Explain the special relationship between while loops and ﬁle handles in Perl.
+* In what ways did even early versions of Perl improve on sed and awk?
+  14. Explain the special relationship between while loops and ﬁle handles in Perl.
   What is the meaning of the empty ﬁle handle, <>?
   15. Name three widely used commercial packages for mathematical computing.
-* List several distinctive features of the R statistical scripting language.
+## 16. List several distinctive features of the R statistical scripting language.
 
-### 17. Explain the meaning of the $ and @ characters at the beginning of variable
+## 17. Explain the meaning of the $ and @ characters at the beginning of variable names in Perl. Explain the different meanings of $, @, and @@ in Ruby.
 
-names in Perl. Explain the different meanings of $, @, and @@ in Ruby.
+## 18. Which of the languages described in Section 14.2.4 uses indentation to control syntactic grouping?
 
-### 18. Which of the languages described in Section 14.2.4 uses indentation to control
+## 19. List several distinctive features of Python. 20. Describe, brieﬂy, how Ruby uses* blocks* and* iterators*.
 
-syntactic grouping?
+## 21. What capabilities must a scripting language provide in order to be used for extension?
 
-* List several distinctive features of Python.
-  20. Describe, brieﬂy, how Ruby uses* blocks* and* iterators*.
-### 21. What capabilities must a scripting language provide in order to be used for
+## 22. Name several commercial tools that use extension languages.
 
-extension?
-
-* Name several commercial tools that use extension languages.
-
-## 14.3
-
-### **Scripting the World Wide Web**
+14.3 **Scripting the World Wide Web**
 
 Much of the content of the World Wide Web—particularly the content that is vis- ible to search engines—is static: pages that seldom, if ever, change. But hypertext, the abstract notion on which the Web is based, was always conceived as a way to represent “the complex, the changing, and the indeterminate” [Nel65]. Much of the power of the Web today lies in its ability to deliver pages that move, play sounds, respond to user actions, or—perhaps most important—contain infor- mation created or formatted on demand, in response to the page-fetch request. From a programming languages point of view, simple playback of recorded audio or video is not particularly interesting. We therefore focus our attention here on content that is generated on the ﬂy by a program—a script—associated with an Internet URI (uniform resource identiﬁer).4 Suppose we type a URI into a browser on a client machine, and the browser sends a request to the appropriate web server. If the content is dynamically created, an obvious ﬁrst question is: does the script that creates it run on the server or the client machine? These options are known as* server-side* and* client-side* web scripting, respectively. Server-side scripts are typically used when the service provider wants to re- tain complete control over the content of the page, but can’t (or doesn’t want to) create the content in advance. Examples include the pages returned by search engines, Internet retailers, auction sites, and any organization that provides its clients with on-line access to personal accounts. Client-side scripts are typically used for tasks that don’t need access to proprietary information, and are more
 
@@ -428,7 +392,7 @@ Much of the content of the World Wide Web—particularly the content that is vis
 
 efﬁcient if executed on the client’s machine. Examples include interactive anima- tion, error-checking of ﬁll-in forms, and a wide variety of other self-contained calculations.
 
-## 14.3.1** CGI Scripts**
+14.3.1** CGI Scripts**
 
 The original mechanism for server-side web scripting was the Common Gateway Interface (CGI). A CGI script is an executable program residing in a special di- rectory known to the web server program. When a client requests the URI corre- sponding to such a program, the server executes the program and sends its output back to the client. Naturally, this output needs to be something that the browser will understand—typically HTML. CGI scripts may be written in any language available on the server’s machine, though Perl is particularly popular: its string-handling and “glue” mechanisms are ideally suited to generating HTML, and it was already widely available during the early years of the Web. As a simple if somewhat artiﬁcial example, suppose we **EXAMPLE** 14.29
 
@@ -441,7 +405,7 @@ Adder web form with a CGI script appears in Figure 14.11. The form element in th
 
 part of the URI (for a get-type form) or on the standard input stream (for a post-type form, shown here).5 With either method, we can access the values using the param routine of the standard CGI Perl library, loaded at the beginning of our script. ■
 
-## 14.3.2** Embedded Server-Side Scripts**
+14.3.2** Embedded Server-Side Scripts**
 
 Though widely used, CGI scripts have several disadvantages:
 
@@ -483,13 +447,13 @@ Self-posting Adder web form reside in an arbitrary web directory, including the 
 ![Figure 14.14 An interactive...](images/page_766_vector_531.png)
 *Figure 14.14 An interactive PHP web page. The script at top could be used in place of the script in the middle of Figure 14.11. The lower script in the current ﬁgure replaces both the web page at the top and the script in the middle of Figure 14.11. It checks to see if it has received a full set of arguments. If it hasn’t, it displays the ﬁll-in form; if it has, it displays results.*
 
-## 14.3.3** Client-Side Scripts**
+14.3.3** Client-Side Scripts**
 
 While embedded server-side scripts are generally faster than CGI scripts, at least when start-up cost predominates, communication across the Internet is still too slow for truly interactive pages. If we want the behavior or appearance of the page to change as the user moves the mouse, clicks, types, or hides or exposes windows, we really need to execute some sort of script on the client’s machine. Because they run on the web designer’s site, CGI scripts and, to a lesser extent, embeddable server-side scripts can be written in many different languages. All the client ever sees is standard HTML. Client-side scripts, by contrast, require an interpreter on the client’s machine. By virtue of having been “in the right place at the right time” historically, JavaScript is supported with at least some degree of consistency by almost all of the world’s web browsers. Given the number of legacy browsers still running, and the difﬁculty of convincing users to upgrade or to install new plug-ins, pages intended for use outside a limited domain (e.g., the desktops of a single company) almost always use JavaScript for interactive features. Figure 14.15 shows a page with embedded JavaScript that imitates (on the **EXAMPLE** 14.35
 
 Adder web form in JavaScript client) the behavior of the Adder scripts of Figures 14.11 and 14.14. Function doAdd is deﬁned in the header of the page so it is available throughout. In partic- ular, it will be invoked when the user clicks on the Calculate button. By default, the input values are character strings; we use the parseInt function to convert them to integers. The parentheses around (argA + argB) in the ﬁnal assign- ment statement then force the use of integer addition. The other occurrences of + are string concatenation. To disable the usual mechanism whereby input data are submitted to the server when the user hits the enter or return key, we have speciﬁed a dummy behavior for the onsubmit attribute of the form. Rather than replace the page with output text, as our CGI and PHP scripts did, we have chosen in our JavaScript version to append the output at the bottom. The HTML SPAN element provides a named place in the document where this output can be inserted, and the getElementById JavaScript method provides us with a reference to this element. The HTML* Document Object Model (DOM)*, standard- ized by the World Wide Web Consortium, speciﬁes a very large number of other elements, attributes, and user actions, all of which are accessible in JavaScript. Through them, scripts can, at appropriate times, inspect or alter almost any as- pect of the content, structure, or style of a page. ■
 
-## 14.3.4** Java Applets and Other Embedded Elements**
+14.3.4** Java Applets and Other Embedded Elements**
 
 As an alternative to requiring client-side scripts to interact with the DOM of a web page, many browsers support an* embedding* mechanism that allows a browser plug-in to assume responsibility for some rectangular region of the page, in which it can then display whatever it wants. In other words, plug-ins are less a matter of scripting the browser than of bypassing it entirely. Historically, plug-ins were
 
@@ -506,34 +470,27 @@ The type attribute informs the browser that the embedded element is expected to 
 
 Flash Player is more accurately described as a multimedia display engine than a general purpose programming language interpreter. Over time, plug-ins have proven to be a major source of browser security bugs. Almost any nontrivial plug-in requires access to operating system services— network IO, local ﬁle space, graphics acceleration, and so on. Providing just enough service to make the plug-in useful—but not enough to allow it to do any harm—has proven extremely difﬁcult. To address this problem, extensive mul- timedia support has been built into the HTML5 standard, allowing the browser itself to assume responsibility for much of what was once accomplished with plug- ins. Security is still a problem, but the number of software modules that must be trusted—and the number of points at which an attacker might try to gain entrance—is signiﬁcantly reduced. Many browsers now disable Java by default. Some disable Flash as well.
 
-## 14.3.5** XSLT**
+14.3.5** XSLT**
 
 Most readers will undoubtedly have had the opportunity to write, or at least to read, the HTML (hypertext markup language) used to compose web pages. HTML has, for the most part, a nested structure in which fragments of docu- ments (*elements*) are delimited by* tags* that indicate their purpose or appearance. We saw in Section 14.2.2, for example, that top-level headings are delimited with <h1> and </h1>. Unfortunately, as a result of the chaotic and informal way in which the Web evolved, HTML ended up with many inconsistencies in its design, and incompatibilities among the versions implemented by different vendors.
 
 **DESIGN & IMPLEMENTATION**
 
-### 14.5 JavaScript and Java
-
-Despite its name, JavaScript has no connection to Java beyond some superﬁcial syntactic similarity. The language was originally developed by Brendan Eich at Netscape Corp. in 1995. Eich called his creation* LiveScript*, but the company chose to rename it as part of a joint marketing agreement with Sun Microsys- tems, prior to its public release. Trademark on the JavaScript name is actually owned by Oracle, which acquired Sun in 2010. Netscape’s browser was the market leader in 1995, and JavaScript usage grew extremely fast. To remain competitive, developers at Microsoft added JavaScript support to Internet Explorer, but they used the name* JScript* in- stead, and they introduced a number of incompatibilities with the Netscape version of the language. A common version was standardized as* ECMAScript* by the European standards body in 1997 (and subsequently by the ISO), but major incompatibilities remained in the Document Object Models provided by different browsers. These have been gradually resolved through a series of standards from the World Wide Web Consortium, but legacy pages and legacy browsers continue to plague web developers.
+14.5 JavaScript and Java Despite its name, JavaScript has no connection to Java beyond some superﬁcial syntactic similarity. The language was originally developed by Brendan Eich at Netscape Corp. in 1995. Eich called his creation* LiveScript*, but the company chose to rename it as part of a joint marketing agreement with Sun Microsys- tems, prior to its public release. Trademark on the JavaScript name is actually owned by Oracle, which acquired Sun in 2010. Netscape’s browser was the market leader in 1995, and JavaScript usage grew extremely fast. To remain competitive, developers at Microsoft added JavaScript support to Internet Explorer, but they used the name* JScript* in- stead, and they introduced a number of incompatibilities with the Netscape version of the language. A common version was standardized as* ECMAScript* by the European standards body in 1997 (and subsequently by the ISO), but major incompatibilities remained in the Document Object Models provided by different browsers. These have been gradually resolved through a series of standards from the World Wide Web Consortium, but legacy pages and legacy browsers continue to plague web developers.
 
 XML (extensible markup language) is a more recent and general language in which to capture structured data. Compared to HTML, its syntax and seman- tics are more regular and consistent, and more consistently implemented across platforms. It is* extensible*, meaning that users can deﬁne their own tags. It also makes a clear distinction between the* content* of a document (the data it captures) and the* presentation* of that data. Presentation, in fact, is deferred to a compan- ion standard known as XSL (extensible stylesheet language). XSLT is a portion of XSL devoted to* transforming* XML: selecting, reorganizing, and modifying tags and the elements they delimit—in effect, scripting the processing of data repre- sented in XML.
 
 **DESIGN & IMPLEMENTATION**
 
-## 14.6 How far can you trust a script?
-
-Security becomes an issue whenever code is executed using someone else’s re- sources. On a hosting machine, web servers are usually installed with very lim- ited access rights, and with only a limited view of the host’s ﬁle system. This strategy limits the set of pages accessible through the server to a well-deﬁned subset of what would be visible to users logged into the hosting machine di- rectly. By contrast, CGI scripts are separate executable programs, and can po- tentially run with the privileges of whoever installs them. To prevent users on the hosting machine from accidentally or intentionally passing their privileges to arbitrary users on the Internet, most system administrators conﬁgure their machines so that CGI scripts must reside in a special directory, and be installed by a trusted user. Embedded server-side scripts can reside in any ﬁle because they are guaranteed to run with the (limited) rights of the server itself. A larger risk is posed by code downloaded over the Internet and executed on a client machine. Because such code is in general untrusted, it must be executed in a carefully controlled environment, sometimes called a* sandbox*, to prevent it from doing any damage. As a general rule, embedded JavaScript cannot access the local ﬁle system, memory management system, or network, nor can it manipulate documents from other sites. Java applets, likewise, have only limited ability to access external resources. Reality is a bit more compli- cated, of course: Sometimes, a script needs access to, say, a temporary ﬁle of limited size, or a network connection to a trusted server. Mechanisms exist to certify sites as* trusted*, or to allow a trusted site to certify the trustworthiness of pages from other sites. Scripts on pages obtained through a trusted mecha- nism may then be given extended rights. Such mechanisms must be used with care. Finding the right balance between security and functionality remains one of the central challenges of the Web, and of distributed computing in general. (More on this topic can be found in Section 16.2.4, and in Explorations 16.19 and 16.20.)
+14.6 How far can you trust a script? Security becomes an issue whenever code is executed using someone else’s re- sources. On a hosting machine, web servers are usually installed with very lim- ited access rights, and with only a limited view of the host’s ﬁle system. This strategy limits the set of pages accessible through the server to a well-deﬁned subset of what would be visible to users logged into the hosting machine di- rectly. By contrast, CGI scripts are separate executable programs, and can po- tentially run with the privileges of whoever installs them. To prevent users on the hosting machine from accidentally or intentionally passing their privileges to arbitrary users on the Internet, most system administrators conﬁgure their machines so that CGI scripts must reside in a special directory, and be installed by a trusted user. Embedded server-side scripts can reside in any ﬁle because they are guaranteed to run with the (limited) rights of the server itself. A larger risk is posed by code downloaded over the Internet and executed on a client machine. Because such code is in general untrusted, it must be executed in a carefully controlled environment, sometimes called a* sandbox*, to prevent it from doing any damage. As a general rule, embedded JavaScript cannot access the local ﬁle system, memory management system, or network, nor can it manipulate documents from other sites. Java applets, likewise, have only limited ability to access external resources. Reality is a bit more compli- cated, of course: Sometimes, a script needs access to, say, a temporary ﬁle of limited size, or a network connection to a trusted server. Mechanisms exist to certify sites as* trusted*, or to allow a trusted site to certify the trustworthiness of pages from other sites. Scripts on pages obtained through a trusted mecha- nism may then be given extended rights. Such mechanisms must be used with care. Finding the right balance between security and functionality remains one of the central challenges of the Web, and of distributed computing in general. (More on this topic can be found in Section 16.2.4, and in Explorations 16.19 and 16.20.)
 
 **IN MORE DEPTH**
 
 XML can be used to create specialized markup languages for a very wide range of application domains. XHTML is an almost (but not quite) backward compatible variant of HTML that conforms to the XML standard. Web tools are increasingly being designed to generate XHTML. On the companion site, we consider a variety of topics related to XML, with a particular emphasis on XSLT. We elaborate on the distinction between content and presentation, introduce the general notion of stylesheet languages, and de- scribe the* document type deﬁnitions* (DTDs) and* schemas* used to deﬁne domain- speciﬁc applications of XML, using XHTML as an example. Because tags are required to nest, an XML document has a natural tree-based structure. XSLT is designed to process these trees via recursive traversal. Though it can be used for almost any task that takes XML as input, perhaps its most com- mon use is to transform XML into formatted output—often XHTML to be pre- sented in a browser. As an extended example, we consider the formatting of an XML-based bibliographic database.
 
-### 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 23. Explain the distinction between* server-side* and* client-side* web scripting.
 
-* Explain the distinction between* server-side* and* client-side* web scripting.
-
-#### 24. List the tradeoffs between CGI scripts and embedded PHP.
-25. Why are CGI scripts usually installed only in a special directory?
+## 24. List the tradeoffs between CGI scripts and embedded PHP. 25. Why are CGI scripts usually installed only in a special directory?
 
 * Explain how a PHP page can service its own requests.
   27. Why might we prefer to execute a web script on the server rather than the
@@ -541,15 +498,11 @@ XML can be used to create specialized markup languages for a very wide range of 
   28. What is the HTML* Document Object Model*? What is its signiﬁcance for client-
   side scripting?
   29. What is the relationship between JavaScript and Java?
-#### 30. What is an applet? Why applets are usually not considered an example of
+## 30. What is an* applet*? Why applets are usually not considered an example of scripting?
 
-scripting?
+## 31. What is HTML? XML? XSLT? How are they related to one another?
 
-#### 31. What is HTML? XML? XSLT? How are they related to one another?
-
-## 14.4
-
-#### **Innovative Features**
+14.4 **Innovative Features**
 
 In Section 14.1.1, we listed several common characteristics of scripting languages:
 
@@ -557,7 +510,7 @@ In Section 14.1.1, we listed several common characteristics of scripting languag
 
 Several of these are discussed in more detail in the subsections below. Speciﬁ- cally, Section 14.4.1 considers naming and scoping in scripting languages; Sec- tion 14.4.2 discusses string and pattern manipulation; and Section 14.4.3 con- siders data types. Items (1), (2), and (5) in our list, while important, are not particularly difﬁcult or subtle, and will not be considered further here.
 
-## 14.4.1** Names and Scopes**
+14.4.1** Names and Scopes**
 
 Most scripting languages (Scheme is the obvious exception) do not require vari- ables to be declared. A few languages, notably Perl and JavaScript, permit optional declarations, primarily as a sort of compiler-checked documentation. Perl can be run in a mode (use strict ‚vars‚) that requires declarations. With or without declarations, most scripting languages use dynamic typing. Values are generally self-descriptive, so the interpreter can perform type checking at run time, or co- erce values when appropriate. Nesting and scoping conventions vary quite a bit. Scheme, Python, JavaScript, and R provide the classic combination of nested subroutines and static (lexical) scope. Tcl allows subroutines to nest, but uses dynamic scoping. Named subrou- tines (methods) do not nest in PHP or Ruby, and they are only sort of nest in Perl (more on this below as well), but Perl and Ruby join Scheme, Python, JavaScript, and R in providing ﬁrst-class anonymous local subroutines. Nested blocks are statically scoped in Perl. In Ruby, they are part of the named scope in which they appear. Scheme, Perl, Python, Ruby, JavaScript, and R all provide unlimited extent for variables captured in closures. PHP, R, and the major glue languages (Perl, Tcl, Python, Ruby) all have sophisticated namespace mechanisms for infor- mation hiding and the selective import of names from separate modules.
 
@@ -618,13 +571,11 @@ Here there is one lexical instance of z and two of x and y—one global, one in 
 
 **DESIGN & IMPLEMENTATION**
 
-## 14.7 Thinking about dynamic scoping
-
-In Section 3.3.6, we described dynamic scope rules as introducing a new mean- ing for a name that remains visible, wherever we are in the program, until con- trol leaves the scope in which the new meaning was created. This conceptual model mirrors the association list implementation described in Section C 3.4.2 and, as described in Sidebar 3.6, probably accounts for the use of dynamic scoping in early dialects of Lisp. Documentation for Perl suggests a semantically equivalent but conceptually different model. Rather than saying that a local declaration introduces a new variable whose name hides previous declarations, Perl says that there is a* single* variable, at the global level, whose previous* value* is saved when the new decla- ration is encountered, and then automatically restored when control leaves the new declaration’s scope. This model mirrors the underlying implementation in Perl, which uses a central reference table (also described in Section C 3.4.2). In keeping with this model and implementation, Perl does not allow a local operator to create a dynamic instance of a variable that is not global.
+14.7 Thinking about dynamic scoping In Section 3.3.6, we described dynamic scope rules as introducing a new mean- ing for a name that remains visible, wherever we are in the program, until con- trol leaves the scope in which the new meaning was created. This conceptual model mirrors the association list implementation described in Section C 3.4.2 and, as described in Sidebar 3.6, probably accounts for the use of dynamic scoping in early dialects of Lisp. Documentation for Perl suggests a semantically equivalent but conceptually different model. Rather than saying that a local declaration introduces a new variable whose name hides previous declarations, Perl says that there is a* single* variable, at the global level, whose previous* value* is saved when the new decla- ration is encountered, and then automatically restored when control leaves the new declaration’s scope. This model mirrors the underlying implementation in Perl, which uses a central reference table (also described in Section C 3.4.2). In keeping with this model and implementation, Perl does not allow a local operator to create a dynamic instance of a variable that is not global.
 
 its print statement, the inner scope ﬁnds the y from the middle scope. It ﬁnds the global x, however, because of the our operator on line 6. Now what about z? The rules require us to start with static scoping, ignoring local operators. According, then, to the our operator in the inner scope, we are using the global z. Once we know this, we look to see whether a dynamic (local) redeclaration of z is in effect. In this case indeed it is, and our program prints 1, 2, 3. As it turns out, the our declaration in the inner scope had no effect on this program. If only x had been declared our, we would still have used the global z, and then found the dynamic instance from the middle scope. ■
 
-## 14.4.2** String and Pattern Manipulation**
+14.4.2** String and Pattern Manipulation**
 
 When we ﬁrst considered regular expressions, in Section 2.1.1, we noted that many scripting languages and related tools employ extended versions of the no- tation. Some extensions are simply a matter of convenience. Others increase the expressive power of the notation, allowing us to generate (match) nonregular sets of strings. Still other extensions serve to tie the notation to other language fea- tures. We have already seen examples of extended regular expressions in sed (Fig- ure 14.1), awk (Figures 14.2 and 14.3), Perl (Figures 14.4 and 14.5), Python (Fig- ure 14.6), and Ruby (Figure 14.7). Many readers will also be familiar with grep, the stand-alone Unix pattern-matching tool (see Sidebar 14.8). While there are many different implementations of extended regular expres- sions (“REs” for short), with slightly different syntax, most fall into two main groups. The ﬁrst group includes awk, egrep (the most widely used of several different versions of grep), and the regex library for C. These implement REs as deﬁned in the POSIX standard [Int03b]. Languages in the second group follow the lead of Perl, which provides a large set of extensions, sometimes referred to as “advanced REs.” Perl-like advanced REs appear in PHP, Python, Ruby, JavaScript, Emacs Lisp, Java, and C#. They can also be found in third-party packages for C++ and other languages. A few tools, including sed, classic grep, and older Unix editors, provide so-called “basic” REs, less capable than those of egrep. In certain languages and tools—notably sed, awk, Perl, PHP, Ruby, and JavaScript—regular expressions are tightly integrated into the rest of the lan- guage, with special syntax and built-in operators. In these languages an RE is typ- ically delimited with slash characters, though other delimiters may be accepted in some cases (and Perl in fact provides slightly different semantics for a few alterna- tive delimiters). In most other languages, REs are expressed as ordinary character strings, and are manipulated by passing them to library routines. Over the next few pages we will consider POSIX and advanced REs in more detail. Following Perl, we will use slashes as delimiters. Our coverage will of necessity be incom- plete. The chapter on REs in the Perl book [CfWO12, Chap. 5] is over 100 pages long. The corresponding Unix man page totals some 40 pages.
 
@@ -652,9 +603,7 @@ Character classes o|u/), extended REs permit* character classes* to be speciﬁe
 
 **DESIGN & IMPLEMENTATION**
 
-## 14.8 The grep command and the birth of Unix tools
-
-Historically, regular expression tools have their roots in the pattern matching mechanism of the ed line editor, which dates from the earliest days of Unix. In 1973, Doug McIlroy, head of the department where Unix was born, was working on a project in computerized voice synthesis. As part of this project he was using the editor to search for potentially challenging words in an on- line dictionary. The process was both tedious and slow. At McIlroy’s request, Ken Thompson extracted the pattern matcher from ed and made it a stand- alone tool. He named his creation grep, after the g/*re*/p command sequence in the editor: g for “global”; / / to search for a regular expression (*re*); p to print [HH97a, Chap. 9]. Thompson’s creation was one of the ﬁrst in a large suite of stream-based Unix tools. As described in Section 14.2.1, such tools are frequently combined with pipes to perform a variety of ﬁltering, transforming, and formatting op- erations.
+14.8 The** grep** command and the birth of Unix tools Historically, regular expression tools have their roots in the pattern matching mechanism of the ed line editor, which dates from the earliest days of Unix. In 1973, Doug McIlroy, head of the department where Unix was born, was working on a project in computerized voice synthesis. As part of this project he was using the editor to search for potentially challenging words in an on- line dictionary. The process was both tedious and slow. At McIlroy’s request, Ken Thompson extracted the pattern matcher from ed and made it a stand- alone tool. He named his creation grep, after the g/*re*/p command sequence in the editor: g for “global”; / / to search for a regular expression (*re*); p to print [HH97a, Chap. 9]. Thompson’s creation was one of the ﬁrst in a large suite of stream-based Unix tools. As described in Section 14.2.1, such tools are frequently combined with pipes to perform a variety of ﬁltering, transforming, and formatting op- erations.
 
 Ranges are also permitted:
 
@@ -724,9 +673,7 @@ $foo = "albatross"; $foo =~ s/[aeiou]/-/g; # "-lb-tr-ss" ■
 
 **DESIGN & IMPLEMENTATION**
 
-## 14.9 Automata for regular expressions
-
-POSIX regular expressions are typically implemented using the constructions described in Section 2.2.1, which transform the RE into an NFA and then a DFA. Advanced REs of the sort provided by Perl are typically implemented via backtracking search in the obvious NFA. The NFA-to-DFA construction is usually not employed because it fails to preserve some of the advanced RE extensions (notably the* capture* mechanism described in Examples 14.55– 14.58) [CfWO12, pp. 241–246]. Some implementations use a DFA ﬁrst to de- termine whether there* is* a match, and then an NFA or backtracking search to actually effect the match. This strategy pays the price of the slower automaton only when it’s sure to be worthwhile.
+14.9 Automata for regular expressions POSIX regular expressions are typically implemented using the constructions described in Section 2.2.1, which transform the RE into an NFA and then a DFA. Advanced REs of the sort provided by Perl are typically implemented via backtracking search in the obvious NFA. The NFA-to-DFA construction is usually not employed because it fails to preserve some of the advanced RE extensions (notably the* capture* mechanism described in Examples 14.55– 14.58) [CfWO12, pp. 241–246]. Some implementations use a DFA ﬁrst to de- termine whether there* is* a match, and then an NFA or backtracking search to actually effect the match. This strategy pays the price of the slower automaton only when it’s sure to be worthwhile.
 
 ![Figure 14.18 Regular expression...](images/page_780_vector_346.png)
 *Figure 14.18 Regular expression escape sequences in Perl. Sequences in the top portion of the table represent individual characters. Sequences in the middle are zero-width assertions. Sequences at the bottom are built-in character classes. Note that these are only examples: Perl assigns a meaning to almost every backslash-character sequence.*
@@ -787,9 +734,7 @@ print "Opening tag: ", $1, "\n"; ■
 
 **DESIGN & IMPLEMENTATION**
 
-## 14.10 Compiling regular expressions
-
-Before it can be used as the basis of a search, a regular expression must be compiled into a deterministic or nondeterministic (backtracking) automaton. Patterns that are clearly constant can be compiled once, either when the pro- gram is loaded or when they are ﬁrst encountered. Patterns that contain in- terpolated strings, however, must in the general case be recompiled whenever they are encountered, at potentially signiﬁcant run-time cost. A programmer who knows that interpolated variables will never change can inhibit recom- pilation by attaching a trailing o modiﬁer to the regular expression, in which case the expression will be compiled the ﬁrst time it is encountered, and never thereafter. For expressions that must sometimes but not always be recompiled, the programmer can use the qr operator to force recompilation of a pattern, yielding a result that can be used repeatedly and efﬁciently:
+14.10 Compiling regular expressions Before it can be used as the basis of a search, a regular expression must be compiled into a deterministic or nondeterministic (backtracking) automaton. Patterns that are clearly constant can be compiled once, either when the pro- gram is loaded or when they are ﬁrst encountered. Patterns that contain in- terpolated strings, however, must in the general case be recompiled whenever they are encountered, at potentially signiﬁcant run-time cost. A programmer who knows that interpolated variables will never change can inhibit recom- pilation by attaching a trailing o modiﬁer to the regular expression, in which case the expression will be compiled the ﬁrst time it is encountered, and never thereafter. For expressions that must sometimes but not always be recompiled, the programmer can use the qr operator to force recompilation of a pattern, yielding a result that can be used repeatedly and efﬁciently:
 
 ```
 for (@patterns) {
@@ -851,15 +796,9 @@ With input “now is the time”, this code prints
 
 prefix(now ) match(is) suffix( the time) ■
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 32. Name a scripting language that uses dynamic scoping. 33. Summarize the strategies used in Perl, PHP, Ruby, and Python to determine the scope of variables that are not declared. 34. Describe the conceptual model for dynamically scoped variables in Perl.
 
-* Name a scripting language that uses dynamic scoping.
-  33. Summarize the strategies used in Perl, PHP, Ruby, and Python to determine
-  the scope of variables that are not declared.
-  34. Describe the conceptual model for dynamically scoped variables in Perl.
-#### 35. List the principal features found in POSIX regular expressions, but not in the
-
-regular expressions of formal language theory (Section 2.1.1).
+## 35. List the principal features found in POSIX regular expressions, but not in the regular expressions of formal language theory (Section 2.1.1).
 
 * List the principal features found in Perl REs, but not in those of POSIX.
   37. Explain the purpose of search* modiﬁers* (characters following the ﬁnal delim-
@@ -867,9 +806,9 @@ regular expressions of formal language theory (Section 2.1.1).
   38. Describe the three main categories of* escape sequences* in Perl-type regular
   expressions.
   39. Explain the difference between* greedy* and* minimal* matches.
-* Describe the notion of* capture* in regular expressions.
+## 40. Describe the notion of* capture* in regular expressions.
 
-### 14.4.3** Data Types**
+14.4.3** Data Types**
 
 As we have seen, scripting languages don’t generally require (or even permit) the declaration of types for variables. Most perform extensive run-time checks to make sure that values are never used in inappropriate ways. Some languages (e.g., Scheme, Python, and Ruby) are relatively strict about this checking; the program- mer who wants to convert from one type to another must say so explicitly. If we **EXAMPLE** 14.59
 
@@ -959,9 +898,7 @@ print colors[2], complements["blue"]
 
 **DESIGN & IMPLEMENTATION**
 
-## 14.11 Typeglobs in Perl
-
-It turns out that a global name in Perl can have multiple independent mean- ings. It is possible, for example, to use $foo, @foo, %foo, &foo and two differ- ent meanings of foo, all in the same program. To keep track of these multiple meanings, Perl interposes a level of indirection between the symbol table entry for foo and the various values foo may have. The intermediate structure is called a* typeglob*. It has one slot for each of foo’s meanings. It also has a name of its own: *foo. By manipulating typeglobs, the expert Perl programmer can actually modify the table used by the interpreter to look up names at run time. The simplest use is to create an alias:
+14.11 Typeglobs in Perl It turns out that a global name in Perl can have multiple independent mean- ings. It is possible, for example, to use $foo, @foo, %foo, &foo and two differ- ent meanings of foo, all in the same program. To keep track of these multiple meanings, Perl interposes a level of indirection between the symbol table entry for foo and the various values foo may have. The intermediate structure is called a* typeglob*. It has one slot for each of foo’s meanings. It also has a name of its own: *foo. By manipulating typeglobs, the expert Perl programmer can actually modify the table used by the interpreter to look up names at run time. The simplest use is to create an alias:
 
 *a = *b;
 
@@ -1048,7 +985,7 @@ Using wantarray to determine calling context wantarray. This returns true if the
 
 if (* something went wrong* ) { return wantarray ? () : undef; } ■
 
-## 14.4.4** Object Orientation**
+14.4.4** Object Orientation**
 
 Though not an object-oriented language, Perl 5 has features that allow one to program in an object-oriented style.7 PHP and JavaScript have cleaner, more conventional-looking object-oriented features, but both allow the programmer to use a more traditional imperative style as well. Python and Ruby are explicitly and uniformly object-oriented. Perl uses a value model for variables; objects are always accessed via pointers. In PHP and JavaScript, a variable can hold either a value of a primitive type or a reference to an object of composite type. In contrast to Perl, however, these languages provide no way to speak of the reference itself, only the object to which it refers. Python and Ruby use a uniform reference model. Classes are themselves objects in Python and Ruby, much as they are in Small- talk. They are merely types in PHP, much as they are in C++, Java, or C#. Classes in Perl are simply an alternative way of looking at packages (namespaces). JavaScript, remarkably, has objects but no classes; its inheritance is based on a concept known as* prototypes*, initially introduced by the Self programming lan- guage.
 
@@ -1175,39 +1112,25 @@ Constructors in Python and Ruby which cannot be overloaded. In Python it is __in
 
 Naming class members in Python and Ruby is explicit in Python; by convention it is usually named self. In Ruby self is a keyword, and the parameter it represents is invisible. Any variable beginning with a single @ sign in Ruby is a ﬁeld of the current object. Within a Python method, uses of object members must name the object explicitly. One must, for example, write self.print(); just print() will not sufﬁce. ■ Ruby methods may be public, protected, or private.8 Access control in Python is purely a matter of convention; both methods and ﬁelds are universally accessible. Finally, Python has multiple inheritance. Ruby has mix-in inheri- tance: a class cannot obtain data from more than one ancestor. Unlike most other languages, however, Ruby allows an interface (mix-in) to deﬁne not only the sig- natures of methods but also their implementation (code).
 
-## 3CHECK YOUR UNDERSTANDING
-
-### 41. Contrast the philosophies of Perl and Ruby with regard to error checking and
-
-reporting.
+3**CHECK YOUR UNDERSTANDING** 41. Contrast the philosophies of Perl and Ruby with regard to error checking and reporting.
 
 **8** The meanings of private and protected in Ruby are different from those in C++, Java, or C#: private methods in Ruby are available only to the current instance of an object; protected methods are available to any instance of the current class or its descendants.
 
-## 42. Compare the numeric types of popular scripting languages to those of com-
+## 42. Compare the numeric types of popular scripting languages to those of com- piled languages like C or Fortran. 43. What are* bignums*? Which languages support them?
 
-piled languages like C or Fortran. 43. What are* bignums*? Which languages support them?
+## 44. What are* associative arrays*? By what other names are they sometimes known? 45. Why don’t most scripting languages provide direct support for records?
 
-## 44. What are associative arrays? By what other names are they sometimes known?
-
-## 45. Why don’t most scripting languages provide direct support for records?
-
-## 46. What is a typeglob in Perl? What purpose does it serve?
-
-* Describe the* tuple* and* set* types of Python.
+## 46. What is a* typeglob* in Perl? What purpose does it serve? 47. Describe the* tuple* and* set* types of Python.
 
 * Explain the uniﬁcation of arrays and hashes in PHP and Tcl.
   49. Explain the uniﬁcation of arrays and objects in JavaScript.
   50. Explain how tuples and hashes can be used to emulate multidimensional ar-
   rays in Python.
-## 51. Explain the concept of context in Perl. How is it related to type compatibil-
-
-ity and type inference? What are the two principal contexts deﬁned by the language’s operators?
+## 51. Explain the concept of* context* in Perl. How is it related to type compatibil- ity and type inference? What are the two principal contexts deﬁned by the language’s operators?
 
 **DESIGN & IMPLEMENTATION**
 
-## 14.12 Executable class declarations
-
-Both Python and Ruby take the interesting position that class declarations are executable code. Elaboration of a declaration executes the code inside. Among other things, we can use this mechanism to achieve the effect of conditional compilation:
+14.12 Executable class declarations Both Python and Ruby take the interesting position that class declarations are executable code. Elaboration of a declaration executes the code inside. Among other things, we can use this mechanism to achieve the effect of conditional compilation:
 
 ```
 class My_class
@@ -1230,39 +1153,28 @@ end
 
 Instead of computing the expensive function inside get, on every invocation, we compute it once, ahead of time, and deﬁne an appropriate specialized ver- sion of get.
 
-* Compare the approaches to object orientation taken by Perl 5, PHP 5,
-  JavaScript, Python, and Ruby.
-  53. What is meant by the* blessing* of a reference in Perl?
-### 54. What are* prototypes* in JavaScript? What purpose do they serve?
+## 52. Compare the approaches to object orientation taken by Perl 5, PHP 5, JavaScript, Python, and Ruby. 53. What is meant by the* blessing* of a reference in Perl?
 
-## 14.5
+## 54. What are* prototypes* in JavaScript? What purpose do they serve?
 
-### **Summary and Concluding Remarks**
+14.5 **Summary and Concluding Remarks**
 
 Scripting languages serve primarily to control and coordinate other software components. Though their roots go back to interpreted languages of the 1960s, for many years they were largely ignored by academic computer science. With an increasing emphasis on programmer productivity, however, and with the explo- sion of the World Wide Web, scripting languages have seen enormous growth in interest and popularity, both in industry and in academia. Many signiﬁcant ad- vances have been made by commercial developers and by the open-source com- munity. Scripting languages may well come to dominate programming in the 21st century, with traditional compiled languages more and more seen as special- purpose tools. In comparison to their traditional cousins, scripting languages emphasize ﬂex- ibility and richness of expression over sheer run-time performance. Common characteristics include both batch and interactive use, economy of expression,
 
 **DESIGN & IMPLEMENTATION**
 
-### 14.13 Worse Is Better
-
-Any discussion of the relative merits of scripting and “systems” languages in- variably ends up addressing the tradeoffs between expressivenessand ﬂexibility on the one hand and compile-time safety and performance on the other. It may also digress into questions of “quick-and-dirty” versus “polished” applications. An interesting take on this debate can be found in the widely circulated essays of Richard Gabriel (*www.dreamsongs.com/WorseIsBetter.html*). While working for Lucid Corp. in 1989, Gabriel found himself asking why Unix and C had been so successful at attracting users, while Common Lisp (Lucid’s principal focus) had not. His explanation contrasts “The Right Thing,” as exempliﬁed by Common Lisp, with a “Worse Is Better” philosophy, as exempliﬁed by C and Unix. “The Right Thing” emphasizes complete, correct, consistent, and ele- gant design. “Worse Is Better” emphasizes the rapid development of software that does most of what users need most of the time, and can be tuned and im- proved incrementally, based on ﬁeld experience. Much of scripting, and Perl in particular, ﬁts the “Worse Is Better” philosophy (Ruby and Scheme enthusiasts might beg to disagree). Gabriel, for his part, says he still hasn’t made up his mind; his essays argue both points of view.
+14.13 Worse Is Better Any discussion of the relative merits of scripting and “systems” languages in- variably ends up addressing the tradeoffs between expressivenessand ﬂexibility on the one hand and compile-time safety and performance on the other. It may also digress into questions of “quick-and-dirty” versus “polished” applications. An interesting take on this debate can be found in the widely circulated essays of Richard Gabriel (*www.dreamsongs.com/WorseIsBetter.html*). While working for Lucid Corp. in 1989, Gabriel found himself asking why Unix and C had been so successful at attracting users, while Common Lisp (Lucid’s principal focus) had not. His explanation contrasts “The Right Thing,” as exempliﬁed by Common Lisp, with a “Worse Is Better” philosophy, as exempliﬁed by C and Unix. “The Right Thing” emphasizes complete, correct, consistent, and ele- gant design. “Worse Is Better” emphasizes the rapid development of software that does most of what users need most of the time, and can be tuned and im- proved incrementally, based on ﬁeld experience. Much of scripting, and Perl in particular, ﬁts the “Worse Is Better” philosophy (Ruby and Scheme enthusiasts might beg to disagree). Gabriel, for his part, says he still hasn’t made up his mind; his essays argue both points of view.
 
 lack of declarations, simple scoping rules, ﬂexible dynamic typing, easy access to other programs, sophisticated pattern matching and string manipulation, and high-level data types. We began our chapter by tracing the historical development of scripting, start- ing with the command interpreter, or* shell* programs of the mid-1970s, and the text processing and report generation tools that followed soon thereafter. We looked in particular at the “Bourne-again” shell, bash, and the Unix tools sed and awk. We also mentioned such special-purpose domains as mathematics and statistics, where scripting languages are widely used for data analysis, visualiza- tion, modeling, and simulation. We then turned to the three domains that dom- inate scripting today: “glue” (coordination) applications, conﬁguration and ex- tension, and scripting of the World Wide Web. For many years, Perl was the most popular of the general-purpose “glue” lan- guages, but Python and Ruby have clearly overtaken it at this point. Several script- ing languages, including Python, Scheme, and Lua, are widely used to extend the functionality of complex applications. In addition, many commercial packages have their own proprietary extension languages. Web scripting comes in many forms. On the server side of an HTTP con- nection, the Common Gateway Interface (CGI) standard allows a URI to name a program that will be used to generate dynamic content. Alternatively, web- page-embedded scripts, often written in PHP, can be used to create dynamic con- tent in a way that is invisible to users. To reduce the load on servers, and to improve interactive responsiveness, scripts can also be executed within the client browser. JavaScript is the dominant notation in this domain; it uses the HTML Document Object Model (DOM) to manipulate web-page elements. For more demanding tasks, many browsers can be directed to run a Java* applet*, which takes full responsibility for some portion of the “screen real estate,” but this strategy comes with security concerns that are increasingly viewed as unacceptable. With the emergence of HTML5, most dynamic content—multimedia in particular— can be handled directly by the browser. At the same time, XML has emerged as the standard format for structured, presentation-independent information, with load-time transformation via XSL. Because of their rapid evolution, scripting languages have been able to take ad- vantage of many of the most powerful and elegant mechanisms described in pre- vious chapters, including ﬁrst-class and higher-order functions, unlimited extent, iterators, garbage collection, list comprehensions, and object orientation—not to mention extended regular expressions and such high-level data types as dictionar- ies, sets, and tuples. Given current trends, scripting languages are likely to become increasingly ubiquitous, and to remain a principal focus of language innovation. 14.6 **Exercises**
 
-## 14.2
-
-Write shell scripts to (a) Replace blanks with underscores in the names of all ﬁles in the current directory. (b) Rename every ﬁle in the current directory by prepending to its name a textual representation of its modiﬁcation date. (c) Find all eps ﬁles in the ﬁle hierarchy below the current directory, and create any corresponding pdf ﬁles that are missing or out of date. (d) Print the names of all ﬁles in the ﬁle hierarchy below the current di- rectory for which a given predicate evaluates to true. Your (quoted) predicate should be speciﬁed on the command line using the syntax of the Unix test command, with one or more at signs (@) standing in for the name of the candidate ﬁle. 14.3 In Example 14.16 we used "$@" to refer to the parameters passed to ll. What would happen if we removed the quote marks? (Hint: Try this for ﬁles whose names contain spaces!) Read the man page for bash and learn the difference between $@ and $*. Create versions of ll that use $* or "$*" instead of "$@". Explain what’s going on. 14.4 (a) Extend the code in Figure 14.5, 14.6, or 14.7 to try to kill processes more gently. You’ll want to read the man page for the standard kill command. Use a TERM signal ﬁrst. If that doesn’t work, ask the user if you should resort to KILL. (b) Extend your solution to part (a) so that the script accepts an optional argument specifying the signal to be used. Alternatives to TERM and KILL include HUP, INT, QUIT, and ABRT. 14.5 Write a Perl, Python, or Ruby script that creates a simple* concordance*: a sorted list of signiﬁcant words appearing in an input document, with a sublist for each that indicates the lines on which the word occurs, with up to six words of surrounding context. Exclude from your list all common articles, conjunctions, prepositions, and pronouns. 14.6 Write Emacs Lisp scripts to (a) Insert today’s date into the current buffer at the insertion point (cur- rent cursor location). (b) Place quote marks (" ") around the word surrounding the insertion point. (c) Fix end-of-sentence spaces in the current buffer. Use the following heuristic: if a period, question mark, or exclamation point is followed by a single space (possibly with closing quote marks, parentheses, brackets, or braces in-between), then add an extra space, unless the character preceding the period, question mark, or exclamation point is a capital letter (in which case we assume it is an abbreviation).
+14.2 Write shell scripts to (a) Replace blanks with underscores in the names of all ﬁles in the current directory. (b) Rename every ﬁle in the current directory by prepending to its name a textual representation of its modiﬁcation date. (c) Find all eps ﬁles in the ﬁle hierarchy below the current directory, and create any corresponding pdf ﬁles that are missing or out of date. (d) Print the names of all ﬁles in the ﬁle hierarchy below the current di- rectory for which a given predicate evaluates to true. Your (quoted) predicate should be speciﬁed on the command line using the syntax of the Unix test command, with one or more at signs (@) standing in for the name of the candidate ﬁle. 14.3 In Example 14.16 we used "$@" to refer to the parameters passed to ll. What would happen if we removed the quote marks? (Hint: Try this for ﬁles whose names contain spaces!) Read the man page for bash and learn the difference between $@ and $*. Create versions of ll that use $* or "$*" instead of "$@". Explain what’s going on. 14.4 (a) Extend the code in Figure 14.5, 14.6, or 14.7 to try to kill processes more gently. You’ll want to read the man page for the standard kill command. Use a TERM signal ﬁrst. If that doesn’t work, ask the user if you should resort to KILL. (b) Extend your solution to part (a) so that the script accepts an optional argument specifying the signal to be used. Alternatives to TERM and KILL include HUP, INT, QUIT, and ABRT. 14.5 Write a Perl, Python, or Ruby script that creates a simple* concordance*: a sorted list of signiﬁcant words appearing in an input document, with a sublist for each that indicates the lines on which the word occurs, with up to six words of surrounding context. Exclude from your list all common articles, conjunctions, prepositions, and pronouns. 14.6 Write Emacs Lisp scripts to (a) Insert today’s date into the current buffer at the insertion point (cur- rent cursor location). (b) Place quote marks (" ") around the word surrounding the insertion point. (c) Fix end-of-sentence spaces in the current buffer. Use the following heuristic: if a period, question mark, or exclamation point is followed by a single space (possibly with closing quote marks, parentheses, brackets, or braces in-between), then add an extra space, unless the character preceding the period, question mark, or exclamation point is a capital letter (in which case we assume it is an abbreviation).
 
 ![Figure 14.21 Pascal’s triangle...](images/page_800_vector_254.png)
 *Figure 14.21 Pascal’s triangle rendered in a web page (Exercise 14.8).*
 
-### (d) Run the contents of the current buffer through your favorite spell
+(d) Run the contents of the current buffer through your favorite spell checker, and create a new buffer containing a list of misspelled words. (e) Delete one misspelled word from the buffer created in (d), and place the cursor (insertion point) on top of the ﬁrst occurrence of that mis- spelled word in the current buffer. 14.7 Explain the circumstances under which it makes sense to realize an inter- active task on the Web as a CGI script, an embedded server-side script, or a client-side script. For each of these implementation choices, give three examples of tasks for which it is clearly the preferred approach. 14.8 (a) Write a web page with embedded PHP to print the ﬁrst 10 rows of Pascal’s triangle (see Example C 17.10 if you don’t know what this is). When rendered, your output should look like Figure 14.21. (b) Modify your page to create a self-posting form that accepts the num- ber of desired rows in an input ﬁeld. (c) Rewrite your page in JavaScript. 14.9 Create a ﬁll-in web form that uses a JavaScript implementation of the Luhn formula (Exercise 4.10) to check for typos in credit card numbers. (But don’t use real credit card numbers; homework exercises don’t tend to be very secure!) 14.10 (a) Modify the code of Figure 14.15 (Example 14.35) so that it replaces the form with its output, as the CGI and PHP versions of Figures 14.11 and 14.14 do. (b) Modify the CGI and PHP scripts of Figures 14.11 and 14.14 (Exam- ples 14.30 and 14.34) so they appear to append their output to the bottom of the form, as the JavaScript version of Figure 14.15 does.
 
-checker, and create a new buffer containing a list of misspelled words. (e) Delete one misspelled word from the buffer created in (d), and place the cursor (insertion point) on top of the ﬁrst occurrence of that mis- spelled word in the current buffer. 14.7 Explain the circumstances under which it makes sense to realize an inter- active task on the Web as a CGI script, an embedded server-side script, or a client-side script. For each of these implementation choices, give three examples of tasks for which it is clearly the preferred approach. 14.8 (a) Write a web page with embedded PHP to print the ﬁrst 10 rows of Pascal’s triangle (see Example C 17.10 if you don’t know what this is). When rendered, your output should look like Figure 14.21. (b) Modify your page to create a self-posting form that accepts the num- ber of desired rows in an input ﬁeld. (c) Rewrite your page in JavaScript. 14.9 Create a ﬁll-in web form that uses a JavaScript implementation of the Luhn formula (Exercise 4.10) to check for typos in credit card numbers. (But don’t use real credit card numbers; homework exercises don’t tend to be very secure!) 14.10 (a) Modify the code of Figure 14.15 (Example 14.35) so that it replaces the form with its output, as the CGI and PHP versions of Figures 14.11 and 14.14 do. (b) Modify the CGI and PHP scripts of Figures 14.11 and 14.14 (Exam- ples 14.30 and 14.34) so they appear to append their output to the bottom of the form, as the JavaScript version of Figure 14.15 does.
-
-## 14.11
-
-Run the following program in Perl:
+## 14.11 Run the following program in Perl:
 
 ```
 sub foo {
@@ -1297,9 +1209,7 @@ foo(3)
 
 Now comment out the second line (y = 2) and run the script again. Ex- plain what happens. Restate our claim about scoping more carefully and precisely. 14.14 Write a Perl script to translate English measurements (in, ft, yd, mi) into metric equivalents (cm, m, km). You may want to learn about the e mod- iﬁer on regular expressions, which allows the right-hand side of an s///e expression to contain executable code.
 
-### 14.15
-
-Write a Perl script to ﬁnd, for each input line, the longest substring that appears at least twice within the line, without overlapping. (*Warning:* This is harder than it sounds. Remember that by default Perl searches for a* left-* *most longest* match.) 14.16 Perl provides an alternative (?:... ) form of parentheses that supports grouping in regular expressions without performing capture. Using this syntax, Example 14.57 could have been written as follows:
+14.15 Write a Perl script to ﬁnd, for each input line, the longest substring that appears at least twice within the line, without overlapping. (*Warning:* This is harder than it sounds. Remember that by default Perl searches for a* left-* *most longest* match.) 14.16 Perl provides an alternative (?:... ) form of parentheses that supports grouping in regular expressions without performing capture. Using this syntax, Example 14.57 could have been written as follows:
 
 ```
 if (/^([+-]?)((\d+)\.|(\d*)\.(\d+))(?:e([+-]?\d+))?$/) {
@@ -1341,9 +1251,7 @@ domain—professional typesetting—inﬂuenced its design. Features you might w
 
 respect to Perl 5. What do you think of these changes? If you were in charge of the revision, what would you do differently? 14.30 Learn about AJAX, a collection of web technologies that allows a JavaScript program to interact with web servers “in the background,” to dynamically update a page in a browser after its initial loading. What kinds of ap- plications can you build in AJAX that you couldn’t easily build otherwise? What features of JavaScript are most important for making the technology work? 14.31 Learn about Dart, a language developed at Google. Initially intended as a successor to JavaScript, Dart is now supported only as a language in which to develop code that will be* translated into* JavaScript. What explains the change in strategy? What are the odds that some other competitor to JavaScript will emerge in future years?
 
-### 14.32–14.35 In More Depth.
-14.8
-**Bibliographic Notes**
+14.32–14.35 In More Depth. 14.8 **Bibliographic Notes**
 
 Most of the major scripting languages and their predecessors are described in books by the language designers or their close associates: awk [AKW88], Perl [CfWO12], PHP [TML13], Python [vRD11], and Ruby [TFH13]. Several of these books have versions available on-line. Most of the languages are also de- scribed in a variety of other texts, and most have dedicated web sites:* perl.org*, *php.net*,* python.org*,* ruby-lang.org*. Extensive documentation for Perl is pre- installed on many machines; type man perl for an index. Rexx [Ame96a] was standardized by ANSI, the American National Standards Institute. JavaScript [ECM11] is standardized by ECMA, the European stan- dards body. Guile (*gnu.org/software/guile/*) is GNU’s Scheme implementation for scripting. Standards for the World Wide Web, including HTML5, XML, XSL, XPath, and XSLT, are promulgated by the World Wide Web Consortium: *www.w3.org*. For those updating their pages to HTML5, the validation service at* validator.w3.org* is particularly useful. High-quality tutorials on many web- related topics can be found at* w3schools.com*. Hauben and Hauben [HH97a] describe the historical roots of the Internet, including early work on Unix. Original articles on the various Unix shell lan- guages include those of Mashey [Mas76], Bourne [Bou78], and Korn [Kor94]. The original reference on APL is by Iverson [Ive62]. Ousterhout [Ous98] makes the case for scripting languages in general, and Tcl in particular. Chonacky and Winch [CW05] compare and contrast Maple, Mathematica, and Matlab. Richard Gabriel’s collection of “Worse Is Better” papers can be found at* www.dreamsongs.* *com/WorseIsBetter.html*. A similar comparison of Tcl and Scheme can be found in the introductory chapter of Abelson, Greenspun, and Sandon’s on-line* Tcl for* *Web Nerds* guide (*philip.greenspun.com/tcl/index.adp*).
 

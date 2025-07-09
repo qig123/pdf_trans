@@ -1,6 +1,6 @@
-## 7
+# Chapter 7: Type Systems
 
-### **Type Systems**
+**7** **Type Systems**
 
 **Most programming languages include a notion of***** type*** for expressions and/or objects.1 Types serve several important purposes:
 
@@ -24,29 +24,25 @@ Computer hardware can interpret bits in memory in several different ways: as in-
 
 **DESIGN & IMPLEMENTATION**
 
-## 7.1 Systems programming
-
-The standard argument against complete type safety in C is that systems pro- grams need to be able to “break” types on occasion. Consider, for example, the code that implements dynamic memory management (e.g., malloc and free). This code must interpret the same bytes, at different times, as unal- located space, metadata, or (parts of) user-deﬁned data structures. “By ﬁat” conversions between types are inescapable. Such conversions need not, how- ever, be subtle. Largely in reaction to experience with C, the designers of C# chose to permit operations that break the type system only within blocks of code that have been explicitly labeled unsafe.
+7.1 Systems programming The standard argument against complete type safety in C is that systems pro- grams need to be able to “break” types on occasion. Consider, for example, the code that implements dynamic memory management (e.g., malloc and free). This code must interpret the same bytes, at different times, as unal- located space, metadata, or (parts of) user-deﬁned data structures. “By ﬁat” conversions between types are inescapable. Such conversions need not, how- ever, be subtle. Largely in reaction to experience with C, the designers of C# chose to permit operations that break the type system only within blocks of code that have been explicitly labeled unsafe.
 
 Dynamic (run-time) type checking can be seen as a form of late binding, and tends to be found in languages that delay other issues until run time as well. Static typing is thus the norm in languages intended for performance; dynamic typing is more common in languages intended for ease of programming. Lisp and Small- talk are dynamically (though strongly) typed. Most scripting languages are also dynamically typed; some (e.g., Python and Ruby) are strongly typed. Languages with dynamic scoping are generally dynamically typed (or not typed at all): if the compiler can’t identify the object to which a name refers, it usually can’t deter- mine the type of the object either.
 
-## 7.1.1** The Meaning of “Type”**
+7.1.1** The Meaning of “Type”**
 
 While every programmer has at least an informal notion of what is meant by “type,” that notion can be formalized in several different ways. Three of the most popular are what we might call the* denotational*,* structural*, and* abstraction-based* points of view. From the denotational point of view, a type is simply a set of val- ues. A value has a given type if it belongs to the set; an object has a given type if its value is guaranteed to be in the set. From the structural point of view, a type is either one of a small collection of* built-in* types (integer, character, Boolean, real, etc.; also called* primitive* or* predeﬁned* types), or a* composite* type created by
 
 **DESIGN & IMPLEMENTATION**
 
-### 7.2 Dynamic typing
-
-The growing popularity of scripting languages has led a number of promi- nent software developers to publicly question the value of static typing. They ask: given that we can’t check everything at compile time, how much pain is it worth to check the things we can? As a general rule, it is easier to write type- correct code than to prove that we have done so, and static typing requires such proofs. As type systems become more complex (due to object orienta- tion, generics, etc.), the complexity of static typing increases correspondingly. Anyone who has written extensively in Ada or C++ on the one hand, and in Python or Scheme on the other, cannot help but be struck at how much easier it is to write code, at least for modest-sized programs, without complex type declarations. Dynamic checking incurs some run-time overhead, of course, and may delay the discovery of bugs, but this is increasingly seen as insigniﬁ- cant in comparison to the potential increase in human productivity. An inter- mediate position, epitomized by the ML family of languages but increasingly adopted (in limited form) by others, retains the requirement that types be stat- ically known, but relies on the compiler to infer them automatically, without the need for some (or—in the case of ML—most) explicit declarations. We will discuss this topic more in Section 7.2.3. Static and dynamic typing and the role of inference promise to provide some of the most interesting language debates of the coming decade.
+7.2 Dynamic typing The growing popularity of scripting languages has led a number of promi- nent software developers to publicly question the value of static typing. They ask: given that we can’t check everything at compile time, how much pain is it worth to check the things we can? As a general rule, it is easier to write type- correct code than to prove that we have done so, and static typing requires such proofs. As type systems become more complex (due to object orienta- tion, generics, etc.), the complexity of static typing increases correspondingly. Anyone who has written extensively in Ada or C++ on the one hand, and in Python or Scheme on the other, cannot help but be struck at how much easier it is to write code, at least for modest-sized programs, without complex type declarations. Dynamic checking incurs some run-time overhead, of course, and may delay the discovery of bugs, but this is increasingly seen as insigniﬁ- cant in comparison to the potential increase in human productivity. An inter- mediate position, epitomized by the ML family of languages but increasingly adopted (in limited form) by others, retains the requirement that types be stat- ically known, but relies on the compiler to infer them automatically, without the need for some (or—in the case of ML—most) explicit declarations. We will discuss this topic more in Section 7.2.3. Static and dynamic typing and the role of inference promise to provide some of the most interesting language debates of the coming decade.
 
 applying a type* constructor* (record, array, set, etc.) to one or more simpler types. (This use of the term “constructor” is unrelated to the initialization func- tions of object-oriented languages. It also differs in a more subtle way from the use of the term in ML.) From the abstraction-based point of view, a type is an* in-* *terface* consisting of a set of operations with well-deﬁned and mutually consistent semantics. For both programmers and language designers, types may also reﬂect a mixture of these viewpoints. In denotational semantics (one of several ways to formalize the meaning of programs), a set of values is known as a* domain*. Types are domains, and the meaning of an expression is a value from the domain that represents the expres- sion’s type. Some domains—the integers, for example—are simple and familiar. Others are more complex. An array can be thought of as a value from a domain whose elements are functions; each of these functions maps values from some ﬁ- nite* index* type (typically a subset of the integers) to values of some other* element* type. As it turns out, denotational semantics can associate a type with* everything* in a program—even statements with side effects. The meaning of an assignment statement is a value from a domain of higher-level functions, each of whose ele- ments maps a* store*—a mapping from names to values that represents the current contents of memory—to another store, which represents the contents of memory after the assignment. One of the nice things about the denotational view of types is that it allows us in many cases to describe user-deﬁned composite types (records, arrays, etc.) in terms of mathematical operations on sets. We will allude to these operations again under “Composite Types” in Section 7.1.4. Because it is based on mathematical objects, the denotational view of types usually ignores such implementation is- sues as limited precision and word length. This limitation is less serious than it might at ﬁrst appear: Checks for such errors as arithmetic overﬂow are usually implemented outside of the type system of a language anyway. They result in a run-time error, but this error is not called a type clash. When a programmer deﬁnes an enumerated type (e.g., enum hue {red, green, blue} in C), he or she certainly thinks of this type as a set of values. For other varieties of user-deﬁned type, this denotational view may not be as nat- ural. Instead, the programmer may think in terms of the way the type is built from simpler types, or in terms of its meaning or purpose. These ways of think- ing reﬂect the structural and abstraction-based points of view, respectively. The structural point of view was pioneered by Algol W and Algol 68, and is character- istic of many languages designed in the 1970s and 1980s. The abstraction-based point of view was pioneered by Simula-67 and Smalltalk, and is characteristic of modern object-oriented languages; it can also be found in the module constructs of various other languages, and it can be adopted as a matter of programming discipline in almost any language. We will consider the structural point of view in more detail in Chapter 8, and the abstraction-based in Chapter 10.
 
-## 7.1.2** Polymorphism**
+7.1.2** Polymorphism**
 
 *Polymorphism*, which we mentioned brieﬂy in Section 3.5.2, takes its name from the Greek, and means “having multiple forms.” It applies to code—both data structures and subroutines—that is designed to work with values of multiple types. To maintain correctness, the types must generally have certain characteris- tics in common, and the code must not depend on any other characteristics. The commonality is usually captured in one of two main ways. In* parametric poly-* *morphism* the code takes a type (or set of types) as a parameter, either explicitly or implicitly. In* subtype polymorphism*, the code is designed to work with values of some speciﬁc type* T*, but the programmer can deﬁne additional types to be extensions or reﬁnements of* T*, and the code will work with these* subtypes* as well. Explicit parametric polymorphism, also known as* generics* (or* templates* in C++), typically appears in statically typed languages, and is usually implemented at compile time. The implicit version can also be implemented at compile time— speciﬁcally, in ML-family languages; more commonly, it is paired with dynamic typing, and the checking occurs at run time. Subtype polymorphism appears primarily in object-oriented languages. With static typing, most of the work required to deal with multiple types can be per- formed at compile time: the principal run-time cost is an extra level of indirection on method invocations. Most languages that envision such an implementation, including C++, Eiffel, OCaml, Java, and C#, provide a separate mechanism for generics, also checked mainly at compile time. The combination of subtype and parametric polymorphism is particularly useful for* container* (*collection*) classes such as “list of T” (List<T>) or “stack of T” (Stack<T>), where T is initially unspeciﬁed, and can be instantiated later as almost any type. By contrast, dynamically typed object-oriented languages, including Smalltalk, Python, and Ruby, generally use a single mechanism for both parametric and sub- type polymorphism, with checking delayed until run time. A uniﬁed mechanism also appears in Objective-C, which provides dynamically typed objects on top of otherwise static typing. We will consider parametric polymorphism in more detail in Section 7.3, after our coverage of typing in ML. Subtype polymorphism will largely be deferred to Chapter 10, which covers object orientation, and to Section 14.4.4, which focuses on objects in scripting languages.
 
-## 7.1.3** Orthogonality**
+7.1.3** Orthogonality**
 
 In Section 6.1.2 we discussed the importance of orthogonality in the design of expressions, statements, and control-ﬂow constructs. In a highly orthogonal lan- guage, these features can be used, with consistent behavior, in almost any com- bination. Orthogonality is equally important in type system design. A highly or- thogonal language tends to be easier to understand, to use, and to reason about in
 
@@ -132,7 +128,7 @@ B := (1 => 1, 3 | 5 | 7 => 3, others => 0);
 
 Here the aggregates assigned into p and A are* positional*; the aggregates assigned into q and B name their elements explicitly. The aggregate for B uses a shorthand notation to assign the same value (3) into array elements 3, 5, and 7, and to as- sign a 0 into all unnamed ﬁelds. Several languages, including C, C++, Fortran 90, and Lisp, provide similar capabilities. ■ ML provides a very general facility for composite expressions, based on the use of* constructors* (discussed in Section 11.4.3). Lambda expressions, which we saw in Section 3.6.4 and will discuss again in Chapter 11, amount to aggregates for values that are functions.
 
-## 7.1.4** Classiﬁcation of Types**
+7.1.4** Classiﬁcation of Types**
 
 The terminology for types varies some from one language to another. This sub- section presents deﬁnitions for the most common terms. Most languages provide built-in types similar to those supported in hardware by most processors: inte- gers, characters, Booleans, and real (ﬂoating-point) numbers. Booleans (sometimes called* logical*s) are typically implemented as single-byte quantities, with 1 representing true and 0 representing false. In a few lan- guages and implementations, Booleans may be packed into arrays using only one bit per value. As noted in Section 6.1.2 (“Orthogonality”), C was historically un- usual in omitting a Boolean type: where most languages would expect a Boolean value, C expected an integer, using zero for false and anything else for true. C99 introduced a new _Bool type, but it is effectively an integer that the com- piler is permitted to store in a single bit. As noted in Section C 6.5.4, Icon replaces Booleans with a more general notion of* success* and* failure*. Characters have traditionally been implemented as one-byte quantities as well, typically (but not always) using the ASCII encoding. More recent languages (e.g., Java and C#) use a two-byte representation designed to accommodate (the com- monly used portion of) the* Unicode* character set. Unicode is an international standard designed to capture the characters of a wide variety of languages (see Sidebar 7.3). The ﬁrst 128 characters of Unicode (\u0000 through \u007f) are identical to ASCII. C and C++ provide both regular and “wide” characters, though for wide characters both the encoding and the actual width are imple- mentation dependent. Fortran 2003 supports four-byte Unicode characters.
 
@@ -144,9 +140,7 @@ A few languages (e.g., C and Fortran) distinguish between different lengths of i
 
 **DESIGN & IMPLEMENTATION**
 
-## 7.3 Multilingual character sets
-
-The* ISO 10646* international standard deﬁnes a* Universal Character Set (UCS)* intended to include all characters of all known human languages. (It also sets aside a “private use area” for such artiﬁcial [constructed] languages as Klingon, Tengwar, and Cirth [Tolkien Elvish]. Allocation of this private space is coordi- nated by a volunteer organization known as the ConScript Unicode Registry.) All natural languages currently employ codes in the 16-bit* Basic Multilingual* *Plane (BMP)*: 0x0000 through 0xfffd. *Unicode* is an expanded version of ISO 10646, maintained by an interna- tional consortium of software manufacturers. In addition to mapping tables, it covers such topics as rendering algorithms, directionality of text, and sorting and comparison conventions. While recent languages have moved toward 16- or 32-bit internal char- acter representations, these cannot be used for external storage—text ﬁles— without causing severe problems with backward compatibility. To accommo- date Unicode without breaking existing tools, Ken Thompson in 1992 pro- posed a multibyte “expanding” code known as* UTF-8* (UCS/Unicode Trans- formation Format, 8-bit), and codiﬁed as a formal annex (appendix) to ISO 10646. UTF-8 characters occupy a maximum of 6 bytes—3 if they lie in the BMP, and only 1 if they are ordinary ASCII. The trick is to observe that ASCII is a 7-bit code; in any legacy text ﬁle the most signiﬁcant bit of every byte is 0. In UTF-8 a most signiﬁcant bit of 1 indicates a multibyte character. Two-byte codes begin with the bits 110. Three-byte codes begin with 1110. Second and subsequent bytes of multibyte characters always begin with 10. On some systems one also ﬁnds ﬁles encoded in one of ten variants of the older 8-bit ISO 8859 standard, but these are inconsistently rendered across platforms. On the web, non-ASCII characters are typically encoded with* nu-* *meric character references*, which bracket a Unicode value, written in decimal or hex, with an ampersand and a semicolon. The copyright symbol (©), for example, is &#169;. Many characters also have symbolic* entity names* (e.g., &copy;), but not all browsers support these.
+7.3 Multilingual character sets The* ISO 10646* international standard deﬁnes a* Universal Character Set (UCS)* intended to include all characters of all known human languages. (It also sets aside a “private use area” for such artiﬁcial [constructed] languages as Klingon, Tengwar, and Cirth [Tolkien Elvish]. Allocation of this private space is coordi- nated by a volunteer organization known as the ConScript Unicode Registry.) All natural languages currently employ codes in the 16-bit* Basic Multilingual* *Plane (BMP)*: 0x0000 through 0xfffd. *Unicode* is an expanded version of ISO 10646, maintained by an interna- tional consortium of software manufacturers. In addition to mapping tables, it covers such topics as rendering algorithms, directionality of text, and sorting and comparison conventions. While recent languages have moved toward 16- or 32-bit internal char- acter representations, these cannot be used for external storage—text ﬁles— without causing severe problems with backward compatibility. To accommo- date Unicode without breaking existing tools, Ken Thompson in 1992 pro- posed a multibyte “expanding” code known as* UTF-8* (UCS/Unicode Trans- formation Format, 8-bit), and codiﬁed as a formal annex (appendix) to ISO 10646. UTF-8 characters occupy a maximum of 6 bytes—3 if they lie in the BMP, and only 1 if they are ordinary ASCII. The trick is to observe that ASCII is a 7-bit code; in any legacy text ﬁle the most signiﬁcant bit of every byte is 0. In UTF-8 a most signiﬁcant bit of 1 indicates a multibyte character. Two-byte codes begin with the bits 110. Three-byte codes begin with 1110. Second and subsequent bytes of multibyte characters always begin with 10. On some systems one also ﬁnds ﬁles encoded in one of ten variants of the older 8-bit ISO 8859 standard, but these are inconsistently rendered across platforms. On the web, non-ASCII characters are typically encoded with* nu-* *meric character references*, which bracket a Unicode value, written in decimal or hex, with an ampersand and a semicolon. The copyright symbol (©), for example, is &#169;. Many characters also have symbolic* entity names* (e.g., &copy;), but not all browsers support these.
 
 complex types together constitute the* scalar* types. Scalar types are also some- times called* simple* types.
 
@@ -160,9 +154,7 @@ The values of an enumeration type are ordered, so comparisons are generallyvalid
 
 **DESIGN & IMPLEMENTATION**
 
-## 7.4 Decimal types
-
-A few languages, notably Cobol and PL/I, provide a* decimal* type for ﬁxed- point representation of integer quantities. These types were designed primarily to exploit the* binary-coded decimal (BCD)* integer format supported by many traditional CISC machines. BCD devotes one* nibble* (four bits—half a byte) to each decimal digit. Machines that support BCD in hardware can perform arithmetic directly on the BCD representation of a number, without convert- ing it to and from binary form. This capability is particularly useful in business and ﬁnancial applications, which treat their data as both numbers and charac- ter strings. With the growth in on-line commerce, the past few years have seen renewed interest in decimal arithmetic. The 2008 revision of the IEEE 754 ﬂoating- point standard includes decimal ﬂoating-point types in 32-, 64-, and 128-bit lengths. These represent both the mantissa (signiﬁcant bits) and exponent in binary, but interpret the exponent as a power of ten, not a power of two. At a given length, values of decimal type have greater precision but smaller range than binary ﬂoating-point values. They are ideal for ﬁnancial calculations, be- cause they capture decimal fractions precisely. Designers hope the new stan- dard will displace existing incompatible decimal formats, not only in hardware but also in software libraries, thereby providing the same portability and pre- dictability that the original 754 standard provided for binary ﬂoating-point. C# includes a 128-bit decimal type that is compatible with the new stan- dard. Speciﬁcally, a C# decimal variable includes 96 bits of precision, a sign, and a decimal* scaling factor* that can vary between 10*−*28 and 1028. IBM, for which business and ﬁnancial applications have always been an important mar- ket, has included a hardware implementation of the standard (64- and 128-bit widths) in its pSeries RISC machines, beginning with the POWER6.
+7.4 Decimal types A few languages, notably Cobol and PL/I, provide a* decimal* type for ﬁxed- point representation of integer quantities. These types were designed primarily to exploit the* binary-coded decimal (BCD)* integer format supported by many traditional CISC machines. BCD devotes one* nibble* (four bits—half a byte) to each decimal digit. Machines that support BCD in hardware can perform arithmetic directly on the BCD representation of a number, without convert- ing it to and from binary form. This capability is particularly useful in business and ﬁnancial applications, which treat their data as both numbers and charac- ter strings. With the growth in on-line commerce, the past few years have seen renewed interest in decimal arithmetic. The 2008 revision of the IEEE 754 ﬂoating- point standard includes decimal ﬂoating-point types in 32-, 64-, and 128-bit lengths. These represent both the mantissa (signiﬁcant bits) and exponent in binary, but interpret the exponent as a power of ten, not a power of two. At a given length, values of decimal type have greater precision but smaller range than binary ﬂoating-point values. They are ideal for ﬁnancial calculations, be- cause they capture decimal fractions precisely. Designers hope the new stan- dard will displace existing incompatible decimal formats, not only in hardware but also in software libraries, thereby providing the same portability and pre- dictability that the original 754 standard provided for binary ﬂoating-point. C# includes a 128-bit decimal type that is compatible with the new stan- dard. Speciﬁcally, a C# decimal variable includes 96 bits of precision, a sign, and a decimal* scaling factor* that can vary between 10*−*28 and 1028. IBM, for which business and ﬁnancial applications have always been an important mar- ket, has included a hardware implementation of the standard (64- and 128-bit widths) in its pSeries RISC machines, beginning with the POWER6.
 
 ordered nature of enumerations facilitates the writing of enumeration-controlled loops:
 
@@ -214,9 +206,7 @@ type test_score = 0..100; workday = mon..fri; ■
 
 **DESIGN & IMPLEMENTATION**
 
-## 7.5 Multiple sizes of integers
-
-The space savings possible with (small-valued) subrange types in Pascal and Ada is achieved in several other languages by providing more than one size of built-in integer type. C and C++, for example, support integer arithmetic on signed and unsigned variants of char, short, int, long, and long long types, with monotonically nondecreasing sizes.2
+7.5 Multiple sizes of integers The space savings possible with (small-valued) subrange types in Pascal and Ada is achieved in several other languages by providing more than one size of built-in integer type. C and C++, for example, support integer arithmetic on signed and unsigned variants of char, short, int, long, and long long types, with monotonically nondecreasing sizes.2
 
 **2** More speciﬁcally, C requires ranges for these types corresponding to lengths of at least 1, 2, 2, 4, and 8 bytes, respectively. In practice, one ﬁnds implementations in which plain ints are 2, 4, or 8 bytes long, including some in which they are the same size as shorts but shorter than longs, and some in which they are the same size as longs, and longer than shorts.
 
@@ -247,50 +237,31 @@ which belongs to a (potentially different) simpler type. Records are akin to mat
 
 We will examine composite types in more detail in Chapter 8.
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 1. What purpose(s) do types serve in a programming language?
 
-### 1.
-What purpose(s) do types serve in a programming language?
+## 2. What does it mean for a language to be* strongly typed*?* Statically typed*? What prevents, say, C from being strongly typed?
 
-### 2.
-What does it mean for a language to be* strongly typed*?* Statically typed*? What
-prevents, say, C from being strongly typed?
+## 3. Name two programming languages that are strongly but dynamically typed. 4. What is a* type clash*?
 
-### 3.
-Name two programming languages that are strongly but dynamically
-typed.
-4.
-What is a* type clash*?
+## 5. Discuss the differences among the* denotational*,* structural*, and* abstraction-* *based* views of types.
 
-* 
-  Discuss the differences among the* denotational*,* structural*, and* abstraction-*
-  *based* views of types.
-* 
-  What does it mean for a set of language features (e.g., a type system) to be
-  *orthogonal*?
-  7.
-  What are* aggregates*?
-  8.
-  What are* option* types? What purpose do they serve?
-### 9.
-What is* polymorphism*? What distinguishes its* parametric* and* subtype* vari-
-eties? What are* generics*?
+## 6. What does it mean for a set of language features (e.g., a type system) to be *orthogonal*? 7. What are* aggregates*? 8. What are* option* types? What purpose do they serve?
 
-### 10. What is the difference between discrete and scalar types?
+## 9. What is* polymorphism*? What distinguishes its* parametric* and* subtype* vari- eties? What are* generics*?
 
-### 11. Give two examples of languages that lack a Boolean type. What do they use
-
-instead? 12. In what ways may an enumeration type be preferable to a collection of named constants? In what ways may a subrange type be preferable to its base type? In what ways may a string be preferable to an array of characters?
-
-## 7.2
-
-### **Type Checking**
+* What is the difference between* discrete* and* scalar* types?
+  11. Give two examples of languages that lack a Boolean type. What do they use
+  instead?
+  12. In what ways may an enumeration type be preferable to a collection of named
+  constants? In what ways may a subrange type be preferable to its base type?
+  In what ways may a string be preferable to an array of characters?
+7.2 **Type Checking**
 
 In most statically typed languages, every deﬁnition of an object (constant, vari- able, subroutine, etc.) must specify the object’s type. Moreover, many of the con- texts in which an object might appear are also typed, in the sense that the rules of the language constrain the types that an object in that context may validly possess. In the subsections below we will consider the topics of* type equivalence*,* type com-* *patibility*, and* type inference*. Of the three, type compatibility is the one of most concern to programmers. It determines when an object of a certain type can be used in a certain context. At a minimum, the object can be used if its type and the type expected by the context are equivalent (i.e., the same). In many languages, however, compatibility is a looser relationship than equivalence: objects and con- texts are often compatible even when their types are different. Our discussion of type compatibility will touch on the subjects of type* conversion* (also called* cast-* *ing*), which changes a value of one type into a value of another; type* coercion*, which performs a conversion automatically in certain contexts; and* nonconvert-* *ing* type casts, which are sometimes used in systems programming to interpret the bits of a value of one type as if they represented a value of some other type. Whenever an expression is constructed from simpler subexpressions, the ques- tion arises: given the types of the subexpressions (and possibly the type expected
 
 by the surrounding context), what is the type of the expression as a whole? This question is answered by type inference. Type inference is often trivial: the sum of two integers is still an integer, for example. In other cases (e.g., when dealing with sets) it is a good bit trickier. Type inference plays a particularly important role in ML, Miranda, and Haskell, in which almost all type annotations are optional, and will be inferred by the compiler when omitted.
 
-## 7.2.1** Type Equivalence**
+7.2.1** Type Equivalence**
 
 In a language in which the user can deﬁne new types, there are two principal ways of deﬁning type equivalence.* Structural equivalence* is based on the* content* of type deﬁnitions: roughly speaking, two types are the same if they consist of the same components, put together in the same way.* Name equivalence* is based on the* lexical occurrence* of type deﬁnitions: roughly speaking, each deﬁnition introduces a new type. Structural equivalence is used in Algol-68, Modula-3, and (with various wrinkles) C and ML. Name equivalence appears in Java, C#, standard Pascal, and most Pascal descendants, including Ada. The exact deﬁnition of structural equivalence varies from one language to an- other. It requires that one decide which potential differences between types are important, and which may be considered unimportant. Most people would prob- ably agree that the format of a declaration should not matter—identical declara- tions that differ only in spacing or line breaks should still be considered equiva- lent. Likewise, in a Pascal-like language with structural equivalence, **EXAMPLE** 7.17
 
@@ -324,27 +295,12 @@ Here the length of the array is the same in both cases, but the index values are
 
 The problem with structural equivalence mentation-oriented way to think about types. Its principal problem is an inability to distinguish between types that the programmer may think of as distinct, but which happen by coincidence to have the same internal structure:
 
-* 
-  type student = record
-  2.
-  name, address : string
-  3.
-  age : integer
-* 
-  type school = record
-  5.
-  name, address : string
-  6.
-  age : integer
-* 
-  x : student;
-  8.
-  y : school;
-  9.
-  . . .
-  10.
-  x := y;
-  –– is this an error?
+## 1. type student = record 2. name, address : string 3. age : integer
+
+## 4. type school = record 5. name, address : string 6. age : integer
+
+## 7. x : student; 8. y : school; 9. . . . 10. x := y; –– is this an error?
+
 Most programmers would probably want to be informed if they accidentally as- signed a value of type school into a variable of type student, but a compiler whose type checking is based on structural equivalence will blithely accept such an as- signment. Name equivalence is based on the assumption that if the programmer goes to the effort of writing two type deﬁnitions, then those deﬁnitions are probably meant to represent different types. In the example above, variables x and y will be considered to have different types under name equivalence: x uses the type declared at line 1; y uses the type declared at line 4. ■
 
 ***Variants of Name Equivalence***
@@ -464,9 +420,7 @@ Conversions and nonconverting casts in C++
 
 **DESIGN & IMPLEMENTATION**
 
-## 7.6 Nonconverting casts
-
-C programmers sometimes attempt a nonconverting type cast (type pun) by taking the address of an object, converting the type of the resulting pointer, and then dereferencing:
+## 7.6 Nonconverting casts C programmers sometimes attempt a nonconverting type cast (type pun) by taking the address of an object, converting the type of the resulting pointer, and then dereferencing:
 
 r = *((float *) &n);
 
@@ -479,7 +433,7 @@ int n = static_cast<int>(d);
 
 There is also a const_cast that can be used to remove read-only qualiﬁcation. C-style type casts in C++ are deﬁned in terms of const_cast, static_cast, and reinterpret_cast; the precise behavior depends on the source and target types. ■ Any nonconverting type cast constitutes a dangerous subversion of the lan- guage’s type system. In a language with a weak type system such subversions can be difﬁcult to ﬁnd. In a language with a strong type system, the use of explicit nonconverting type casts at least labels the dangerous points in the code, facilitat- ing debugging if problems arise.
 
-## 7.2.2** Type Compatibility**
+7.2.2** Type Compatibility**
 
 Most languages do not require equivalence of types in every context. Instead, they merely say that a value’s type must be* compatible* with that of the context in which it appears. In an assignment statement, the type of the right-hand side must be compatible with that of the left-hand side. The types of the operands of + must both be compatible with some common type that supports addition (integers, real numbers, or perhaps strings or sets). In a subroutine call, the types of any arguments passed into the subroutine must be compatible with the types of the corresponding formal parameters, and the types of any formal parameters passed back to the caller must be compatible with the types of the corresponding arguments. The deﬁnition of type compatibility varies greatly from language to language. Ada takes a relatively restrictive approach: an Ada type S is compatible with an expected type T if and only if (1) S and T are equivalent, (2) one is a subtype of the other (or both are subtypes of the same base type), or (3) both are arrays, with the same numbers and types of elements in each dimension. Pascal was only slightly more lenient: in addition to allowing the intermixing of base and subrange types, it allowed an integer to be used in a context where a real was expected.
 
@@ -535,7 +489,7 @@ myStack.push(s); myStack.push(f); // we can push any kind of object on a stack .
 
 In a language without type tags, the assignment of a universal reference into an object of a speciﬁc reference type cannot be checked, because objects are not self- descriptive: there is no way to identify their type at run time. The programmer must therefore resort to an (unchecked) type conversion.
 
-## 7.2.3** Type Inference**
+7.2.3** Type Inference**
 
 We have seen how type checking ensures that the components of an expression (e.g., the arguments of a binary operator) have appropriate types. But what de- termines the type of the overall expression? In many cases, the answer is easy. The result of an arithmetic operator usually has the same type as the operands (possibly after coercing one of them, if their types were not the same). The re- sult of a comparison is usually Boolean. The result of a function call has the type declared in the function’s header. The result of an assignment (in languages in which assignments are expressions) has the same type as the left-hand side. In a few cases, however, the answer is not obvious. Operations on subranges and com- posite objects, for example, do not necessarily preserve the types of the operands. We examine these cases in the remainder of this subsection. In the following sec- tion, we consider a more elaborate form of type inference found in ML, Miranda, and Haskell.
 
@@ -601,7 +555,7 @@ decltype(a + b) sum;
 
 Here the type of sum depends on the types of A and B under the C++ coercion rules. If A and B are both int, for example, then sum will be an int. If one of A and B is double and the other is int, then sum will be a double. With appropri- ate (user-provided) coercion rules, sum might be inferred to have a complex (real + imaginary) or arbitrary-precision (“bignum”) type. ■
 
-## 7.2.4** Type Checking in ML**
+7.2.4** Type Checking in ML**
 
 The most sophisticated form of type inference occurs in the ML family of func- tional languages, including Haskell, F#, and the OCaml and SML dialects of ML itself. Programmers have the option of declaring the types of objects in these lan- guages, in which case the compiler behaves much like that of a more traditional statically typed language. As we noted near the beginning of Section 7.1, how- ever, programmers may also choose not to declare certain types, in which case the compiler will infer them, based on the known types of literal constants, the explicitly declared types of any objects that have them, and the syntactic structure
 
@@ -609,16 +563,8 @@ of the program. ML-style type inference is the invention of the language’s cre
 
 Fibonacci function in OCaml introduced in Example 6.87:
 
-* 
-  let fib n =
-  2.
-  let rec fib_helper n1 n2 i =
-  3.
-  if i = n then n2
-  4.
-  else fib_helper n2 (n1 + n2) (i + 1) in
-  5.
-  fib_helper 0 1 0;;
+## 1. let fib n = 2. let rec fib_helper n1 n2 i = 3. if i = n then n2 4. else fib_helper n2 (n1 + n2) (i + 1) in 5. fib_helper 0 1 0;;
+
 The inner let construct introduces a nested scope: function fib_helper is nested inside fib. The body of the outer function, fib, is the expression fib_helper 0 1 0. The body of fib_helper is an if... then ... else expres- sion; it evaluates to either n2 or to fib_helper n2 (n1 + n2) (i + 1), de- pending on whether the third argument to fib_helper is n or not. The keyword rec indicates that fib_helper is recursive, so its name should be made available within its own body—not just in the body of the let. Given this function deﬁnition, an OCaml compiler will reason roughly as fol- lows: Parameter i of fib_helper must have type int, because it is added to 1 at line 4. Similarly, parameter n of fib must have type int, because it is com- pared to i at line 3. In the call to fib_helper at line 5, the types of all three arguments are int, and since this is the only call, the types of n1 and n2 are int. Moreover the type of i is consistent with the earlier inference, namely int, and the types of the arguments to the recursive call at line 4 are similarly consistent. Since fib_helper returns n2 at line 3, the result of the call at line 5 will be an int. Since fib immediately returns this result as its own result, the return type of fib is int. ■
 
 **4** Robin Milner (1934–2010), of Cambridge University’s Computer Laboratory, was responsible not only for the development of ML and its type system, but for the Logic of Computable Func- tions, which provides a formal basis for machine-assisted proof construction, and the Calculus of Communicating Systems, which provides a general theory of concurrency. He received the ACM Turing Award in 1991.
@@ -653,9 +599,7 @@ Polymorphic functions objects in an OCaml program must be consistent, they do no
 
 **DESIGN & IMPLEMENTATION**
 
-## 7.7 Type classes for overloaded functions in Haskell
-
-In the OCaml code of Figure 7.1, parameters x, p, and q must support the equality operator (=). OCaml makes this easy by allowing anything to be compared for equality, and then checking at run time to make sure that the comparison actually makes sense. An attempt to compare two functions, for example, will result in a run-time error. This is unfortunate, given that most other type checking in OCaml (and in other ML-family languages) can happen at compile time. In a similar vein, OCaml provides a built-in deﬁnition of or- dering (<, >, <=, and >=) on almost all types, even when it doesn’t make sense, so that the programmer can create polymorphic functions like min, max, and sort, which require it. A function like average, which might plausibly work in a polymorphic fashion for all numeric types (presumably with roundoff for integers) cannot be deﬁned in OCaml: each numeric type has its own addition and division operations; there is no operator overloading. Haskell overcomes these limitations using the machinery of* type classes*. As mentioned in Example 3.28, these explicitly identify the types that support a particular overloaded function or set of functions. Elements of any type in the Ord class, for example, support the <, >, <=, and >= operations. Elements of any type in the Enum class are countable; Num types support addition, subtrac- tion, and multiplication; Fractional and Real types additionally support division. In the Haskell equivalent of the code in Figure 7.1, parameters x, p, and q would be inferred to belong to some type in the class Eq. Elements of an array passed to sort would be inferred to belong to some type in the class Ord. Type consistency in Haskell can thus be veriﬁed entirely at compile time: there is no need for run-time checks.
+7.7 Type classes for overloaded functions in Haskell In the OCaml code of Figure 7.1, parameters x, p, and q must support the equality operator (=). OCaml makes this easy by allowing anything to be compared for equality, and then checking at run time to make sure that the comparison actually makes sense. An attempt to compare two functions, for example, will result in a run-time error. This is unfortunate, given that most other type checking in OCaml (and in other ML-family languages) can happen at compile time. In a similar vein, OCaml provides a built-in deﬁnition of or- dering (<, >, <=, and >=) on almost all types, even when it doesn’t make sense, so that the programmer can create polymorphic functions like min, max, and sort, which require it. A function like average, which might plausibly work in a polymorphic fashion for all numeric types (presumably with roundoff for integers) cannot be deﬁned in OCaml: each numeric type has its own addition and division operations; there is no operator overloading. Haskell overcomes these limitations using the machinery of* type classes*. As mentioned in Example 3.28, these explicitly identify the types that support a particular overloaded function or set of functions. Elements of any type in the Ord class, for example, support the <, >, <=, and >= operations. Elements of any type in the Enum class are countable; Num types support addition, subtrac- tion, and multiplication; Fractional and Real types additionally support division. In the Haskell equivalent of the code in Figure 7.1, parameters x, p, and q would be inferred to belong to some type in the class Eq. Elements of an array passed to sort would be inferred to belong to some type in the class Ord. Type consistency in Haskell can thus be veriﬁed entirely at compile time: there is no need for run-time checks.
 
 ![Figure 7.1 An OCaml...](images/page_363_vector_156.png)
 *Figure 7.1 An OCaml program to illustrate checking for type consistency.*
@@ -674,39 +618,26 @@ A simple instance of uniﬁcation that E1 is an expression of type ‚a * int (t
 
 **DESIGN & IMPLEMENTATION**
 
-#### 7.8 Uniﬁcation
+7.8 Uniﬁcation Uniﬁcation is a powerful technique. In addition to its role in type inference (which also arises in the templates [generics] of C++), uniﬁcation plays a cen- tral role in the computational model of Prolog and other logic languages. We will consider this latter role in Section 12.1. In the general case the cost of uni- fying the types of two expressions can be exponential [Mai90], but the patho- logical cases tend not to arise in practice.
 
-Uniﬁcation is a powerful technique. In addition to its role in type inference (which also arises in the templates [generics] of C++), uniﬁcation plays a cen- tral role in the computational model of Prolog and other logic languages. We will consider this latter role in Section 12.1. In the general case the cost of uni- fying the types of two expressions can be exponential [Mai90], but the patho- logical cases tend not to arise in practice.
+3**CHECK YOUR UNDERSTANDING** 13. What is the difference between* type equivalence* and* type compatibility*?
 
-### 3CHECK YOUR UNDERSTANDING
+## 14. Discuss the comparative advantages of* structural* and* name* equivalence for types. Name three languages that use each approach.
 
-#### 13. What is the difference between* type equivalence* and* type compatibility*?
+## 15. Explain the difference between* strict* and* loose* name equivalence. 16. Explain the distinction between* derived* types and* subtypes* in Ada.
 
-#### 14. Discuss the comparative advantages of structural and name equivalence for
+## 17. Explain the differences among* type conversion*,* type coercion*, and* nonconvert-* *ing type casts*.
 
-types. Name three languages that use each approach.
+## 18. Summarize the arguments for and against coercion. 19. Under what circumstances does a type conversion require a run-time check?
 
-* Explain the difference between* strict* and* loose* name equivalence.
-  16. Explain the distinction between* derived* types and* subtypes* in Ada.
-#### 17. Explain the differences among type conversion, type coercion, and nonconvert-
-
-*ing type casts*.
-
-#### 18. Summarize the arguments for and against coercion.
-19. Under what circumstances does a type conversion require a run-time check?
-
-#### 20. What purpose is served by universal reference types?
-
-#### 21. What is* type inference*? Describe three contexts in which it occurs.
-22. Under what circumstances does an ML compiler announce a type clash?
-
+* What purpose is served by* universal* reference types?
+  21. What is* type inference*? Describe three contexts in which it occurs.
+  22. Under what circumstances does an ML compiler announce a type clash?
 * Explain how the type inference of ML leads naturally to polymorphism.
   24. Why do ML programmers often declare the types of variables, even when they
   don’t have to?
   25. What is* uniﬁcation*? What is its role in ML?
-## 7.3
-
-#### **Parametric Polymorphism**
+7.3 **Parametric Polymorphism**
 
 As we have seen in the previous section, functions in ML-family languages are naturally polymorphic. Consider the simple task of ﬁnding the minimum of two values. In OCaml, the function **EXAMPLE** 7.44
 
@@ -737,7 +668,7 @@ Duck typing in Ruby deﬁned method supported by collection classes. Assuming th
 
 For the ﬁnal call to min, we have provided, as a trailing block, an alternative deﬁ- nition of the comparison operator. ■ This operational style of checking (an object has an acceptable type if it sup- ports the requested method) is sometimes known as* duck typing*. It takes its name from the notion that “if it walks like a duck and quacks like a duck, then it must be a duck.” 6
 
-## 7.3.1** Generic Subroutines and Classes**
+7.3.1** Generic Subroutines and Classes**
 
 The disadvantage of polymorphism in Scheme, Smalltalk, Ruby, and the like is the need for run-time checking, which incurs nontrivial costs, and delays the report- ing of errors. The implicit polymorphism of ML-family languages avoids these disadvantages, but requires advanced type inference. For other compiled lan- guages,* explicit* parametric polymorphism (otherwise known as* generics*) allows the programmer to specify type parameters when declaring a subroutine or class. The compiler then uses these parameters in the course of static type checking. Languages that provide generics include Ada, C++ (which calls them* tem-* *plates*), Eiffel, Java, C#, and Scala. As a concrete example, consider the overloaded **EXAMPLE** 7.47
 
@@ -758,9 +689,7 @@ Generics can be implemented several ways. In most implementations of Ada and C++
 
 **DESIGN & IMPLEMENTATION**
 
-## 7.9 Generics in ML
-
-Perhaps surprisingly, given the implicit polymorphism that comes “for free” with type inference, both OCaml and SML provide explicit polymorphism— generics—as well, in the form of parameterized modules called* functors*. Un- like the implicit polymorphism, functors allow the OCaml or SML program- mer to indicate that a collection of functions and other values (i.e., the contents of a module) share a common set of generic parameters. This sharing is then enforced by the compiler. Moreover, any types exported by a functor invoca- tion (generic instantiation) are guaranteed to be distinct, even though their signatures (interfaces) are the same. As in Ada and C++, generic parameters in ML can be values as well as types. NB: While Haskell also provides something called a Functor (speciﬁcally, a type class that supports a mapping function), its use of the term has little in common with that of OCaml and SML.
+7.9 Generics in ML Perhaps surprisingly, given the implicit polymorphism that comes “for free” with type inference, both OCaml and SML provide explicit polymorphism— generics—as well, in the form of parameterized modules called* functors*. Un- like the implicit polymorphism, functors allow the OCaml or SML program- mer to indicate that a collection of functions and other values (i.e., the contents of a module) share a common set of generic parameters. This sharing is then enforced by the compiler. Moreover, any types exported by a functor invoca- tion (generic instantiation) are guaranteed to be distinct, even though their signatures (interfaces) are the same. As in Ada and C++, generic parameters in ML can be values as well as types. NB: While Haskell also provides something called a Functor (speciﬁcally, a type class that supports a mapping function), its use of the term has little in common with that of OCaml and SML.
 
 ![Figure 7.3 Generic array-based...](images/page_368_vector_321.png)
 *Figure 7.3 Generic array-based queue in C++.*
@@ -789,9 +718,7 @@ Generic sorting routine in Java might declare and use a sorting routine as follo
 
 **DESIGN & IMPLEMENTATION**
 
-## 7.10 Overloading and polymorphism
-
-Given that a compiler will often create multiple instances of the code for a generic subroutine, specialized to a given set of generic parameters, one might be forgiven for wondering: what exactly is the difference between the left and right sides of Figure 7.2? The answer lies in the generality of the polymorphic code. With overloading the programmer must write a separate min routine for every type, and while the compiler will choose among these automatically, the fact that they do something similar with their arguments is purely a matter of convention. Generics, on the other hand, allow the* compiler* to create an appropriate version for every needed type. The similarity of the calling syntax (and of the generated code, when conventions are followed) has led some au- thors to refer to overloading as* ad hoc* (special case)* polymorphism*. There is no particular reason, however, for the programmer to think of polymorphism in terms of multiple copies: from a semantic (conceptual) point of view, over- loaded subroutines use a single name for more than one thing; a polymorphic subroutine* is* a single thing.
+7.10 Overloading and polymorphism Given that a compiler will often create multiple instances of the code for a generic subroutine, specialized to a given set of generic parameters, one might be forgiven for wondering: what exactly is the difference between the left and right sides of Figure 7.2? The answer lies in the generality of the polymorphic code. With overloading the programmer must write a separate min routine for every type, and while the compiler will choose among these automatically, the fact that they do something similar with their arguments is purely a matter of convention. Generics, on the other hand, allow the* compiler* to create an appropriate version for every needed type. The similarity of the calling syntax (and of the generated code, when conventions are followed) has led some au- thors to refer to overloading as* ad hoc* (special case)* polymorphism*. There is no particular reason, however, for the programmer to think of polymorphism in terms of multiple copies: from a semantic (conceptual) point of view, over- loaded subroutines use a single name for more than one thing; a polymorphic subroutine* is* a single thing.
 
 ```
 public static <T extends Comparable<T>> void sort(T A[]) {
@@ -860,7 +787,7 @@ sort(strings, 30);
 
 In each case, the compiler will implicitly instantiate an appropriate version of the sort routine. Java and C# have similar conventions. To keep the language man- ageable, the rules for implicit instantiation in C++ are more restrictive than the rules for resolving overloaded subroutines in general. In particular, the compiler will not coerce a subroutine argument to match a type expression containing a generic parameter (Exercise C 7.26). ■ Figure 7.4 summarizes the features of Ada, C++, Java, and C# generics, and of the implicit parametric polymorphism of Lisp and ML. Further explanation of some of the details appears in Section C 7.3.2.
 
-## 7.3.2** Generics in C++, Java, and C#**
+7.3.2** Generics in C++, Java, and C#**
 
 Several of the key tradeoffs in the design of generics can be illustrated by com- paring the features of C++, Java, and C#. C++ is by far the most ambitious of the three. Its templates are intended for almost any programming task that re- quires substantially similar but not identical copies of an abstraction. Java and C# provide generics purely for the sake of polymorphism. Java’s design was heavily inﬂuenced by the desire for backward compatibility, not only with existing ver- sions of the language, but with existing virtual machines and libraries. The C# designers, though building on an existing language, did not feel as constrained. They had been planning for generics from the outset, and were able to engineer substantial new support into the .NET virtual machine.
 
@@ -868,9 +795,7 @@ Several of the key tradeoffs in the design of generics can be illustrated by com
 
 On the companion site we discuss C++, Java, and C# generics in more detail, and consider the impact of their differing designs on the quality of error messages, the speed and size of generated code, and the expressive power of the notation. We note in particular the very different mechanisms used to make generic classes and methods support as broad a class of generic arguments as possible.
 
-## 7.4
-
-### **Equality Testing and Assignment**
+7.4 **Equality Testing and Assignment**
 
 For simple, primitive data types such as integers, ﬂoating-point numbers, or char- acters, equality testing and assignment are relatively straightforward operations, with obvious semantics and obvious implementations (bit-wise comparison or copy). For more complicated or abstract data types, both semantic and imple- mentation subtleties arise. Consider for example the problem of comparing two character strings. Should the expression s = t determine whether s and t
 
@@ -899,69 +824,36 @@ In any particular implementation, numeric, character, and string tests will alwa
 
 Deep assignments are relatively rare. They are used primarily in distributed computing, and in particular for parameter passing in remote procedure call (RPC) systems. These will be discussed in Section C 13.5.4. For user-deﬁned abstractions, no single language-speciﬁed mechanism for equality testing or assignment is likely to produce the desired results in all cases. Languages with sophisticated data abstraction mechanisms usually allow the pro- grammer to deﬁne the comparison and assignment operators for each new data type—or to specify that equality testing and/or assignment is not allowed.
 
-### 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 26. Explain the distinction between implicit and explicit parametric polymor- phism. What are their comparative advantages? 27. What is* duck typing*? What is its connection to polymorphism? In what lan- guages does it appear? 28. Explain the distinction between overloading and generics. Why is the former sometimes called* ad hoc* polymorphism?
 
-#### 26. Explain the distinction between implicit and explicit parametric polymor-
+## 29. What is the principal purpose of generics? In what sense do generics serve a broader purpose in C++ and Ada than they do in Java and C#?
 
-phism. What are their comparative advantages? 27. What is* duck typing*? What is its connection to polymorphism? In what lan- guages does it appear? 28. Explain the distinction between overloading and generics. Why is the former sometimes called* ad hoc* polymorphism?
+## 30. Under what circumstances can a language implementation share code among separate instances of a generic?
 
-#### 29. What is the principal purpose of generics? In what sense do generics serve a
+* What are* container* classes? What do they have to do with generics?
+  32. What does it mean for a generic parameter to be* constrained*? Explain the
+  difference between explicit and implicit constraints. Describe how interface
+  classes can be used to specify constraints in Java and C#.
+## 33. Why will C# accept int as a generic argument, but Java won’t? 34. Under what circumstances will C++ instantiate a generic function implicitly?
 
-broader purpose in C++ and Ada than they do in Java and C#?
+## 35. Why is equality testing more subtle than it ﬁrst appears?
 
-#### 30. Under what circumstances can a language implementation share code among
-
-separate instances of a generic?
-
-#### 31. What are container classes? What do they have to do with generics?
-
-#### 32. What does it mean for a generic parameter to be constrained? Explain the
-
-difference between explicit and implicit constraints. Describe how interface classes can be used to specify constraints in Java and C#.
-
-#### 33. Why will C# accept int as a generic argument, but Java won’t?
-
-#### 34. Under what circumstances will C++ instantiate a generic function implicitly?
-
-#### 35. Why is equality testing more subtle than it ﬁrst appears?
-
-## 7.5
-
-#### **Summary and Concluding Remarks**
+7.5 **Summary and Concluding Remarks**
 
 This chapter has surveyed the fundamental concept of* types*. In the typical pro- gramming language, types serve two principal purposes: they provide implicit context for many operations, freeing the programmer from the need to specify that context explicitly, and they allow the compiler to catch a wide variety of common programming errors. When discussing types, we noted that it is some- times helpful to distinguish among denotational, structural, and abstraction- based points of view, which regard types, respectively, in terms of their values, their substructure, and the operations they support.
 
 In a typical programming language, the* type system* consists of a set of built- in types, a mechanism to deﬁne new types, and rules for* type equivalence*,* type* *compatibility*, and* type inference*. Type equivalence determines when two values or named objects have the same type. Type compatibility determines when a value of one type may be used in a context that “expects” another type. Type inference determines the type of an expression based on the types of its components or (sometimes) the surrounding context. A language is said to be* strongly typed* if it never allows an operation to be applied to an object that does not support it; a language is said to be* statically typed* if it enforces strong typing at compile time. We introduced terminology for the common built-in types and for enumer- ations, subranges, and the common type* constructors* (more on the latter will appear in Chapter 8). We discussed several different approaches to type equiv- alence, compatibility, and inference. We also examined type* conversion*,* coercion*, and* nonconverting casts*. In the area of type equivalence, we contrasted the* struc-* *tural* and* name*-based approaches, noting that while name equivalence appears to have gained in popularity, structural equivalence retains its advocates. Expanding on material introduced in Section 3.5.2, we explored several styles of* polymorphism*, all of which allow a subroutine—or the methods of a class—to operate on values of multiple types, so long as they only use those values in ways their types support. We focused in particular on* parametric* polymorphism, in which the types of the values on which the code will operate are passed to it as extra parameters, implicitly or explicitly. The implicit alternative appears in the static typing of ML and its descendants, and in the dynamic typing of Lisp, Small- talk, and many other languages. The explicit alternative appears in the* generics* of many modern languages. In Chapter 10 we will consider the related topic of* sub-* *type polymorphism*. In our discussion of implicit parametric polymorphism, we devoted consid- erable attention to type checking in ML, where the compiler uses a sophisticated system of inference to determine, at compile time, whether a type error (an at- tempt to perform an operation on a type that doesn’t support it) could ever oc- cur at run time—all without access to type declarations in the source code. In our discussion of generics we explored alternative ways to express* constraints* on generic parameters. We also considered implementation strategies. As examples, we contrasted (on the companion site) the generic facilities of C++, Java, and C#. More so, perhaps, than in previous chapters, our study of types has highlighted fundamental differences in philosophy among language designers. As we have seen, some languages use variables to name values; others, references. Some lan- guages do all or most of their type checking at compile time; others wait until run time. Among those that check at compile time, some use name equivalence; others, structural equivalence. Some languages avoid type coercions; others em- brace them. Some avoid overloading; others again embrace them. In each case, the choice among design alternatives reﬂects nontrivial tradeoffs among compet- ing language goals, including expressiveness, ease of programming, quality and timing of error discovery, ease of debugging and maintenance, compilation cost, and run-time performance.
 
-## 7.6
+7.6 **Exercises**
 
-### **Exercises**
-
-### 7.1
-
-Most statically typed languages developed since the 1970s (including Java, C#, and the descendants of Pascal) use some form of name equivalence for types. Is structural equivalence a bad idea? Why or why not? 7.2 In the following code, which of the variables will a compiler consider to have compatible types under structural equivalence? Under strict name equiva- lence? Under loose name equivalence?
+7.1 Most statically typed languages developed since the 1970s (including Java, C#, and the descendants of Pascal) use some form of name equivalence for types. Is structural equivalence a bad idea? Why or why not? 7.2 In the following code, which of the variables will a compiler consider to have compatible types under structural equivalence? Under strict name equiva- lence? Under loose name equivalence?
 
 type T = array [1..10] of integer S = T A : T B : T C : S D : array [1..10] of integer
 
-### 7.3
+## 7.3 Consider the following declarations:
 
-Consider the following declarations:
+## 1. type cell –– a forward declaration 2. type cell ptr = pointer to cell 3. x : cell 4. type cell = record 5. val : integer 6. next : cell ptr 7. y : cell
 
-* 
-  type cell
-  –– a forward declaration
-  2.
-  type cell ptr = pointer to cell
-  3.
-  x : cell
-  4.
-  type cell = record
-  5.
-  val : integer
-  6.
-  next : cell ptr
-  7.
-  y : cell
 Should the declaration at line 4 be said to introduce an alias type? Under strict name equivalence, should x and y have the same type? Explain. 7.4 Suppose you are implementing an Ada compiler, and must support arith- metic on 32-bit ﬁxed-point binary numbers with a programmer-speciﬁed number of fractional bits. Describe the code you would need to generate to add, subtract, multiply, or divide two ﬁxed-point numbers. You should assume that the hardware provides arithmetic instructions only for integers and IEEE ﬂoating-point. You may assume that the integer instructions pre- serve full precision; in particular, integer multiplication produces a 64-bit result. Your description should be general enough to deal with operands and results that have different numbers of fractional bits. 7.5 When Sun Microsystems ported Berkeley Unix from the Digital VAX to the Motorola 680x0 in the early 1980s, many C programs stopped working, and had to be repaired. In effect, the 680x0 revealed certain classes of program bugs that one could “get away with” on the VAX. One of these classes of bugs occurred in programs that use more than one size of integer (e.g., short and long), and arose from the fact that the VAX is a little-endian machine, while the 680x0 is big-endian (Section C 5.2). Another class of bugs oc- curred in programs that manipulate both null and empty strings. It arose
 
 from the fact that location zero in a Unix process’s address space on the VAX always contained a zero, while the same location on the 680x0 is not in the address space, and will generate a protection error if used. For both of these classes of bugs, give examples of program fragments that would work on a VAX but not on a 680x0. 7.6 Ada provides two “remainder” operators, rem and mod for integer types, deﬁned as follows [Ame83, Sec. 4.5.5]:
@@ -970,11 +862,7 @@ Integer division and remainder are deﬁned by the relation A = (A/B)*B + (A rem
 
 Give values of A and B for which A rem B and A mod B differ. For what purposes would one operation be more useful than the other? Does it make sense to provide both, or is it overkill? Consider also the % operator of C and the mod operator of Pascal. The designers of these languages could have picked semantics resembling those of either Ada’s rem or its mod. Which did they pick? Do you think they made the right choice? 7.7 Consider the problem of performing range checks on set expressions in Pas- cal. Given that a set may contain many elements, some of which may be known at compile time, describe the information that a compiler might maintain in order to track both the elements known to belong to the set and the possible range of unknown elements. Then explain how to update this information for the following set operations: union, intersection, and difference. The goal is to determine (1) when subrange checks can be elimi- nated at run time and (2) when subrange errors can be reported at compile time. Bear in mind that the compiler* cannot* do a perfect job: some unnec- essary run-time checks will inevitably be performed, and some operations that must always result in errors will not be caught at compile time. The goal is to do as good a job as possible at reasonable cost. 7.8 In Section 7.2.2 we introduced the notion of a* universal reference type* (void * in C) that refers to an object of unknown type. Using such ref- erences, implement a “poor man’s generic queue” in C, as suggested in Sec- tion 7.3.1. Where do you need type casts? Why? Give an example of a use of the queue that will fail catastrophically at run time, due to the lack of type checking. 7.9 Rewrite the code of Figure 7.3 in Ada, Java, or C#. 7.10 (a) Give a generic solution to Exercise 6.19. (b) Translate this solution into Ada, Java, or C#. 7.11 In your favorite language with generics, write code for simple versions of the following abstractions:
 
-## (a) a stack, implemented as a linked list
-
-## (b) a priority queue, implemented as a skip list or a partially ordered tree
-
-embedded in an array (c) a dictionary (mapping), implemented as a hash table 7.12 Figure 7.3 passes integer max_items to the queue abstraction as a generic parameter. Write an alternative version of the code that makes max_items a parameter to the queue constructor instead. What is the advantage of the generic parameter version? 7.13 Rewrite the generic sorting routine of Examples 7.50–7.52 (with con- straints) using OCaml or SML functors. 7.14 Flesh out the C++ sorting routine of Example 7.53. Demonstrate that this routine does “the wrong thing” when asked to sort an array of char* strings. 7.15 In Example 7.53 we mentioned three ways to make the need for compar- isons more explicit when deﬁning a generic sort routine in C++: make the comparison routine a method of the generic parameter class T, an extra ar- gument to the sort routine, or an extra generic parameter. Implement these options and discuss their comparative strengths and weaknesses. 7.16 Yet another solution to the problem of the previous exercise is to make the sorting routine a method of a sorter class. The comparison routine can then be passed into the class as a constructor argument. Implement this option and compare it to those of the previous exercise. 7.17 Consider the following code skeleton in C++:
+(a) a stack, implemented as a linked list (b) a priority queue, implemented as a skip list or a partially ordered tree embedded in an array (c) a dictionary (mapping), implemented as a hash table 7.12 Figure 7.3 passes integer max_items to the queue abstraction as a generic parameter. Write an alternative version of the code that makes max_items a parameter to the queue constructor instead. What is the advantage of the generic parameter version? 7.13 Rewrite the generic sorting routine of Examples 7.50–7.52 (with con- straints) using OCaml or SML functors. 7.14 Flesh out the C++ sorting routine of Example 7.53. Demonstrate that this routine does “the wrong thing” when asked to sort an array of char* strings. 7.15 In Example 7.53 we mentioned three ways to make the need for compar- isons more explicit when deﬁning a generic sort routine in C++: make the comparison routine a method of the generic parameter class T, an extra ar- gument to the sort routine, or an extra generic parameter. Implement these options and discuss their comparative strengths and weaknesses. 7.16 Yet another solution to the problem of the previous exercise is to make the sorting routine a method of a sorter class. The comparison routine can then be passed into the class as a constructor argument. Implement this option and compare it to those of the previous exercise. 7.17 Consider the following code skeleton in C++:
 
 ```
 #include <list>
@@ -1000,9 +888,7 @@ print_all(LB);
 
 Explain why the compiler won’t allow the second call. Give an example of bad things that could happen if it did. 7.18 Bjarne Stroustrup, the original designer of C++, once described templates as “a clever kind of macro that obeys the scope, naming, and type rules of C++” [Str13, 2nd ed., p. 257]. How close is the similarity? What can templates do that macros can’t? What do macros do that templates don’t?
 
-### 7.19 In Section 9.3.1 we noted that Ada 83 does not permit subroutines to be
-
-passed as parameters, but that some of the same effect can be achieved with generics. Suppose we want to apply a function to every member of an array. We might write the following in Ada 83:
+7.19 In Section 9.3.1 we noted that Ada 83 does not permit subroutines to be passed as parameters, but that some of the same effect can be achieved with generics. Suppose we want to apply a function to every member of an array. We might write the following in Ada 83:
 
 ```
 generic
@@ -1032,21 +918,13 @@ apply_to_ints(scores);
 
 How general is this mechanism? What are its limitations? Is it a reasonable substitute for formal (i.e., second-class, as opposed to third-class) subrou- tines? 7.20 Modify the code of Figure 7.3 or your solution to Exercise 7.12 to throw an exception if an attempt is made to enqueue an item in a full queue, or to dequeue an item from an empty queue.
 
-### 7.21–7.27 In More Depth.
-7.7
-**Explorations**
+7.21–7.27 In More Depth. 7.7 **Explorations**
 
-### 7.28 Some language deﬁnitions specify a particular representation for data types
+7.28 Some language deﬁnitions specify a particular representation for data types in memory, while others specify only the semantic behavior of those types. For languages in the latter class, some implementations guarantee a partic- ular representation, while others reserve the right to choose different repre- sentations in different circumstances. Which approach do you prefer? Why? 7.29 Investigate the* typestate* mechanism employed by Strom et al. in the Hermes programming language [SBG+91]. Discuss its relationship to the notion of deﬁnite assignment in Java and C# (Section 6.1.3).
 
-in memory, while others specify only the semantic behavior of those types. For languages in the latter class, some implementations guarantee a partic- ular representation, while others reserve the right to choose different repre- sentations in different circumstances. Which approach do you prefer? Why? 7.29 Investigate the* typestate* mechanism employed by Strom et al. in the Hermes programming language [SBG+91]. Discuss its relationship to the notion of deﬁnite assignment in Java and C# (Section 6.1.3).
+7.30 Several recent projects attempt to blur the line between static and dynamic typing by adding optional type declarations to scripting languages. These declarations support a strategy of* gradual typing*, in which programmers initially write in a traditional scripting style and then add declarations in- crementally to increase reliability or decrease run-time cost. Learn about the Dart, Hack, and TypeScript languages, promoted by Google, Facebook, and Microsoft, respectively. What are your impressions? How easy do you think it will be in practice to retroﬁt declarations into programs originally developed without them? 7.31 Research the type systems of Standard ML, OCaml, Haskell, and F#. What are the principal differences? What might explain the different choices made by the language designers? 7.32 Write a program in C++ or Ada that creates at least two concrete types or subroutines from the same template/generic. Compile your code to assem- bly language and look at the result. Describe the mapping from source to target code. 7.33 While Haskell does not include generics (its parametric polymorphism is implicit), its type classes can be considered a generalization of type con- straints. Learn more about type classes. Discuss their relevance to poly- morphic functions, as well as more general uses. You might want to look ahead to the discussion of* monads* in Section 11.5.2. 7.34 Investigate the notion of* type conformance*, employed by Black et al. in the Emerald programming language [BHJL07]. Discuss how conformance re- lates to the type inference of ML and to the class-based typing of object- oriented languages. 7.35 C++11 introduces so-called* variadic templates*, which take a variable num- ber of generic parameters. Read up on how these work. Show how they might be used to replace the usual cout <<* expr*1 << ... <<* expr**n* syntax of formatted output with print(*expr*1, ... ,* expr**n*), while retaining full static type checking.
 
-### 7.30 Several recent projects attempt to blur the line between static and dynamic
-
-typing by adding optional type declarations to scripting languages. These declarations support a strategy of* gradual typing*, in which programmers initially write in a traditional scripting style and then add declarations in- crementally to increase reliability or decrease run-time cost. Learn about the Dart, Hack, and TypeScript languages, promoted by Google, Facebook, and Microsoft, respectively. What are your impressions? How easy do you think it will be in practice to retroﬁt declarations into programs originally developed without them? 7.31 Research the type systems of Standard ML, OCaml, Haskell, and F#. What are the principal differences? What might explain the different choices made by the language designers? 7.32 Write a program in C++ or Ada that creates at least two concrete types or subroutines from the same template/generic. Compile your code to assem- bly language and look at the result. Describe the mapping from source to target code. 7.33 While Haskell does not include generics (its parametric polymorphism is implicit), its type classes can be considered a generalization of type con- straints. Learn more about type classes. Discuss their relevance to poly- morphic functions, as well as more general uses. You might want to look ahead to the discussion of* monads* in Section 11.5.2. 7.34 Investigate the notion of* type conformance*, employed by Black et al. in the Emerald programming language [BHJL07]. Discuss how conformance re- lates to the type inference of ML and to the class-based typing of object- oriented languages. 7.35 C++11 introduces so-called* variadic templates*, which take a variable num- ber of generic parameters. Read up on how these work. Show how they might be used to replace the usual cout <<* expr*1 << ... <<* expr**n* syntax of formatted output with print(*expr*1, ... ,* expr**n*), while retaining full static type checking.
-
-### 7.36–7.38 In More Depth.
-7.8
-**Bibliographic Notes**
+7.36–7.38 In More Depth. 7.8 **Bibliographic Notes**
 
 References to general information on the various programming languages men- tioned in this chapter can be found in Appendix A, and in the Bibliographic Notes for Chapters 1 and 6. Welsh, Sneeringer, and Hoare [WSH77] provide a critique of the original Pascal deﬁnition, with a particular emphasis on its type system. Tanenbaum’s comparison of Pascal and Algol 68 also focuses largely on types [Tan78]. Cleaveland [Cle86] provides a book-length study of many of the is- sues in this chapter. Pierce [Pie02] provides a formal and detailed modern cover- age of the subject. The ACM Special Interest Group on Programming Languages
 

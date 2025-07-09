@@ -1,6 +1,6 @@
-## 3
+# Chapter 3: Names, Scopes, and Bindings
 
-### **Names, Scopes, and Bindings**
+**3** **Names, Scopes, and Bindings**
 
 **Early languages such as Fortran, Algol, and Lisp** were termed “high level” because their syntax and semantics were signiﬁcantly more* abstract*—farther from the hardware—than those of the assembly languages they were intended to supplant. Abstraction made it possible to write programs that would run well on a wide variety of machines. It also made programs signiﬁcantly easier for hu- man beings to understand. While machine independence remains important, it is primarily ease of programming that continues to drive the design of modern languages. This chapter is the ﬁrst of six to address core issues in language de- sign. (The others are Chapters 6 through 10.) Much of the current discussion will revolve around the notion of* names*. A name is a mnemonic character string used to represent something else. Names in most languages are identiﬁers (alphanumeric tokens), though certain other symbols, such as + or :=, can also be names. Names allow us to refer to variables, constants, operations, types, and so on using symbolic identiﬁers rather than low-level concepts like addresses. Names are also essential in the context of a second meaning of the word* abstraction*. In this second meaning, abstraction is a process by which the programmer associates a name with a potentially compli- cated program fragment, which can then be thought of in terms of its purpose or function, rather than in terms of how that function is achieved. By hiding irrel- evant details, abstraction reduces conceptual complexity, making it possible for the programmer to focus on a manageable subset of the program text at any par- ticular time. Subroutines are* control abstractions*: they allow the programmer to hide arbitrarily complicated code behind a simple interface. Classes are* data ab-* *stractions*: they allow the programmer to hide data representation details behind a (comparatively) simple set of operations. We will look at severalmajor issues related to names. Section 3.1 introduces the notion of* binding time*, which refers not only to the binding of a name to the thing it represents, but also in general to the notion of resolving any design decision in a language implementation. Section 3.2 outlines the various mechanisms used to allocate and deallocate storage space for objects, and distinguishes between
 
@@ -18,9 +18,7 @@ The terms* static* and* dynamic* are generally used to refer to things bound bef
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.1 Binding time
-
-It is difﬁcult to overemphasize the importance of binding times in the design and implementation of programming languages. In general, early binding times are associated with greater efﬁciency, while later binding times are as- sociated with greater ﬂexibility. The tension between these goals provides a recurring theme for later chapters of this book.
+3.1 Binding time It is difﬁcult to overemphasize the importance of binding times in the design and implementation of programming languages. In general, early binding times are associated with greater efﬁciency, while later binding times are as- sociated with greater ﬂexibility. The tension between these goals provides a recurring theme for later chapters of this book.
 
 the following section, a compiler will not usually be able to predict the address of a local variable at compile time, since space for the variable will be allocated dy- namically on a stack, but it can arrange for the variable to appear at a ﬁxed offset from the location pointed to by a certain register at run time. Some languages are difﬁcult to compile because their semantics require funda- mental decisions to be postponed until run time, generally in order to increase the ﬂexibility or expressiveness of the language. Most scripting languages, for exam- ple, delay all type checking until run time. References to objects of arbitrary types (classes) can be assigned into arbitrary named variables, as long as the program never ends up applying an operator to (invoking a method of) an object that is not prepared to handle it. This form of* polymorphism*—applicability to objects or expressions of multiple types—allows the programmer to write unusually ﬂexi- ble and general-purpose code. We will mention polymorphism again in several future sections, including 7.1.2, 7.3, 10.1.1, and 14.4.4. 3.2 **Object Lifetime and Storage Management**
 
@@ -32,7 +30,7 @@ The period of time between the creation and the destruction of a name-to- object
 
 **2.*** Stack* objects are allocated and deallocated in last-in, ﬁrst-out order, usually in conjunction with subroutine calls and returns. **3.*** Heap* objects may be allocated and deallocated at arbitrary times. They require a more general (and expensive) storage management algorithm.
 
-## 3.2.1** Static Allocation**
+3.2.1** Static Allocation**
 
 Global variables are the obvious example of static objects, but not the only one. The instructions that constitute a program’s machine code can also be thought of as statically allocated objects. We shall see examples in Section 3.3.1 of vari- ables that are local to a single subroutine, but retain their values from one invo- cation to the next; their space is statically allocated. Numeric and string-valued constant literals are also statically allocated, for statements such as A = B/14.7 or printf("hello, world\n"). (Small constants are often stored within the instruction itself; larger ones are assigned a separate location.) Finally, most compilers produce a variety of tables that are used by run-time support routines for debugging, dynamic type checking, garbage collection, exception handling, and other purposes; these are also statically allocated. Statically allocated ob- jects whose value should not change during program execution (e.g., instructions, constants, and certain run-time tables) are often allocated in protected, read-only memory, so that any inadvertent attempt to write to them will cause a processor interrupt, allowing the operating system to announce a run-time error. Logically speaking, local variables are created when their subroutine is called, and destroyed when it returns. If the subroutine is called repeatedly, each invo- cation is said to create and destroy a separate* instance* of each local variable. It is not always the case, however, that a language implementation must perform work at run time corresponding to these create and destroy operations. Recursion was **EXAMPLE** 3.1
 
@@ -40,13 +38,11 @@ Static allocation of local variables not originally supported in Fortran (it was
 
 **DESIGN & IMPLEMENTATION**
 
-### 3.2 Recursion in Fortran
-
-The lack of recursion in (pre-Fortran 90) Fortran is generally attributed to the expense of stack manipulation on the IBM 704, on which the language was ﬁrst implemented. Many (perhaps most) Fortran implementations choose to use a stack for local variables, but because the language deﬁnition permits the use of static allocation instead, Fortran programmers were denied the beneﬁts of language-supported recursion for over 30 years.
+3.2 Recursion in Fortran The lack of recursion in (pre-Fortran 90) Fortran is generally attributed to the expense of stack manipulation on the IBM 704, on which the language was ﬁrst implemented. Many (perhaps most) Fortran implementations choose to use a stack for local variables, but because the language deﬁnition permits the use of static allocation instead, Fortran programmers were denied the beneﬁts of language-supported recursion for over 30 years.
 
 In many languages a named constant is required to have a value that can be determined at compile time. Usually the expression that speciﬁes the constant’s value is permitted to include only other known constants and built-in functions and arithmetic operators. Named constants of this sort, together with constant literals, are sometimes called* manifest constants* or* compile-time constants*. Mani- fest constants can always be allocated statically, even if they are local to a recursive subroutine: multiple instances can share the same location. In other languages (e.g., C and Ada), constants are simply variables that cannot be changed after elaboration (initialization) time. Their values, though unchang- ing, can sometimes depend on other values that are not known until run time. Such* elaboration-time constants*, when local to a recursive subroutine, must be allocated on the stack. C# distinguishes between compile-time and elaboration- time constants using the const and readonly keywords, respectively.
 
-## 3.2.2** Stack-Based Allocation**
+3.2.2** Stack-Based Allocation**
 
 If a language permits recursion, static allocation of local variables is no longer an option, since the number of instances of a variable that may need to exist at the same time is conceptually unbounded. Fortunately, the natural nesting of sub- routine calls makes it easy to allocate space for locals on a stack. A simpliﬁed **EXAMPLE** 3.2
 
@@ -62,7 +58,7 @@ can do so by adding a predetermined offset to the value in the frame pointer. As
 
 subroutines, active or not. A stack may therefore require substantially less mem- ory at run time than would be required for static allocation.
 
-## 3.2.3** Heap-Based Allocation**
+3.2.3** Heap-Based Allocation**
 
 A* heap* is a region of storage in which subblocks can be allocated and deallocated at arbitrary times.2 Heaps are required for the dynamically allocated pieces of linked data structures, and for objects such as fully general character strings, lists, and sets, whose size may change as a result of an assignment statement or other update operation. There are many possible strategies to manage space in a heap. We review the major alternatives here; details can be found in any data-structures textbook. The principal concerns are speed and space, and as usual there are tradeoffs between them. Space concerns can be further subdivided into issues of internal and ex- ternal* fragmentation*. Internal fragmentation occurs when a storage-management algorithm allocates a block that is larger than required to hold a given object; the extra space is then unused. External fragmentation occurs when the blocks that **EXAMPLE** 3.3
 
@@ -70,42 +66,21 @@ External fragmentation in the heap have been assigned to active objects are scat
 
 request. In either case, if the chosen block is signiﬁcantly larger than required, then we divide it into two and return the unneeded portion to the free list as a smaller block. (If the unneeded portion is below some minimum threshold in size, we may leave it in the allocated block as internal fragmentation.) When a block is deallocated and returned to the free list, we check to see whether either or both of the physically adjacent blocks are free; if so, we coalesce them. Intuitively, one would expect a best ﬁt algorithm to do a better job of reserving large blocks for large requests. At the same time, it has higher allocation cost than a ﬁrst ﬁt algorithm, because it must always search the entire list, and it tends to result in a larger number of very small “left-over” blocks. Which approach—ﬁrst ﬁt or best ﬁt—results in lower external fragmentation depends on the distribution of size requests. In any algorithm that maintains a single free list, the cost of allocation is lin- ear in the number of free blocks. To reduce this cost to a constant, some stor- age management algorithms maintain separate free lists for blocks of different sizes. Each request is rounded up to the next standard size (at the cost of inter- nal fragmentation) and allocated from the appropriate list. In effect, the heap is divided into “pools,” one for each standard size. The division may be static or dynamic. Two common mechanisms for dynamic pool adjustment are known as the* buddy system* and the* Fibonacci heap*. In the buddy system, the standard block sizes are powers of two. If a block of size 2*k* is needed, but none is available, a block of size 2*k*+1 is split in two. One of the halves is used to satisfy the request; the other is placed on the* k*th free list. When a block is deallocated, it is coa- lesced with its “buddy”—the other half of the split that created it—if that buddy is free. Fibonacci heaps are similar, but use Fibonacci numbers for the standard sizes, instead of powers of two. The algorithm is slightly more complex, but leads to slightly lower internal fragmentation, because the Fibonacci sequence grows more slowly than 2*k*. The problem with external fragmentation is that the ability of the heap to sat- isfy requests may degrade over time. Multiple free lists may help, by clustering small blocks in relatively close physical proximity, but they do not eliminate the problem. It is always possible to devise a sequence of requests that cannot be satisﬁed, even though the total space required is less than the size of the heap. If memory is partitioned among size pools statically, one need only exceed the maxi- mum number of requests of a given size. If pools are dynamically readjusted, one can “checkerboard” the heap by allocating a large number of small blocks and then deallocating every other one, in order of physical address, leaving an alter- nating pattern of small free and allocated blocks. To eliminate external fragmen- tation, we must be prepared to* compact* the heap, by moving already-allocated blocks. This task is complicated by the need to ﬁnd and update all outstanding references to a block that is being moved. We will discuss compaction further in Section 8.5.3.
 
-### 3.2.4** Garbage Collection**
+3.2.4** Garbage Collection**
 
 Allocation of heap-based objects is always triggered by some speciﬁc operation in a program: instantiating an object, appending to the end of a list, assigning a long value into a previously short string, and so on. Deallocation is also explicit in some languages (e.g., C, C++, and Rust). As we shall see in Section 8.5, however, many languages specify that objects are to be deallocated implicitly when it is no longer possible to reach them from any program variable. The run-time library for such a language must then provide a* garbage collection* mechanism to identify and reclaim unreachable objects. Most functional and scripting languages require garbage collection, as do many more recent imperative languages, including Java and C#. The traditional arguments in favor of explicit deallocation are implementa- tion simplicity and execution speed. Even naive implementations of automatic garbage collection add signiﬁcant complexity to the implementation of a lan- guage with a rich type system, and even the most sophisticated garbage collector can consume nontrivial amounts of time in certain programs. If the programmer can correctly identify the end of an object’s lifetime, without too much run-time bookkeeping, the result is likely to be faster execution. The argument in favor of automatic garbage collection, however, is compel- ling: manual deallocation errors are among the most common and costly bugs in real-world programs. If an object is deallocated too soon, the program may follow a* dangling reference*, accessing memory now used by another object. If an object is* not* deallocated at the end of its lifetime, then the program may “leak memory,” eventually running out of heap space. Deallocation errors are notoriously difﬁ- cult to identify and ﬁx. Over time, many language designers and programmers have come to consider automatic garbage collection an essential language feature. Garbage-collection algorithms have improved, reducing their run-time overhead; language implementations have become more complex in general, reducing the marginal complexity of automatic collection; and leading-edge applications have become larger and more complex, making the beneﬁts of automatic collection ever more compelling.
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 1. What is* binding time*? 2. Explain the distinction between decisions that are bound statically and those that are bound dynamically. 3. What is the advantage of binding things as early as possible? What is the advantage of delaying bindings? 4. Explain the distinction between the* lifetime* of a name-to-object binding and its* visibility*.
 
-* 
-  What is* binding time*?
-  2.
-  Explain the distinction between decisions that are bound statically and those
-  that are bound dynamically.
-  3.
-  What is the advantage of binding things as early as possible? What is the
-  advantage of delaying bindings?
-  4.
-  Explain the distinction between the* lifetime* of a name-to-object binding and
-  its* visibility*.
-* 
-  What determines whether an object is allocated statically, on the stack, or in
-  the heap?
-  6.
-  List the objects and information commonly found in a stack frame.
-### 7.
-What is a* frame pointer*? What is it used for?
-8.
-What is a* calling sequence*?
+## 5. What determines whether an object is allocated statically, on the stack, or in the heap? 6. List the objects and information commonly found in a stack frame.
 
-### 9.
-What are internal and external* fragmentation*?
-10. What is* garbage collection*?
+## 7. What is a* frame pointer*? What is it used for? 8. What is a* calling sequence*?
 
-### 11. What is a* dangling reference*?
+## 9. What are internal and external* fragmentation*? 10. What is* garbage collection*?
 
-## 3.3
+## 11. What is a* dangling reference*?
 
-### **Scope Rules**
+3.3 **Scope Rules**
 
 The textual region of the program in which a binding is active is its* scope*. In most modern languages, the scope of a binding is determined statically, that is, at compile time. In C, for example, we introduce a new scope upon entry to a subroutine. We create bindings for local objects and deactivate bindings for global objects that are hidden (made invisible) by local objects of the same name. On subroutine exit, we destroy bindings for local variables and reactivate bindings for any global objects that were hidden. These manipulations of bindings may at ﬁrst glance appear to be run-time operations, but they do not require the execution of any code: the portions of the program in which a binding is active are completely determined at compile time. We can look at a C program and know which names refer to which objects at which points in the program based on purely textual rules. For this reason, C is said to be* statically scoped* (some authors say* lexically* *scoped* 3). Other languages, including APL, Snobol, Tcl, and early dialects of Lisp, are* dynamically scoped*: their bindings depend on the ﬂow of execution at run time. We will examine static and dynamic scoping in more detail in Sections 3.3.1 and 3.3.6. In addition to talking about the “scope of a binding,” we sometimes use the word “scope” as a noun all by itself, without a speciﬁc binding in mind. Infor- mally, a scope is a program region of maximal size in which no bindings change (or at least none are destroyed—more on this in Section 3.3.3). Typically, a scope is the body of a module, class, subroutine, or structured control-ﬂow statement, sometimes called a* block*. In C family languages it would be delimited with {...} braces.
 
@@ -113,7 +88,7 @@ The textual region of the program in which a binding is active is its* scope*. I
 
 Algol 68 and Ada use the term* elaboration* to refer to the process by which declarations become active when control ﬁrst enters a scope. Elaboration entails the creation of bindings. In many languages, it also entails the allocation of stack space for local objects, and possibly the assignment of initial values. In Ada it can entail a host of other things, including the execution of error-checking or heap-space-allocating code, the propagation of exceptions, and the creation of concurrently executing* tasks* (to be discussed in Chapter 13). At any given point in a program’s execution, the set of active bindings is called the current* referencing environment*. The set is principally determined by static or dynamic* scope rules*. We shall see that a referencing environment generally corresponds to a sequence of scopes that can be examined (in order) to ﬁnd the current binding for a given name. In some cases, referencing environments also depend on what are (in a con- fusing use of terminology) called* binding rules*. Speciﬁcally, when a reference to a subroutine* S* is stored in a variable, passed as a parameter to another subroutine, or returned as a function value, one needs to determine when the referencing en- vironment for* S* is chosen—that is, when the binding between the reference to *S* and the referencing environment of* S* is made. The two principal options are *deep binding*, in which the choice is made when the reference is ﬁrst created, and *shallow binding*, in which the choice is made when the reference is ﬁnally used. We will examine these options in more detail in Section 3.6.
 
-## 3.3.1** Static Scoping**
+3.3.1** Static Scoping**
 
 In a language with static (lexical) scoping, the bindings between names and ob- jects can be determined at compile time by examining the text of the program, without consideration of the ﬂow of control at run time. Typically, the “current” binding for a given name is found in the matching declaration whose block most closely surrounds a given point in the program, though as we shall see there are many variants on this basic theme. The simplest static scope rule is probably that of early versions of Basic, in which there was only a single, global scope. In fact, there were only a few hundred possible names, each of which consisted of a letter optionally followed by a digit. There were no explicit declarations; variables were declared implicitly by virtue of being used. Scope rules are somewhat more complex in (pre-Fortran 90) Fortran, though not much more. Fortran distinguishes between global and local variables. The scope of a local variable is limited to the subroutine in which it appears; it is not visible elsewhere. Variable declarations are optional. If a variable is not declared, it is assumed to be local to the current subroutine and to be of type integer if its name begins with the letters I–N, or real otherwise. (Different conventions for implicit declarations can be speciﬁed by the programmer. In Fortran 90 and its successors, the programmer can also turn off implicit declarations, so that use of an undeclared variable becomes a compile-time error.)
 
@@ -124,7 +99,7 @@ Semantically, the lifetime of a local Fortran variable (both the object itself a
 
 Static variables in C The subroutine label_name can be used to generate a series of distinct character- string names: L1, L2, .... A compiler might use these names in its assembly language output. ■
 
-## 3.3.2** Nested Subroutines**
+3.3.2** Nested Subroutines**
 
 The ability to nest subroutines inside each other, introduced in Algol 60, is a fea- ture of many subsequent languages, including Ada, ML, Common Lisp, Python, Scheme, Swift, and (to a limited extent) Fortran 90. Other languages, including C and its descendants, allow classes or other scopes to nest. Just as the local variables of a Fortran subroutine are not visible to other subroutines, any constants, types, variables, or subroutines declared within a scope are not visible outside that scope in Algol-family languages. More formally, Algol-style nesting gives rise to the* clos-* *est nested scope rule* for bindings from names to objects: a name that is introduced in a declaration is known in the scope in which it is declared, and in each inter- nally nested scope, unless it is* hidden* by another declaration of the same name in one or more nested scopes. To ﬁnd the object corresponding to a given use of a name, we look for a declaration with that name in the current, innermost scope. If there is one, it deﬁnes the active binding for the name. Otherwise, we look for a declaration in the immediately surrounding scope. We continue outward,
 
@@ -143,33 +118,7 @@ We have already seen (Section 3.2.2) that the compiler can arrange for a frame p
 ![Figure 3.4 Example of...](images/page_162_vector_393.png)
 *Figure 3.4 Example of nested subroutines, shown in pseudocode. Vertical bars indicate the scope of each name, for a language in which declarations are visible throughout their subroutine. Note the hole in the scope of the outer X.*
 
-### time. Using this register as a base for displacement (register plus offset) address-
-
-### ing, target code can access objects within the current subroutine. But what about
-
-### objects in lexically surrounding subroutines? To ﬁnd these we need a way to ﬁnd
-
-### the frames corresponding to those scopes at run time. Since a nested subroutine
-
-### may call a routine in an outer scope, the order of stack frames at run time may not
-
-### necessarily correspond to the order of lexical nesting. Nonetheless, we can be sure
-
-### that there is some frame for the surrounding scope already in the stack, since the
-
-### current subroutine could not have been called unless it was visible, and it could
-
-### not have been visible unless the surrounding scope was active. (It is actually pos-
-
-### sible in some languages to save a reference to a nested subroutine, and then call
-
-### it when the surrounding scope is no longer active. We defer this possibility to
-
-### Section 3.6.2.)
-
-### The simplest way in which to ﬁnd the frames of surrounding scopes is to main-
-
-### tain a* static link* in each frame that points to the “parent” frame: the frame of the
+time. Using this register as a base for* displacement* (register plus offset) address- ing, target code can access objects within the current subroutine. But what about objects in lexically surrounding subroutines? To ﬁnd these we need a way to ﬁnd the frames corresponding to those scopes at run time. Since a nested subroutine may call a routine in an outer scope, the order of stack frames at run time may not necessarily correspond to the order of lexical nesting. Nonetheless, we can be sure that there* is* some frame for the surrounding scope already in the stack, since the current subroutine could not have been called unless it was visible, and it could not have been visible unless the surrounding scope was active. (It is actually pos- sible in some languages to save a reference to a nested subroutine, and then call it when the surrounding scope is no longer active. We defer this possibility to Section 3.6.2.) The simplest way in which to ﬁnd the frames of surrounding scopes is to main- tain a* static link* in each frame that points to the “parent” frame: the frame of the
 
 ![Figure 3.5 Static chains....](images/page_163_vector_287.png)
 *Figure 3.5 Static chains. Subroutines A, B, C, D, and E are nested as shown on the left. If the sequence of nested calls at run time is A, E, B, D, and C, then the static links in the stack will look as shown on the right. The code for subroutine C can ﬁnd local objects at known offsets from the frame pointer. It can ﬁnd local objects of the surrounding scope, B, by dereferencing its static chain once and then applying an offset. It can ﬁnd local objects in B’s surrounding scope, A, by dereferencing its static chain twice and then applying an offset.*
@@ -178,7 +127,7 @@ most recent invocation of the lexically surrounding subroutine. If a subroutine 
 
 Static chains will discuss the code required to maintain them in Section 9.2. ■
 
-## 3.3.3** Declaration Order**
+3.3.3** Declaration Order**
 
 In our discussion so far we have glossed over an important subtlety: suppose an object x is declared somewhere within block B. Does the scope of x include the portion of B before the declaration, and if so can x actually be used in that portion of the code? Put another way, can an expression* E* refer to any name declared in the current scope, or only to names that are declared* before E* in the scope? Several early languages, including Algol 60 and Lisp, required that all declara- tions appear at the beginning of their scope. One might at ﬁrst think that this rule
 
@@ -186,22 +135,8 @@ would avoid the questions in the preceding paragraph, but it does not, because d
 
 A “gotcha” in declare-before-use cal modiﬁed the requirement to say that names must be declared before they are used. There are special mechanisms to accommodate recursive types and sub- routines, but in general, a* forward reference* (an attempt to use a name before its declaration) is a static semantic error. At the same time, however, Pascal retained the notion that the scope of a declaration is the entire surrounding block. Taken together, whole-block scope and declare-before-use rules can interact in surpris- ing ways:
 
-* 
-  const N = 10;
-  2.
-  ...
-  3.
-  procedure foo;
-  4.
-  const
-  5.
-  M = N;
-  (* static semantic error! *)
-  6.
-  ...
-  7.
-  N = 20;
-  (* local constant declaration; hides the outer N *)
+## 1. const N = 10; 2. ... 3. procedure foo; 4. const 5. M = N; (* static semantic error! *) 6. ... 7. N = 20; (* local constant declaration; hides the outer N *)
+
 Pascal says that the second declaration of N covers all of foo, so the semantic analyzer should complain on line 5 that N is being used before its declaration. The error has the potential to be highly confusing, particularly if the programmer meant to use the outer N:
 
 ```
@@ -221,9 +156,7 @@ Here the pair of messages “N used before declaration” and “N is not a cons
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.3 Mutual recursion
-
-Some Algol 60 compilers were known to process the declarations of a scope in program order. This strategy had the unfortunate effect of implicitly outlawing mutually recursive subroutines and types, something the language designers clearly did not intend [Atk73].
+3.3 Mutual recursion Some Algol 60 compilers were known to process the declarations of a scope in program order. This strategy had the unfortunate effect of implicitly outlawing mutually recursive subroutines and types, something the language designers clearly did not intend [Atk73].
 
 **6** We saw an example of mutually recursive subroutines in the recursive descent parsing of Sec- tion 2.3.1. Mutually recursive types frequently arise in linked data structures, where nodes of two types may need to point to each other.
 
@@ -302,9 +235,7 @@ In many languages, including Algol 60, C89, and Ada, local variables can be de- 
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.4 Redeclarations
-
-Some languages, particularly those that are intended for interactive use, permit the programmer to redeclare an object: to create a new binding for a given name in a given scope. Interactive programmers commonly use redeclarations to experiment with alternative implementations or to ﬁx bugs during early development. In most interactive languages, the new meaning of the name replaces the old in all contexts. In ML dialects, however, the old meaning of the name may remain accessible to functions that were elaborated before the name was redeclared. This design choice can sometimes be counterintuitive. Here’s an example in OCaml (the lines beginning with # are user input; the others are printed by the interpreter):
+3.4 Redeclarations Some languages, particularly those that are intended for interactive use, permit the programmer to redeclare an object: to create a new binding for a given name in a given scope. Interactive programmers commonly use redeclarations to experiment with alternative implementations or to ﬁx bugs during early development. In most interactive languages, the new meaning of the name replaces the old in all contexts. In ML dialects, however, the old meaning of the name may remain accessible to functions that were elaborated before the name was redeclared. This design choice can sometimes be counterintuitive. Here’s an example in OCaml (the lines beginning with # are user input; the others are printed by the interpreter):
 
 ```
 # let x = 1;;
@@ -333,25 +264,18 @@ b = temp;
 
 Keeping the declaration of temp lexically adjacent to the code that uses it makes the program easier to read, and eliminates any possibility that this code will in- terfere with another variable named temp. ■ No run-time work is needed to allocate or deallocate space for variables de- clared in nested blocks; their space can be included in the total space for local variables allocated in the subroutine prologue and deallocated in the epilogue. Exercise 3.9 considers how to minimize the total space required.
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 12. What do we mean by the* scope* of a name-to-object binding?
 
-#### 12. What do we mean by the* scope* of a name-to-object binding?
+## 13. Describe the difference between static and dynamic scoping. 14. What is* elaboration*?
 
-#### 13. Describe the difference between static and dynamic scoping.
-14. What is* elaboration*?
+## 15. What is a* referencing environment*? 16. Explain the* closest nested scope rule*. 17. What is the purpose of a* scope resolution operator*?
 
-#### 15. What is a referencing environment?
-
-#### 16. Explain the* closest nested scope rule*.
-17. What is the purpose of a* scope resolution operator*?
-
-#### 18. What is a static chain? What is it used for?
-
-#### 19. What are forward references? Why are they prohibited or restricted in many
-
-programming languages? 20. Explain the difference between a* declaration* and a* deﬁnition*. Why is the dis- tinction important?
-
-### 3.3.4** Modules**
+* What is a* static chain*? What is it used for?
+  19. What are* forward references*? Why are they prohibited or restricted in many
+  programming languages?
+  20. Explain the difference between a* declaration* and a* deﬁnition*. Why is the dis-
+  tinction important?
+3.3.4** Modules**
 
 An important challenge in the construction of any large body of software is to divide the effort among programmers in such a way that work can proceed on multiple fronts simultaneously. This modularization of effort depends critically on the notion of* information hiding*, which makes objects and algorithms invisi- ble, whenever possible, to portions of the system that do not need them. Properly modularized code reduces the “cognitive load” on the programmer by minimiz- ing the amount of information required to understand any given portion of the
 
@@ -422,7 +346,7 @@ int r2 = rand_int(g2);
 
 In more complex programs, it may make sense for a module to export several related types, instances of which can then be passed to its subroutines. ■
 
-## 3.3.5** Module Types and Classes**
+3.3.5** Module Types and Classes**
 
 construct. Given a module type, the programmer could declare an arbitrary number of similar module objects. As it turns out, the classes of modern object- oriented languages are an extension of module types. Access to a module instance typically looks like access to an object, and we can illustrate the ideas in any object-oriented language. For our C++ pseudorandom number example, the **EXAMPLE** 3.16
 
@@ -446,9 +370,7 @@ where the rand_gen class is declared as in Figure 3.8. Module types or classes a
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.5 Modules and separate compilation
-
-One of the hallmarks of a good abstraction is that it tends to be useful in multi- ple contexts. To facilitate code reuse, many languages make modules the basis of separate compilation. Modula-2 actually provided two different kinds of modules: one (external modules) for separate compilation, the other (internal modules) for textual nesting within a larger scope. Experience with these op- tions eventually led Niklaus Wirth, the designer of Modula-2, to conclude that external modules were by far the more useful variety; he omitted the internal version from his subsequent language, Oberon. Many would argue, however, that internal modules ﬁnd their real utility only when extended with instan- tiation and inheritance. Indeed, as noted near the end of this section, many object-oriented languages provide both modules* and* classes. The former sup- port separate compilation and serve to minimize name conﬂicts; the latter are for data abstraction. To facilitate separate compilation, modules in many languages (Modula-2 and Oberon among them) can be divided into a declaration part (*header*) and an implementation part (*body*), each of which occupies a separate ﬁle. Code that uses the exports of a given module can be compiled as soon as the header exists; it is not dependent on the body. In particular, work on the bodies of cooperating modules can proceed concurrently once the headers exist. We will return to the subjects of separate compilation and code reuse in Sections C 3.8 and 10.1, respectively.
+3.5 Modules and separate compilation One of the hallmarks of a good abstraction is that it tends to be useful in multi- ple contexts. To facilitate code reuse, many languages make modules the basis of separate compilation. Modula-2 actually provided two different kinds of modules: one (external modules) for separate compilation, the other (internal modules) for textual nesting within a larger scope. Experience with these op- tions eventually led Niklaus Wirth, the designer of Modula-2, to conclude that external modules were by far the more useful variety; he omitted the internal version from his subsequent language, Oberon. Many would argue, however, that internal modules ﬁnd their real utility only when extended with instan- tiation and inheritance. Indeed, as noted near the end of this section, many object-oriented languages provide both modules* and* classes. The former sup- port separate compilation and serve to minimize name conﬂicts; the latter are for data abstraction. To facilitate separate compilation, modules in many languages (Modula-2 and Oberon among them) can be divided into a declaration part (*header*) and an implementation part (*body*), each of which occupies a separate ﬁle. Code that uses the exports of a given module can be compiled as soon as the header exists; it is not dependent on the body. In particular, work on the bodies of cooperating modules can proceed concurrently once the headers exist. We will return to the subjects of separate compilation and code reuse in Sections C 3.8 and 10.1, respectively.
 
 ![Figure 3.8 Pseudorandom number...](images/page_174_vector_222.png)
 *Figure 3.8 Pseudorandom number generator class in C++.*
@@ -467,7 +389,7 @@ While there is a clear progression from modules to module types to classes, it i
 
 Modules and classes in a large application hierarchies may be just what we need to represent characters, possessions, build- ings, goals, and a host of other data abstractions. At the same time, especially on a project with a large team of programmers, we will probably want to divide the functionality of the game into large-scale subsystems such as graphics and ren- dering, physics, and strategy. These subsystems are really not data abstractions, and we probably don’t* want* the option to create multiple instances of them. They are naturally captured with traditional modules, particularly if those modules are designed for separate compilation (Section 3.8). Recognizing the need for both multi-instance abstractions and functional subdivision, many languages, includ- ing C++, Java, C#, Python, and Ruby, provide separate class and module mecha- nisms. ■
 
-## 3.3.6** Dynamic Scoping**
+3.3.6** Dynamic Scoping**
 
 In a language with dynamic scoping, the bindings between names and objects depend on the ﬂow of control at run time, and in particular on the order in which subroutines are called. In comparison to the static scope rules discussed in the previous section, dynamic scope rules are generally quite simple: the “current” binding for a given name is the one encountered most recently* during execution*, and not yet destroyed by returning from its scope. Languages with dynamic scoping include APL, Snobol, Tcl, TEX (the type- setting language with which this book was created), and early dialects of Lisp [MAE+65, Moo78, TM81] and Perl.9 Because the ﬂow of control cannot in gen- eral be predicted in advance, the bindings between names and objects in a lan- guage with dynamic scoping cannot in general be determined by a compiler. As a
 
@@ -482,9 +404,7 @@ Static vs dynamic scoping prints a 1. If dynamic scoping is in effect, the outpu
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.6 Dynamic scoping
-
-It is not entirely clear whether the use of dynamic scoping in Lisp and other early interpreted languages was deliberate or accidental. One reason to think that it may have been deliberate is that it makes it very easy for an interpreter to look up the meaning of a name: all that is required is a stack of declarations (we examine this stack more closely in Section C 3.4.2). Unfortunately, this simple implementation has a very high run-time cost, and experience indicates that dynamic scoping makes programs harder to understand. The modern consen- sus seems to be that dynamic scoping is usually a bad idea (see Exercise 3.17 and Exploration 3.36 for two exceptions).
+3.6 Dynamic scoping It is not entirely clear whether the use of dynamic scoping in Lisp and other early interpreted languages was deliberate or accidental. One reason to think that it may have been deliberate is that it makes it very easy for an interpreter to look up the meaning of a name: all that is required is a stack of declarations (we examine this stack more closely in Section C 3.4.2). Unfortunately, this simple implementation has a very high run-time cost, and experience indicates that dynamic scoping makes programs harder to understand. The modern consen- sus seems to be that dynamic scoping is usually a bad idea (see Exercise 3.17 and Exploration 3.36 for two exceptions).
 
 We create a binding for n when we enter the main program. We create another when and if we enter procedure second. When we execute the assignment state- ment at line 3, the n to which we are referring will depend on whether we entered ﬁrst through second or directly from the main program. If we entered through second, we will assign the value 1 to second’s local n. If we entered from the main program, we will assign the value 1 to the global n. In either case, the write at line 12 will refer to the global n, since second’s local n will be destroyed, along with its binding, when control returns to the main program. ■ With dynamic scoping, errors associated with the referencing environment **EXAMPLE** 3.19
 
@@ -501,13 +421,11 @@ A symbol table with visibility support can be implemented in several different w
 
 An association list (or* A-list* for short) is simply a list of name/value pairs. When used to implement dynamic scoping it functions as a stack: new declara- tions are pushed as they are encountered, and popped at the end of the scope in which they appeared. Bindings are found by searching down the list from the top. A central reference table avoids the need for linear-time search by maintaining an explicit mapping from names to their current meanings. Lookup is faster, but scope entry and exit are somewhat more complex, and it becomes substantially more difﬁcult to save a referencing environment for future use (we discuss this issue further in Section 3.6.1).
 
-## 3.5
-
-#### **The Meaning of Names within a Scope**
+3.5 **The Meaning of Names within a Scope**
 
 So far in our discussion of naming and scopes we have assumed that there is a one-to-one mapping between names and visible objects at any given point in a program. This need not be the case. Two or more names that refer to the same object at the same point in the program are said to be* aliases*. A name that can refer to more than one object at a given point in the program is said to be* overloaded*. Overloading is in turn related to the more general subject of *polymorphism*, which allows a subroutine or other program fragment to behave in different ways depending on the types of its arguments.
 
-### 3.5.1** Aliases**
+3.5.1** Aliases**
 
 Simple examples of aliases occur in the variant records and unions of many pro- gramming languages (we will discuss these features detail in Section C 8.1.3).
 
@@ -542,16 +460,14 @@ b = *p;
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.7 Pointers in C and Fortran
-
-The tendency of pointers to introduce aliases is one of the reasons why For- tran compilers tended, historically, to produce faster code than C compilers: pointers are heavily used in C, but missing from Fortran 77 and its predeces- sors. It is only in recent years that sophisticated alias analysis algorithms have allowed C compilers to rival their Fortran counterparts in speed of generated code. Pointer analysis is sufﬁciently important that the designers of the C99 standard decided to add a new keyword to the language. The restrict qual- iﬁer, when attached to a pointer declaration, is an assertion on the part of the programmer that the object to which the pointer refers has no alias in the cur- rent scope. It is the programmer’s responsibility to ensure that the assertion is correct; the compiler need not attempt to check it. C99 also introduced* strict* *aliasing*. This allows the compiler to assume that pointers of different types will never refer to the same location in memory. Most compilers provide a command-line option to disable optimizations that exploit this rule; other- wise (poorly written) legacy programs may behave incorrectly when compiled at higher optimization levels.
+3.7 Pointers in C and Fortran The tendency of pointers to introduce aliases is one of the reasons why For- tran compilers tended, historically, to produce faster code than C compilers: pointers are heavily used in C, but missing from Fortran 77 and its predeces- sors. It is only in recent years that sophisticated alias analysis algorithms have allowed C compilers to rival their Fortran counterparts in speed of generated code. Pointer analysis is sufﬁciently important that the designers of the C99 standard decided to add a new keyword to the language. The restrict qual- iﬁer, when attached to a pointer declaration, is an assertion on the part of the programmer that the object to which the pointer refers has no alias in the cur- rent scope. It is the programmer’s responsibility to ensure that the assertion is correct; the compiler need not attempt to check it. C99 also introduced* strict* *aliasing*. This allows the compiler to assume that pointers of different types will never refer to the same location in memory. Most compilers provide a command-line option to disable optimizations that exploit this rule; other- wise (poorly written) legacy programs may behave incorrectly when compiled at higher optimization levels.
 
 ![Figure 3.11 Overloading of...](images/page_180_vector_198.png)
 *Figure 3.11 Overloading of enumeration constants in Ada.*
 
 The initial assignment to a will, on most machines, require that *p be loaded into a register. Since accessing memory is expensive, the compiler will want to hang on to the loaded value and reuse it in the assignment to b. It will be unable to do so, however, unless it can verify that p and q cannot refer to the same object—that is, that *p and *q are not aliases. While compile-time veriﬁcation of this sort is possible in many common cases, in general it’s undecidable. ■
 
-## 3.5.2** Overloading**
+3.5.2** Overloading**
 
 Most programming languages provide at least a limited form of overloading. In C, for example, the plus sign (+) is used to name several different functions, in- cluding signed and unsigned integer and ﬂoating-point addition. Most program- mers don’t worry about the distinction between these two functions—both are based on the same mathematical concept, after all—but they take arguments of different types and perform very different operations on the underlying bits. A **EXAMPLE** 3.22
 
@@ -619,9 +535,7 @@ Overloading with type classes mechanism known as* type classes*. Among the simpl
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.8 User-deﬁned operators in OCaml
-
-OCaml does not support overloading, but it does allow the user to create new operators, whose names—as in Haskell—consist of non-alphanumeric char- acters. Each such name must begin with the name of one of the built-in op- erators, from which the new operator inherits its syntactic role (preﬁx, inﬁx, or postﬁx) and precedence. So, for example,+.is used for ﬂoating-point addi- tion; +/ is used for “bignum” (arbitrary precision) integer addition.
+3.8 User-deﬁned operators in OCaml OCaml does not support overloading, but it does allow the user to create new operators, whose names—as in Haskell—consist of non-alphanumeric char- acters. Each such name must begin with the name of one of the built-in op- erators, from which the new operator inherits its syntactic role (preﬁx, inﬁx, or postﬁx) and precedence. So, for example,+.is used for ﬂoating-point addi- tion; +/ is used for “bignum” (arbitrary precision) integer addition.
 
 ```
 class Eq a, where
@@ -645,39 +559,23 @@ Printing objects of multiple types put stream, and suppose that we wish to be ab
 
 Finally, suppose we have a language in which many types support a to string operation that will generate a character-string representation of an object of that type. We might then be able to write a polymorphic print routine that accepts an argument of any type for which to string is deﬁned. The to string operation might itself be polymorphic, built in, or simply overloaded; in any of these cases, print could call it and output the result. ■ In short, overloading allows the programmerto give the same name to multiple objects, and to disambiguate (*resolve*) them based on context—for subroutines, on the number or types of arguments. Coercion allows the compiler to perform an automatic type conversion to make an argument conform to the expected type of some existing routine. Polymorphism allows a single routine to accept argu- ments of multiple types, provided that it attempts to use them only in ways that their types support.
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 21. Explain the importance of information hiding.
 
-* Explain the importance of information hiding.
+## 22. What is an* opaque* export? 23. Why might it be useful to distinguish between the* header* and the* body* of a module? 24. What does it mean for a scope to be* closed*?
 
-### 22. What is an opaque export?
+## 25. Explain the distinction between “modules as managers” and “modules as types.”
 
-### 23. Why might it be useful to distinguish between the header and the body of a
+## 26. How do classes differ from modules? 27. Why might it be useful to have modules and classes in the same language?
 
-module? 24. What does it mean for a scope to be* closed*?
-
-### 25. Explain the distinction between “modules as managers” and “modules as
-
-types.”
-
-### 26. How do classes differ from modules?
-
-### 27. Why might it be useful to have modules and classes in the same language?
-
-### 28. Why does the use of dynamic scoping imply the need for run-time type check-
-
-ing?
+## 28. Why does the use of dynamic scoping imply the need for run-time type check- ing?
 
 * Explain the purpose of a compiler’s symbol table.
   30. What are* aliases*? Why are they considered a problem in language design and
   implementation?
   31. Explain the value of the restrict qualiﬁer in C.
-### 32. What is overloading? How does it differ from coercion and polymorphism?
+## 32. What is* overloading*? How does it differ from* coercion* and* polymorphism*? 33. What are* type classes* in Haskell? What purpose do they serve?
 
-### 33. What are* type classes* in Haskell? What purpose do they serve?
-
-## 3.6
-
-### **The Binding of Referencing Environments**
+3.6 **The Binding of Referencing Environments**
 
 We have seen in Section 3.3 how scope rules determine the referencing environ- ment of a given statement in a program. Static scope rules specify that the refer- encing environment depends on the lexical nesting of program blocks in which names are declared. Dynamic scope rules specify that the referencing environ- ment depends on the order in which declarations are encountered at run time. An additional issue that we have not yet considered arises in languages that allow one to create a* reference* to a subroutine—for example, by passing it as a parame- ter. When should scope rules be applied to such a subroutine: when the reference is ﬁrst created, or when the routine is ﬁnally called? The answer is particularly im- portant for languages with dynamic scoping, though we shall see that it matters even in languages with static scoping. A dynamic scoping example appears as pseudocode in Figure 3.13. Procedure **EXAMPLE** 3.30
 
@@ -686,21 +584,9 @@ Deep and shallow binding print selected records is assumed to be a general-purpo
 ![Figure 3.13 Program (in...](images/page_186_vector_431.png)
 *Figure 3.13 Program (in pseudocode) to illustrate the importance of binding rules. One might argue that deep binding is appropriate for the environment of function older than threshold (for access to threshold), while shallow binding is appropriate for the environment of procedure print person (for access to line length).*
 
-## 3.6.1** Subroutine Closures**
+3.6.1** Subroutine Closures**
 
-#### Deep binding is implemented by creating an explicit representation of a refer-
-
-#### encing environment (generally the one in which the subroutine would execute
-
-#### if called at the present time) and bundling it together with a reference to the
-
-#### subroutine. The bundle as a whole is referred to as a closure. Usually the sub-
-
-#### routine itself can be represented in the closure by a pointer to its code. In a lan-
-
-#### guage with dynamic scoping, the representation of the referencing environment
-
-#### depends on whether the language implementation uses an association list or a
+Deep binding is implemented by creating an explicit representation of a refer- encing environment (generally the one in which the subroutine would execute if called at the present time) and bundling it together with a reference to the subroutine. The bundle as a whole is referred to as a* closure*. Usually the sub- routine itself can be represented in the closure by a pointer to its code. In a lan- guage with dynamic scoping, the representation of the referencing environment depends on whether the language implementation uses an association list or a
 
 ![Figure 3.14 Deep binding...](images/page_187_vector_225.png)
 *Figure 3.14 Deep binding in Python. At right is a conceptual view of the run-time stack. Referencing environments captured in closures are shown as dashed boxes and arrows. When B is called via formal parameter P, two instances of I exist. Because the closure for P was created in the initial invocation of A, B’s static link (solid arrow) points to the frame of that earlier invocation. B uses that invocation’s instance of I in its print statement, and the output is a 1.*
@@ -711,7 +597,7 @@ Binding rules with static scoping trates the impact of binding rules in the pres
 
 It should be noted that binding rules matter with static scoping only when accessing objects that are neither local nor global, but are deﬁned at some inter- mediate level of nesting. If an object is local to the currently executing subroutine, then it does not matter whether the subroutine was called directly or through a closure; in either case local objects will have been created when the subroutine started running. If an object is global, there will never be more than one instance, since the main body of the program is not recursive. Binding rules are therefore irrelevant in languages like C, which has no nested subroutines, or Modula-2, which allows only outermost subroutines to be passed as parameters, thus ensur- ing that any variable deﬁned outside the subroutine is global. (Binding rules are also irrelevant in languages like PL/I and Ada 83, which do not permit subroutines to be passed as parameters at all.) Suppose then that we have a language with static scoping in which nested sub- routines can be passed as parameters, with deep binding. To represent a closure for subroutine* S*, we can simply save a pointer to* S*’s code together with the static link that* S* would use if it were called right now, in the current environment. When* S* is ﬁnally called, we temporarily restore the saved static link, rather than creating a new one. When* S* follows its static chain to access a nonlocal object, it will ﬁnd the object instance that was current at the time the closure was created. This instance may not have the* value* it had at the time the closure was created, but its identity, at least, will reﬂect the intent of the closure’s creator.
 
-## 3.6.2** First-Class Values and Unlimited Extent**
+3.6.2** First-Class Values and Unlimited Extent**
 
 In general, a value in a programming language is said to have* ﬁrst-class* status if it can be passed as a parameter, returned from a subroutine, or assigned into a variable. Simple types such as integers and characters are ﬁrst-class values in most programming languages. By contrast, a “second-class” value can be passed as a parameter, but not returned from a subroutine or assigned into a variable, and a “third-class” value cannot even be passed as a parameter. As we shall see in Section 9.3.2, labels (in languages that have them) are usually third-class val- ues, but they are second-class values in Algol. Subroutines display the most vari- ation. They are ﬁrst-class values in all functional programming languages and most scripting languages. They are also ﬁrst-class values in C# and, with some restrictions, in several other imperative languages, including Fortran, Modula-2 and -3, Ada 95, C, and C++.10 They are second-class values in most other imper- ative languages, and third-class values in Ada 83. Our discussion of binding so far has considered only second-class subroutines. First-class subroutines in a language with nested scopes introduce an additional level of complexity: they raise the possibility that a reference to a subroutine may
 
@@ -738,16 +624,14 @@ Here the let construct on line 5 declares a new function, f, which is the result
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.9 Binding rules and extent
-
-Binding mechanisms and the notion of extent are closely tied to implementa- tion issues. A-lists make it easy to build closures (Section C 3.4.2), but so do the non-nested subroutines of C and the rule against passing nonglobal sub- routines as parameters in Modula-2. In a similar vein, the lack of ﬁrst-class subroutines in many imperative languages reﬂects in large part the desire to avoid heap allocation, which would be needed for local variables with unlim- ited extent.
+3.9 Binding rules and extent Binding mechanisms and the notion of extent are closely tied to implementa- tion issues. A-lists make it easy to build closures (Section C 3.4.2), but so do the non-nested subroutines of C and the rule against passing nonglobal sub- routines as parameters in Modula-2. In a similar vein, the lack of ﬁrst-class subroutines in many imperative languages reﬂects in large part the desire to avoid heap allocation, which would be needed for local variables with unlim- ited extent.
 
 ![Figure 3.15 The need...](images/page_190_vector_150.png)
 *Figure 3.15 The need for unlimited extent. When function plus-x is called in Example 3.32, it returns (left side of the ﬁgure) a closure containing an anonymous function. The referencing environment of that function encompasses both plus-x and main—including the local variables of plus-x itself. When the anonymous function is subsequently called (right side of the ﬁgure), it must be able to access variables in the closure’s environment—in particular, the x inside plus-x—despite the fact that plus-x is no longer active.*
 
 most routines to be returned or stored in variables (outermost routines are ﬁrst- class values; nested routines are second-class values). Ada 95 allows a nested rou- tine to be returned, but only if the scope in which it was declared is the same as, or larger than, the scope of the declared return type. This containment rule, while more conservative than strictly necessary (it forbids the Ada equivalent of Figure 3.14), makes it impossible to propagate a subroutine reference to a portion of the program in which the routine’s referencing environment is not active.
 
-## 3.6.3** Object Closures**
+3.6.3** Object Closures**
 
 As noted in Section 3.6.1, the referencing environment in a closure will be non- trivial only when passing a nested subroutine. This means that the implementa- tion of ﬁrst-class subroutines is trivial in a language without nested subroutines. At the same time, it means that a programmer working in such a language is missing a useful feature: the ability to pass a subroutine* with context*. In object- oriented languages, there is an alternative way to achieve a similar effect: we can encapsulate our subroutine as a method of a simple object, and let the object’s ﬁelds hold context for the method. In Java we might write the equivalent of Ex- **EXAMPLE** 3.33
 
@@ -820,7 +704,7 @@ cout << f(3) << "\n";
 
 Object f could also be passed to any function that expected a parameter of class int_func. ■
 
-## 3.6.4** Lambda Expressions**
+3.6.4** Lambda Expressions**
 
 In most of our examples so far, closures have corresponded to subroutines that were declared—and named—in the usual way. In the Scheme code of Exam- ple 3.32, however, we saw an anonymous function—a* lambda expression*. Simi- larly, in Example 3.35, we saw an anonymous delegate in C#. That example can **EXAMPLE** 3.37
 
@@ -907,9 +791,7 @@ Both of these cause the compiler to create an object closure (a* function object
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.10 Functions and function objects
-
-The astute reader may be wondering: In Example 3.40, how does for_each manage to “do the right thing” with two different implementations of its third parameter? After all, sometimes that parameter is implemented as a simple pointer; other times it is a pointer to an object with an operator(), which re- quires a different kind of call. The answer is that for_each is a* generic* routine (a* template* in C++). The compiler generates customized implementations of for_each on demand. We will discuss generics in more detail in Section 7.3.1. In some situations, it may be difﬁcult to use generics to distinguish among “function-like” parameters. As an alternative, C++ provides a standard function* class*, with constructors that allow it to be instantiated from a func- tion, a function pointer, a function object, or a manually created object closure. Something like for_each could then be written as an ordinary (nongeneric) subroutine whose third parameter was a object of class function. In any given call, the compiler would coerce the provided argument to be a function object.
+3.10 Functions and function objects The astute reader may be wondering: In Example 3.40, how does for_each manage to “do the right thing” with two different implementations of its third parameter? After all, sometimes that parameter is implemented as a simple pointer; other times it is a pointer to an object with an operator(), which re- quires a different kind of call. The answer is that for_each is a* generic* routine (a* template* in C++). The compiler generates customized implementations of for_each on demand. We will discuss generics in more detail in Section 7.3.1. In some situations, it may be difﬁcult to use generics to distinguish among “function-like” parameters. As an alternative, C++ provides a standard function* class*, with constructors that allow it to be instantiated from a func- tion, a function pointer, a function object, or a manually created object closure. Something like for_each could then be written as an ordinary (nongeneric) subroutine whose third parameter was a object of class function. In any given call, the compiler would coerce the provided argument to be a function object.
 
 Lambda expressions appear in Java 8 as well, but in a restricted form. In situa- tions where they might be useful, Java has traditionally relied on an idiom known as a* functional interface*. The Arrays.sort routine, for example, expects a pa- **EXAMPLE** 3.41
 
@@ -932,9 +814,7 @@ Arrays.sort(People, (p1, p2) -> Integer.compare(p1.age, p2.age));
 
 The key to the simpler syntax is that Comparator is a functional interface, and thus has only a single abstract method. When a variable or formal parameter is declared to be of some functional interface type, Java 8 allows a lambda ex- pression whose parameter and return types match those of the interface’s single method to be assigned into the variable or passed as the parameter. In effect, the compiler uses the lambda expression to create an instance of an anonymous class that implements the interface. ■ As it turns out, coercion to functional interface types is the* only* use of lambda expressions in Java. In particular, lambda expressions have no types of their own: they are not really objects, and cannot be directly manipulated. Their behav- ior with respect to variable capture is entirely determined by the usual rules for nested classes. We will consider these rules in more detail in Section 10.2.3; for now, sufﬁce it to note that Java, like C++, does not support unlimited extent.
 
-## 3.7
-
-### **Macro Expansion**
+3.7 **Macro Expansion**
 
 Prior to the development of high-level programming languages, assembly lan- guage programmers could ﬁnd themselves writing highly repetitive code. To ease the burden, many assemblers provided sophisticated* macro expansion* facilities. Consider the task of loading an element of a two-dimensional array from memory **EXAMPLE** 3.42
 
@@ -956,31 +836,22 @@ Macros like LINE_LEN avoided the need (in early versions of C) to support named 
 
 **DESIGN & IMPLEMENTATION**
 
-## 3.11 Generics as macros
-
-In some sense, the ability to import names into an ordinary module provides a primitive sort of generic facility. A stack module that imports its element type, for example, can be inserted (with a text editor) into any context in which the appropriate type name has been declared, and will produce a “customized” stack for that context when compiled. Early versions of C++ formalized this mechanism by using macros to implement templates. Later versions of C++ have made templates (generics) a fully supported language feature, giving them much of the ﬂavor of hygienic macros. (More on templates and on* template* *metaprogramming* can be found in Section C 7.3.2.)
+3.11 Generics as macros In some sense, the ability to import names into an ordinary module provides a primitive sort of generic facility. A stack module that imports its element type, for example, can be inserted (with a text editor) into any context in which the appropriate type name has been declared, and will produce a “customized” stack for that context when compiled. Early versions of C++ formalized this mechanism by using macros to implement templates. Later versions of C++ have made templates (generics) a fully supported language feature, giving them much of the ﬂavor of hygienic macros. (More on templates and on* template* *metaprogramming* can be found in Section C 7.3.2.)
 
 in standard C we cannot avoid the extra side effects by assigning the parameters into temporary variables: a C macro that “returns” a value must be an expression, and declarations are one of many language constructs that cannot appear inside (see also Exercise 3.23). ■ Modern languages and compilers have, for the most part, abandoned macros as an anachronism. Named constants are type-safe and easy to implement, and *in-line* subroutines (to be discussed in Section 9.2.4) provide almost all the per- formance of parameterized macros without their limitations. A few languages (notably Scheme and Common Lisp) take an alternative approach, and integrate macros into the language in a safe and consistent way. So-called* hygienic* macros implicitly encapsulate their arguments, avoiding unexpected interactions with as- sociativity and precedence. They rename variables when necessary to avoid the capture problem, and they can be used in any expression context. Unlike subrou- tines, however, they are expanded during semantic analysis, making them gen- erally unsuitable for unbounded recursion. Their appeal is that, like all macros, they take* unevaluated* arguments, which they evaluate lazily on demand. Among other things, this means that they preserve the multiple side effect “gotcha” of our MAX example. Delayed evaluation was a bug in this context, but can sometimes be a feature. We will return to it in Sections 6.1.5 (short-circuit Boolean eval- uation), 9.3.2 (call-by-name parameters), and 11.5 (normal-order evaluation in functional programming languages).
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 34. Describe the difference between deep and shallow* binding* of referencing en- vironments. 35. Why are binding rules particularly important for languages with dynamic scoping? 36. What are* ﬁrst-class* subroutines? What languages support them? 37. What is a* subroutine closure*? What is it used for? How is it implemented?
 
-### 34. Describe the difference between deep and shallow binding of referencing en-
+* What is an* object closure*? How is it related to a subroutine closure?
+  39. Describe how the* delegates* of C# extend and unify both subroutine and object
+  closures.
+  40. Explain the distinction between limited and unlimited* extent* of objects in a
+  local scope.
+  41. What is a* lambda expression*? How does the support for lambda expressions in
+  functional languages compare to that of C# or Ruby? To that of C++ or Java?
+## 42. What are* macros*? What was the motivation for including them in C? What problems may they cause?
 
-vironments. 35. Why are binding rules particularly important for languages with dynamic scoping? 36. What are* ﬁrst-class* subroutines? What languages support them? 37. What is a* subroutine closure*? What is it used for? How is it implemented?
-
-### 38. What is an object closure? How is it related to a subroutine closure?
-
-### 39. Describe how the delegates of C# extend and unify both subroutine and object
-
-closures. 40. Explain the distinction between limited and unlimited* extent* of objects in a local scope. 41. What is a* lambda expression*? How does the support for lambda expressions in functional languages compare to that of C# or Ruby? To that of C++ or Java?
-
-### 42. What are macros? What was the motivation for including them in C? What
-
-problems may they cause?
-
-## 3.8
-
-### **Separate Compilation**
+3.8 **Separate Compilation**
 
 Since most large programs are constructed and tested incrementally, and since the compilation of a very large program can be a multihour operation, any language designed to support large programs must provide for separate compilation.
 
@@ -988,9 +859,7 @@ Since most large programs are constructed and tested incrementally, and since th
 
 On the companion site we consider the relationship between modules and sepa- rate compilation. Because they are designed for encapsulation and provide a nar- row interface, modules are the natural choice for the “compilation units” of many programming languages. The separate module headers and bodies of Modula-3 and Ada, for example, are explicitly intended for separate compilation, and reﬂect experience gained with more primitive facilities in other languages. C and C++, by contrast, must maintain backward compatibility with mechanisms designed in the early 1970s. Modern versions of C and C++ include a* namespace* mechanism that provides module-like data hiding, but names must still be declared before they are used in every compilation unit, and the mechanisms used to accom- modate this rule are purely a matter of convention. Java and C# break with the C tradition by requiring the compiler to infer header information automatically from separately compiled class deﬁnitions; no header ﬁles are required.
 
-## 3.9
-
-### **Summary and Concluding Remarks**
+3.9 **Summary and Concluding Remarks**
 
 This chapter has addressed the subject of names, and the* binding* of names to ob- jects (in a broad sense of the word). We began with a general discussion of the notion of* binding time*—the time at which a name is associated with a particular object or, more generally, the time at which an answer is associated with any open question in language or program design or implementation. We deﬁned the no- tion of* lifetime* for both objects and name-to-object bindings, and noted that they need not be the same. We then introduced the three principal storage allocation mechanisms—static, stack, and heap—used to manage space for objects. In Section 3.3 we described how the binding of names to objects is governed by *scope rules*. In some languages, scope rules are dynamic: the meaning of a name is found in the most recently entered scope that contains a declaration and that has not yet been exited. In most modern languages, however, scope rules are static, or *lexical*: the meaning of a name is found in the closest lexically surrounding scope that contains a declaration. We found that lexical scope rules vary in important but sometimes subtle ways from one language to another. We considered what sorts of scopes are allowed to nest, whether scopes are* open* or* closed*, whether the scope of a name encompasses the entire block in which it is declared, and whether
 
@@ -998,24 +867,16 @@ a name must be declared before it is used. We explored the implementation of sco
 
 implementation do not always go together. Many easy-to-compile features (e.g., goto statements) are of questionable value at best. We will also see several ex- amples of highly useful and (conceptually) simple features, such as garbage col- lection (Section 8.5.3) and uniﬁcation (Sections 7.2.4, C 7.3.2, and 12.2.1), whose implementations are quite complex. 3.10 **Exercises**
 
-### 3.1
-
-Indicate the binding time (when the language is designed, when the pro- gram is linked, when the program begins execution, etc.) for each of the following decisions in your favorite programming language and implemen- tation. Explain any answers you think are open to interpretation.
+3.1 Indicate the binding time (when the language is designed, when the pro- gram is linked, when the program begins execution, etc.) for each of the following decisions in your favorite programming language and implemen- tation. Explain any answers you think are open to interpretation.
 
 The number of built-in functions (math, type queries, etc.) The variable declaration that corresponds to a particular variable refer- ence (use) The maximum length allowed for a constant (literal) character string The referencing environment for a subroutine that is passed as a pa- rameter The address of a particular library routine The total amount of space occupied by program code and data 3.2 In Fortran 77, local variables were typically allocated statically. In Algol and its descendants (e.g., Ada and C), they are typically allocated in the stack. In Lisp they are typically allocated at least partially in the heap. What accounts for these differences? Give an example of a program in Ada or C that would not work correctly if local variables were allocated statically. Give an example of a program in Scheme or Common Lisp that would not work correctly if local variables were allocated on the stack. 3.3 Give two examples in which it might make sense to delay the binding of an implementation decision, even though sufﬁcient information exists to bind it early. 3.4 Give three concrete examples drawn from programming languages with which you are familiar in which a variable is live but not in scope. 3.5 Consider the following pseudocode:
 
-* 
-  procedure main()
-  2.
-  a : integer := 1
-  3.
-  b : integer := 2
-* 
-  procedure middle()
-  5.
-  b : integer := a
-* 
-  a : integer := 3
+## 1. procedure main() 2. a : integer := 1 3. b : integer := 2
+
+## 4. procedure middle() 5. b : integer := a
+
+## 8. a : integer := 3
+
 * 
   –– body of middle
   10.
@@ -1028,9 +889,7 @@ The number of built-in functions (math, type queries, etc.) The variable declara
   middle()
   14.
   print a, b
-### Suppose this was code for a language with the declaration-order rules of C
-
-(but with nested subroutines)—that is, names must be declared before use, and the scope of a name extends from its declaration through the end of the block. At each print statement, indicate which declarations of a and b are in the referencing environment. What does the program print (or will the compiler identify static semantic errors)? Repeat the exercise for the declaration-order rules of C# (names must be declared before use, but the scope of a name is the entire block in which it is declared) and of Modula-3 (names can be declared in any order, and their scope is the entire block in which they are declared). 3.6 Consider the following pseudocode, assuming nested subroutines and static scope:
+Suppose this was code for a language with the declaration-order rules of C (but with nested subroutines)—that is, names must be declared before use, and the scope of a name extends from its declaration through the end of the block. At each print statement, indicate which declarations of a and b are in the referencing environment. What does the program print (or will the compiler identify static semantic errors)? Repeat the exercise for the declaration-order rules of C# (names must be declared before use, but the scope of a name is the entire block in which it is declared) and of Modula-3 (names can be declared in any order, and their scope is the entire block in which they are declared). 3.6 Consider the following pseudocode, assuming nested subroutines and static scope:
 
 procedure main() g : integer
 
@@ -1047,17 +906,11 @@ procedure R(m : integer) write integer(x) x /:= 2 –– integer division if x >
 ![Figure 3.16 List management...](images/page_202_vector_397.png)
 *Figure 3.16 List management routines for Exercise 3.7.*
 
-## (b) Show the frames on the stack when A has just been called. For each
+(b) Show the frames on the stack when A has just been called. For each frame, show the static and dynamic links. (c) Explain how A ﬁnds g.
 
-frame, show the static and dynamic links. (c) Explain how A ﬁnds g.
+## 3.7 As part of the development team at MumbleTech.com, Janet has written a list manipulation library for C that contains, among other things, the code in Figure 3.16.
 
-## 3.7
-
-As part of the development team at MumbleTech.com, Janet has written a list manipulation library for C that contains, among other things, the code in Figure 3.16.
-
-## (a) Accustomed to Java, new team member Brad includes the following
-
-code in the main loop of his program:
+(a) Accustomed to Java, new team member Brad includes the following code in the main loop of his program:
 
 ```
 list_node* L = 0;
@@ -1081,9 +934,7 @@ L = T;
 
 This seems to solve the insufﬁcient memory problem, but where the program used to produce correct results (before running out of mem- ory), now its output is strangely corrupted, and Brad goes back to Janet for advice. What will she tell him this time?
 
-## 3.8
-
-Rewrite Figures 3.6 and 3.7 in C. You will need to use separate compilation for name hiding. 3.9 Consider the following fragment of code in C:
+## 3.8 Rewrite Figures 3.6 and 3.7 in C. You will need to use separate compilation for name hiding. 3.9 Consider the following fragment of code in C:
 
 ```
 {
@@ -1107,13 +958,9 @@ int g, h, i;
 }
 ```
 
-## (a) Assume that each integer variable occupies four bytes. How much total
+(a) Assume that each integer variable occupies four bytes. How much total space is required for the variables in this code? (b) Describe an algorithm that a compiler could use to assign stack frame offsets to the variables of arbitrary nested blocks, in a way that mini- mizes the total space required.
 
-space is required for the variables in this code? (b) Describe an algorithm that a compiler could use to assign stack frame offsets to the variables of arbitrary nested blocks, in a way that mini- mizes the total space required.
-
-## 3.10 Consider the design of a Fortran 77 compiler that uses static allocation for
-
-the local variables of subroutines. Expanding on the solution to the pre- vious question, describe an algorithm to minimize the total space required for these variables. You may ﬁnd it helpful to construct a* call graph* data
+3.10 Consider the design of a Fortran 77 compiler that uses static allocation for the local variables of subroutines. Expanding on the solution to the pre- vious question, describe an algorithm to minimize the total space required for these variables. You may ﬁnd it helpful to construct a* call graph* data
 
 structure in which each node represents a subroutine, and each directed arc indicates that the subroutine at the tail may sometimes call the subroutine at the head. 3.11 Consider the following pseudocode:
 
@@ -1216,9 +1063,7 @@ bugs arise? How do you ﬁnd them? How much effort does it take? Learn about ope
 
 by placing it after the end of the argument list (in which case it become an extra, ﬁnal parameter); by passing it to Proc.new; or, within the argument list, by preﬁxing it with the keyword lambda or by writing it in -> lambda notation. Investigate these options. Which came ﬁrst? Which came later? What are their comparative advantages? Are their any minor differences in their behavior? 3.41 Lambda expressions were a late addition to the Java programming language: they were strongly resisted for many years. Research the controversy sur- rounding them. Where do your sympathies lie? What alternative proposals were rejected? Do you ﬁnd any of them appealing? 3.42 Give three examples of features that are* not* provided in some language with which you are familiar, but that are common in other languages. Why do you think these features are missing? Would they complicate the implemen- tation of the language? If so, would the complication (in your judgment) be justiﬁed?
 
-### 3.43–3.47 In More Depth.
-3.12
-**Bibliographic Notes**
+3.43–3.47 In More Depth. 3.12 **Bibliographic Notes**
 
 This chapter has traced the evolution of naming and scoping mechanisms through a very large number of languages, including Fortran (several versions), Basic, Algol 60 and 68, Pascal, Simula, C and C++, Euclid, Turing, Modula (1, 2, and 3), Ada (83 and 95), Oberon, Eiffel, Perl, Tcl, Python, Ruby, Rust, Java, and C#. Bibliographic references for all of these can be found in Appendix A. Both modules and objects trace their roots to Simula, which was developed by Dahl, Nygaard, Myhrhaug, and others at the Norwegian Computing Center in the mid-1960s. (Simula I was implemented in 1964; descriptions in this book pertain to Simula 67.) The encapsulation mechanisms of Simula were reﬁned in the 1970s by the developers of Clu, Modula, Euclid, and related languages. Other Simula innovations—inheritance and dynamic method binding in particular— provided the inspiration for Smalltalk, the original and arguably purest of the object-oriented languages. Modern object-oriented languages, including Eiffel, C++, Java, C#, Python, and Ruby, represent to a large extent a reintegration of the evolutionary lines of encapsulation on the one hand and inheritance and dynamic method binding on the other. The notion of information hiding originates in Parnas’s classic paper, “On the Criteria to be Used in Decomposing Systems into Modules” [Par72]. Compara- tive discussions of naming, scoping, and abstraction mechanisms can be found, among other places, in Liskov et al.’s discussion of Clu [LSAS77], Liskov and Gut- tag’s text [LG86, Chap. 4], the Ada Rationale [IBFW91, Chaps. 9–12], Harbison’s text on Modula-3 [Har92, Chaps. 8–9], Wirth’s early work on modules [Wir80], and his later discussion of Modula and Oberon [Wir88a, Wir07]. Further infor- mation on object-oriented languages can be found in Chapter 10.
 

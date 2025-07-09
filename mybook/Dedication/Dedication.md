@@ -1,2 +1,4 @@
-## *To family and friends.*
+# Dedication
+
+*To family and friends.*
 

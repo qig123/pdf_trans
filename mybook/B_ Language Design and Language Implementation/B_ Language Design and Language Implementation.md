@@ -1,14 +1,12 @@
-## B
+# B: Language Design and Language Implementation
 
-### Language Design and Language
-
-### **Implementation**
+**B** **Language Design and Language** **Implementation**
 
 Throughout this text, we have had occasion to remark on the many connections between language design and language implementation. Some of the more direct connections have been highlighted in separate sidebars. We list those sidebars here.
 
 **Chapter 1: Introduction**
 
-1.1 Introduction 10 1.2 Compiled and interpreted languages 18 1.3 The early success of Pascal 22 1.4 Powerful development environments 25
+## 1.1 Introduction 10 1.2 Compiled and interpreted languages 18 1.3 The early success of Pascal 22 1.4 Powerful development environments 25
 
 **Chapter 2: Programming Language Syntax**
 
@@ -18,11 +16,11 @@ Throughout this text, we have had occasion to remark on the many connections bet
 
 3.1 Binding time 117 3.2 Recursion in Fortran 119 3.3 Mutual recursion 131 3.4 Redeclarations 134 3.5 Modules and separate compilation 140 3.6 Dynamic scoping 143 3.7 Pointers in C and Fortran 146 3.8 User-deﬁned operators in OCaml 149 3.9 Binding rules and extent 156 3.10 Functions and function objects 161
 
-3.11 Generics as macros 163 3.12 Separate compilation C*·*41
+## 3.11 Generics as macros 163 3.12 Separate compilation C*·*41
 
 **Chapter 4: Semantic Analysis**
 
-4.1 Dynamic semantic checks 182 4.2 Forward references 193 4.3 Attribute evaluators 198
+## 4.1 Dynamic semantic checks 182 4.2 Forward references 193 4.3 Attribute evaluators 198
 
 **Chapter 5: Target Machine Architecture**
 
@@ -54,7 +52,7 @@ Throughout this text, we have had occasion to remark on the many connections bet
 
 **Chapter 12: Logic Languages**
 
-12.1 Homoiconic languages 608 12.2 Reﬂection 611 12.3 Implementing logic 613 12.4 Alternative search strategies 614
+## 12.1 Homoiconic languages 608 12.2 Reﬂection 611 12.3 Implementing logic 613 12.4 Alternative search strategies 614
 
 **Chapter 13: Concurrency**
 
@@ -66,15 +64,15 @@ Throughout this text, we have had occasion to remark on the many connections bet
 
 **Chapter 15: Building a Runnable Program**
 
-15.1 Postscript 783 15.2 Type checking for separate compilation 799
+## 15.1 Postscript 783 15.2 Type checking for separate compilation 799
 
 **Chapter 16: Run-Time Program Management**
 
-16.1 Run-time systems 808 16.2 Optimizing stack-based IF 812 16.3 Veriﬁcation of class ﬁles and bytecode 820
+## 16.1 Run-time systems 808 16.2 Optimizing stack-based IF 812 16.3 Veriﬁcation of class ﬁles and bytecode 820
 
-16.7 Assuming a just-in-time compiler C*·*287 16.8 References and pointers C*·*290 16.4 Emulation and interpretation 830 16.5 Creating a sandbox via binary rewriting 835 16.6 DWARF 846
+## 16.7 Assuming a just-in-time compiler C*·*287 16.8 References and pointers C*·*290 16.4 Emulation and interpretation 830 16.5 Creating a sandbox via binary rewriting 835 16.6 DWARF 846
 
 **Chapter 17: Code Improvement**
 
-17.1 Peephole optimization C*·*303 17.2 Basic blocks C*·*304 17.3 Common subexpressions C*·*309 17.4 Pointer analysis C*·*310 17.5 Loop invariants C*·*324 17.6 Control ﬂow analysis C*·*325
+## 17.1 Peephole optimization C*·*303 17.2 Basic blocks C*·*304 17.3 Common subexpressions C*·*309 17.4 Pointer analysis C*·*310 17.5 Loop invariants C*·*324 17.6 Control ﬂow analysis C*·*325
 

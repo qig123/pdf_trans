@@ -1,6 +1,6 @@
-## 6
+# Chapter 6: Control Flow
 
-### **Control Flow**
+**6** **Control Flow**
 
 **Having considered the mechanisms that a compiler uses** to enforce se- mantic rules (Chapter 4) and the characteristics of the target machines for which compilers must generate code (Chapter 5), we now return to core issues in lan- guage design. Speciﬁcally, we turn in this chapter to the issue of* control ﬂow* or *ordering* in program execution. Ordering is fundamental to most models of com- puting. It determines what should be done ﬁrst, what second, and so forth, to accomplish some desired task. We can organize the language mechanisms used to specify ordering into several categories:
 
@@ -61,7 +61,7 @@ a = b != 0 ? a/b : 0; ■
 
 Postﬁx notation is used for most functions in Postscript, Forth, the input lan- guage of certain hand-held calculators, and the intermediate code of some com- pilers. Postﬁx appears in a few places in other languages as well. Examples in- clude the pointer dereferencing operator (^) of Pascal and the post-increment and decrement operators (++ and --) of C and its descendants.
 
-## 6.1.1** Precedence and Associativity**
+6.1.1** Precedence and Associativity**
 
 Most languages provide a rich set of built-in arithmetic and logical operators. When written in inﬁx notation, without parentheses, these operators lead to am- biguity as to what is an operand of what. In Fortran, for example, which uses ** **EXAMPLE** 6.7
 
@@ -102,7 +102,7 @@ infixr 8 ^
 
 Here infixr means “right associative inﬁx operator,” so 4 ^ 3 ^ 2 groups as 4 ^ (3 ^ 2) rather than as (4 ^ 3) ^ 2. The similar infixl and infix dec- larations specify left associativity and nonassociativity, respectively. Precedence levels run from 0 (loosest) to 9 (tightest). If no “ﬁxity” declaration is provided, newly deﬁned operators are left associative by default, and group at level 9. Func- tion application (speciﬁed simply via juxtaposition in Haskell) groups tightest of all—effectively at level 10. ■ Because the rules for precedence and associativity vary so much from one lan- guage to another, a programmer who works in several languages is wise to make liberal use of parentheses.
 
-## 6.1.2** Assignments**
+6.1.2** Assignments**
 
 In a purely functional language, expressions are the building blocks of programs, and computation consists entirely of expression evaluation. The effect of any individual expression on the overall computation is limited to the value that ex- pression provides to its surrounding context. Complex computations employ re- cursion to generate a potentially unbounded number of values, expressions, and contexts. In an imperative language, by contrast, computation typically consists of an ordered series of changes to the values of variables in memory. Assignments pro- vide the principal means by which to make the changes. Each assignment takes a pair of arguments: a value and a reference to a variable into which the value should be placed. In general, a programming language construct is said to have a* side effect* if it inﬂuences subsequent computation (and ultimately program output) in any way other than by returning a value for use in the surrounding context. Assignment is perhaps the most fundamental side effect: while the evaluation of an assignment may sometimes yield a value, what we really care about is the fact that it changes the value of a variable, thereby inﬂuencing the result of any later computation in which the variable appears. Many imperative languages distinguish between* expressions*, which always pro- duce a value, and may or may not have side effects, and* statements*, which are ex- ecuted* solely* for their side effects, and return no useful value. Given the centrality of assignment, imperative programming is sometimes described as “computing by means of side effects.” At the opposite extreme, purely functional languages have no side effects. As a result, the value of an expression in such a language depends only on the referenc- ing environment in which the expression is evaluated,* not* on the time at which
 
@@ -165,9 +165,7 @@ The wrapper class was needed here because Hashtable expects a parameter of objec
 
 **DESIGN & IMPLEMENTATION**
 
-## 6.1 Implementing the reference model
-
-It is tempting to assume that the reference model of variables is inherently more expensive than the value model, since a naive implementation would require a level of indirection on every access. As we shall see in Section 8.5.1, however, most compilers for languages with a reference model use multiple copies of immutable objects for the sake of efﬁciency, achieving exactly the same performance for simple types that they would with a value model.
+6.1 Implementing the reference model It is tempting to assume that the reference model of variables is inherently more expensive than the value model, since a naive implementation would require a level of indirection on every access. As we shall see in Section 8.5.1, however, most compilers for languages with a reference model use multiple copies of immutable objects for the sake of efﬁciency, achieving exactly the same performance for simple types that they would with a value model.
 
 C# and more recent versions of Java perform automatic* boxing* and* unboxing* **EXAMPLE** 6.17
 
@@ -313,12 +311,7 @@ a, b, c = foo(d, e, f);
 
 This notation eliminates the asymmetry (nonorthogonality) of functions in most programming languages, which allow an arbitrary number of arguments, but only a single return. ■
 
-## 3CHECK YOUR UNDERSTANDING
-
-### 1.
-Name eight major categories of control-ﬂow mechanisms.
-2.
-What distinguishes* operators* from other sorts of functions?
+3**CHECK YOUR UNDERSTANDING** 1. Name eight major categories of control-ﬂow mechanisms. 2. What distinguishes* operators* from other sorts of functions?
 
 * 
   Explain the difference between* preﬁx*,* inﬁx*, and* postﬁx* notation. What is
@@ -343,7 +336,7 @@ What distinguishes* operators* from other sorts of functions?
   11. What are the advantages of updating a variable with an* assignment operator*,
   rather than with a regular assignment in which the variable appears on both
   the left- and right-hand sides?
-## 6.1.3** Initialization**
+6.1.3** Initialization**
 
 Because they already provide a construct (the assignment statement) to set the value of a variable, imperative languages do not always provide a means of spec- ifying an initial value for a variable in its declaration. There are several reasons, however, why such initial values may be useful:
 
@@ -384,7 +377,7 @@ While a human being might reason that i will be used only when it has previously
 
 Many object-oriented languages (Java and C# among them) allow the program- mer to deﬁne types for which initialization of dynamically allocated variables occurs automatically, even when no initial value is speciﬁed in the declaration. Some—notably C++—also distinguish carefully between initialization and as- signment. Initialization is interpreted as a call to a* constructor* function for the variable’s type, with the initial value as an argument. In the absence of coercion, assignment is interpreted as a call to the type’s assignment operator or, if none has been deﬁned, as a simple bit-wise copy of the value on the assignment’s right- hand side. The distinction between initialization and assignment is particularly important for user-deﬁned abstract data types that perform their own storage management. A typical example occurs in variable-length character strings. An assignment to such a string must generally deallocate the space consumed by the old value of the string before allocating space for the new value. An initialization of the string must simply allocate space. Initialization with a nontrivial value is generally cheaper than default initialization followed by assignment, because it avoids deallocation of the space allocated for the default value. We will return to this issue in Section 10.3.2. Neither Java nor C# distinguishes between initialization and assignment: an initial value can be given in a declaration, but this is the same as an immedi- ate subsequent assignment. Java uses a reference model for all variables of user- deﬁned object types, and provides for automatic storage reclamation, so assign- ment never copies values. C# allows the programmer to specify a value model when desired (in which case assignment does copy values), but otherwise mirrors Java.
 
-## 6.1.4** Ordering within Expressions**
+6.1.4** Ordering within Expressions**
 
 While precedence and associativity rules deﬁne the order in which binary inﬁx operators are applied within an expression, they do not specify the order in which the operands of a given operator are evaluated. For example, in the expression **EXAMPLE** 6.28
 
@@ -411,9 +404,7 @@ Because of the importance of code improvement, most language manuals say that th
 
 **DESIGN & IMPLEMENTATION**
 
-## 6.2 Safety versus performance
-
-A recurring theme in any comparison between C++ and Java is the latter’s will- ingness to accept additional run-time cost in order to obtain cleaner semantics or increased reliability. Deﬁnite assignment is one example: it may force the programmer to perform “unnecessary” initializations on certain code paths, but in so doing it avoids the many subtle errors that can arise from missing initialization in other languages. Similarly, the Java speciﬁcation mandates au- tomatic garbage collection, and its reference model of user-deﬁnedtypes forces most objects to be allocated in the heap. As we shall see in future chapters, Java also requires both dynamic binding of all method invocations and run-time checks for out-of-bounds array references, type clashes, and other dynamic semantic errors. Clever compilers can reduce or eliminate the cost of these requirements in certain common cases, but for the most part the Java design reﬂects an evolutionary shift away from performance as* the* overriding design goal.
+6.2 Safety versus performance A recurring theme in any comparison between C++ and Java is the latter’s will- ingness to accept additional run-time cost in order to obtain cleaner semantics or increased reliability. Deﬁnite assignment is one example: it may force the programmer to perform “unnecessary” initializations on certain code paths, but in so doing it avoids the many subtle errors that can arise from missing initialization in other languages. Similarly, the Java speciﬁcation mandates au- tomatic garbage collection, and its reference model of user-deﬁnedtypes forces most objects to be allocated in the heap. As we shall see in future chapters, Java also requires both dynamic binding of all method invocations and run-time checks for out-of-bounds array references, type clashes, and other dynamic semantic errors. Clever compilers can reduce or eliminate the cost of these requirements in certain common cases, but for the most part the Java design reﬂects an evolutionary shift away from performance as* the* overriding design goal.
 
 ***Applying Mathematical Identities***
 
@@ -450,9 +441,7 @@ Unfortunately, while mathematical arithmetic obeys a variety of commuta- tive, a
 
 **DESIGN & IMPLEMENTATION**
 
-## 6.3 Evaluation order
-
-Expression evaluation presents a difﬁcult tradeoff between semantics and im- plementation. To limit surprises, most language deﬁnitions require the com- piler, if it ever reorders expressions, to respect any ordering imposed by paren- theses. The programmer can therefore use parentheses to prevent the applica- tion of arithmetic “identities” when desired. No similar guarantee exists with respect to the order of evaluation of operands and arguments. It is therefore unwise to write expressions in which a side effect of evaluating one operand or argument can affect the value of another. As we shall see in Section 6.3, some languages, notably Euclid and Turing, outlaw such side effects.
+6.3 Evaluation order Expression evaluation presents a difﬁcult tradeoff between semantics and im- plementation. To limit surprises, most language deﬁnitions require the com- piler, if it ever reorders expressions, to respect any ordering imposed by paren- theses. The programmer can therefore use parentheses to prevent the applica- tion of arithmetic “identities” when desired. No similar guarantee exists with respect to the order of evaluation of operands and arguments. It is therefore unwise to write expressions in which a side effect of evaluating one operand or argument can affect the value of another. As we shall see in Section 6.3, some languages, notably Euclid and Turing, outlaw such side effects.
 
 problem is that numbers in a computer are of limited precision. Suppose a, b, **EXAMPLE** 6.32
 
@@ -460,7 +449,7 @@ Overﬂow and arithmetic “identities” and c are all integers between two bil
 
 Reordering and numerical stability bers devote one bit to the sign, eight bits to the exponent (power of two), and 23 bits to the mantissa. Under this representation, a + b is guaranteed to result in a loss of information if* |* log2(*a**/**b*)*|** >* 23. Thus if b = -c, then a + b + c may appear to be zero, instead of a, if the magnitude of a is small, while the magnitudes of b and c are large. In a similar vein, a number like 0*.*1 cannot be represented precisely, because its binary representation is a “repeating decimal”: 0.0001001001.... For certain values of x, (0.1 + x) * 10.0 and 1.0 + (x * 10.0) can differ by as much as 25%, even when 0.1 and x are of the same mag- nitude. ■
 
-## 6.1.5** Short-Circuit Evaluation**
+6.1.5** Short-Circuit Evaluation**
 
 Boolean expressions provide a special and important opportunity for code im- provement and increased readability. Consider the expression (a < b) and **EXAMPLE** 6.34
 
@@ -513,29 +502,17 @@ if d = 0.0 or else n/d < threshold then ...
 
 (Ada uses /= for “not equal.”) In C, the bit-wise & and | operators can be used as non-short-circuiting alternatives to && and || when their arguments are logical (zero or one) values. ■ If we think of and and or as binary operators, short circuiting can be consid- ered an example of delayed or* lazy* evaluation: the operands are “passed” uneval- uated. Internally, the operator evaluates the ﬁrst operand in any case, the second only when needed. In a language like Algol 68, which allows arbitrary control ﬂow constructs to be used inside expressions, conditional evaluation can be speciﬁed explicitly with if... then ... else; see Exercise 6.13. When used to determine the ﬂow of control in a selection or iteration con- struct, short-circuit Boolean expressions do not really have to calculate a Boolean value; they simply have to ensure that control takes the proper path in any given situation. We will look more closely at the generation of code for short-circuit expressions in Section 6.4.1.
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 12. Given the ability to assign a value into a variable, why is it useful to be able to specify an* initial* value?
 
-### 12. Given the ability to assign a value into a variable, why is it useful to be able to
+## 13. What are* aggregates*? Why are they useful? 14. Explain the notion of* deﬁnite assignment* in Java and C#.
 
-specify an* initial* value?
+## 15. Why is it generally expensive to catch all uses of uninitialized variables at run time?
 
-### 13. What are aggregates? Why are they useful?
-
-* Explain the notion of* deﬁnite assignment* in Java and C#.
-
-### 15. Why is it generally expensive to catch all uses of uninitialized variables at run
-
-time?
-
-### 16. Why is it impossible to catch all uses of uninitialized variables at compile time?
-
-### 17. Why do most languages leave unspeciﬁed the order in which the arguments
-
-of an operator or function are evaluated? 18. What is* short-circuit* Boolean evaluation? Why is it useful?
-
-## 6.2
-
-### **Structured and Unstructured Flow**
+* Why is it impossible to catch all uses of uninitialized variables at compile time?
+  17. Why do most languages leave unspeciﬁed the order in which the arguments
+  of an operator or function are evaluated?
+  18. What is* short-circuit* Boolean evaluation? Why is it useful?
+6.2 **Structured and Unstructured Flow**
 
 Control ﬂow in assembly languages is achieved by means of conditional and un- conditional jumps (branches). Early versions of Fortran mimicked the low-level **EXAMPLE** 6.39
 
@@ -552,7 +529,7 @@ The 10 on the bottom line is a* statement label*. Goto statements also featured 
 
 **6** Edsger W. Dijkstra (1930–2002) developed much of the logical foundation of our modern un- derstanding of concurrency. He was also responsible, among many other contributions, for the semaphores of Section 13.3.5 and for much of the practical development of structured program- ming. He received the ACM Turing Award in 1972.
 
-## 6.2.1** Structured Alternatives to**** goto**
+6.2.1** Structured Alternatives to**** goto**
 
 Once the principal structured constructs had been deﬁned, most of the contro- versy surrounding gotos revolved around a small number of special cases, each of which was eventually addressed in structured ways. Where once a goto might have been used to jump to the end of the current subroutine, most modern lan- guages provide an explicit return statement. Where once a goto might have been used to escape from the middle of a loop, most modern languages provide a break or exit statement for this purpose. (Some languages also provide a state- ment that will skip the remainder of the current iteration only: continue in C; cycle in Fortran 90; next in Perl.) More signiﬁcantly, several languages allow a program to return from a nested chain of subroutine calls in a single opera- tion, and many provide a way to raise an* exception* that propagates out to some surrounding context. Both of these capabilities might once have been attempted with (nonlocal) gotos.
 
@@ -622,7 +599,7 @@ status := my_proc(args); if status = ok then ... ■
 
 The auxiliary Booleans can be eliminated by using a nonlocal goto or multilevel return, but the caller to which we return must still inspect status codes explic- itly. As a structured alternative, many modern languages provide an* exception-* *handling* mechanism for convenient, nonlocal recovery from exceptions. We will discuss exception handling in more detail in Section 9.4. Typically the program- mer appends a block of code called a* handler* to any computation in which an exception may arise. The job of the handler is to take whatever remedial action is required to recover from the exception. If the protected computation completes in the normal fashion, execution of the handler is skipped. Multilevel returns and structured exceptions have strong similarities. Both in- volve a control transfer from some inner, nested context back to an outer context, unwinding the stack on the way. The distinction lies in where the computing oc- curs. In a multilevel return the inner context has all the information it needs. It completes its computation, generating a return value if appropriate, and transfers to the outer context in a way that requires no post-processing. At an exception, by contrast, the inner context cannot complete its work—it cannot fulﬁll its con- tract. It performs an “abnormal” return, triggering execution of the handler. Common Lisp and Ruby provide mechanisms for both multilevel returns and exceptions, but this dual support is relatively rare. Most languages support only exceptions; programmers implement multilevel returns by writing a trivial han- dler. In an unfortunate overloading of terminology, the names catch and throw, which Common Lisp and Ruby use for multilevel returns, are used for exceptions in several other languages.
 
-## 6.2.2** Continuations**
+6.2.2** Continuations**
 
 The notion of nonlocal gotos that unwind the stack can be generalized by deﬁn- ing what are known as* continuations*. In low-level terms, a continuation con- sists of a code address, a referencing environment that should be established (or restored) when jumping to that address, and a reference to another continua- tion that represents what to do in the event of a subsequent subroutine return. (The chain of return continuations constitutes a* backtrace* of the run-time stack.) In higher-level terms, a continuation is an abstraction that captures a* context* in which execution might continue. Continuations are fundamental to deno- tational semantics. They also appear as ﬁrst-class values in several programming languages (notably Scheme and Ruby), allowing the programmer to deﬁne new control-ﬂow constructs. Continuation support in Scheme takes the form of a function named call- with-current-continuation, often abbreviated call/cc. This function takes a single argument* f* , which is itself a function of one argument. Call/cc calls* f* , passing as argument a continuation* c* that captures the current program counter, referencing environment, and stack backtrace. The continuation is implemented as a closure, indistinguishable from the closures used to represent subroutines passed as parameters. At any point in the future,* f* can call* c*, passing it a value,* v*. The call will “return”* v* into* c*’s captured context, as if it had been returned by the original call to call/cc. Ruby support is similar: **EXAMPLE** 6.43
 
@@ -637,9 +614,7 @@ Here the parameter to callcc is a* block*—roughly, a lambda expression. The bl
 
 **DESIGN & IMPLEMENTATION**
 
-### 6.4 Cleaning up continuations
-
-The implementation of continuations in Scheme and Ruby is surprisingly straightforward. Because local variables have unlimited extent in both lan- guages, activation records must in general be allocated on the heap. As a re- sult, explicit deallocation of frames in the current context is neither required nor appropriate when jumping through a continuation: if those frames are no longer accessible, they will eventually be reclaimed by the standard garbage collector (more on this in Section 8.5.3).
+6.4 Cleaning up continuations The implementation of continuations in Scheme and Ruby is surprisingly straightforward. Because local variables have unlimited extent in both lan- guages, activation records must in general be allocated on the heap. As a re- sult, explicit deallocation of frames in the current context is neither required nor appropriate when jumping through a continuation: if those frames are no longer accessible, they will eventually be reclaimed by the standard garbage collector (more on this in Section 8.5.3).
 
 number 1, to subroutine foo. The subroutine then calls itself twice recursively before executing c.call(i). Finally, the call method jumps into the context captured by c, making i (that is, 3) appear to have been returned by callcc. The ﬁnal program output is start 1; start 2; start 3; got 3. ■ In this simple example, the jump into the continuation behaved much as an exception would, popping out of a series of nested calls. But continuations can do much more. Like other closures, they can be saved in variables, returned from **EXAMPLE** 6.44
 
@@ -676,9 +651,7 @@ start 1; start 2; start 3; end 3; end 2; end 1; end 3; end 2; end 1; end 3; end 
 
 Call/cc sufﬁces to build a wide variety of control abstractions, including gotos, midloop exits, multilevel returns, exceptions, iterators (Section 6.5.3), call-by-name parameters (Section 9.3.1), and coroutines (Section 9.5). It even subsumes the notion of returning from a subroutine, though it seldom replaces it in practice. Used in a disciplined way, continuations make a language surpris- ingly extensible. At the same time, they allow the undisciplined programmer to construct completely inscrutable programs.
 
-## 6.3
-
-### **Sequencing**
+6.3 **Sequencing**
 
 Like assignment, sequencing is central to imperative programming. It is the prin- cipal means of controlling the order in which side effects (e.g., assignments) oc- cur: when one statement follows another in the program text, the ﬁrst statement executes before the second. In most imperative languages, lists of statements can be enclosed with begin... end or { ... } delimiters and then used in any context in which a single statement is expected. Such a delimited list is usually called a* compound statement*. A compound statement optionally preceded by a set of declarations is sometimes called a* block*. In languages like Algol 68, which blur or eliminate the distinction between statements and expressions, the value of a statement (expression) list is the value of its ﬁnal element. In Common Lisp, the programmer can choose to return the value of the ﬁrst element, the second, or the last. Of course, sequencing is a useless operation unless the subexpressions that do not play a part in the return value have side effects. The various sequencing constructs in Lisp are used only in program fragments that do not conform to a purely functional programming model. Even in imperative languages, there is debate as to the value of certain kinds of side effects. In Euclid and Turing, for example, functions (i.e., subroutines that return values, and that therefore can appear within expressions) are not permitted to have side effects. Among other things, side-effect freedom ensures that a Euclid or Turing function, like its counterpart in mathematics, is always* idempotent*: if called repeatedly with the same set of arguments, it will always return the same value, and the number of consecutive calls (after the ﬁrst) will not affect the results of subsequent execution. In addition, side-effect freedom for functions means that the value of a subexpression will never depend on whether that subexpression is evaluated before or after calling a function in some other subexpression. These properties make it easier for a programmer or theorem-proving system to reason about program behavior. They also simplify code improvement, for example by permitting the safe rearrangement of expressions. Unfortunately, there are some situations in which side effects in functions are **EXAMPLE** 6.45
 
@@ -721,7 +694,7 @@ cond in Lisp (cond ((= A B) (...))
 
 Here cond takes as arguments a sequence of pairs. In each pair the ﬁrst ele- ment is a condition; the second is an expression to be returned as the value of the overall construct if the condition evaluates to T (T means “true” in most Lisp dialects). ■
 
-## 6.4.1** Short-Circuited Conditions**
+6.4.1** Short-Circuited Conditions**
 
 While the condition in an if... then ... else statement is a Boolean expression, there is usually no need for evaluation of that expression to result in a Boolean value in a register. Most machines provide conditional branch instructions that capture simple comparisons. Put another way, the purpose of the Boolean expres- sion in a selection statement is not to compute a value to be stored, but to cause control to branch to various locations. This observation allows us to generate particularly efﬁcient code (called* jump code*) for expressions that are amenable to the short-circuit evaluation of Section 6.1.5. Jump code is applicable not only to selection statements such as if... then ... else, but to logically controlled loops as well; we will consider the latter in Section 6.5.5. In the usual process of code generation, a synthesized attribute of the root of an expression subtree acquires the name of a register into which the value of the expression will be computed at run time. The surrounding context then uses this register name when generating code that uses the expression. In jump code, *inherited* attributes of the root inform it of the addresses to which control should branch if the expression is true or false, respectively. Suppose, for example, that we are generating code for the following source: **EXAMPLE** 6.49
 
@@ -743,9 +716,7 @@ Here the value of the Boolean condition is never explicitly placed into a regist
 
 **DESIGN & IMPLEMENTATION**
 
-## 6.5 Short-circuit evaluation
-
-Short-circuit evaluation is one of those happy cases in programming language design where a clever language feature yields both more useful semantics* and* a faster implementation than existing alternatives. Other at least arguable exam- ples include case statements, local scopes for for loop indices (Section 6.5.1), and Ada-style parameter modes (Section 9.3.1).
+6.5 Short-circuit evaluation Short-circuit evaluation is one of those happy cases in programming language design where a clever language feature yields both more useful semantics* and* a faster implementation than existing alternatives. Other at least arguable exam- ples include case statements, local scopes for for loop indices (Section 6.5.1), and Ada-style parameter modes (Section 9.3.1).
 
 If the value of a short-circuited expression is needed explicitly, it can of course **EXAMPLE** 6.51
 
@@ -769,7 +740,7 @@ r1 := p if r1 = 0 goto L1 r2 := r1*→*key if r2* ̸*= val goto L1 r1 := 1 goto 
 
 The astute reader will notice that the ﬁrst goto L1 can be replaced by goto L2, since r1 already contains a zero in this case. The code improvement phase of the compiler will notice this also, and make the change. It is easier to ﬁx this sort of thing in the code improver than it is to generate the better version of the code in the ﬁrst place. The code improver has to be able to recognize jumps to redundant instructions for other reasons anyway; there is no point in building special cases into the short-circuit evaluation routines. ■
 
-## 6.4.2** Case****/****Switch**** Statements**
+6.4.2** Case****/****Switch**** Statements**
 
 The case statements of Algol W and its descendants provide alternative syntax **EXAMPLE** 6.52
 
@@ -795,18 +766,7 @@ Rather than test its controlling expression sequentially against a series of pos
 ![Figure 6.4 Jump table...](images/page_291_vector_484.png)
 *Figure 6.4 Jump table to control branching in a case statement. This code replaces the last three lines of Figure 6.3.*
 
-### The “code” at label T in that ﬁgure is in fact an array of addresses, known as a
-
-### jump table. It contains one entry for each integer between the lowest and highest
-
-### values, inclusive, found among the case statement labels. The code at L6 checks
-
-### to make sure that the controlling expression is within the bounds of the array (if
-
-### not, we should execute the others arm of the case statement). It then fetches
-
-### the corresponding entry from the table and branches to it.
-■
+The “code” at label T in that ﬁgure is in fact an array of addresses, known as a *jump table*. It contains one entry for each integer between the lowest and highest values, inclusive, found among the case statement labels. The code at L6 checks to make sure that the controlling expression is within the bounds of the array (if not, we should execute the others arm of the case statement). It then fetches the corresponding entry from the table and branches to it. ■
 
 ***Alternative Implementations***
 
@@ -818,9 +778,7 @@ As with if... then ... else statements, the syntactic details of case statements
 
 **DESIGN & IMPLEMENTATION**
 
-## 6.6 Case statements
-
-Case statements are one of the clearest examples of language design driven by implementation. Their primary reason for existence is to facilitate the gener- ation of jump tables. Ranges in label lists (not permitted in Pascal or C) may reduce efﬁciency slightly, but binary search is still dramatically faster than the equivalent series of ifs.
+6.6** Case** statements Case statements are one of the clearest examples of language design driven by implementation. Their primary reason for existence is to facilitate the gener- ation of jump tables. Ranges in label lists (not permitted in Pascal or C) may reduce efﬁciency slightly, but binary search is still dramatically faster than the equivalent series of ifs.
 
 requires the labels to cover* all possible* values in the domain of the controlling expression’s type; if the type has a very large number of values, then this cover- age must be accomplished using ranges or an others clause. In some languages, notably C and Fortran 90, it is* not* an error for the tested expression to evaluate to a missing value. Rather, the entire construct has no effect when the value is missing.
 
@@ -838,34 +796,27 @@ letter_case = lower; switch (c) { ... case 'A' : letter_case = upper; /* FALL TH
 
 Most of the time, however, the need to insert a break at the end of each arm— and the compiler’s willingness to accept arms without breaks, silently—is a recipe for unexpected and difﬁcult-to-diagnose bugs. C# retains the familiar C syntax, including multiple consecutive labels, but requires every nonempty arm to end with a break, goto, continue, or return.
 
-### 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 19. List the principal uses of goto, and the structured alternatives to each.
 
-* List the principal uses of goto, and the structured alternatives to each.
+## 20. Explain the distinction between exceptions and multilevel returns. 21. What are* continuations*? What other language features do they subsume?
 
-#### 20. Explain the distinction between exceptions and multilevel returns.
-21. What are* continuations*? What other language features do they subsume?
-
-#### 22. Why is sequencing a comparatively unimportant form of control ﬂow in Lisp?
-
-* Explain why it may sometimes be useful for a function to have side effects.
+* Why is sequencing a comparatively unimportant form of control ﬂow in Lisp?
+  23. Explain why it may sometimes be useful for a function to have side effects.
   24. Describe the* jump code* implementation of short-circuit Boolean evaluation.
-#### 25. Why do imperative languages commonly provide a case or switch statement
+* Why do imperative languages commonly provide a case or switch statement
+  in addition to if... then ... else?
+  26. Describe three different search strategies that might be employed in the im-
+  plementation of a case statement, and the circumstances in which each
+  would be desirable.
+## 27. Explain the use of break to terminate the arms of a C switch statement, and the behavior that arises if a break is accidentally omitted.
 
-in addition to if... then ... else? 26. Describe three different search strategies that might be employed in the im- plementation of a case statement, and the circumstances in which each would be desirable.
-
-#### 27. Explain the use of break to terminate the arms of a C switch statement, and
-
-the behavior that arises if a break is accidentally omitted.
-
-## 6.5
-
-#### **Iteration**
+6.5 **Iteration**
 
 Iteration and recursion are the two mechanisms that allow a computer to per- form similar operations repeatedly. Without at least one of these mechanisms, the running time of a program (and hence the amount of work it can do and the amount of space it can use) would be a linear function of the size of the program text. In a very real sense, it is iteration and recursion that make computers useful for more than ﬁxed-size tasks. In this section we focus on iteration. Recursion is the subject of Section 6.6. Programmers in imperative languages tend to use iteration more than they use recursion (recursion is more common in functional languages). In most lan- guages, iteration takes the form of* loops*. Like the statements in a sequence, the it- erations of a loop are generally executed for their side effects: their modiﬁcations of variables. Loops come in two principal varieties, which differ in the mecha- nisms used to determine how many times to iterate. An* enumeration-controlled* loop is executed once for every value in a given ﬁnite set; the number of iterations is known before the ﬁrst iteration begins. A* logically controlled* loop is executed
 
 until some Boolean condition (which must generally depend on values altered in the loop) changes value. Most (though not all) languages provide separate con- structs for these two varieties of loop.
 
-## 6.5.1** Enumeration-Controlled Loops**
+6.5.1** Enumeration-Controlled Loops**
 
 Enumeration-controlled iteration originated with the do loop of Fortran I. Sim- ilar mechanisms have been adopted in some form by almost every subsequent language, but syntax and semantics vary widely. Even Fortran’s own loop has evolved considerably over time. The modern Fortran version looks something **EXAMPLE** 6.56
 
@@ -917,9 +868,7 @@ The astute reader may have noticed that use of an iteration count is fundamen- t
 
 **DESIGN & IMPLEMENTATION**
 
-## 6.7 Numerical imprecision
-
-Among its many changes to the do loop of Fortran IV, Fortran 77 allowed the index, bounds, and step size of the loop to be ﬂoating-point numbers, not just integers. Interestingly, this feature was taken back out of the language in Fortran 90. The problem with real-number sequences is that limited precision can cause comparisons (e.g., between the index and the bound) to produce unexpected or even implementation-dependent results when the values are close to one another. Should
+6.7 Numerical imprecision Among its many changes to the do loop of Fortran IV, Fortran 77 allowed the index, bounds, and step size of the loop to be ﬂoating-point numbers, not just integers. Interestingly, this feature was taken back out of the language in Fortran 90. The problem with real-number sequences is that limited precision can cause comparisons (e.g., between the index and the bound) to produce unexpected or even implementation-dependent results when the values are close to one another. Should
 
 for x := 1.0 to 2.0 by 1.0 / 3.0
 
@@ -947,7 +896,7 @@ r1 := ’a’ r2 := ’z’ if r1 > r2 goto L3 –– Code improver may remove t
 
 Of course, the compiler must generate this sort of code in any event (or use an iteration count) if arithmetic overﬂow may interfere with testing the terminating condition. To permit the compiler to use the fastest correct implementation in all cases, several languages, including Fortran 90 and Pascal, say that the value of the index is undeﬁned after the end of the loop. ■ An attractive solution to both the index modiﬁcation problem and the post- loop value problem was pioneered by Algol W and Algol 68, and subsequently adopted by Ada, Modula 3, and many other languages. In these, the header of the loop is considered to contain a* declaration* of the index. Its type is inferred from the bounds of the loop, and its scope is the loop’s body. Because the index is not visible outside the loop, its value is not an issue. Of course, the programmer must not give the index the same name as any variable that must be accessed within the loop, but this is a strictly local issue: it has no ramiﬁcations outside the loop.
 
-## 6.5.2** Combination Loops**
+6.5.2** Combination Loops**
 
 Algol 60 provided a single loop construct that subsumed the properties of more modern enumeration and logically controlled loops. It allowed the programmer to specify an arbitrary number of “enumerators,” each of which could be a single value, a range of values similar to those of modern enumeration-controlled loops, or an expression with a terminating condition. Common Lisp provides an even more powerful facility, with four separate sets of clauses, to initialize index vari- ables (of which there may be an arbitrary number), test for loop termination (in any of several ways), evaluate body expressions, and clean up at loop termination.
 
@@ -971,9 +920,7 @@ This deﬁnition means that it is the programmer’s responsibility to worry abo
 
 **DESIGN & IMPLEMENTATION**
 
-## 6.8 for loops
-
-Modern for loops reﬂect the impact of both semantic and implementation challenges. Semantic challenges include changes to loop indices or bounds from within the loop, the scope of the index variable (and its value, if any, out- side the loop), and gotos that enter or leave the loop. Implementation chal- lenges include the imprecision of ﬂoating-point values, the direction of the bottom-of-loop test, and overﬂow at the end of the iteration range. The “com- bination loops” of C (Section 6.5.2) move responsibility for these challenges out of the compiler and into the application program.
+6.8** for** loops Modern for loops reﬂect the impact of both semantic and implementation challenges. Semantic challenges include changes to loop indices or bounds from within the loop, the scope of the index variable (and its value, if any, out- side the loop), and gotos that enter or leave the loop. Implementation chal- lenges include the imprecision of ﬂoating-point values, the direction of the bottom-of-loop test, and overﬂow at the end of the iteration range. The “com- bination loops” of C (Section 6.5.2) move responsibility for these challenges out of the compiler and into the application program.
 
 the ﬂow of control is localized within the header. In the while loop, one must read both the top and the bottom of the loop to know what is going on. While the logical iteration semantics of the C for loop eliminate any ambigu- ity about the value of the index variable after the end of the loop, it may still be convenient to make the index local to the body of the loop, by declaring it in the header’s initialization clause. In Example 6.64, variable i must be declared in the surrounding scope. If we instead write **EXAMPLE** 6.65
 
@@ -981,7 +928,7 @@ C for loop with a local index for (int i = first; i <= last; i += step) { ... }
 
 then i will not be visible outside. It will still, however, be vulnerable to (deliberate or accidental) modiﬁcation within the loop. ■
 
-## 6.5.3** Iterators**
+6.5.3** Iterators**
 
 In all of the examples we have seen so far (with the possible exception of the com- bination loops of Algol 60, Common Lisp, or C), a for loop iterates over the ele- ments of an arithmetic sequence. In general, however, we may wish to iterate over the elements of any well-deﬁned set (what are often called* collections*, or instances of a* container* class, in object-oriented code). Clu introduced an elegant* iterator* mechanism (also found in Python, Ruby, and C#) to do precisely that. Euclid and several more recent languages, notably C++, Java, and Ada 2012, deﬁne a stan- dard interface for* iterator objects* (sometimes called* enumerators*) that are equally easy to use, but not as easy to write. Icon, conversely, provides a generalization of iterators, known as* generators*, that combines enumeration with backtracking search.7
 
@@ -1044,9 +991,7 @@ cout << n << "\n";
 
 **DESIGN & IMPLEMENTATION**
 
-## 6.9 “True” iterators and iterator objects
-
-While the iterator library mechanisms of C++ and Java are highly useful, it is worth emphasizing that they are* not* the functional equivalents of “true” iterators, as found in Clu, Python, Ruby, and C#. Their key limitation is the need to maintain all intermediate state in the form of explicit data structures, rather than in the program counter and local variables of a resumable execu- tion context.
+6.9 “True” iterators and iterator objects While the iterator library mechanisms of C++ and Java are highly useful, it is worth emphasizing that they are* not* the functional equivalents of “true” iterators, as found in Clu, Python, Ruby, and C#. Their key limitation is the need to maintain all intermediate state in the form of explicit data structures, rather than in the program counter and local variables of a resumable execu- tion context.
 
 ![Figure 6.6 Java code...](images/page_304_vector_408.png)
 *Figure 6.6 Java code for preorder enumeration of the nodes of a binary tree. The nested TreeIterator class uses an explicit Stack object (borrowed from the standard library) to keep track of subtrees whose nodes have yet to be enumerated. Java generics, speciﬁed as <T> type arguments for BinTree, Stack, Iterator, and Iterable, allow next to return an object of the appropriate type, rather than the undifferentiated Object. The remove method is part of the Iterator interface, and must therefore be provided, if only as a placeholder.*
@@ -1131,7 +1076,7 @@ ti_delete(&ti);
 
 There are two principal differences between this code and the more structured al- ternatives: (1) the syntax of the loop is a good bit less elegant (and arguably more prone to accidental errors), and (2) the code for the iterator is simply a type and some associated functions—C provides no abstraction mechanism to group them together as a module or a class. By providing a standard interface for iterator ab- stractions, object-oriented languages facilitate the design of higher-order mech- anisms that manipulate whole collections: sorting them, merging them, ﬁnding their intersection or difference, and so on. We leave the C code for tree_iter and the various ti_ functions to Exercise 6.20. ■
 
-## 6.5.4** Generators in Icon**
+6.5.4** Generators in Icon**
 
 Icon generalizes the concept of iterators, providing a* generator* mechanism that causes any expression in which it is embedded to enumerate multiple values on demand.
 
@@ -1139,7 +1084,7 @@ Icon generalizes the concept of iterators, providing a* generator* mechanism tha
 
 but any expression that* contains* a generator. Generators can also be used in con- structs like if statements, which will execute their nested code if* any* generated value makes the condition true, automatically searching through all the possi- bilities. When generators are nested, Icon explores all possible combinations of generated values, and will even* backtrack* where necessary to undo unsuccessful control-ﬂow branches or assignments.
 
-## 6.5.5** Logically Controlled Loops**
+6.5.5** Logically Controlled Loops**
 
 In comparison to enumeration-controlled loops, logically controlled loops have many fewer semantic subtleties. The only real question to be answered is where within the body of the loop the terminating condition is tested. By far the most common approach is to test the condition before each iteration. The familiar **EXAMPLE** 6.74
 
@@ -1199,34 +1144,27 @@ Exiting a nested loop in Perl outer: while (<>) { # iterate over lines of input 
 
 Java extends the C/C++ break statement in a similar fashion, with optional labels on loops.
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 28. Describe three subtleties in the implementation of enumeration-controlled loops. 29. Why do most languagesnot allow the bounds or increment of an enumeration- controlled loop to be ﬂoating-point numbers?
 
-### 28. Describe three subtleties in the implementation of enumeration-controlled
+* Why do many languages require the step size of an enumeration-controlled
+  loop to be a compile-time constant?
+  31. Describe the “iteration count” loop implementation. What problem(s) does
+  it solve?
+  32. What are the advantages of making an index variable local to the loop it con-
+  trols?
+## 33. Does C have enumeration-controlled loops? Explain. 34. What is a* collection* (a* container* instance)? 35. Explain the difference between true iterators and iterator objects.
 
-loops. 29. Why do most languagesnot allow the bounds or increment of an enumeration- controlled loop to be ﬂoating-point numbers?
+## 36. Cite two advantages of iterator objects over the use of programming conven- tions in a language like C.
 
-#### 30. Why do many languages require the step size of an enumeration-controlled
-
-loop to be a compile-time constant? 31. Describe the “iteration count” loop implementation. What problem(s) does it solve? 32. What are the advantages of making an index variable local to the loop it con- trols?
-
-* Does C have enumeration-controlled loops? Explain.
-  34. What is a* collection* (a* container* instance)?
-  35. Explain the difference between true iterators and iterator objects.
-#### 36. Cite two advantages of iterator objects over the use of programming conven-
-
-tions in a language like C.
-
-#### 37. Describe the approach to iteration typically employed in languages with ﬁrst-
-
-class functions. 38. Give an example in which a* mid-test* loop results in more elegant code than does a pretest or post-test loop.
-
-## 6.6
-
-#### **Recursion**
+* Describe the approach to iteration typically employed in languages with ﬁrst-
+  class functions.
+  38. Give an example in which a* mid-test* loop results in more elegant code than
+  does a pretest or post-test loop.
+6.6 **Recursion**
 
 Unlike the control-ﬂow mechanisms discussed so far, recursion requires no spe- cial syntax. In any language that provides subroutines (particularly functions), all that is required is to permit functions to call themselves, or to call other functions that then call them back in turn. Most programmers learn in a data structures class that recursion and (logically controlled) iteration provide equally powerful means of computing functions: any iterative algorithm can be rewritten, auto- matically, as a recursive algorithm, and vice versa. We will compare iteration and recursion in more detail in the ﬁrst subsection below. In the following subsection we will consider the possibility of passing* unevaluated* expressions into a func- tion. While usually inadvisable, due to implementation cost, this technique will sometimes allow us to write elegant code for functions that are only deﬁned on a subset of the possible inputs, or that explore logically inﬁnite data structures.
 
-### 6.6.1** Iteration and Recursion**
+6.6.1** Iteration and Recursion**
 
 As we noted in Section 3.2, Fortran 77 and certain other languages do not permit recursion. A few functional languages do not permit iteration. Most modern languages, however, provide both mechanisms. Iteration is in some sense the more “natural” of the two in imperative languages, because it is based on the repeated modiﬁcation of variables. Recursion is the more natural of the two in
 
@@ -1341,7 +1279,7 @@ For a programmer accustomed to writing in a functional style, this code is per- 
 
 **9** Actually, one can do substantially better than linear time using algorithms based on binary matrix multiplication or closest-integer rounding of continuous functions, but these approaches suffer from high constant-factor costs or problems with numeric precision. For most purposes the linear-time algorithm is a reasonable choice.
 
-## 6.6.2** Applicative- and Normal-Order Evaluation**
+6.6.2** Applicative- and Normal-Order Evaluation**
 
 Throughout the discussion so far we have assumed implicitly that arguments are evaluated before passing them to a subroutine. This need not be the case. It is possible to pass a representation of the* unevaluated* arguments to the subroutine instead, and to evaluate them only when (if) the value is actually needed. The for- mer option (evaluating before the call) is known as* applicative-order evaluation*; the latter (evaluating only when the value is actually needed) is known as* normal-* *order evaluation*. Normal-order evaluation is what naturally occurs in macros (Section 3.7). It also occurs in short-circuit Boolean evaluation (Section 6.1.5), *call-by-name* parameters (to be discussed in Section 9.3.1), and certain functional languages (to be discussed in Section 11.5). Algol 60 uses normal-order evaluation by default for user-deﬁned functions (applicative order is also available). This choice was presumably made to mimic the behavior of macros (Section 3.7). Most programmers in 1960 wrote mainly in assembler, and were accustomed to macro facilities. Because the parameter- passing mechanisms of Algol 60 are part of the language, rather than textual ab- breviations, problems like misinterpreted precedence or naming conﬂicts do not arise. Side effects, however, are still very much an issue. We will discuss Algol 60 parameters in more detail in Section 9.3.1.
 
@@ -1351,9 +1289,7 @@ From the points of view of clarity and efﬁciency, applicative-order evaluation
 
 **DESIGN & IMPLEMENTATION**
 
-### 6.10 Normal-order evaluation
-
-Normal-order evaluation is one of many examples we have seen where ar- guably desirable semantics have been dismissed by language designers because of fear of implementation cost. Other examples in this chapter include side- effect freedom (which allows normal order to be implemented via lazy evalu- ation), iterators (Section 6.5.3), and nondeterminacy (Section 6.7). As noted in Sidebar 6.2, however, there has been a tendency over time to trade a bit of speed for cleaner semantics and increased reliability. Within the functional programming community, Haskell and its predecessor Miranda are entirely side-effect free, and use normal-order (lazy) evaluation for all parameters.
+6.10 Normal-order evaluation Normal-order evaluation is one of many examples we have seen where ar- guably desirable semantics have been dismissed by language designers because of fear of implementation cost. Other examples in this chapter include side- effect freedom (which allows normal order to be implemented via lazy evalu- ation), iterators (Section 6.5.3), and nondeterminacy (Section 6.7). As noted in Sidebar 6.2, however, there has been a tendency over time to trade a bit of speed for cleaner semantics and increased reliability. Within the functional programming community, Haskell and its predecessor Miranda are entirely side-effect free, and use normal-order (lazy) evaluation for all parameters.
 
 evaluation in the form of built-in functions called delay and force.10 These functions provide an implementation of* lazy evaluation*. In the absence of side effects, lazy evaluation has the same semantics as normal-order evaluation, but the implementation keeps track of which expressions have already been evaluated, so it can reuse their values if they are needed more than once in a given referencing environment. A delayed expression is sometimes called a* promise*. The mechanism used to keep track of which promises have already been evaluated is sometimes called *memoization*.11 Because applicative-order evaluation is the default in Scheme, the programmer must use special syntax not only to pass an unevaluated argument, but also to use it. In Algol 60, subroutine headers indicate which arguments are to be passed which way; the point of call and the uses of parameters within sub- routines look the same in either case. One important use of lazy evaluation is to create so-called* inﬁnite* or* lazy data* *structures*, which are “ﬂeshed out” on demand. The following example, adapted **EXAMPLE** 6.88
 
@@ -1383,23 +1319,13 @@ is deliberately unspeciﬁed. We have already seen examples of nondeterminacy in
 
 Further discussion of nondeterminism can be found on the companion site. Ab- sent a nondeterministic construct, the author of a code fragment in which order does not matter must choose some arbitrary (artiﬁcial) order. Such a choice can make it more difﬁcult to construct a formal correctness proof. Some language designers have also argued that it is inelegant. The most compelling uses for non- determinacy arise in concurrent programs, where imposing an arbitrary choice on the order in which a thread interacts with its peers may cause the system as a whole to deadlock. For such programs one may need to ensure that the choice among nondeterministic alternatives is* fair* in some formal sense.
 
-### 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 39. What is a* tail-recursive* function? Why is tail recursion important? 40. Explain the difference between* applicative-* and* normal-order* evaluation of expressions. Under what circumstances is each desirable? 41. What is* lazy evaluation*? What are* promises*? What is* memoization*?
 
-#### 39. What is a tail-recursive function? Why is tail recursion important?
+## 42. Give two reasons why lazy evaluation may be desirable. 43. Name a language in which parameters are always evaluated lazily.
 
-#### 40. Explain the difference between applicative- and normal-order evaluation of
+## 44. Give two reasons why a programmer might sometimes want control ﬂow to be* nondeterministic*.
 
-expressions. Under what circumstances is each desirable? 41. What is* lazy evaluation*? What are* promises*? What is* memoization*?
-
-* Give two reasons why lazy evaluation may be desirable.
-  43. Name a language in which parameters are always evaluated lazily.
-#### 44. Give two reasons why a programmer might sometimes want control ﬂow to
-
-be* nondeterministic*.
-
-## 6.8
-
-#### **Summary and Concluding Remarks**
+6.8 **Summary and Concluding Remarks**
 
 In this chapter we introduced the principal forms of control ﬂow found in pro- gramming languages: sequencing, selection, iteration, procedural abstraction, recursion, concurrency, exception handling and speculation, and nondetermi- nacy. Sequencing speciﬁes that certain operations are to occur in order, one after the other. Selection expresses a choice among two or more control-ﬂow alter- natives. Iteration and recursion are the two ways to execute operations repeat- edly. Recursion deﬁnes an operation in terms of simpler instances of itself; it depends on procedural abstraction. Iteration repeats an operation for its side
 
@@ -1407,9 +1333,7 @@ effect(s). Sequencing and iteration are fundamental to imperative programming. R
 
 In several cases, advances in compiler technology or in the simple willingness of designers to build more complex compilers have made it possible to incorpo- rate features once considered too expensive. Label ranges in Ada case statements require that the compiler be prepared to generate code employing binary search. In-line functions in C++ eliminate the need to choose between the inefﬁciency of tiny functions and the messy semantics of macros. Exceptions (as we shall see in Section 9.4.3) can be implemented in such a way that they incur no cost in the common case (when they do not occur), but the implementation is quite tricky. Iterators, boxing, generics (Section 7.3.1), and ﬁrst-class functions are likewise rather tricky, but are increasingly found in mainstream imperative languages. Some implementation techniques (e.g., rearranging expressions to uncover common subexpressions, or avoiding the evaluation of guards in a nondeter- ministic construct once an acceptable choice has been found) are sufﬁciently im- portant to justify a modest burden on the programmer (e.g., adding parentheses where necessary to avoid overﬂow or ensure numeric stability, or ensuring that expressions in guards are side-effect-free). Other semantically useful mechanisms (e.g., lazy evaluation, continuations, or truly random nondeterminacy) are usu- ally considered complex or expensive enough to be worthwhile only in special circumstances (if at all). In comparatively primitive languages, we can often obtain some of the beneﬁts of missing features through programming conventions. In early dialects of For- tran, for example, we can limit the use of gotos to patterns that mimic the control ﬂow of more modern languages. In languages without short-circuit evaluation, we can write nested selection statements. In languages without iterators, we can write sets of subroutines that provide equivalent functionality. 6.9 **Exercises**
 
-### 6.1
-
-We noted in Section 6.1.1 that most binary arithmetic operators are left- associative in most programming languages. In Section 6.1.4, however, we also noted that most compilers are free to evaluate the operands of a binary operator in either order. Are these statements contradictory? Why or why not? 6.2 As noted in Figure 6.1, Fortran and Pascal give unary and binary minus the same level of precedence. Is this likely to lead to nonintuitive evaluations of certain expressions? Why or why not? 6.3 In Example 6.9 we described a common error in Pascal programs caused by the fact that and and or have precedence comparable to that of the arith- metic operators. Show how a similar problem can arise in the stream-based I/O of C++ (described in Section C 8.7.3). (Hint: Consider the precedence of << and >>, and the operators that appear below them in the C column of Figure 6.1.) 6.4 Translate the following expression into postﬁx and preﬁx notation:
+6.1 We noted in Section 6.1.1 that most binary arithmetic operators are left- associative in most programming languages. In Section 6.1.4, however, we also noted that most compilers are free to evaluate the operands of a binary operator in either order. Are these statements contradictory? Why or why not? 6.2 As noted in Figure 6.1, Fortran and Pascal give unary and binary minus the same level of precedence. Is this likely to lead to nonintuitive evaluations of certain expressions? Why or why not? 6.3 In Example 6.9 we described a common error in Pascal programs caused by the fact that and and or have precedence comparable to that of the arith- metic operators. Show how a similar problem can arise in the stream-based I/O of C++ (described in Section C 8.7.3). (Hint: Consider the precedence of << and >>, and the operators that appear below them in the C column of Figure 6.1.) 6.4 Translate the following expression into postﬁx and preﬁx notation:
 
 [*−**b* + sqrt(*b** ×** b** −*4* ×** a** ×** c*)]*/*(2* ×** a*)
 
@@ -1493,13 +1417,9 @@ Where the implementation of uptoby in Exercise 6.34 required the use of delay an
 (helper low))))
 ```
 
-### 6.36–6.40 In More Depth.
-6.10
-**Explorations**
+6.36–6.40 In More Depth. 6.10 **Explorations**
 
-### 6.41 Loop unrolling (described in Exercise C 5.21 and Section C 17.7.1) is a code
-
-transformation that replicates the body of a loop and reduces the number of iterations, thereby decreasing loop overhead and increasing opportuni- ties to improve the performance of the processor pipeline by reordering in- structions. Unrolling is traditionally implemented by the code improve- ment phase of a compiler. It can be implemented at source level, however, if we are faced with the prospect of “hand optimizing” time-critical code on a system whose compiler is not up to the task. Unfortunately, if we replicate the body of a loop* k* times, we must deal with the possibility that the original number of loop iterations,* n*, may not be a multiple of* k*. Writing in C, and letting* k* = 4, we might transform the main loop of Exercise C 5.21 from
+6.41* Loop unrolling* (described in Exercise C 5.21 and Section C 17.7.1) is a code transformation that replicates the body of a loop and reduces the number of iterations, thereby decreasing loop overhead and increasing opportuni- ties to improve the performance of the processor pipeline by reordering in- structions. Unrolling is traditionally implemented by the code improve- ment phase of a compiler. It can be implemented at source level, however, if we are faced with the prospect of “hand optimizing” time-critical code on a system whose compiler is not up to the task. Unfortunately, if we replicate the body of a loop* k* times, we must deal with the possibility that the original number of loop iterations,* n*, may not be a multiple of* k*. Writing in C, and letting* k* = 4, we might transform the main loop of Exercise C 5.21 from
 
 ```
 i = 0;
@@ -1542,9 +1462,7 @@ sum += A[i]; squares += A[i] * A[i]; i++;
 
 Duff announced his discovery with “a combination of pride and revulsion.” He noted that “Many people... have said that the worst feature of C is that switches don’t break automatically before each case label. This code forms some sort of argument in that debate, but I’m not sure whether it’s for or against.” What do you think? Is it reasonable to interleave a loop and a switch in this way? Should a programming language permit it? Is automatic fall-through ever a good idea? 6.42 Using your favorite language and compiler, investigate the order of evalu- ation of subroutine parameters. Are they usually evaluated left-to-right or right-to-left? Are they ever evaluated in the other order? (Can you be sure?) Write a program in which the order makes a difference in the results of the computation. 6.43 Consider the different approaches to arithmetic overﬂow adopted by Pascal, C, Java, C#, and Common Lisp, as described in Section 6.1.4. Speculate as to the differences in language design goals that might have caused the designers to adopt the approaches they did. 6.44 Learn more about container classes and the* design patterns* (structured pro- gramming idioms) they support. Explore the similarities and differences among the standard container libraries of C++, Java, and C#. Which of these libraries do you ﬁnd the most appealing? Why?
 
-### 6.45 In Examples 6.43 and 6.72 we suggested that a Ruby proc (a block, passed
-
-to a function as an implicit extra argument) was “roughly” equivalent to a lambda expression. As it turns out, Ruby has both procs* and* lambda expressions, and they’re almost—but not quite—the same. Learn about the details, and the history of their development. In what situations will a proc and a lambda behave differently, and why? 6.46 One of the most popular idioms for large-scale systems is the so-called* vis-* *itor pattern*. It has several uses, one of which resembles the “iterating with ﬁrst-class functions” idiom of Examples 6.70 and 6.71. Brieﬂy, elements of a container class provide an accept method that expects as argument an object that implements the visitor interface. This interface in turn has a method named visit that expects an argument of element type. To iter- ate over a collection, we implement the “loop body” in the visit method of a visitor object. This object constitutes a closure of the sort described in Section 3.6.3. Any information that visit needs (beyond the identify of the “loop index” element) can be encapsulated in the object’s ﬁelds. An itera- tor method for the collection passes the visitor object to the accept method of each element. Each element in turn calls the visit method of the visitor object, passing itself as argument. Learn more about the visitor pattern. Use it to implement iterators for a collection—preorder, inorder, and postorder traversals of a binary tree, for example. How do visitors compare with equivalent iterator-based code? Do they add new functionality? What else are visitors good for, in addition to iteration? 6.47–6.50 In More Depth. 6.11 **Bibliographic Notes**
+6.45 In Examples 6.43 and 6.72 we suggested that a Ruby* proc* (a block, passed to a function as an implicit extra argument) was “roughly” equivalent to a lambda expression. As it turns out, Ruby has both procs* and* lambda expressions, and they’re almost—but not quite—the same. Learn about the details, and the history of their development. In what situations will a proc and a lambda behave differently, and why? 6.46 One of the most popular idioms for large-scale systems is the so-called* vis-* *itor pattern*. It has several uses, one of which resembles the “iterating with ﬁrst-class functions” idiom of Examples 6.70 and 6.71. Brieﬂy, elements of a container class provide an accept method that expects as argument an object that implements the visitor interface. This interface in turn has a method named visit that expects an argument of element type. To iter- ate over a collection, we implement the “loop body” in the visit method of a visitor object. This object constitutes a closure of the sort described in Section 3.6.3. Any information that visit needs (beyond the identify of the “loop index” element) can be encapsulated in the object’s ﬁelds. An itera- tor method for the collection passes the visitor object to the accept method of each element. Each element in turn calls the visit method of the visitor object, passing itself as argument. Learn more about the visitor pattern. Use it to implement iterators for a collection—preorder, inorder, and postorder traversals of a binary tree, for example. How do visitors compare with equivalent iterator-based code? Do they add new functionality? What else are visitors good for, in addition to iteration? 6.47–6.50 In More Depth. 6.11 **Bibliographic Notes**
 
 Many of the issues discussed in this chapter feature prominently in papers on the history of programming languages. Pointers to several such papers can be found in the Bibliographic Notes for Chapter 1. Fifteen papers comparing Ada, C, and Pascal can be found in the collection edited by Feuer and Gehani [FG84]. References for individual languages can be found in Appendix A. Niklaus Wirth has been responsible for a series of inﬂuential languages over a 30-year period, including Pascal [Wir71], its predecessor Algol W [WH66], and the successors Modula [Wir77b], Modula-2 [Wir85b], and Oberon [Wir88b]. The case statement of Algol W is due to Hoare [Hoa81]. Bernstein [Ber85] considers a variety of alternative implementations for case, including multi- level versions appropriate for label sets consisting of several dense “clusters” of values. Guarded commands (Section C 6.7) are due to Dijkstra [Dij75]. Duff’s device (Exploration 6.41) was originally posted to netnews, an early on-line dis- cussion group system, in May of 1984. The original posting appears to have been
 

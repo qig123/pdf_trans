@@ -1,14 +1,12 @@
-## 4
+# Chapter 4: Semantic Analysis
 
-### **Semantic Analysis**
+**4** **Semantic Analysis**
 
 **In Chapter 2 we considered the topic** of programming language syntax. In the current chapter we turn to the topic of semantics. Informally, syntax con- cerns the* form* of a valid program, while semantics concerns its* meaning*. Meaning is important for at least two reasons: it allows us to enforce rules (e.g., type con- sistency) that go beyond mere form, and it provides the information we need in order to generate an equivalent output program. It is conventional to say that the syntax of a language is precisely that portion of the language deﬁnition that can be described conveniently by a context-free grammar, while the semantics is that portion of the deﬁnition that cannot. This convention is useful in practice, though it does not always agree with intuition. When we require, for example, that the number of arguments contained in a call to a subroutine match the number of formal parameters in the subroutine deﬁni- tion, it is tempting to say that this requirement is a matter of syntax. After all, we can count arguments without knowing what they mean. Unfortunately, we can- not count them with context-free rules. Similarly, while it is possible to write a context-free grammar in which every function must contain at least one return statement, the required complexity makes this strategy very unattractive. In gen- eral, any rule that requires the compiler to compare things that are separated by long distances, or to count things that are not properly nested, ends up being a matter of semantics. Semantic rules are further divided into* static* and* dynamic* semantics, though again the line between the two is somewhat fuzzy. The compiler enforces static semantic rules at compile time. It generates code to enforce dynamic semantic rules at run time (or to call library routines that do so). Certain errors, such as division by zero, or attempting to index into an array with an out-of-bounds sub- script, cannot in general be caught at compile time, since they may occur only for certain input values, or certain behaviors of arbitrarily complex code. In special cases, a compiler may be able to tell that a certain error will always or never occur, regardless of run-time input. In these cases, the compiler can generate an error message at compile time, or refrain from generating code to perform the check at run time, as appropriate. Basic results from computability theory, however, tell us that no algorithm can make these predictions correctly for arbitrary programs:
 
 there will inevitably be cases in which an error will always occur, but the compiler cannot tell, and must delay the error message until run time; there will also be cases in which an error can never occur, but the compiler cannot tell, and must incur the cost of unnecessary run-time checks. Both semantic analysis and intermediate code generation can be described in terms of annotation, or* decoration* of a parse tree or syntax tree. The annotations themselves are known as* attributes*. Numerous examples of static and dynamic semantic rules will appear in subsequent chapters. In this current chapter we focus primarily on the mechanisms a compiler uses to enforce the static rules. We will consider intermediate code generation (including the generation of code for dynamic semantic checks) in Chapter 15. In Section 4.1 we consider the role of the semantic analyzer in more detail, considering both the rules it needs to enforce and its relationship to other phases of compilation. Most of the rest of the chapter is then devoted to the subject of* attribute grammars*. Attribute grammars provide a formal framework for the decoration of a tree. This framework is a useful conceptual tool even in compilers that do not build a parse tree or syntax tree as an explicit data structure. We introduce the notion of an attribute grammar in Section 4.2. We then consider various ways in which such grammars can be applied in practice. Section 4.3 discusses the issue of* attribute ﬂow*, which constrains the order(s) in which nodes of a tree can be decorated. In practice, most compilers require decoration of the parse tree (or the evaluation of attributes that would reside in a parse tree if there were one) to occur in the process of an LL or LR parse. Section 4.4 presents* action* *routines* as an ad hoc mechanism for such “on-the-ﬂy” evaluation. In Section 4.5 (mostly on the companion site) we consider the management of space for parse tree attributes. Because they have to reﬂect the structure of the CFG, parse trees tend to be very complicated (recall the example in Figure 1.5). Once parsing is complete, we typically want to replace the parse tree with a syntax tree that reﬂects the input program in a more straightforward way (Figure 1.6). One particularly common compiler organization uses action routines during parsing solely for the purpose of constructing the syntax tree. The syntax tree is then decorated during a sepa- rate traversal, which can be formalized, if desired, with a separate attribute gram- mar. We consider the decoration of syntax trees in Section 4.6.
 
-## 4.1
-
-### **The Role of the Semantic Analyzer**
+4.1 **The Role of the Semantic Analyzer**
 
 Programming languages vary dramatically in their choice of semantic rules. Lisp dialects, for example, allow “mixed-mode” arithmetic on arbitrary numeric types, which they will automatically promote from integer to rational to ﬂoating-point or “bignum” (extended) precision, as required to maintain precision. Ada, by contract, assigns a speciﬁc type to every numeric variable, and requires the pro- grammer to convert among these explicitly when combining them in expressions.
 
@@ -28,9 +26,7 @@ Assertions in Java is a statement that a speciﬁed condition is expected to be 
 
 **DESIGN & IMPLEMENTATION**
 
-## 4.1 Dynamic semantic checks
-
-In the past, language theorists and researchers in programming methodology and software engineering tended to argue for more extensive semantic checks, while “real-world” programmers “voted with their feet” for languages like C and Fortran, which omitted those checks in the interest of execution speed. As computers have become more powerful, and as companies have come to ap- preciate the enormous costs of software maintenance, the “real-world” camp has become much more sympathetic to checking. Languages like Ada and Java have been designed from the outset with safety in mind, and languages like C and C++ have evolved (to the extent possible) toward increasingly strict deﬁ- nitions. In scripting languages, where many semantic checks are deferred until run time in order to avoid the need for explicit types and variable declarations, there has been a similar trend toward stricter rules. Perl, for example (one of the older scripting languages), will typically attempt to infer a possible mean- ing for expressions (e.g., 3 + "four") that newer languages (e.g., Python or Ruby) will ﬂag as run-time errors.
+4.1 Dynamic semantic checks In the past, language theorists and researchers in programming methodology and software engineering tended to argue for more extensive semantic checks, while “real-world” programmers “voted with their feet” for languages like C and Fortran, which omitted those checks in the interest of execution speed. As computers have become more powerful, and as companies have come to ap- preciate the enormous costs of software maintenance, the “real-world” camp has become much more sympathetic to checking. Languages like Ada and Java have been designed from the outset with safety in mind, and languages like C and C++ have evolved (to the extent possible) toward increasingly strict deﬁ- nitions. In scripting languages, where many semantic checks are deferred until run time in order to avoid the need for explicit types and variable declarations, there has been a similar trend toward stricter rules. Perl, for example (one of the older scripting languages), will typically attempt to infer a possible mean- ing for expressions (e.g., 3 + "four") that newer languages (e.g., Python or Ruby) will ﬂag as run-time errors.
 
 **1** Among other things, C. A. R. Hoare (1934–) invented the quicksort algorithm and the case statement, contributed to the design of Algol W, and was one of the leaders in the development of axiomatic semantics. In the area of concurrent programming, he reﬁned and formalized the *monitor* construct (to be described in Section 13.4.1), and designed the CSP programming model and notation. He received the ACM Turing Award in 1980.
 
@@ -154,7 +150,7 @@ const
 
 *expr_tail* -
 
-4 const
+## 4 const
 
 5 2
 
@@ -206,9 +202,7 @@ Bottom-up and top-down AGs to build a syntax tree contain bottom-up and top-down
 
 **DESIGN & IMPLEMENTATION**
 
-## 4.2 Forward references
-
-In Sections 3.3.3 and C 3.4.1 we noted that the scope rules of many languages require names to be declared before they are used, and provide special mech- anisms to introduce the forward references needed for recursive deﬁnitions. While these rules may help promote the creation of clear, maintainable code, an equally important motivation, at least historically, was to facilitate the con- struction of one-pass compilers. With increases in memory size, processing speed, and programmer expectations regarding the quality of code improve- ment, multipass compilers have become ubiquitous, and language designers have felt free (as, for example, in the class declarations of C++, Java, and C#) to abandon the requirement that declarations precede uses.
+4.2 Forward references In Sections 3.3.3 and C 3.4.1 we noted that the scope rules of many languages require names to be declared before they are used, and provide special mech- anisms to introduce the forward references needed for recursive deﬁnitions. While these rules may help promote the creation of clear, maintainable code, an equally important motivation, at least historically, was to facilitate the con- struction of one-pass compilers. With increases in memory size, processing speed, and programmer expectations regarding the quality of code improve- ment, multipass compilers have become ubiquitous, and language designers have felt free (as, for example, in the class declarations of C++, Java, and C#) to abandon the requirement that declarations precede uses.
 
 **3** Most authors use the term* one-pass* only for compilers that translate all the way from source to target code in a single pass. Some authors insist only that intermediate code be generated in a single pass, and permit additional pass(es) to translate intermediate code to target code.
 
@@ -217,38 +211,20 @@ In Sections 3.3.3 and C 3.4.1 we noted that the scope rules of many languages re
 
 binary operator, respectively, and pointers to the supplied operand(s). Figures 4.7 and 4.8 show stages in the decoration of parse trees for (1 + 3) * 2, using the grammars of Figures 4.5 and 4.6, respectively. Note that the ﬁnal syntax tree is the same in each case. ■
 
-## 3CHECK YOUR UNDERSTANDING
+3**CHECK YOUR UNDERSTANDING** 1. What determines whether a language rule is a matter of syntax or of static semantics? 2. Why is it impossible to detect certain program errors at compile time, even though they can be detected at run time?
 
-* 
-  What determines whether a language rule is a matter of syntax or of static
-  semantics?
-  2.
-  Why is it impossible to detect certain program errors at compile time, even
-  though they can be detected at run time?
-* 
-  What is an* attribute grammar*?
-  4.
-  What are programming* assertions*? What is their purpose?
-  5.
-  What is the difference between* synthesized* and* inherited* attributes?
-* 
-  Give two examples of information that is typically passed through inherited
-  attributes.
-### 7.
-What is* attribute ﬂow*?
-8.
-What is a* one-pass* compiler?
+## 3. What is an* attribute grammar*? 4. What are programming* assertions*? What is their purpose? 5. What is the difference between* synthesized* and* inherited* attributes?
+
+## 6. Give two examples of information that is typically passed through inherited attributes.
+
+## 7. What is* attribute ﬂow*? 8. What is a* one-pass* compiler?
 
 ![Figure 4.6 Top-down (L-attributed)...](images/page_228_vector_431.png)
 *Figure 4.6 Top-down (L-attributed) attribute grammar to construct a syntax tree. Here the st attribute, like the ptr attribute (and unlike the st attribute of Figure 4.3), is a pointer to a syntax tree node.*
 
-### 9.
-What does it mean for an attribute grammar to be* S-attributed*?* L-attributed*?
-*Noncircular*? What is the signiﬁcance of these grammar classes?
+## 9. What does it mean for an attribute grammar to be* S-attributed*?* L-attributed*? *Noncircular*? What is the signiﬁcance of these grammar classes?
 
-## 4.4
-
-### **Action Routines**
+4.4 **Action Routines**
 
 Just as there are automatic tools that will construct a parser for a given context- free grammar, there are automatic tools that will construct a semantic analyzer (attribute evaluator) for a given attribute grammar. Attribute evaluator gen-
 
@@ -280,9 +256,7 @@ Top-down action routines to build a syntax tree constant expressions. Action rou
 
 **DESIGN & IMPLEMENTATION**
 
-## 4.3 Attribute evaluators
-
-Automatic evaluators based on formal attribute grammars are popular in lan- guage research projects because they save developer time when the language deﬁnition changes. They are popular in syntax-based editors and incremental compilers because they save execution time: when a small change is made to a program, the evaluator may be able to “patch up” tree decorations signiﬁ- cantly faster than it could rebuild them from scratch. For the typical compiler, however, semantic analysis based on a formal attribute grammar is overkill: it has higher overhead than action routines, and doesn’t really save the compiler writer that much work.
+4.3 Attribute evaluators Automatic evaluators based on formal attribute grammars are popular in lan- guage research projects because they save developer time when the language deﬁnition changes. They are popular in syntax-based editors and incremental compilers because they save execution time: when a small change is made to a program, the evaluator may be able to “patch up” tree decorations signiﬁ- cantly faster than it could rebuild them from scratch. For the typical compiler, however, semantic analysis based on a formal attribute grammar is overkill: it has higher overhead than action routines, and doesn’t really save the compiler writer that much work.
 
 ![Figure 4.9 LL(1) grammar...](images/page_232_vector_232.png)
 *Figure 4.9 LL(1) grammar with action routines to build a syntax tree.*
@@ -309,9 +283,7 @@ Any attribute evaluation method requires space to hold the attributes of the gra
 
 We consider attribute space management in more detail on the companion site. Using bottom-up and top-down grammars for arithmetic expressions, we illus- trate automatic management for both bottom-up and top-down parsers, as well as the ad hoc option for top-down parsers.
 
-## 4.6
-
-### **Tree Grammars and Syntax Tree Decoration**
+4.6 **Tree Grammars and Syntax Tree Decoration**
 
 In our discussion so far we have used attribute grammars solely to decorate parse trees. As we mentioned in the chapter introduction, attribute grammars can also be used to decorate syntax trees. If our compiler uses action routines simply to build a syntax tree, then the bulk of semantic analysis and intermediate code gen- eration will use the syntax tree as base. Figure 4.11 contains a bottom-up CFG for a calculator language with types and **EXAMPLE** 4.14
 
@@ -367,9 +339,7 @@ Tree AG for the calculator language with types be constructed using the node cla
 ![Figure 4.14 (continued on...](images/page_238_vector_478.png)
 *Figure 4.14 (continued on next page)*
 
-### we associate with any symbol table entry or expression for which we have already
-
-generated a message. Though it takes a bit of checking to verify the fact, our attribute grammar is noncircular and well deﬁned. No attribute is ever assigned a value more than once. (The helper routines at the end of Figure 4.14 should be thought of as macros, rather than semantic functions. For the sake of brevity we have passed them entire tree nodes as arguments. Each macro calculates the values of two dif- ferent attributes. Under a strict formulation of attribute grammars each macro
+we associate with any symbol table entry or expression for which we have already generated a message. Though it takes a bit of checking to verify the fact, our attribute grammar is noncircular and well deﬁned. No attribute is ever assigned a value more than once. (The helper routines at the end of Figure 4.14 should be thought of as macros, rather than semantic functions. For the sake of brevity we have passed them entire tree nodes as arguments. Each macro calculates the values of two dif- ferent attributes. Under a strict formulation of attribute grammars each macro
 
 ![Figure 4.14 (continued)...](images/page_239_vector_355.png)
 *Figure 4.14 (continued)*
@@ -381,55 +351,35 @@ Decorating a tree with the AG of Example 4.17 Figure 4.12. The pattern of attrib
 ![Figure 4.15 Decoration of...](images/page_240_vector_434.png)
 *Figure 4.15 Decoration of the syntax tree of Figure 4.12, using the grammar of Figure 4.14. Location information, which we assume has been initialized in every node by the parser, con- tributes to error messages, but does not otherwise propagate through the tree.*
 
-### tice, however, particularly in a multipass compiler, it makes sense to buffer the
+tice, however, particularly in a multipass compiler, it makes sense to buffer the messages, so they can be interleaved with messages produced by other phases of the compiler, and printed in program order at the end of compilation. One could convert our attribute grammar into executable code using an au- tomatic attribute evaluator generator. Alternatively, one could create an ad hoc evaluator in the form of mutually recursive subroutines (Exercise 4.20). In the lat- ter case attribute ﬂow would be explicit in the calling sequence of the routines. We could then choose if desired to keep the symbol table in global variables, rather than passing it from node to node through attributes. Most compilers employ the ad hoc approach.
 
-### messages, so they can be interleaved with messages produced by other phases of
+3**CHECK YOUR UNDERSTANDING** 10. What is the difference between a semantic function and an action routine? 11. Why can’t action routines be placed at arbitrary locations within the right- hand side of productions in an LR CFG? 12. What patterns of attribute ﬂow can be captured easily with action routines?
 
-the compiler, and printed in program order at the end of compilation. One could convert our attribute grammar into executable code using an au- tomatic attribute evaluator generator. Alternatively, one could create an ad hoc evaluator in the form of mutually recursive subroutines (Exercise 4.20). In the lat- ter case attribute ﬂow would be explicit in the calling sequence of the routines. We could then choose if desired to keep the symbol table in global variables, rather than passing it from node to node through attributes. Most compilers employ the ad hoc approach.
+* Some compilers perform all semantic checks and intermediate code genera-
+  tion in action routines. Others use action routines to build a syntax tree and
+  then perform semantic checks and intermediate code generation in separate
+  traversals of the syntax tree. Discuss the tradeoffs between these two strate-
+  gies.
+## 14. What sort of information do action routines typically keep in global variables, rather than in attributes?
 
-### 3CHECK YOUR UNDERSTANDING
+## 15. Describe the similarities and differences between context-free grammars and tree grammars.
 
-#### 10. What is the difference between a semantic function and an action routine?
+## 16. How can a semantic analyzer avoid the generation of cascading error mes- sages?
 
-#### 11. Why can’t action routines be placed at arbitrary locations within the right-
-
-hand side of productions in an LR CFG? 12. What patterns of attribute ﬂow can be captured easily with action routines?
-
-#### 13. Some compilers perform all semantic checks and intermediate code genera-
-
-tion in action routines. Others use action routines to build a syntax tree and then perform semantic checks and intermediate code generation in separate traversals of the syntax tree. Discuss the tradeoffs between these two strate- gies.
-
-#### 14. What sort of information do action routines typically keep in global variables,
-rather than in attributes?
-
-#### 15. Describe the similarities and differences between context-free grammars and
-
-tree grammars.
-
-#### 16. How can a semantic analyzer avoid the generation of cascading error mes-
-
-sages?
-
-## 4.7
-
-#### **Summary and Concluding Remarks**
+4.7 **Summary and Concluding Remarks**
 
 This chapter has discussed the task of semantic analysis. We reviewed the sorts of language rules that can be classiﬁed as syntax, static semantics, and dynamic se- mantics, and discussed the issue of whether to generate code to perform dynamic semantic checks. We also considered the role that the semantic analyzer plays in a typical compiler. We noted that both the enforcement of static semantic rules and the generation of intermediate code can be cast in terms of annotation, or *decoration*, of a parse tree or syntax tree. We then presented attribute grammars as a formal framework for this decoration process. An attribute grammar associates* attributes* with each symbol in a context-free grammar or tree grammar, and* attribute rules* with each production. In a CFG, *synthesized* attributes are calculated only in productions in which their symbol appears on the left-hand side. The synthesized attributes of tokens are initialized by the scanner.* Inherited* attributes are calculated in productions in which their symbol appears within the right-hand side; they allow calculations in the subtree below a symbol to depend on the context in which the symbol appears. Inher- ited attributes of the start symbol (goal) can represent the external environment of the compiler. Strictly speaking, attribute grammars allow only* copy rules* (as- signments of one attribute to another) and simple calls to* semantic functions*, but we usually relax this restriction to allow more or less arbitrary code fragments in some existing programming language.
 
 Just as context-free grammars can be categorized according to the parsing al- gorithm(s) that can use them, attribute grammars can be categorized according to the complexity of their pattern of* attribute ﬂow*. S-attributed grammars, in which all attributes are synthesized, can naturally be evaluated in a single bottom-up pass over a parse tree, in precisely the order the tree is discovered by an LR-family parser. L-attributed grammars, in which all attribute ﬂow is depth-ﬁrst left-to- right, can be evaluated in precisely the order that the parse tree is predicted and matched by an LL-family parser. Attribute grammars with more complex pat- terns of attribute ﬂow are not commonly used for the parse trees of production compilers, but are valuable for syntax-based editors, incremental compilers, and various other tools. While it is possible to construct automatic tools to analyze attribute ﬂow and decorate parse trees, most compilers rely on* action routines*, which the compiler writer embeds in the right-hand sides of productions to evaluate attribute rules at speciﬁc points in a parse. In an LL-family parser, action routines can be embed- ded at arbitrary points in a production’s right-hand side. In an LR-family parser, action routines must follow the production’s* left corner*. Space for attributes in a bottom-up compiler is naturally allocated in parallel with the parse stack, but this complicates the management of inherited attributes. Space for attributes in a top-down compiler can be allocated automatically, or managed explicitly by the writer of action routines. The automatic approach has the advantage of regularity, and is easier to maintain; the ad hoc approach is slightly faster and more ﬂexible. In a* one-pass* compiler, which interleaves scanning, parsing, semantic analysis, and code generation in a single traversal of its input, semantic functions or action routines are responsible for all of semantic analysis and code generation. More commonly, action routines simply build a syntax tree, which is then decorated during separate traversal(s) in subsequent pass(es). The code for these traversals is usually written by hand, in the form of mutually recursive subroutines, allowing the compiler to accommodate essentially arbitrary attribute ﬂow on the syntax tree. In subsequent chapters (6–10 in particular) we will consider a wide variety of programming language constructs. Rather than present the actual attribute grammars required to implement these constructs, we will describe their seman- tics informally, and give examples of the target code. We will return to attribute grammars in Chapter 15, when we consider the generation of intermediate code in more detail. 4.8 **Exercises**
 
-### 4.1
-
-Basic results from automata theory tell us that the language* L* = a*n*b*n*c*n* = *ϵ*, abc, aabbcc, aaabbbccc, ... is not context free. It can be captured, however, using an attribute grammar. Give an underlying CFG and a set of attribute rules that associates a Boolean attribute ok with the root R of each
+4.1 Basic results from automata theory tell us that the language* L* = a*n*b*n*c*n* = *ϵ*, abc, aabbcc, aaabbbccc, ... is not context free. It can be captured, however, using an attribute grammar. Give an underlying CFG and a set of attribute rules that associates a Boolean attribute ok with the root R of each
 
 ![Figure 4.16 Natural syntax...](images/page_243_vector_243.png)
 *Figure 4.16 Natural syntax tree for the Lisp expression (cdr ‚(a b c)).*
 
 parse tree, such that R.ok = true if and only if the string corresponding to the fringe of the tree is in* L*. 4.2 Modify the grammar of Figure 2.25 so that it accepts only programs that contain at least one write statement. Make the same change in the solution to Exercise 2.17. Based on your experience, what do you think of the idea of using the CFG to enforce the rule that every function in C must contain at least one return statement? 4.3 Give two examples of reasonable semantic rules that* cannot* be checked at reasonable cost, either statically or by compiler-generated code at run time. 4.4 Write an S-attributed attribute grammar, based on the CFG of Example 4.7, that accumulates the value of the overall expression into the root of the tree. You will need to use dynamic memory allocation so that individual attributes can hold an arbitrary amount of information. 4.5 Lisp has the unusual property that its programs take the form of parenthe- sized lists. The natural syntax tree for a Lisp program is thus a tree of binary cells (known in Lisp as cons cells), where the ﬁrst child represents the ﬁrst element of the list and the second child represents the rest of the list. The syntax tree for (cdr ‚(a b c)) appears in Figure 4.16. (The notation ‚L is syntactic sugar for (quote L).) Extend the CFG of Exercise 2.18 to create an attribute grammar that will build such trees. When a parse tree has been fully decorated, the root should have an attribute v that refers to the syntax tree. You may assume that each atom has a synthesized attribute v that refers to a syntax tree node that holds information from the scanner. In your semantic functions, you may assume the availability of a cons function that takes two references as arguments and returns a reference to a new cons cell containing those references.
 
-## 4.6
-
-Refer back to the context-free grammar of Exercise 2.13. Add attribute rules to the grammar to accumulate into the root of the tree a count of the max- imum depth to which parentheses are nested in the program string. For example, given the string f1(a, f2(b * (c + (d - (e - f))))), the* stmt* at the root of the tree should have an attribute with a count of 3 (the paren- theses surrounding argument lists don’t count). 4.7 Suppose that we want to translate constant expressions into the postﬁx, or “reverse Polish” notation of logician Jan Łukasiewicz. Postﬁx notation does not require parentheses. It appears in stack-based languages such as Postscript, Forth, and the P-code and Java bytecode intermediate forms mentioned in Section 1.4. It also served, historically, as the input language of certain hand-held calculators made by Hewlett-Packard. When given a number, a postﬁx calculator would push the number onto an internal stack. When given an operator, it would pop the top two numbers from the stack, apply the operator, and push the result. The display would show the value at the top of the stack. To compute 2* ×* (15* −*3)*/*4, for example, one would push 2 E 1 5 E 3 E - * 4 E / (here E is the “enter” key, used to end the string of digits that constitute a number). Using the underlying CFG of Figure 4.1, write an attribute grammar that will associate with the root of the parse tree a sequence of postﬁx calculator button pushes, seq, that will compute the arithmetic value of the tokens derived from that symbol. You may assume the existence of a function buttons(c) that returns a sequence of button pushes (ending with E on a postﬁx calculator) for the constant c. You may also assume the existence of a concatenation function for sequences of button pushes. 4.8 Repeat the previous exercise using the underlying CFG of Figure 4.3. 4.9 Consider the following grammar for reverse Polish arithmetic expressions:
+4.6 Refer back to the context-free grammar of Exercise 2.13. Add attribute rules to the grammar to accumulate into the root of the tree a count of the max- imum depth to which parentheses are nested in the program string. For example, given the string f1(a, f2(b * (c + (d - (e - f))))), the* stmt* at the root of the tree should have an attribute with a count of 3 (the paren- theses surrounding argument lists don’t count). 4.7 Suppose that we want to translate constant expressions into the postﬁx, or “reverse Polish” notation of logician Jan Łukasiewicz. Postﬁx notation does not require parentheses. It appears in stack-based languages such as Postscript, Forth, and the P-code and Java bytecode intermediate forms mentioned in Section 1.4. It also served, historically, as the input language of certain hand-held calculators made by Hewlett-Packard. When given a number, a postﬁx calculator would push the number onto an internal stack. When given an operator, it would pop the top two numbers from the stack, apply the operator, and push the result. The display would show the value at the top of the stack. To compute 2* ×* (15* −*3)*/*4, for example, one would push 2 E 1 5 E 3 E - * 4 E / (here E is the “enter” key, used to end the string of digits that constitute a number). Using the underlying CFG of Figure 4.1, write an attribute grammar that will associate with the root of the parse tree a sequence of postﬁx calculator button pushes, seq, that will compute the arithmetic value of the tokens derived from that symbol. You may assume the existence of a function buttons(c) that returns a sequence of button pushes (ending with E on a postﬁx calculator) for the constant c. You may also assume the existence of a concatenation function for sequences of button pushes. 4.8 Repeat the previous exercise using the underlying CFG of Figure 4.3. 4.9 Consider the following grammar for reverse Polish arithmetic expressions:
 
 *E** −→**E E op*** |** id
 
@@ -455,19 +405,13 @@ Show a parse tree for the string A, B : C;. Then, using arrows and textual descr
 
 so. Be sure to think carefully about your coercion rules. In the expression my_int + my_real, for example, how will you know whether to coerce the integer to be a real, or to coerce the real to be an integer? 4.24 Explain the need for the* A : B* notation on the left-hand sides of produc- tions in a tree grammar. Why isn’t similar notation required for context-free grammars? 4.25 A potential objection to the tree attribute grammar of Example 4.17 is that it repeatedly copies the entire symbol table from one node to another. In this particular tiny language, it is easy to see that the referencing environment never shrinks: the symbol table changes only with the addition of new iden- tiﬁers. Exploiting this observation, show how to modify the pseudocode of Figure 4.14 so that it copies only pointers, rather than the entire symbol table. 4.26 Your solution to the previous exercise probably doesn’t generalize to lan- guages with nontrivial scoping rules. Explain how an AG such as that in Figure 4.14 might be modiﬁed to use a global symbol table similar to the one described in Section C 3.4.1. Among other things, you should consider nested scopes, the hiding of names in outer scopes, and the requirement (not enforced by the table of Section C 3.4.1) that variables be declared be- fore they are used.
 
-### 4.27–4.31 In More Depth.
-4.9
-**Explorations**
+4.27–4.31 In More Depth. 4.9 **Explorations**
 
-### 4.32 One of the most inﬂuential applications of attribute grammars was the Cor-
-
-nell Synthesizer Generator [Rep84, RT88]. Learn how the Generator used attribute grammars not only for incremental update of semantic informa- tion in a program under edit, but also for automatic creation of language based editors from formal language speciﬁcations. How general is this tech- nique? What applications might it have beyond syntax-directed editing of computer programs? 4.33 The attribute grammars used in this chapter are all quite simple. Most are S- or L-attributed. All are noncircular. Are there any practical uses for more complex attribute grammars? How about automatic attribute eval- uators? Using the Bibliographic Notes as a starting point, conduct a survey of attribute evaluation techniques. Where is the line between practical tech- niques and intellectual curiosities? 4.34 The ﬁrst validated Ada implementation was the Ada/Ed interpreter from New York University [DGAFS+80]. The interpreter was written in the set- based language SETL [SDDS86] using a denotational semantics deﬁnition of Ada. Learn about the Ada/Ed project, SETL, and denotational semantics. Discuss how the use of a formal deﬁnition aided the development process.
+4.32 One of the most inﬂuential applications of attribute grammars was the Cor- nell Synthesizer Generator [Rep84, RT88]. Learn how the Generator used attribute grammars not only for incremental update of semantic informa- tion in a program under edit, but also for automatic creation of language based editors from formal language speciﬁcations. How general is this tech- nique? What applications might it have beyond syntax-directed editing of computer programs? 4.33 The attribute grammars used in this chapter are all quite simple. Most are S- or L-attributed. All are noncircular. Are there any practical uses for more complex attribute grammars? How about automatic attribute eval- uators? Using the Bibliographic Notes as a starting point, conduct a survey of attribute evaluation techniques. Where is the line between practical tech- niques and intellectual curiosities? 4.34 The ﬁrst validated Ada implementation was the Ada/Ed interpreter from New York University [DGAFS+80]. The interpreter was written in the set- based language SETL [SDDS86] using a denotational semantics deﬁnition of Ada. Learn about the Ada/Ed project, SETL, and denotational semantics. Discuss how the use of a formal deﬁnition aided the development process.
 
 Also discuss the limitations of Ada/Ed, and expand on the potential role of formal semantics in language design, development, and prototype imple- mentation. 4.35 Version 5 of the Scheme language manual [KCR+98] included a formal def- inition of Scheme in denotational semantics. How long is this deﬁnition, compared to the more conventional deﬁnition in English? How readable is it? What do the length and the level of readability say about Scheme? About denotational semantics? (For more on denotational semantics, see the texts of Stoy [Sto77] or Gordon [Gor79].) Version 6 of the manual [SDF+07] switched to operational semantics. How does this compare to the denotational version? Why do you suppose the standards committee made the change? (For more information, see the paper by Matthews and Findler [MF08].)
 
-### 4.36–4.37 In More Depth.
-4.10
-**Bibliographic Notes**
+4.36–4.37 In More Depth. 4.10 **Bibliographic Notes**
 
 Much of the early theory of attribute grammars was developed by Knuth [Knu68]. Lewis, Rosenkrantz, and Stearns [LRS74] introduced the notion of an L- attributed grammar. Watt [Wat77] showed how to use marker symbols to em- ulate inherited attributes in a bottom-up parser. Jazayeri, Ogden, and Rounds [JOR75] showed that exponential time may be required in the worst case to dec- orate a parse tree with arbitrary attribute ﬂow. Articles by Courcelle [Cou84] and Engelfriet [Eng84] survey the theory and practice of attribute evaluation. Language-based program editing based on attribute grammars was pioneered by the Synthesizer Generator [RT88] (a follow-on to the language-speciﬁc Cor- nell Program Synthesizer [TR81]) of Reps and Teitelbaum. Magpie [SDB84] was an early incremental compiler, again based on attribute grammars. Meyerovich et al. [MTAB13] have recently used attribute grammars to parallelize a variety of tree-traversal tasks—notably for web page rendering and GPU-accelerated ani- mation. Action routines to implement many language features can be found in the texts of Fischer et al. or Appel [App97]. Further notes on attribute grammars can be found in the texts of Cooper and Torczon [CT04, pp. 171–188] or Aho et al. [ALSU07, Chap. 5]. Marcotty, Ledgard, and Bochmann [MLB76] provide an early survey of formal notations for programming language semantics. More detailed but still somewhat dated treatment can be found in the texts of Winskel [Win93] and Slonneger and Kurtz [SK95]. Nipkow and Klein cover the topic from a modern and mathe- matically rigorous perspective, integrating their text with an executable theorem- proving system [NK15]. The seminal paper on axiomatic semantics is by Hoare [Hoa69]. An excellent book on the subject is Gries’s* The Science of Programming* [Gri81]. The seminal paper on denotational semantics is by Scott and Strachey [SS71]. Early texts on the subject include those of Stoy [Sto77] and Gordon [Gor79].
 

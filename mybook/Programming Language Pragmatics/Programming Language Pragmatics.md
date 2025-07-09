@@ -1,12 +1,12 @@
-## **Programming Language Pragmatics**
+# Programming Language Pragmatics
 
-### FOURTH EDITION
+**Programming Language Pragmatics**
 
-### Michael L. Scott
+FOURTH EDITION
 
-#### *Department of Computer Science*
+Michael L. Scott *Department of Computer Science*
 
-#### *University of Rochester*
+*University of Rochester*
 
 AMSTERDAM • BOSTON • HEIDELBERG • LONDON
 
