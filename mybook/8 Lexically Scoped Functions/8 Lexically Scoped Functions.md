@@ -4,11 +4,13 @@
 
 Lexically Scoped Functions
 
-![Figure 8.1 Example of...](images/page_159_vector_607.png)
-*Figure 8.1 Example of a lexically scoped function.*
+This chapter studies lexically scoped functions. Lexical scoping means that a func- tion’s body may refer to variables whose binding site is outside of the function, in an enclosing scope. Consider the example shown in figure 8.1 written in Lλ, which extends LFun with the lambda form for creating lexically scoped functions. The body of the lambda refers to three variables: x, y, and z. The binding sites for x and y are outside of the lambda. Variable y is bound by the enclosing let, and x is a parameter of function f. Note that function f returns the lambda as its result value. The main expression of the program includes two calls to f with different arguments for x: first 5 and then 3. The functions returned from f are bound to variables g and h. Even though these two functions were created by the same lambda, they are really different functions because they use different values for x. Applying g to 11 produces 20 whereas applying h to 15 produces 22, so the result of the program is 42. The approach that we take for implementing lexically scoped functions is to compile them into top-level function definitions, translating from Lλ into LFun. However, the compiler must give special treatment to variable occurrences such as x and y in the body of the lambda shown in figure 8.1. After all, an LFun function may not refer to variables defined outside of it. To identify such variable occurrences, we review the standard notion of free variable.
 
-![Figure 8.2 Flat closure...](images/page_160_vector_213.png)
-*Figure 8.2 Flat closure representations for the two functions produced by the lambda in figure 8.1.*
+![Figure 8.1...](images/page_159_vector_607.png)
+*Figure 8.1*
+
+![Figure 8.2...](images/page_160_vector_213.png)
+*Figure 8.2*
 
 Definition 8.1 A variable is free in expression e if the variable occurs inside e but does not have an enclosing definition that is also in e.
 
@@ -21,8 +23,8 @@ For example, in the expression (+ x (+ y z)) the variables x, y, and z are all f
 
 Thus the free variables of a lambda are the ones that need special treatment. We need to transport at runtime the values of those variables from the point where the lambda was created to the point where the lambda is applied. An efficient solution to the problem, due to Cardelli (1983), is to bundle the values of the free variables together with a function pointer into a tuple, an arrangement called a flat closure (which we shorten to just closure). By design, we have all the ingredients to make closures: chapter 6 gave us tuples, and chapter 7 gave us function pointers. The function pointer resides at index 0, and the values for the free variables fill in the rest of the tuple. Let us revisit the example shown in figure 8.1 to see how closures work. It is a three-step dance. The program calls function f, which creates a closure for the lambda. The closure is a tuple whose first element is a pointer to the top-level function that we will generate for the lambda; the second element is the value of x, which is 5; and the third element is 4, the value of y. The closure does not contain an element for z because z is not a free variable of the lambda. Creating the closure is step 1 of the dance. The closure is returned from f and bound to g, as shown in figure 8.2. The second call to f creates another closure, this time with 3 in the second slot (for x). This closure is also returned from f but bound to h, which is also shown in figure 8.2. Continuing with the example, consider the application of g to 11 shown in figure 8.1. To apply a closure, we obtain the function pointer from the first ele- ment of the closure and call it, passing in the closure itself and then the regular arguments, in this case 11. This technique for applying a closure is step 2 of the
 
-![Figure 8.3 The concrete...](images/page_161_vector_322.png)
-*Figure 8.3 The concrete syntax of Lλ, extending LFun (figure 7.1) with lambda.*
+![Figure 8.3...](images/page_161_vector_322.png)
+*Figure 8.3*
 
 dance. But doesn’t this lambda take only one argument, for parameter z? The third and final step of the dance is generating a top-level function for a lambda. We add an additional parameter for the closure and insert an initialization at the beginning of the function for each free variable, to bind those variables to the appropriate elements from the closure parameter. This three-step dance is known as closure conversion. We discuss the details of closure conversion in section 8.4 and show the code generated from the example in section 8.4.1. First, we define the syntax and semantics of Lλ in section 8.1.
 
@@ -30,17 +32,20 @@ dance. But doesn’t this lambda take only one argument, for parameter z? The th
 
 The definitions of the concrete syntax and abstract syntax for Lλ, a language with anonymous functions and lexical scoping, are shown in figures 8.3 and 8.4. They add the lambda form to the grammar for LFun, which already has syntax for function application. The procedure-arity operation returns the number of parameters of a given function, an operation that we need for the translation of dynamic typing that is discussed in chapter 9. Figure 8.5 shows the definitional interpreter for Lλ. The case for Lambda saves the current environment inside the returned function value. Recall that during function application, the environment stored in the function value, extended with the mapping of parameters to argument values, is used to interpret the body of the function.
 
-![Figure 8.4 The abstract...](images/page_162_vector_344.png)
-*Figure 8.4 The abstract syntax of Lλ, extending LFun (figure 7.2).*
+![Figure 8.4...](images/page_162_vector_344.png)
+*Figure 8.4*
 
-![Figure 8.6 shows how...](images/page_162_vector_383.png)
-*Figure 8.6 shows how to type check the new lambda form. The body of the lambda is checked in an environment that includes the current environment (because it is lexically scoped) and also includes the lambda’s parameters. We require the body’s type to match the declared return type.*
+![Figure 8.6...](images/page_162_vector_383.png)
+*Figure 8.6*
 
-![Figure 8.5 Interpreter for...](images/page_163_vector_368.png)
-*Figure 8.5 Interpreter for Lλ.*
+![(super-new)...](images/page_163_vector_88.png)
+*(super-new)*
 
-![Figure 8.6 Type checking...](images/page_163_vector_597.png)
-*Figure 8.6 Type checking Lλ.*
+![Figure 8.5...](images/page_163_vector_368.png)
+*Figure 8.5*
+
+![Figure 8.6...](images/page_163_vector_597.png)
+*Figure 8.6*
 
 ## 8.2 Assignment and Lexically Scoped Functions
 
@@ -173,8 +178,8 @@ This type indicates that the first thing in the tuple is a function. The first p
 * To give an accurate type to a closure, we would need to add existential types to the type
   checker (Minamide, Morrisett, and Harper 1996).
 
-![Figure 8.7 Example of...](images/page_168_vector_369.png)
-*Figure 8.7 Example of closure conversion.*
+![Figure 8.7...](images/page_168_vector_369.png)
+*Figure 8.7*
 
 There is also the question of what to do with references to top-level function defi- nitions. To maintain a uniform translation of function application, we turn function references into closures.
 
@@ -198,11 +203,11 @@ The output language of explicate_control is CClos; the definition of its abstrac
 
 Compile (AllocateClosure len type arity) in almost the same way as the (Allocate len type) form (section 6.6). The only difference is that you should place the arity in the tag that is stored at position 0 of the tuple. Recall that in section 6.6 a portion of the 64-bit tag was not used. We store the arity in the 5 bits starting at position 57. Compile the procedure-arity operator into a sequence of instructions that access the tag from position 0 of the vector and extract the 5 bits starting at position 57 from the tag. Figure 8.9 provides an overview of the passes needed for the compilation of Lλ.
 
-![Figure 8.8 The abstract...](images/page_170_vector_388.png)
-*Figure 8.8 The abstract syntax of CClos, extending CFun (figure 7.8).*
+![Figure 8.8...](images/page_170_vector_388.png)
+*Figure 8.8*
 
-![Figure 8.9 Diagram of...](images/page_171_vector_366.png)
-*Figure 8.9 Diagram of the passes for Lλ, a language with lexically scoped functions.*
+![Figure 8.9...](images/page_171_vector_366.png)
+*Figure 8.9*
 
 ## 8.8 Challenge: Optimize Closures
 

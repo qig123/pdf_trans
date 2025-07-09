@@ -5,7 +5,7 @@
   },
   "regex": {
     "title": "^\\s*((\\d+\\.\\d+[\\d\\.]*)|([A-Z]\\.[\\d\\.]*))\\s+[A-Za-z].*",
-    "caption": "^(Figure|Fig\\.?|Table|Chart|图|表)\\s+[\\d\\.\\-A-Za-z]+",
+    "caption": "^(Figure|Fig\\.?|Table|Chart|图|表)\\s+[\\d\\.\\-A-Za-z]+|\\s*\\([\\d\\.\\-A-Za-z]+\\)$",
     "keyword_heading": "^\\s*(Introduction|Conclusion|Summary|Abstract|References|Appendix)\\s*$"
   },
   "fonts": {

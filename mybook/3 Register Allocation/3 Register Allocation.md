@@ -6,8 +6,8 @@ Register Allocation
 
 In chapter 2 we learned how to compile LVar to x86, storing variables on the pro- cedure call stack. The CPU may require tens to hundreds of cycles to access a location on the stack, whereas accessing a register takes only a single cycle. In this chapter we improve the efficiency of our generated code by storing some variables in registers. The goal of register allocation is to fit as many variables into registers as possible. Some programs have more variables than registers, so we cannot always map each variable to a different register. Fortunately, it is common for different variables to be in use during different periods of time during program execution, and in those cases we can map multiple variables to the same register. The program shown in figure 3.1 serves as a running example. The source program is on the left and the output of instruction selection is on the right. The program is almost completely in the x86 assembly language, but it still uses variables. Consider variables x and z. After the variable x has been moved to z, it is no longer in use. Variable z, on the other hand, is used only after this point, so x and z could share the same register. The topic of section 3.2 is how to compute where a variable is in use. Once we have that information, we compute which variables are in use at the same time, that is, which ones interfere with each other, and represent this relation as an undirected graph whose vertices are variables and edges indicate when two variables interfere (section 3.3). We then model register allocation as a graph coloring problem (section 3.4). If we run out of registers despite these efforts, we place the remaining variables on the stack, similarly to how we handled variables in chapter 2. It is common to use the verb spill for assigning a variable to a stack location. The decision to spill a variable is handled as part of the graph coloring process. We make the simplifying assumption that each variable is assigned to one location (a register or stack address). A more sophisticated approach is to assign a variable to one or more locations in different regions of the program. For example, if a variable is used many times in short sequence and then used again only after many other instructions, it could be more efficient to assign the variable to a register during the initial sequence and then move it to the stack for the rest of its lifetime. We refer the interested reader to Cooper and Torczon (2011) (chapter 13) for more information about that approach.
 
-![Figure 3.1 A running...](images/page_50_vector_312.png)
-*Figure 3.1 A running example for register allocation.*
+![Figure 3.1...](images/page_50_vector_312.png)
+*Figure 3.1*
 
 ## 3.1 Registers and Calling Conventions
 
@@ -55,21 +55,22 @@ The uncover_live pass performs liveness analysis; that is, it discovers which va
 
 The answer is no, because a is live from line 1 to 3 and b is live from line 4 to 5. The integer written to b on line 2 is never used because it is overwritten (line 4) before the next read (line 5). The live locations for each instruction can be computed by traversing the instruc- tion sequence back to front (i.e., backward in execution order). Let I1, … , In be the instruction sequence. We write Lafter(k) for the set of live locations after instruc- tion Ik and write Lbefore(k) for the set of live locations before instruction Ik. We recommend representing these sets with the Racket set data structure described in figure 3.3.
 
-![Figure 3.2 An example...](images/page_53_vector_367.png)
-*Figure 3.2 An example with function calls.*
+![Figure 3.2...](images/page_53_vector_367.png)
+*Figure 3.2*
 
-![Figure 3.3 The set...](images/page_53_vector_547.png)
-*Figure 3.3 The set data structure.*
+![Figure 3.3...](images/page_53_vector_547.png)
+*Figure 3.3*
 
 The locations that are live after an instruction are its live-after set, and the locations that are live before an instruction are its live-before set. The live-after set of an instruction is always the same as the live-before set of the next instruction.
 
-Lafter(k) = Lbefore(k + 1) (3.1)
+![(3.1)...](images/page_53_vector_630.png)
+*(3.1)*
 
-To start things off, there are no live locations after the last instruction, so
+![(3.2)...](images/page_54_vector_90.png)
+*(3.2)*
 
-Lafter(n) = ∅ (3.2)
-
-We then apply the following rule repeatedly, traversing the instruction sequence back to front. Lbefore(k) = (Lafter(k) −W(k)) ∪R(k), (3.3)
+![(3.3)...](images/page_54_vector_110.png)
+*(3.3)*
 
 where W(k) are the locations written to by instruction Ik, and R(k) are the locations read by instruction Ik. There is a special case for jmp instructions. The locations that are live before a jmp should be the locations in Lbefore at the target of the jump. So, we recommend maintaining an alist named label->live that maps each label to the Lbefore for the first instruction in its block. For now the only jmp in a x86Var program is the jump to the conclusion. (For example, see figure 3.1.) The conclusion reads from rax and rsp, so the alist should map conclusion to the set {rax, rsp}. Let us walk through the previous example, applying these formulas starting with the instruction on line 5 of the code fragment. We collect the answers in figure 3.4. The Lafter for the addq b, c instruction is ∅because it is the last instruction (for- mula (3.2)). The Lbefore for this instruction is {b, c} because it reads from variables b and c (formula (3.3)):
 
@@ -89,16 +90,16 @@ Exercise 3.1 Perform liveness analysis by hand on the running example in figure 
 
 Exercise 3.2 Implement the uncover_live pass. Store the sequence of live-after sets in the info field of the Block structure. We recommend creating an auxil- iary function that takes a list of instructions and an initial live-after set (typically empty) and returns the list of live-after sets. We recommend creating auxiliary functions to (1) compute the set of locations that appear in an arg, (2) compute the locations read by an instruction (the R function), and (3) the locations written
 
-![Figure 3.4 Example output...](images/page_55_vector_206.png)
-*Figure 3.4 Example output of liveness analysis on a short example.*
+![Figure 3.4...](images/page_55_vector_206.png)
+*Figure 3.4*
 
-![Figure 3.5 The running...](images/page_55_vector_540.png)
-*Figure 3.5 The running example annotated with live-after sets.*
+![Figure 3.5...](images/page_55_vector_540.png)
+*Figure 3.5*
 
 by an instruction (the W function). The callq instruction should include all the caller-saved registers in its write set W because the calling convention says that those registers may be written to during the function call. Likewise, the callq instruction should include the appropriate argument-passing registers in its read
 
-![Figure 3.6 The Racket...](images/page_56_vector_254.png)
-*Figure 3.6 The Racket graph package.*
+![Figure 3.6...](images/page_56_vector_254.png)
+*Figure 3.6*
 
 set R, depending on the arity of the function being called. (This is why the abstract syntax for callq includes the arity.)
 
@@ -106,8 +107,8 @@ set R, depending on the arity of the function being called. (This is why the abs
 
 On the basis of the liveness analysis, we know where each location is live. However, during register allocation, we need to answer questions of the specific form: are locations u and v live at the same time? (If so, they cannot be assigned to the same register.) To make this question more efficient to answer, we create an explicit data structure, an interference graph. An interference graph is an undirected graph that has a node for every variable and register and has an edge between two nodes if they are live at the same time, that is, if they interfere with each other. We recommend using the Racket graph package (figure 3.6) to represent the interference graph. A straightforward way to compute the interference graph is to look at the set of live locations between each instruction and add an edge to the graph for every pair of variables in the same set. This approach is less than ideal for two reasons. First, it can be expensive because it takes O(n2) time to consider every pair in a set of n live locations. Second, in the special case in which two locations hold the same value (because one was assigned to the other), they can be live at the same time without interfering with each other. A better way to compute the interference graph is to focus on writes (Appel and Palsberg 2003). The writes performed by an instruction must not overwrite something in a live location. So for each instruction, we create an edge between the locations being written to and the live locations. (However, a location never interferes with itself.) For the callq instruction, we consider all the caller-saved registers to have been written to, so an edge is added between every live variable and every caller-saved register. Also, for movq there is the special case of two variables holding the same value. If a live variable v is the same as the source of the movq,
 
-![Figure 3.7 Interference results...](images/page_57_vector_234.png)
-*Figure 3.7 Interference results for the running example.*
+![Figure 3.7...](images/page_57_vector_234.png)
+*Figure 3.7*
 
 then there is no need to add an edge between v and the destination, because they both hold the same value. Hence we have the following two rules:
 
@@ -124,8 +125,8 @@ Exercise 3.3 Implement the compiler pass named build_interference according to t
 
 We come to the main event discussed in this chapter, mapping variables to registers and stack locations. Variables that interfere with each other must be mapped to
 
-![Figure 3.8 The interference...](images/page_58_vector_194.png)
-*Figure 3.8 The interference graph of the example program.*
+![Figure 3.8...](images/page_58_vector_194.png)
+*Figure 3.8*
 
 different locations. In terms of the interference graph, this means that adjacent vertices must be mapped to different locations. If we think of locations as colors, the register allocation problem becomes the graph coloring problem (Balakrishnan 1996; Rosen 2002). The reader may be more familiar with the graph coloring problem than he or she realizes; the popular game of sudoku is an instance of the graph coloring problem. The following describes how to build a graph out of an initial sudoku board.
 
@@ -143,8 +144,8 @@ If you can color the remaining vertices in the graph with the nine colors, then 
 
 saturation(u) = {c | ∃v.v ∈adjacent(u) and color(v) = c}
 
-![Figure 3.9 A sudoku...](images/page_59_vector_267.png)
-*Figure 3.9 A sudoku game board and the corresponding colored graph.*
+![Figure 3.9...](images/page_59_vector_267.png)
+*Figure 3.9*
 
 where adjacent(u) is the set of vertices that share an edge with u. The Pencil Marks technique leads to a simple strategy for filling in numbers: if there is a square with only one possible number left, then choose that number! But what if there are no squares with only one possibility left? One brute-force approach is to try them all: choose the first one, and if that ultimately leads to a solution, great. If not, backtrack and choose the next possibility. One good thing about Pencil Marks is that it reduces the degree of branching in the search tree. Nevertheless, backtracking can be terribly time consuming. One way to reduce the amount of backtracking is to use the most-constrained-first heuristic (aka minimum remaining values) (Russell and Norvig 2003). That is, in choosing a square, always choose one with the fewest possibilities left (the vertex with the highest saturation). The idea is that choosing highly constrained squares earlier rather than later is better, because later on there may not be any possibilities left in the highly saturated squares. However, register allocation is easier than sudoku, because the register alloca- tor can fall back to assigning variables to stack locations when the registers run out. Thus, it makes sense to replace backtracking with greedy search: make the best choice at the time and keep going. We still wish to minimize the number of colors needed, so we use the most-constrained-first heuristic in the greedy search. Figure 3.10 gives the pseudocode for a simple greedy algorithm for register allo- cation based on saturation and the most-constrained-first heuristic. It is roughly equivalent to the DSATUR graph coloring algorithm (Brélaz 1979). Just as in sudoku, the algorithm represents colors with integers. The integers 0 through k −1 correspond to the k registers that we use for register allocation. In particular, we recommend the following correspondence, with k = 11.
 
@@ -153,8 +154,8 @@ where adjacent(u) is the set of vertices that share an edge with u. The Pencil M
 6: r10, 7: rbx, 8: r12, 9: r13, 10: r14
 ```
 
-![Figure 3.10 The saturation-based...](images/page_60_vector_258.png)
-*Figure 3.10 The saturation-based greedy graph coloring algorithm.*
+![Figure 3.10...](images/page_60_vector_258.png)
+*Figure 3.10*
 
 The integers k and larger correspond to stack locations. The registers that are not used for register allocation, such as rax, are assigned to negative integers. In particular, we recommend the following correspondence.
 
@@ -210,8 +211,8 @@ y : 2, {0, 1, −2} w : 0, {1, 2, −2} v : 1, {0, −2}
 
 rax : −1, {0, −2}
 
-![Figure 3.11 The priority...](images/page_62_vector_262.png)
-*Figure 3.11 The priority queue data structure.*
+![Figure 3.11...](images/page_62_vector_262.png)
+*Figure 3.11*
 
 In the last step of the algorithm, we color x with 1.
 
@@ -321,8 +322,8 @@ The reason we subtract 8C in this equation is that the prelude uses pushq to sav
 * Sometimes two or more spilled variables are assigned to the same stack location, so S can be
   less than the number of spilled variables.
 
-![Figure 3.12 Diagram of...](images/page_65_vector_299.png)
-*Figure 3.12 Diagram of the passes for LVar with register allocation.*
+![Figure 3.12...](images/page_65_vector_299.png)
+*Figure 3.12*
 
 from the rsp at the end of the prelude to reserve space for the one spilled variable. After that subtraction, the rsp is aligned to 16 bytes. Moving on to the program proper, we see how the registers were allocated. Vari- ables v, x, and z were assigned to rbx, and variables w and t was assigned to rcx. Variable y was spilled to the stack location -16(%rbp). Recall that the prelude saved the callee-save register rbx onto the stack. The spilled variables must be placed lower on the stack than the saved callee-save registers, so in this case y is placed at -16(%rbp). In the conclusion, we undo the work that was done in the prelude. We move the stack pointer up by 8 bytes (the room for spilled variables), then pop the old values of rbx and rbp (callee-saved registers), and finish with retq to return control to the operating system.
 
@@ -332,8 +333,8 @@ Exercise 3.6 Update the prelude_and_conclusion pass as described in this section
 
 This section describes an enhancement to the register allocator, called move biasing, for students who are looking for an extra challenge. To motivate the need for move biasing we return to the running example, but this time we use all the general purpose registers. So, we have the following mapping of
 
-![Figure 3.13 The x86...](images/page_66_vector_384.png)
-*Figure 3.13 The x86 output from the running example (figure 3.1), limiting allocation to just rbx and rcx.*
+![Figure 3.13...](images/page_66_vector_384.png)
+*Figure 3.13*
 
 color numbers to registers.
 

@@ -18,11 +18,11 @@ For example, the following program initializes x to 32 and then evaluates the bo
 
 When there are multiple lets for the same variable, the closest enclosing let is used. That is, variable definitions overshadow prior definitions. Consider the
 
-![Figure 2.1 The concrete...](images/page_28_vector_156.png)
-*Figure 2.1 The concrete syntax of LVar.*
+![Figure 2.1...](images/page_28_vector_156.png)
+*Figure 2.1*
 
-![Figure 2.2 The abstract...](images/page_28_vector_292.png)
-*Figure 2.2 The abstract syntax of LVar.*
+![Figure 2.2...](images/page_28_vector_292.png)
+*Figure 2.2*
 
 following program with two lets that define two variables named x. Can you figure out the result?
 
@@ -102,40 +102,48 @@ We can invoke the interp_exp method for LVar on this expression, which we call e
 
 To process the - operator, the default case of interp_exp in LVar dispatches to the interp_exp method in LInt. But then for the recursive method call, it dispatches to interp_exp in LVar, where the Var node is handled correctly. Thus, method overriding gives us the open recursion that we need to implement our interpreters in an extensible way.
 
-![Figure 2.6 defines the...](images/page_30_vector_593.png)
-*Figure 2.6 defines the concrete syntax for x86Int. We use the AT&T syntax expected by the GNU assembler. A program begins with a main label followed by a sequence*
+2.1.2 Definitional Interpreter for LVar Having justified the use of classes and methods to implement interpreters, we revisit the definitional interpreter for LInt shown in figure 2.3 and then extend it to create an interpreter for LVar, shown in figure 2.4. The interpreter for LVar adds two new cases for variables and let. For let, we need a way to communicate the value bound to a variable to all the uses of the variable. To accomplish this, we maintain a mapping from variables to values called an environment. We use an association list (alist) to represent the environ- ment. Figure 2.5 gives a brief introduction to alists and the racket/dict package. The interp_exp function takes the current environment, env, as an extra param- eter. When the interpreter encounters a variable, it looks up the corresponding value in the environment. If the variable is not in the environment (because the variable was not defined) then the lookup will fail and the interpreter will halt with an error. Recall that the compiler is not obligated to compile such programs (Section 1.5).1 When the interpreter encounters a Let, it evaluates the initializing expression, extends the environment with the result value bound to the variable, using dict-set, then evaluates the body of the Let. The goal for this chapter is to implement a compiler that translates any program P1 written in the LVar language into an x86 assembly program P2 such that P2 exhibits the same behavior when run on a computer as the P1 program interpreted by interp_Lvar. That is, they output the same integer n. We depict this correctness criteria in the following diagram:
+
+![Figure 2.6...](images/page_30_vector_593.png)
+*Figure 2.6*
 
 * In Chapter 4 we introduce type checking rules that prohibit access to undefined variables.
 
-![Figure 2.3 Interpreter for...](images/page_31_vector_346.png)
-*Figure 2.3 Interpreter for LInt as a class.*
+![(super-new)...](images/page_31_vector_88.png)
+*(super-new)*
 
-![Figure 2.4 Interpreter for...](images/page_31_vector_586.png)
-*Figure 2.4 Interpreter for the LVar language.*
+![Figure 2.3...](images/page_31_vector_346.png)
+*Figure 2.3*
 
-![Figure 2.5 Association lists...](images/page_32_vector_287.png)
-*Figure 2.5 Association lists implement the dictionary interface.*
+![(super-new)...](images/page_31_vector_394.png)
+*(super-new)*
 
-![Figure 2.6 The syntax...](images/page_32_vector_462.png)
-*Figure 2.6 The syntax of the x86Int assembly language (AT&T syntax).*
+![Figure 2.4...](images/page_31_vector_586.png)
+*Figure 2.4*
+
+![Figure 2.5...](images/page_32_vector_287.png)
+*Figure 2.5*
+
+![Figure 2.6...](images/page_32_vector_462.png)
+*Figure 2.6*
 
 of instructions. The globl directive makes the main procedure externally visible so that the operating system can call it. An x86 program is stored in the computer’s memory. For our purposes, the computer’s memory is a mapping of 64-bit addresses to 64-bit values. The computer has a program counter (PC) stored in the rip register that points to the address of the next instruction to be executed. For most instructions, the program counter is incremented after the instruction is executed so that it points to the next instruction in memory. Most x86 instructions take two operands, each of which is an integer constant (called an immediate value), a register, or a memory location. A register is a special kind of variable that holds a 64-bit value. There are 16 general-purpose registers in the computer; their names are given in figure 2.6. A register is written with a percent sign, %, followed by its name, for example, %rax.
 
-![Figure 2.7 An x86...](images/page_33_vector_165.png)
-*Figure 2.7 An x86 program that computes (+ 10 32).*
+![Figure 2.7...](images/page_33_vector_165.png)
+*Figure 2.7*
 
 An immediate value is written using the notation $n where n is an integer. An access to memory is specified using the syntax n(%r), which obtains the address stored in register r and then adds n bytes to the address. The resulting address is used to load or to store to memory depending on whether it occurs as a source or destination argument of an instruction. An arithmetic instruction such as addq s, d reads from the source s and des- tination d, applies the arithmetic operation, and then writes the result to the destination d. The move instruction movq s, d reads from s and stores the result in d. The callq label instruction jumps to the procedure specified by the label, and retq returns from a procedure to its caller. We discuss procedure calls in more detail further in this chapter and in chapter 7. The last letter q indicates that these instructions operate on quadwords, which are 64-bit values. The instruction jmp label updates the program counter to the address of the instruction immediately after the specified label. Appendix A.3 contains a reference for all the x86 instructions used in this book. Figure 2.7 depicts an x86 program that computes (+ 10 32). The instruction movq $10, %rax puts 10 into register rax, and then addq $32, %rax adds 32 to the 10 in rax and puts the result, 42, into rax. The last instruction retq finishes the main function by returning the integer in rax to the operating system. The operating system interprets this integer as the program’s exit code. By convention, an exit code of 0 indicates that a program has completed successfully, and all other exit codes indicate various errors. However, in this book we return the result of the program as the exit code. We exhibit the use of memory for storing intermediate results in the next example. Figure 2.8 lists an x86 program that computes (+ 52 (- 10)). This program uses a region of memory called the procedure call stack (stack for short). The stack consists of a separate frame for each procedure call. The memory layout for an individual frame is shown in figure 2.9. The register rsp is called the stack pointer and contains the address of the item at the top of the stack. In general, we use the term pointer for something that contains an address. The stack grows downward in memory, so we increase the size of the stack by subtracting from the stack pointer. In the context of a procedure call, the return address is the location of the instruction that immediately follows the call instruction on the caller side. The function call instruction, callq, pushes the return address onto the stack prior to jumping to
 
-![Figure 2.8 An x86...](images/page_34_vector_297.png)
-*Figure 2.8 An x86 program that computes (+ 52 (- 10)).*
+![Figure 2.8...](images/page_34_vector_297.png)
+*Figure 2.8*
 
-![Figure 2.9 Memory layout...](images/page_34_vector_445.png)
-*Figure 2.9 Memory layout of a frame.*
+![Figure 2.9...](images/page_34_vector_445.png)
+*Figure 2.9*
 
 the procedure. The register rbp is the base pointer and is used to access variables that are stored in the frame of the current procedure call. The base pointer of the caller is stored immediately after the return address. Figure 2.9 shows the memory layout of a frame with storage for n variables, which are numbered from 1 to n. Variable 1 is stored at address −8(%rbp), variable 2 at −16(%rbp), and so on. In the program shown in figure 2.8, consider how control is transferred from the operating system to the main function. The operating system issues a callq main instruction that pushes its return address on the stack and then jumps to main. In x86-64, the stack pointer rsp must be divisible by 16 bytes prior to the execution of any callq instruction, so that when control arrives at main, the rsp is 8 bytes out of alignment (because the callq pushed the return address). The first three instructions are the typical prelude for a procedure. The instruction pushq %rbp first subtracts 8 from the stack pointer rsp and then saves the base pointer of the
 
-![Figure 2.10 The abstract...](images/page_35_vector_203.png)
-*Figure 2.10 The abstract syntax of x86Int assembly.*
+![Figure 2.10...](images/page_35_vector_203.png)
+*Figure 2.10*
 
 caller at address rsp on the stack. The next instruction movq %rsp, %rbp sets the base pointer to the current stack pointer, which is pointing to the location of the old base pointer. The instruction subq $16, %rsp moves the stack pointer down to make enough room for storing variables. This program needs one variable (8 bytes), but we round up to 16 bytes so that rsp is 16-byte-aligned, and then we are ready to make calls to other functions. The last instruction of the prelude is jmp start, which transfers control to the instructions that were generated from the expression (+ 52 (- 10)). The first instruction under the start label is movq $10, -8(%rbp), which stores 10 in variable 1. The instruction negq -8(%rbp) changes the contents of variable 1 to −10. The next instruction moves the −10 from variable 1 into the rax register. Finally, addq $52, %rax adds 52 to the value in rax, updating its contents to 42. The three instructions under the label conclusion are the typical conclusion of a procedure. The first two restore the rsp and rbp registers to their states at the beginning of the procedure. In particular, addq $16, %rsp moves the stack pointer to point to the old base pointer. Then popq %rbp restores the old base pointer to rbp and adds 8 to the stack pointer. The last instruction, retq, jumps back to the procedure that called this one and adds 8 to the stack pointer. Our compiler needs a convenient representation for manipulating x86 programs, so we define an abstract syntax for x86, shown in figure 2.10. We refer to this language as x86Int. The main difference between this and the concrete syntax of x86Int (figure 2.6) is that labels are not allowed in front of every instruction. Instead instructions are grouped into basic blocks with a label associated with every basic block; this is why the X86Program struct includes an alist mapping labels to basic blocks. The reason for this organization becomes apparent in chapter 4 when we introduce conditional branching. The Block structure includes an info field that is not needed in this chapter but becomes useful in chapter 3. For now, the info field should contain an empty list. Regarding the abstract syntax for callq, the Callq AST node includes an integer for representing the arity of the function, that is, the number of arguments, which is helpful to know during register allocation (chapter 3).
 
@@ -170,18 +178,18 @@ Our treatment of remove_complex_operands and explicate_control as separate passe
 * For analogous decompositions of the translation into continuation passing style, see the work
   of Lawall and Danvy (1993) and Hatcliff and Danvy (1994).
 
-![Figure 2.11 Diagram of...](images/page_38_vector_249.png)
-*Figure 2.11 Diagram of the passes for compiling LVar.*
+![Figure 2.11...](images/page_38_vector_249.png)
+*Figure 2.11*
 
 program-scope variables and removes the restrictions regarding instruction argu- ments. The last pass, prelude_and_conclusion, places the program instructions inside a main function with instructions for the prelude and conclusion. In the next section we discuss the CVar intermediate language that serves as the output of explicate_control. The remainder of this chapter provides guidance on the implementation of each of the compiler passes represented in figure 2.11.
 
 2.3.1 The CVar Intermediate Language The output of explicate_control is similar to the C language (Kernighan and Ritchie 1988) in that it has separate syntactic categories for expressions and state- ments, so we name it CVar. This style of intermediate language is also known as three-address code, to emphasize that the typical form of a statement such as x = (+ y z); involves three addresses: x, y, and z (Aho et al. 2006). The concrete syntax for CVar is shown in figure 2.12, and the abstract syntax for CVar is shown in figure 2.13. The CVar language supports the same operators as LVar but the arguments of operators are restricted to atomic expressions. Instead of let expressions, CVar has assignment statements that can be executed in sequence using the Seq form. A sequence of statements always ends with Return, a guarantee that is baked into the grammar rules for tail. The naming of this nonterminal comes from the term tail position, which refers to an expression that is the last one to execute within a function or program. A CVar program consists of an alist mapping labels to tails. This is more general than necessary for the present chapter, as we do not yet introduce goto for jumping to labels, but it saves us from having to change the syntax in chapter 4. For now there is just one label, start, and the whole program is its tail. The info field of the CProgram form, after the explicate_control pass, contains an alist that associates the symbol locals with a list of all the variables used in the program. At the start
 
-![Figure 2.12 The concrete...](images/page_39_vector_169.png)
-*Figure 2.12 The concrete syntax of the CVar intermediate language.*
+![Figure 2.12...](images/page_39_vector_169.png)
+*Figure 2.12*
 
-![Figure 2.13 The abstract...](images/page_39_vector_310.png)
-*Figure 2.13 The abstract syntax of the CVar intermediate language.*
+![Figure 2.13...](images/page_39_vector_310.png)
+*Figure 2.13*
 
 of the program, these variables are uninitialized; they become initialized on their first assignment. The definitional interpreter for CVar is in the support code, in the file interp-Cvar.rkt.
 
@@ -203,8 +211,8 @@ The following is another example translation, this time of a program with a let 
 
 We recommend implementing uniquify by creating a structurally recursive func- tion named uniquify_exp that does little other than copy an expression. However,
 
-![Figure 2.14 Skeleton for...](images/page_40_vector_247.png)
-*Figure 2.14 Skeleton for the uniquify pass.*
+![Figure 2.14...](images/page_40_vector_247.png)
+*Figure 2.14*
 
 when encountering a let, it should generate a unique name for the variable and associate the old name with the new name in an alist.3 The uniquify_exp function needs to access this alist when it gets to a variable reference, so we add a parameter to uniquify_exp for the alist. The skeleton of the uniquify_exp function is shown in figure 2.14. The for/list form of Racket is useful for transforming the element of a list to produce a new list.
 
@@ -221,11 +229,11 @@ Run the run-tests.rkt script in the support code to check whether the output pro
 
 * The Racket function gensym is handy for generating unique variable names.
 
-![Figure 2.15 Lmon Var...](images/page_41_vector_176.png)
-*Figure 2.15 Lmon Var is LVar with operands restricted to atomic expressions.*
+![Figure 2.15...](images/page_41_vector_176.png)
+*Figure 2.15*
 
-![Figure 2.15 presents the...](images/page_41_vector_389.png)
-*Figure 2.15 presents the grammar for the output of this pass, the language Lmon Var . The only difference is that operator arguments are restricted to be atomic expres- sions that are defined by the atm nonterminal. In particular, integer constants and variables are atomic. The atomic expressions are pure (they do not cause or depend on side effects) whereas complex expressions may have side effects, such as (Prim 'read ()). A language with this separation between pure expressions versus expressions with side effects is said to be in monadic normal form (Moggi 1991; Danvy 2003), which explains the mon in the name Lmon Var . An important invariant of the remove_complex_operands pass is that the relative ordering among complex expressions is not changed, but the relative ordering between atomic expressions and complex expressions can change and often does. These changes are behavior preserving because atomic expressions are pure. Another well-known form for intermediate languages is the administrative normal form (ANF) (Danvy 1991; Flanagan et al. 1993). The Lmon Var language is not quite in ANF because it allows the right-hand side of a let to be a complex expression, such as another let. The flattening of nested let expressions is instead one of the responsibilities of the explicate_control pass. We recommend implementing this pass with two mutually recursive functions, rco_atom and rco_exp. The idea is to apply rco_atom to subexpressions that need*
+![Figure 2.15...](images/page_41_vector_389.png)
+*Figure 2.15*
 
 to become atomic and to apply rco_exp to subexpressions that do not. Both func- tions take an LVar expression as input. The rco_exp function returns an expression. The rco_atom function returns two things: an atomic expression and an alist map- ping temporary variables to complex subexpressions. You can return multiple things from a function using Racket’s values form, and you can receive multiple things from a function call using the define-values form. In the example program with the expression (+ 42 (- 10)), the subexpression (- 10) should be processed using the rco_atom function because it is an argument of the + operator and therefore needs to become atomic. The output of rco_atom applied to (- 10) is as follows:
 
@@ -261,8 +269,8 @@ In debugging your compiler, it is often useful to see the intermediate programs 
 
 The explicate_control pass compiles Lmon Var programs into CVar programs that make the order of execution explicit in their syntax. For now this amounts to flattening
 
-![Figure 2.16 Skeleton for...](images/page_43_vector_324.png)
-*Figure 2.16 Skeleton for the explicate_control pass.*
+![Figure 2.16...](images/page_43_vector_324.png)
+*Figure 2.16*
 
 let constructs into a sequence of assignment statements. For example, consider the following LVar program:
 
