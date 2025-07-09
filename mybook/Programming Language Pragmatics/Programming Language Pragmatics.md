@@ -4,13 +4,9 @@ Programming Language Pragmatics
 
 FOURTH EDITION
 
-Michael L. Scott Department of Computer Science
+Michael L. Scott  Department of Computer Science  University of Rochester
 
-University of Rochester
-
-AMSTERDAM • BOSTON • HEIDELBERG • LONDON
-
-NEW YORK • OXFORD • PARIS • SAN DIEGO SAN FRANCISCO • SINGAPORE • SYDNEY • TOKYO
+AMSTERDAM • BOSTON • HEIDELBERG • LONDON  NEW YORK • OXFORD • PARIS • SAN DIEGO  SAN FRANCISCO • SINGAPORE • SYDNEY • TOKYO
 
 Morgan Kaufmann is an imprint of Elsevier
 

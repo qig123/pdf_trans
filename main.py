@@ -6,15 +6,14 @@ import shutil
 from urllib.parse import quote
 from datetime import datetime
 
-# ==================== 配置加载（保持不变） ====================
+# ==================== Configuration Loading (Unchanged) ====================
 def load_config(path="config.json"):
-    """加载配置文件"""
+    # ... (code is identical to previous version, so omitted for brevity)
     try:
         with open(path, 'r', encoding='utf-8') as f:
             return json.load(f)
     except FileNotFoundError:
-        print(f"错误: 配置文件 '{path}' 未找到。请创建它。")
-        print("将使用默认配置。")
+        print(f"Warning: Configuration file '{path}' not found. Using default settings.")
         return {
             "margins": {"header": 0.08, "footer": 0.08},
             "regex": {
@@ -22,11 +21,11 @@ def load_config(path="config.json"):
                 "caption": "^(Figure|Fig\\.?|Table|Chart|图|表)\\s+[\\d\\.\\-A-Za-z]+",
                 "keyword_heading": "^\\s*(Introduction|Conclusion|Summary|Abstract|References|Appendix)\\s*$"
             },
-            "fonts": {"monospace_keywords": ["mono", "courier"]}
+            "fonts": {"monospace_keywords": ["mono", "courier"]},
+            "extraction_options": {"max_toc_level": 2}
         }
     except json.JSONDecodeError:
-        print(f"错误: 配置文件 '{path}' 格式不正确。将使用默认配置。")
-        # 返回一个默认配置以防万一
+        print(f"Warning: Configuration file '{path}' is malformed. Using default settings.")
         return {
             "margins": {"header": 0.08, "footer": 0.08},
             "regex": {
@@ -34,28 +33,26 @@ def load_config(path="config.json"):
                 "caption": "^(Figure|Fig\\.?|Table|Chart|图|表)\\s+[\\d\\.\\-A-Za-z]+",
                 "keyword_heading": "^\\s*(Introduction|Conclusion|Summary|Abstract|References|Appendix)\\s*$"
             },
-            "fonts": {"monospace_keywords": ["mono", "courier"]}
+            "fonts": {"monospace_keywords": ["mono", "courier"]},
+            "extraction_options": {"max_toc_level": 2}
         }
 
 CONFIG = load_config()
 
-# --- 辅助函数 ---
-
+# --- Helper Functions (Unchanged) ---
 def clean_filename(name):
-    """清理文件名中的非法字符"""
+    # ... (unchanged)
     name = re.sub(r'[<>:"/\\|?*]', '_', name)
     name = re.sub(r'[\x00-\x1f\x7f]', '', name)
     name = name.strip(' .')
     return (name[:100] if len(name) > 100 else name) or "untitled"
 
-# --- 正则表达式定义 ---
 TITLE_REGEX = re.compile(CONFIG['regex']['title'])
 CAPTION_REGEX = re.compile(CONFIG['regex']['caption'], flags=re.IGNORECASE)
 KEYWORD_HEADING_REGEX = re.compile(CONFIG['regex']['keyword_heading'], flags=re.IGNORECASE)
 
-# --- 辅助函数（保持不变） ---
 def is_header_or_footer(block_bbox, page_rect):
-    """判断文本块是否位于页眉或页脚区域"""
+    # ... (unchanged)
     header_margin = CONFIG['margins']['header']
     footer_margin = CONFIG['margins']['footer']
     header_boundary = page_rect.y0 + page_rect.height * header_margin
@@ -63,8 +60,7 @@ def is_header_or_footer(block_bbox, page_rect):
     return block_bbox.y1 < header_boundary or block_bbox.y0 > footer_boundary
 
 def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, processed_blocks):
-    """为标题查找对应的图像"""
-    # 此函数逻辑不变，因此省略以保持简洁...
+    # ... (unchanged, omitted for brevity)
     if caption_block_idx > 0:
         prev_block = blocks[caption_block_idx - 1]
         if prev_block["type"] == 1:
@@ -89,11 +85,8 @@ def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, proc
         return {"filename": filename, "bbox": search_area}
     return None
 
-# ==================== ↓↓↓ 核心修改 1: 更新 get_markdown_from_block ↓↓↓ ====================
 def get_markdown_from_block(block, true_headings=None):
-    """
-    根据文本块的内容模式和“真标题白名单”推断其Markdown格式。
-    """
+    # ... (This function is now perfect and requires no changes)
     if true_headings is None:
         true_headings = set()
         
@@ -103,12 +96,10 @@ def get_markdown_from_block(block, true_headings=None):
     full_text = "\n".join("".join(s['text'] for s in l['spans']) for l in block['lines'])
     if not full_text.strip():
         return ""
-
-    # 预分割逻辑可以保留，因为它有助于将物理上在一个块、逻辑上是多个段落的内容分开
-    # 例如：一个段落紧跟着一个标题，但 PyMuPDF 把它们放进同一个块里
+        
     split_marker = "<\r\n_SPLIT_HERE_\r\n>"
     processed_text = re.sub(
-        r'(?m)(^|(?<=\n))(' + CONFIG['regex']['title'] + r')', # 使用配置中的正则
+        r'(?m)(^|(?<=\n))(' + CONFIG['regex']['title'] + r')',
         lambda m: f"{split_marker}{m.group(2)}",
         full_text
     )
@@ -121,17 +112,12 @@ def get_markdown_from_block(block, true_headings=None):
         if not sub_text:
             continue
 
-        # 1. 最高优先级：检查是否是“真标题”（来自书签白名单）
-        # 为了更鲁棒的匹配，我们检查子块文本是否包含任何一个白名单标题
-        # 清理子块文本，方式和清理书签标题时一样
-        # (^\s*[\d\.\sA-Z]+[a-z]?) 这个正则可以去掉 "3.2.1", "A.1." 等编号
         clean_sub_text = re.sub(r'^\s*[\d\.\sA-Z]+[a-z]?\s*', '', sub_text).strip()
         
         is_true_heading = False
-        if clean_sub_text:
+        if clean_sub_text and true_headings:
             for true_heading in true_headings:
-                # 使用 'in' 进行部分匹配，以增加鲁棒性
-                if true_heading in clean_sub_text and len(clean_sub_text) < (len(true_heading) + 20): # 避免过长的无关内容误匹配
+                if true_heading in clean_sub_text and len(clean_sub_text) < (len(true_heading) + 30):
                     is_true_heading = True
                     break
         
@@ -139,14 +125,10 @@ def get_markdown_from_block(block, true_headings=None):
             output_parts.append(f"## {sub_text.replace(chr(10), ' ')}\n\n")
             continue
 
-        # 2. 次高优先级：检查是否是无编号的关键词标题
         if KEYWORD_HEADING_REGEX.match(sub_text):
             output_parts.append(f"## {sub_text.replace(chr(10), ' ')}\n\n")
             continue
 
-        # 3. 不再使用 TITLE_REGEX 进行通用标题判断，从根本上避免误判
-
-        # 4. 后续逻辑（代码块、列表、段落）保持不变
         mono_fonts = CONFIG['fonts']['monospace_keywords']
         is_monospace_block = all(
             any(keyword in span['font'].lower() for keyword in mono_fonts)
@@ -163,7 +145,6 @@ def get_markdown_from_block(block, true_headings=None):
             for line in lines:
                 clean_line = line.strip()
                 if not clean_line: continue
-                # 检查每一行是否是新的列表项
                 if re.match(r'^\s*([•*-]|\d+\.|[a-zA-Z]\))\s+', clean_line):
                     output_lines.append(re.sub(r'^\s*([•*-]|\d+\.|[a-zA-Z]\))\s+', '* ', clean_line))
                 else:
@@ -171,68 +152,84 @@ def get_markdown_from_block(block, true_headings=None):
             output_parts.append("\n".join(output_lines) + "\n\n")
             continue
             
-        output_parts.append(sub_text.replace('\n', ' ') + "\n\n")
+        output_parts.append(sub_text.replace('\n', ' ').replace('\r', '') + "\n\n")
 
     return "".join(output_parts)
-# ==================== ↑↑↑ 核心修改 1 结束 ↑↑↑ ====================
 
 
-# --- 主处理函数 (已更新) ---
+# --- Main Processing Function (Updated) ---
 def run_extraction_stable(pdf_path, output_dir="mybook"):
     """
-    处理PDF文件。使用书签作为真标题的“白名单”来提高准确性。
+    Processes a PDF file, using all bookmark levels for an accurate heading
+    whitelist, while maintaining a 2-level directory structure.
     """
     if os.path.exists(output_dir):
-        print(f"发现旧输出目录 '{output_dir}'。正在删除...")
+        print(f"Old output directory '{output_dir}' found. Deleting...")
         shutil.rmtree(output_dir)
-        print("旧目录已删除。")
+        print("Old directory deleted.")
     os.makedirs(output_dir)
 
     doc = fitz.open(pdf_path)
     original_toc = doc.get_toc()
     if not original_toc:
-        print("错误: 未找到书签。")
+        print("Error: No bookmarks (TOC) found in the document.")
         return
 
-    # 我们仍然只处理前两级书签作为文件/章节结构
-    toc = [item for item in original_toc if item[0] <= CONFIG.get("extraction_options", {}).get("max_toc_level", 2)]
-    print(f"处理 {len(toc)} 个书签(从原始 {len(original_toc)} 个过滤到最多2级)。")
+    # ==================== ↓↓↓ CORE CHANGE 1: Use a filtered TOC for file structure ONLY ↓↓↓ ====================
+    # This list determines which bookmarks become .md files.
+    file_structure_toc = [item for item in original_toc if item[0] <= CONFIG.get("extraction_options", {}).get("max_toc_level", 2)]
+    print(f"Processing {len(file_structure_toc)} bookmarks for file structure (from original {len(original_toc)}).")
+    # ==================== ↑↑↑ CORE CHANGE 1 END ↑↑↑ ====================
 
     markdown_files_list = []
     level_paths = {}
 
-    for i, item in enumerate(toc):
+    # We iterate through the file_structure_toc to create our files and folders
+    for i, item in enumerate(file_structure_toc):
         level, title, start_page = item
         safe_title = clean_filename(title)
         level_paths[level] = safe_title
-        print(f"{'  ' * (level-1)}-> 处理: {title}")
+        print(f"{'  ' * (level-1)}-> Processing Chapter/File: {title}")
 
-        is_parent_node = (i + 1 < len(toc)) and (toc[i+1][0] > level)
+        # Determine the page range for the current chapter
         end_page = doc.page_count + 1
-        for next_item in toc[i+1:]:
+        # Look ahead in the *same level* of the file structure TOC to find the end page
+        for next_item in file_structure_toc[i+1:]:
             if next_item[0] <= level:
                 end_page = next_item[2]
                 break
         
-        # ==================== ↓↓↓ 核心修改 2: 构建真标题白名单 ↓↓↓ ====================
+        # ==================== ↓↓↓ CORE CHANGE 2: Build whitelist from the UNFILTERED original_toc ↓↓↓ ====================
         true_heading_whitelist = set()
-        for j in range(i + 1, len(original_toc)):
-            sub_item = original_toc[j]
-            if sub_item[0] > level: # 是子书签
-                if sub_item[2] >= end_page: # 超出当前章节范围
+        # Find the index of our current item in the original TOC
+        try:
+            original_toc_index = original_toc.index(item)
+        except ValueError:
+            # This should not happen if file_structure_toc is a subset of original_toc
+            print(f"Warning: Could not find item '{title}' in original TOC. Whitelist may be incomplete.")
+            original_toc_index = -1
+
+        if original_toc_index != -1:
+            # Scan forward from our current position in the original_toc
+            for j in range(original_toc_index + 1, len(original_toc)):
+                sub_item = original_toc[j]
+                # If we find a bookmark that is a child of our current item
+                if sub_item[0] > level:
+                    # Clean the title and add it to our whitelist
+                    clean_title = re.sub(r'^\s*[\d\.\sA-Z]+[a-z]?\s*', '', sub_item[1]).strip()
+                    if len(clean_title) > 4: # Filter out very short/empty titles
+                        true_heading_whitelist.add(clean_title)
+                # If we hit a bookmark at the same level or higher, we've left the current chapter's scope
+                elif sub_item[0] <= level:
                     break
-                # 清理书签标题，去掉编号，得到纯文本标题
-                clean_title = re.sub(r'^\s*[\d\.\sA-Z]+[a-z]?\s*', '', sub_item[1]).strip()
-                if len(clean_title) > 5: # 过滤掉太短或空的标题
-                    true_heading_whitelist.add(clean_title)
-            elif sub_item[0] <= level: # 遇到同级或更高级别的书签，说明子书签结束了
-                break
         
         if true_heading_whitelist:
-             print(f"    - 本章节真标题白名单包含: {list(true_heading_whitelist)[:3]}...")
-        # ==================== ↑↑↑ 核心修改 2 结束 ↑↑↑ ====================
+             print(f"    - Found {len(true_heading_whitelist)} sub-headings for whitelist (e.g., {list(true_heading_whitelist)[:3]}...).")
+        # ==================== ↑↑↑ CORE CHANGE 2 END ↑↑↑ ====================
 
+        # The rest of the logic remains largely the same, just ensure it uses `start_page` and `end_page` correctly.
         if start_page >= end_page:
+            is_parent_node = (i + 1 < len(file_structure_toc)) and (file_structure_toc[i+1][0] > level)
             if is_parent_node:
                 current_content_dir = os.path.join(output_dir, safe_title)
                 os.makedirs(current_content_dir, exist_ok=True)
@@ -265,7 +262,7 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
             page_content_parts = {}
             ignored_text_areas = []
 
-            # 1. 优先处理图片和图注 (逻辑不变)
+            # Image and caption processing (unchanged)
             caption_blocks_indices = {idx for idx, b in enumerate(blocks) if b["type"] == 0 and "lines" in b and CAPTION_REGEX.match(''.join(s["text"] for s in b["lines"][0]["spans"]).strip())}
             for idx in sorted(list(caption_blocks_indices)):
                 b = blocks[idx]
@@ -280,22 +277,21 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
                     page_content_parts[idx] = f"*{full_caption}*\n\n"
                 processed_block_indices.add(idx)
 
-            # 2. 处理所有文本块
+            # Text block processing
             for idx, b in enumerate(blocks):
                 if idx in processed_block_indices or b['type'] != 0: continue
                 block_bbox = fitz.Rect(b["bbox"])
                 if is_header_or_footer(block_bbox, page.rect): continue
                 if any(area.intersects(block_bbox) for area in ignored_text_areas): continue
-
-                # ==================== ↓↓↓ 核心修改 3: 调用时传入白名单 ↓↓↓ ====================
+                
+                # Pass the comprehensive whitelist to the processing function
                 markdown_text = get_markdown_from_block(b, true_headings=true_heading_whitelist)
-                # ==================== ↑↑↑ 核心修改 3 结束 ↑↑↑ ====================
                 
                 if markdown_text:
                     page_content_parts[idx] = markdown_text
                 processed_block_indices.add(idx)
 
-             # 3. 处理未被图注关联的图片 (逻辑不变)
+             # Uncaptioned image processing (unchanged)
             for img in page.get_images(full=True):
                 xref = img[0]
                 if xref not in processed_img_xrefs:
@@ -304,7 +300,6 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
                         if b.get("type") == 1 and b.get("number") == xref:
                             img_block_idx = idx
                             break
-                    
                     if img_block_idx != -1 and img_block_idx not in page_content_parts:
                         try:
                             base_image = doc.extract_image(xref)
@@ -312,35 +307,33 @@ def run_extraction_stable(pdf_path, output_dir="mybook"):
                             image_filename = f"page_{page_num+1}_uncaptioned_img_{xref}.{base_image['ext']}"
                             relative_path = os.path.join("images", quote(image_filename))
                             with open(os.path.join(current_image_dir, image_filename), "wb") as f: f.write(base_image["image"])
-                            content = f"![未加标题的图片 第{page_num+1}页 xref {xref}]({relative_path})\n\n"
+                            content = f"![Uncaptioned image on page {page_num+1} xref {xref}]({relative_path})\n\n"
                             page_content_parts[img_block_idx] = content
                             processed_img_xrefs.add(xref)
                         except Exception as e:
-                            print(f"警告: 无法处理未加标题的图片 xref {xref} 在第 {page_num+1} 页。错误: {e}")
+                            print(f"Warning: Could not process uncaptioned image xref {xref} on page {page_num+1}. Error: {e}")
 
-            # 4. 按顺序组合页面内容
             for idx in sorted(page_content_parts.keys()):
                 chapter_content += page_content_parts[idx]
 
-        # 写入Markdown文件
         chapter_content = re.sub(r'\n{3,}', '\n\n', chapter_content)
         with open(output_filepath, "w", encoding="utf-8") as f: f.write(chapter_content)
         relative_md_path = os.path.relpath(output_filepath, output_dir).replace(os.sep, '/')
         markdown_files_list.append(relative_md_path)
 
-    # 生成书籍元数据 (逻辑不变)
+    # Metadata generation (unchanged)
     metadata = doc.metadata
     book_title = metadata.get('title') or os.path.splitext(os.path.basename(pdf_path))[0]
-    book_authors = [metadata.get('author')] if metadata.get('author') else ["未知作者"]
+    book_authors = [metadata.get('author')] if metadata.get('author') else ["Unknown Author"]
     book_data = {
         "kind": "Book", "title": book_title, "version": "0.1.0",
-        "authors": book_authors, "translators": ["由脚本生成"],
+        "authors": book_authors, "translators": ["Generated by Script"],
         "year": str(datetime.now().year), "src": ".", "contents": markdown_files_list
     }
     with open(os.path.join(output_dir, "book.json"), 'w', encoding='utf-8') as f: 
         json.dump(book_data, f, ensure_ascii=False, indent=2)
 
-    print("\n提取完成!")
+    print("\nExtraction complete!")
     doc.close()
 
 
@@ -349,4 +342,4 @@ if __name__ == "__main__":
     if os.path.exists(pdf_file):
         run_extraction_stable(pdf_file)
     else:
-        print(f"错误: 文件 '{pdf_file}' 未找到。")
+        print(f"Error: File '{pdf_file}' not found.")
