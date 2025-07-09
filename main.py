@@ -2,13 +2,11 @@ import fitz  # PyMuPDF
 import os
 import re
 import json
-import shutil # <--- 1. 导入 shutil 模块
-from collections import Counter
-
+import shutil
 from urllib.parse import quote
 from datetime import datetime
 
-# ... (clean_filename and get_dominant_font_info functions remain exactly the same) ...
+# clean_filename 和 find_image_for_caption 函数保持不变，这里省略
 def clean_filename(name):
     """Cleans a string to be safely used as a file or directory name."""
     name = re.sub(r'[<>:"/\\|?*]', '_', name)
@@ -16,32 +14,24 @@ def clean_filename(name):
     name = name.strip(' .')
     return (name[:100] if len(name) > 100 else name) or "untitled"
 
-def get_dominant_font_info(page):
-    """Analyzes the page to find the most common font size and name (body text)."""
-    spans = [span for block in page.get_text("dict")["blocks"] if "lines" in block for line in block["lines"] for span in line["spans"]]
-    if not spans: return 12, "sans-serif"
-    font_sizes = Counter(span["size"] for span in spans)
-    font_names = Counter(span["font"] for span in spans)
-    body_size = font_sizes.most_common(1)[0][0] if font_sizes else 12
-    body_font = font_names.most_common(1)[0][0] if font_names else "sans-serif"
-    return body_size, body_font
-
 def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, processed_blocks):
     """Helper function to find and save the image associated with a caption."""
     # Look for a raster image block right above
     if caption_block_idx > 0:
         prev_block = blocks[caption_block_idx - 1]
-        if prev_block["type"] == 1 and prev_block["number"] not in processed_blocks:
+        if prev_block["type"] == 1:
+            # block["number"] from get_text("dict") is the xref for images
             xref = prev_block["number"]
-            try:
-                base_image = doc.extract_image(xref)
-                if not base_image: return None
-                filename = f"page_{page.number+1}_img_{xref}.{base_image['ext']}"
-                with open(os.path.join(image_dir, filename), "wb") as f: f.write(base_image["image"])
-                processed_blocks.add(prev_block["number"])
-                return {"filename": filename}
-            except Exception:
-                return None # Ignore images that fail to extract
+            if xref not in processed_blocks:
+                try:
+                    base_image = doc.extract_image(xref)
+                    if not base_image: return None
+                    filename = f"page_{page.number+1}_img_{xref}.{base_image['ext']}"
+                    with open(os.path.join(image_dir, filename), "wb") as f: f.write(base_image["image"])
+                    processed_blocks.add(xref)
+                    return {"filename": filename}
+                except Exception:
+                    return None
 
     # If not found, assume vector and take a screenshot of the area above
     caption_bbox = fitz.Rect(blocks[caption_block_idx]["bbox"])
@@ -54,97 +44,124 @@ def find_image_for_caption(doc, page, blocks, caption_block_idx, image_dir, proc
         return {"filename": filename}
     
     return None
-    
-def run_extraction(pdf_path, output_dir="mybook"): # <--- 2. 确认输出目录为 'mybook'
+
+
+def run_extraction_stable(pdf_path, output_dir="mybook"):
     """
-    Final, robust script to extract PDF content into rich Markdown,
-    handle images, and generate a book.json file.
+    Extracts content with stable plain text logic and advanced image handling.
+    Corrected directory and file placement logic.
     """
-    # --- 3. 新增：在开始前清理旧的输出目录 ---
     if os.path.exists(output_dir):
-        print(f"Old output directory '{output_dir}' found. Deleting it for a fresh start...")
+        print(f"Old output directory '{output_dir}' found. Deleting it...")
         shutil.rmtree(output_dir)
         print("Old directory deleted.")
     
-    # 脚本现在可以确保在一个干净的环境下创建新目录
     os.makedirs(output_dir)
 
     doc = fitz.open(pdf_path)
     toc = doc.get_toc()
-    if not toc: print("Error: No bookmarks found."); return
+    if not toc:
+        print("Error: No bookmarks found.")
+        return
 
-    print("Starting full extraction process...")
+    print("Starting extraction with stable text processing...")
     markdown_files_list = []
     level_paths = {}
     CAPTION_REGEX = re.compile(r'^(Figure|Fig\.?|Table|Chart|图|表)\s+[\d\.\-A-Za-z]+', flags=re.IGNORECASE)
 
     for i, item in enumerate(toc):
         level, title, start_page = item
-        if level > 3: continue
         
         safe_title = clean_filename(title)
         level_paths[level] = safe_title
-        parent_path_parts = [level_paths[l] for l in range(1, level)]
-        current_text_dir = os.path.join(output_dir, *parent_path_parts)
-        current_image_dir = os.path.join(current_text_dir, "images")
-        os.makedirs(current_image_dir, exist_ok=True)
-        if level < 3: os.makedirs(os.path.join(current_text_dir, safe_title), exist_ok=True)
         
         print(f"{'  ' * (level-1)}-> Processing: {title}")
 
-        end_page = doc.page_count + 1
+        # --- START: MODIFIED PATH LOGIC ---
+
+        # Determine if the current item is a "parent" node (i.e., has children)
+        is_parent_node = (i + 1 < len(toc)) and (toc[i+1][0] > level)
+
+        # Get the path of the parent directory
+        parent_dir_parts = [level_paths[l] for l in range(1, level)]
+        parent_dir = os.path.join(output_dir, *parent_dir_parts)
+
+        if is_parent_node:
+            # If it's a parent, its content and children go into a new directory named after it.
+            # e.g., "Part I" -> mybook/Part I/
+            current_content_dir = os.path.join(parent_dir, safe_title)
+            # The .md file for "Part I" itself goes inside this directory.
+            # e.g., mybook/Part I/Part I.md
+            output_filepath = os.path.join(current_content_dir, f"{safe_title}.md")
+        else:
+            # If it's a leaf node, its file goes directly into its parent's directory.
+            # e.g., "1.1 Intro" (child of "Chapter 1") goes into mybook/Part I/Chapter 1/
+            current_content_dir = parent_dir
+            # e.g., mybook/Part I/Chapter 1/1.1 Intro.md
+            output_filepath = os.path.join(current_content_dir, f"{safe_title}.md")
+
+        # The image directory is always 'images' inside the directory that CONTAINS the .md file.
+        # This ensures sub-chapters' images are placed in the main chapter's image folder.
+        md_file_containing_dir = os.path.dirname(output_filepath)
+        current_image_dir = os.path.join(md_file_containing_dir, "images")
+        
+        # Ensure both the directory for the .md file and the images subdir exist.
+        os.makedirs(current_image_dir, exist_ok=True)
+        
+        # --- END: MODIFIED PATH LOGIC ---
+        
+        end_page = doc.page_count
         for next_item in toc[i+1:]:
             if next_item[0] <= level:
-                end_page = next_item[2]; break
+                end_page = next_item[2]
+                break
         
         chapter_content = f"# {title}\n\n"
-        processed_block_nums = set()
+        processed_img_xrefs = set()
 
+        # The page range in TOC is 1-based, need to adjust for 0-based page index.
+        # Also, the end page is exclusive.
         for page_num in range(start_page - 1, end_page - 1):
             if page_num >= doc.page_count: continue
             page = doc.load_page(page_num)
-            body_size, _ = get_dominant_font_info(page)
             
-            blocks = page.get_text("dict")["blocks"]
-            for block_idx, b in enumerate(blocks):
-                block_num = b["number"]
-                if block_num in processed_block_nums: continue
+            page_data = page.get_text("dict")
+            blocks = sorted(page_data["blocks"], key=lambda b: (b["bbox"][1], b["bbox"][0]))
 
-                if b["type"] == 0 and "lines" in b:
-                    first_line_text = ''.join(span["text"] for span in b["lines"][0]["spans"]).strip()
-                    if CAPTION_REGEX.match(first_line_text):
-                        full_caption = ' '.join(''.join(s["text"] for s in l["spans"]) for l in b["lines"]).replace('\n', ' ').strip()
-                        short_alt = ' '.join(full_caption.split()[:4]) + "..."
-                        image_info = find_image_for_caption(doc, page, blocks, block_idx, current_image_dir, processed_block_nums)
-                        if image_info:
-                            relative_path = os.path.join("images", quote(image_info["filename"]))
-                            chapter_content += f"\n![{short_alt}]({relative_path})\n*{full_caption}*\n\n"
-                        else:
-                             chapter_content += f"*{full_caption}*\n\n"
-                        processed_block_nums.add(block_num)
-                        continue
+            caption_blocks_indices = {idx for idx, b in enumerate(blocks) if b["type"] == 0 and "lines" in b and CAPTION_REGEX.match(''.join(s["text"] for s in b["lines"][0]["spans"]).strip())}
+            
+            for idx in sorted(list(caption_blocks_indices)):
+                b = blocks[idx]
+                full_caption = ' '.join(''.join(s["text"] for s in l["spans"]) for l in b["lines"]).replace('\n', ' ').strip()
+                short_alt = ' '.join(full_caption.split()[:4]) + "..."
+                image_info = find_image_for_caption(doc, page, blocks, idx, current_image_dir, processed_img_xrefs)
+                if image_info:
+                    # The relative path for the image is always from its .md file.
+                    relative_path = os.path.join("images", quote(image_info["filename"]))
+                    chapter_content += f"![{short_alt}]({relative_path})\n*{full_caption}*\n\n"
+                else:
+                    chapter_content += f"*{full_caption}*\n\n"
 
-                if b["type"] == 0 and "lines" in b:
-                    if any("mono" in s["font"].lower() for l in b["lines"] for s in l["spans"]):
-                        code_text = '\n'.join(''.join(s["text"] for s in l["spans"]) for l in b["lines"])
-                        chapter_content += f"```\n{code_text}\n```\n\n"
-                    else:
-                        is_heading = False
-                        for line in b["lines"]:
-                            line_text, span_sizes = "", [s["size"] for s in line["spans"]]
-                            avg_size = sum(span_sizes) / len(span_sizes) if span_sizes else body_size
-                            for span in line["spans"]:
-                                text = span["text"]
-                                if span["flags"] & 2**4: text = f"**{text}**"
-                                elif span["flags"] & 2**1: text = f"*{text}*"
-                                line_text += text
-                            if avg_size > body_size * 1.5: chapter_content += f"## {line_text.strip()}\n\n"; is_heading = True
-                            elif avg_size > body_size * 1.2: chapter_content += f"### {line_text.strip()}\n\n"; is_heading = True
-                            else: chapter_content += line_text + "\n"
-                        if not is_heading: chapter_content += "\n"
-                    processed_block_nums.add(block_num)
+            for idx, b in enumerate(blocks):
+                if b["type"] == 0 and idx not in caption_blocks_indices:
+                    plain_text = ' '.join(''.join(s["text"] for s in l["spans"]) for l in b["lines"]).replace('\n', ' ').strip()
+                    if plain_text:
+                        chapter_content += plain_text + "\n\n"
 
-        output_filepath = os.path.join(current_text_dir, f"{safe_title}.md")
+            for img in page.get_images(full=True):
+                xref = img[0]
+                if xref not in processed_img_xrefs:
+                    try:
+                        base_image = doc.extract_image(xref)
+                        if not base_image: continue
+                        image_filename = f"page_{page_num+1}_uncaptioned_img_{xref}.{base_image['ext']}"
+                        relative_path = os.path.join("images", quote(image_filename))
+                        with open(os.path.join(current_image_dir, image_filename), "wb") as f: f.write(base_image["image"])
+                        chapter_content += f"![Uncaptioned Image page {page_num+1} xref {xref}]({relative_path})\n\n"
+                        processed_img_xrefs.add(xref)
+                    except Exception as e:
+                        print(f"Warning: Could not process uncaptioned image xref {xref} on page {page_num+1}. Error: {e}")
+
         with open(output_filepath, "w", encoding="utf-8") as f: f.write(chapter_content)
         relative_md_path = os.path.relpath(output_filepath, output_dir).replace(os.sep, '/')
         markdown_files_list.append(relative_md_path)
@@ -159,8 +176,9 @@ def run_extraction(pdf_path, output_dir="mybook"): # <--- 2. 确认输出目录�
     doc.close()
 
 if __name__ == "__main__":
+    # 请确保将 "your_document.pdf" 替换为您的PDF文件名
     pdf_file = "your_document.pdf"
     if os.path.exists(pdf_file):
-        run_extraction(pdf_file)
+        run_extraction_stable(pdf_file)
     else:
         print(f"Error: File '{pdf_file}' not found.")

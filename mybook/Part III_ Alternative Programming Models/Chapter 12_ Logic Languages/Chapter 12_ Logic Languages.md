@@ -1,0 +1,710 @@
+# Chapter 12: Logic Languages
+
+12 Logic Languages
+
+Having considered functional languages in some detail, we now turn to logic languages. The overlap between imperative and functional concepts in pro- gramming language design has led us to discuss the latter at numerous points throughout the text. We have had less occasion to remark on features of logic programming languages. Logic of course is used heavily in the design of digi- tal circuits, and most programming languages provide a logical (Boolean) type and operators. Logic is also heavily used in the formal study of language seman- tics, speciﬁcally in axiomatic semantics.1 In the 1970s, with the work of Alain Colmeraurer and Philippe Roussel of the University of Aix–Marseille in France and Robert Kowalski and associates at the University of Edinburgh in Scotland, researchers also began to employ the process of logical deduction as a general- purpose model of computing. We introduce the basic concepts of logic programming in Section 12.1. We then survey the most widely used logic language, Prolog, in Section 12.2. We consider, in turn, the concepts of resolution and uniﬁcation, support for lists and arithmetic, and the search-based execution model. After presenting an extended example based on the game of tic-tac-toe, we turn to the more advanced topics of imperative control ﬂow and database manipulation. Much as functional programming is based on the formalism of lambda calcu- lus, Prolog and other logic languages are based on ﬁrst-order predicate calculus. A brief introduction to this formalism appears in Section C 12.3 on the compan- ion site. Where functional languages capture the full capabilities of the lambda calculus, however (within the limits, at least, of memory and other resources), logic languages do not capture the full power of predicate calculus. We consider the relevant limitations as part of a general evaluation of logic programming in Section 12.4.
+
+1 Axiomatic semantics models each statement or expression in the language as a predicate trans- former—an inference rule that takes a set of conditions known to be true initially and derives a new set of conditions guaranteed to be true after the construct has been evaluated. The study of formal semantics is beyond the scope of this book.
+
+591
+
+592 Chapter 12 Logic Languages
+
+12.1 Logic Programming Concepts
+
+Logic programming systems allow the programmer to state a collection of axioms from which theorems can be proven. The user of a logic program states a theorem, or goal, and the language implementation attempts to ﬁnd a collection of axioms and inference steps (including choices of values for variables) that together imply the goal. Of the several existing logic languages, Prolog is by far the most widely used. In almost all logic languages, axioms are written in a standard form known as EXAMPLE 12.1
+
+Horn clauses a Horn clause. A Horn clause consists of a head,2 or consequent term H, and a body consisting of terms Bi:
+
+H ←B1, B2, . . . , Bn
+
+The semantics of this statement are that when the Bi are all true, we can deduce that H is true as well. When reading aloud, we say “H, if B1, B2, ..., and Bn.” Horn clauses can be used to capture most, but not all, logical statements. (We return to the issue of completeness in Section C 12.3.) ■ In order to derive new statements, a logic programming system combines ex- isting statements, canceling like terms, through a process known as resolution. If EXAMPLE 12.2
+
+Resolution we know that A and B imply C, for example, and that C implies D, we can deduce that A and B imply D:
+
+C ←A, B
+
+D ←C
+
+D ←A, B
+
+In general, terms like A, B, C, and D may consist not only of constants (“Rochester is rainy”) but also of predicates applied to atoms or to variables: rainy(Rochester), rainy(Seattle), rainy(X). ■ During resolution, free variables may acquire values through uniﬁcation with EXAMPLE 12.3
+
+Uniﬁcation expressions in matching terms, much as variables acquire types in ML (Sec- tion 7.2.4):
+
+ﬂowery(X) ←rainy(X)
+
+rainy(Rochester)
+
+ﬂowery(Rochester)
+
+In the following section we consider Prolog in more detail. We return to formal logic, and to its relationship to Prolog, in Section C 12.3. ■
+
+2 Note that the word “head” is used for two different things in Prolog: the head of a Horn clause and the head of a list. The distinction between these is usually clear from context.
+
+12.2 Prolog 593
+
+12.2 Prolog
+
+Much as an imperative or functional language interpreter evaluates expressions in the context of a referencing environment in which various functions and con- stants have been deﬁned, a Prolog interpreter runs in the context of a database of clauses (Horn clauses) that are assumed to be true.3 Each clause is composed of terms, which may be constants, variables, or structures. A constant is either an atom or a number. A structure can be thought of as either a logical predicate or a data structure. Atoms in Prolog are similar to symbols in Lisp. Lexically, an atom looks like EXAMPLE 12.4
+
+Atoms, variables, scope, and type an identiﬁer beginning with a lowercase letter, a sequence of “punctuation” char- acters, or a quoted character string:
+
+foo my_Const + 'Hi, Mom'
+
+Numbers resemble the integers and ﬂoating-point constants of other program- ming languages. A variable looks like an identiﬁer beginning with an uppercase letter:
+
+Foo My_var X
+
+Variables can be instantiated to (i.e., can take on) arbitrary values at run time as a result of uniﬁcation. The scope of every variable is limited to the clause in which it appears. There are no declarations. Type checking is dynamic: it occurs only when a program attempts to use a value as an operand at run time. ■ Structures consist of an atom called the functor and a list of arguments: EXAMPLE 12.5
+
+Structures and predicates rainy(rochester) teaches(scott, cs254) bin_tree(foo, bin_tree(bar, glarch))
+
+Prolog requires the opening parenthesis to come immediately after the functor, with no intervening space. Arguments can be arbitrary terms: constants, vari- ables, or (nested) structures. Internally, a typical Prolog implementation will rep- resent each structure as a tree of Lisp-like cons cells. Conceptually, the program- mer may prefer to think of certain structures (e.g., rainy) as logical predicates. We use the term “predicate” to refer to the combination of a functor and an “ar- ity” (number of arguments). The predicate rainy has arity 1. The predicate teaches has arity 2. ■ The clauses in a Prolog database can be classiﬁed as facts or rules, each of which ends with a period. A fact is a Horn clause without a right-hand side. It looks like EXAMPLE 12.6
+
+Facts and rules a single term (the implication symbol is implicit):
+
+3 In fact, for any given program, the database is assumed to characterize everything that is true. As we shall see in Section 12.4.3, this closed world assumption imposes certain limits on the expres- siveness of the language.
+
+594 Chapter 12 Logic Languages
+
+rainy(rochester).
+
+A rule has a right-hand side:
+
+snowy(X) :- rainy(X), cold(X).
+
+The token :- is the implication symbol; the comma indicates “and.” Variables that appear in the head of a Horn clause are universally quantiﬁed: for all X, X is snowy if X is rainy and X is cold. ■ It is also possible to write a clause with an empty left-hand side. Such a clause is called a query, or a goal. Queries do not appear in Prolog programs. Rather, one builds a database of facts and rules and then initiates execution by giving the Prolog interpreter (or the compiled Prolog program) a query to be answered (i.e., a goal to be proven). In most implementations of Prolog, queries are entered with a special ?- ver- sion of the implication symbol. If we were to type the following: EXAMPLE 12.7
+
+Queries rainy(seattle). rainy(rochester). ?- rainy(C).
+
+the Prolog interpreter would respond with
+
+C = seattle
+
+Of course, C = rochester would also be a valid answer, but Prolog will ﬁnd seattle ﬁrst, because it comes ﬁrst in the database. (Dependence on ordering is one of the ways in which Prolog departs from pure logic; we discuss this issue further in Section 12.4.) If we want to ﬁnd all possible solutions, we can ask the interpreter to continue by typing a semicolon:
+
+C = seattle ; C = rochester.
+
+If there had been another possibility, the interpreter would have left off the ﬁnal period and given us the opportunity to type another semicolon. Given
+
+rainy(seattle). rainy(rochester). cold(rochester). snowy(X) :- rainy(X), cold(X).
+
+the query
+
+?- snowy(C).
+
+will yield only one solution. ■
+
+12.2 Prolog 595
+
+12.2.1 Resolution and Uniﬁcation
+
+The resolution principle, due to Robinson [Rob65], says that if C1 and C2 are Horn clauses and the head of C1 matches one of the terms in the body of C2, then we can replace the term in C2 with the body of C1. Consider the following example. EXAMPLE 12.8
+
+Resolution in Prolog takes(jane_doe, his201). takes(jane_doe, cs254). takes(ajit_chandra, art302). takes(ajit_chandra, cs254). classmates(X, Y) :- takes(X, Z), takes(Y, Z).
+
+If we let X be jane_doe and Z be cs254, we can replace the ﬁrst term on the right-hand side of the last clause with the (empty) body of the second clause, yielding the new rule
+
+classmates(jane_doe, Y) :- takes(Y, cs254).
+
+In other words, Y is a classmate of jane_doe if Y takes cs254. ■ Note that the last rule has a variable (Z) on the right-hand side that does not appear in the head. Such variables are existentially quantiﬁed: for all X and Y, X and Y are classmates if there exists a class Z that they both take. The pattern-matching process used to associate X with jane_doe and Z with cs254 is known as uniﬁcation. Variables that are given values as a result of uniﬁ- cation are said to be instantiated. The uniﬁcation rules for Prolog state that
+
+A constant uniﬁes only with itself. Two structures unify if and only if they have the same functor and the same arity, and the corresponding arguments unify recursively. A variable uniﬁes with anything. If the other thing has a value, then the vari- able is instantiated. If the other thing is an uninstantiated variable, then the two variables are associated in such a way that if either is given a value later, that value will be shared by both.
+
+Uniﬁcation of structures in Prolog is very much akin to ML’s uniﬁcation of the EXAMPLE 12.9
+
+Uniﬁcation in Prolog and ML types of formal and actual parameters. A formal parameter of type int * ‚b list, for example, will unify with an actual parameter of type ‚a * real list in ML by instantiating ‚a to int and ‚b to real. ■ Equality in Prolog is deﬁned in terms of “uniﬁability.” The goal =(A, B) suc- ceeds if and only if A and B can be uniﬁed. For the sake of convenience, the goal may be written as A = B; the inﬁx notation is simply syntactic sugar. In keeping EXAMPLE 12.10
+
+Equality and uniﬁcation with the rules above, we have
+
+596 Chapter 12 Logic Languages
+
+?- a = a. true. % constant unifies with itself ?- a = b. false. % but not with another constant ?- foo(a, b) = foo(a, b). true. % structures are recursively identical ?- X = a. X = a. % variable unifies with constant ?- foo(a, b) = foo(X, b). X = a. % arguments must unify ■
+
+It is possible for two variables to be uniﬁed without instantiating them. If we EXAMPLE 12.11
+
+Uniﬁcation without instantiation type
+
+?- A = B.
+
+the interpreter will simply respond
+
+A = B.
+
+If, however, we type
+
+?- A = B, A = a, B = Y.
+
+(unifying A and B before binding a to A) the interpreter will linearize the string of uniﬁcations and make it clear that all three variables are equal to a:
+
+A = B, B = Y, Y = a.
+
+In a similar vein, suppose we are given the following rules:
+
+takes_lab(S) :- takes(S, C), has_lab(C). has_lab(D) :- meets_in(D, R), is_lab(R).
+
+(S takes a lab class if S takes C and C is a lab class. Moreover D is a lab class if D meets in room R and R is a lab.) An attempt to resolve these rules will unify the head of the second with the second term in the body of the ﬁrst, causing C and D to be uniﬁed, even though neither is instantiated. ■
+
+12.2.2 Lists
+
+Like equality checking, list manipulation is a sufﬁciently common operation in Prolog to warrant its own notation. The construct [a, b, c] is syntactic sugar EXAMPLE 12.12
+
+List notation in Prolog for the structure .(a, .(b, .(c, []))), where [] is the empty list and . is a built-in cons-like predicate. With minor syntactic differences (parentheses v. brackets; commas v. semicolons), this notation should be familiar to users of ML or Lisp. Prolog adds an extra convenience, however—an optional vertical bar that delimits the “tail” of the list. Using this notation, [a, b, c] could be expressed as [a | [b, c]], [a, b | [c]], or [a, b, c | []]. The vertical-bar notation is particularly handy when the tail of the list is a variable:
+
+12.2 Prolog 597
+
+member(X, [X | _]). member(X, [_ | T]) :- member(X, T).
+
+sorted([]). % empty list is sorted sorted([_]). % singleton is sorted sorted([A, B | T]) :- A =< B, sorted([B | T]). % compound list is sorted if first two elements are in order and % remainder of list (after first element) is sorted
+
+Here =< is a built-in predicate that operates on numbers. The underscore is a placeholder for a variable that is not needed anywhere else in the clause. Note that [a, b | c] is the improper list .(a, .(b, c)). The sequence of tokens [a | b, c] is syntactically invalid. ■ One of the interesting things about Prolog resolution is that it does not in EXAMPLE 12.13
+
+Functions, predicates, and two-way rules general distinguish between “input” and “output” arguments (there are certain exceptions, such as the is predicate described in the following subsection). Thus, given
+
+append([], A, A). append([H | T], A, [H | L]) :- append(T, A, L).
+
+We can type
+
+?- append([a, b, c], [d, e], L). L = [a, b, c, d, e]. ?- append(X, [d, e], [a, b, c, d, e]). X = [a, b, c] ; false. ?- append([a, b, c], Y, [a, b, c, d, e]). Y = [d, e].
+
+This example highlights the difference between functions and Prolog predi- cates. The former have a clear notion of inputs (arguments) and outputs (results); the latter do not. In an imperative or functional language we apply functions to arguments to generate results. In a logic language we search for values for which a predicate is true. (Not all logic languages are equally ﬂexible. Mercury, for exam- ple, requires the programmer to specify in or out modes on arguments. These allow the compiler to generate substantially faster code.) Note that when the in- terpreter prints its response to our second query, it is not yet certain whether additional solutions might exist. Only after we enter a semicolon does it invest the effort to determine that there are none. ■
+
+12.2.3 Arithmetic
+
+The usual arithmetic operators are available in Prolog, but they play the role of predicates, not of functions. Thus +(2, 3), which may also be written 2 + 3, EXAMPLE 12.14
+
+Arithmetic and the is predicate is a two-argument structure, not a function call. In particular, it will not unify with 5:
+
+598 Chapter 12 Logic Languages
+
+?- (2 + 3) = 5. false.
+
+To handle arithmetic, Prolog provides a built-in predicate, is, that uniﬁes its ﬁrst argument with the arithmetic value of its second argument:
+
+?- is(X, 1+2). X = 3. ?- X is 1+2. X = 3. % infix is also ok ?- 1+2 is 4-1. false. % 1st argument (1+2) is already instantiated ?- X is Y. ERROR % 2nd argument (Y) must already be instantiated ?- Y is 1+2, X is Y. Y = X, X = 3. % Y is instantiated before it is needed ■
+
+12.2.4 Search/Execution Order
+
+So how does Prolog go about answering a query (satisfying a goal)? What it needs is a sequence of resolution steps that will build the goal out of clauses in the database, or a proof that no such sequence exists. In the realm of formal logic, one can imagine two principal search strategies:
+
+Start with existing clauses and work forward, attempting to derive the goal. This strategy is known as forward chaining. Start with the goal and work backward, attempting to “unresolve” it into a set of preexisting clauses. This strategy is known as backward chaining.
+
+If the number of existing rules is very large, but the number of facts is small, it is possible for forward chaining to discover a solution more quickly than backward chaining. In most circumstances, however, backward chaining turns out to be more efﬁcient. Prolog is deﬁned to use backward chaining. Because resolution is associative and commutative (Exercise 12.5), a backward- chaining theorem prover can limit its search to sequences of resolutions in which terms on the right-hand side of a clause are uniﬁed with the heads of other clauses one by one in some particular order (e.g., left to right). The resulting search EXAMPLE 12.15
+
+Search tree exploration can be described in terms of a tree of subgoals, as shown in Figure 12.1. The Prolog interpreter (or program) explores this tree depth ﬁrst, from left to right. It starts at the beginning of the database, searching for a rule R whose head can be uniﬁed with the top-level goal. It then considers the terms in the body of R as subgoals, and attempts to satisfy them, recursively, left to right. If at any point a subgoal fails (cannot be satisﬁed), the interpreter returns to the previous subgoal and attempts to satisfy it in a different way (i.e., to unify it with the head of a different clause). ■
+
+![Figure 12.1 Backtracking search...](images/page_632_vector_331.png)
+*Figure 12.1 Backtracking search in Prolog. The tree of potential resolutions consists of alter- nating AND and OR levels. An AND level consists of subgoals from the right-hand side of a rule, all of which must be satisﬁed. An OR level consists of alternative database clauses whose head will unify with the subgoal above; one of these must be satisﬁed. The notation _C = _X is meant to indicate that while both C and X are uninstantiated, they have been associated with one another in such a way that if either receives a value in the future it will be shared by both.*
+
+12.2 Prolog 599
+
+rainy(seattle). rainy(rochester). cold(rochester). snowy(X) :- rainy(X), cold(X).
+
+snowy(C)
+
+Original goal
+
+Success
+
+_C  =  _X
+
+snowy(X)
+
+Candidate clauses
+
+AND
+
+X =  seattle
+
+rainy(X) cold(X)
+
+Subgoals
+
+cold(seattle) fails; backtrack
+
+OR
+
+rainy(seattle) rainy(rochester) cold(rochester)
+
+Candidate clauses
+
+X  =  rochester
+
+The process of returning to previous goals is known as backtracking. It strongly resembles the control ﬂow of generators in Icon (Section C 6.5.4). Whenever a uniﬁcation operation is “undone” in order to pursue a different path through the search tree, variables that were given values or associated with one another as a result of that uniﬁcation are returned to their uninstantiated or unassociated state. In Figure 12.1, for example, the binding of X to seattle is broken when EXAMPLE 12.16
+
+Backtracking and instantiation we backtrack to the rainy(X) subgoal. The effect is similar to the breaking of bindings between actual and formal parameters in an imperative programming language, except that Prolog couches the bindings in terms of uniﬁcation rather than subroutine calls. ■ Space management for backtracking search in Prolog usually follows the single-stack implementation of iterators described in Section C 9.5.3. The inter- preter pushes a frame onto its stack every time it begins to pursue a new subgoal G. If G fails, the frame is popped from the stack and the interpreter begins to backtrack. If G succeeds, control returns to the “caller” (the parent in the search tree), but G’s frame remains on the stack. Later subgoals will be given space above
+
+600 Chapter 12 Logic Languages
+
+this dormant frame. If subsequent backtracking causes the interpreter to search for alternative ways of satisfying G, control will be able to resume where it last left off. Note that G will not fail unless all of its subgoals (and all of its siblings to the right in the search tree) have also failed, implying that there is nothing above G’s frame in the stack. At the top level of the interpreter, a semicolon typed by the user is treated the same as failure of the most recently satisﬁed subgoal. The fact that clauses are ordered, and that the interpreter considers them from ﬁrst to last, means that the results of a Prolog program are deterministic and pre- dictable. In fact, the combination of ordering and depth-ﬁrst search means that the Prolog programmer must often consider the order to ensure that recursive programs will terminate. Suppose for example that we have a database describing EXAMPLE 12.17
+
+Order of rule evaluation a directed acyclic graph:
+
+edge(a, b). edge(b, c). edge(c, d). edge(d, e). edge(b, e). edge(d, f). path(X, X). path(X, Y) :- edge(Z, Y), path(X, Z).
+
+The last two clauses tell us how to determine whether there is a path from node X to node Y. If we were to reverse the order of the terms on the right-hand side of the ﬁnal clause, then the Prolog interpreter would search for a node Z that is reachable from X before checking to see whether there is an edge from Z to Y. The program would still work, but it would not be as efﬁcient. ■ Now consider what would happen if in addition we were to reverse the order EXAMPLE 12.18
+
+Inﬁnite regression of the last two clauses:
+
+path(X, Y) :- path(X, Z), edge(Z, Y). path(X, X).
+
+From a logical point of view, our database still deﬁnes the same relationships. A Prolog interpreter, however, will no longer be able to ﬁnd answers. Even a simple query like ?- path(a, a) will never terminate. To see why, consider Figure 12.2. The interpreter ﬁrst uniﬁes path(a, a) with the left-hand side of path(X, Y) :- path(X, Z), edge(Z, Y). It then considers the goals on the right-hand side, the ﬁrst of which (path(X, Z)), uniﬁes with the left-hand side of the very same rule, leading to an inﬁnite regression. In effect, the Prolog interpreter gets lost in an inﬁnite branch of the search tree, and never discovers ﬁnite branches to the right. We could avoid this problem by exploring the tree in breadth-ﬁrst order, but that strategy was rejected by Prolog’s designers because of its expense: it can require substantially more space, and does not lend itself to a stack-based imple- mentation. ■
+
+12.2.5 Extended Example: Tic-Tac-Toe
+
+In the previous subsection we saw how the order of clauses in the Prolog database, EXAMPLE 12.19
+
+Tic-tac-toe in Prolog and the order of terms within a right-hand side, can affect both the efﬁciency of
+
+![Figure 12.2 Inﬁnite regression...](images/page_634_vector_302.png)
+*Figure 12.2 Inﬁnite regression in Prolog. In this ﬁgure even a simple query like ?- path(a, a) will never terminate: the interpreter will never ﬁnd the trivial branch.*
+
+12.2 Prolog 601
+
+edge(a, b). edge(b, c). edge(c, d). edge(d, e). edge(b, e). edge(d, f). path(X, Y) :- path(X, Z), edge(Z, Y). path(X, X). X1 = a, Y1 = a
+
+path(a, a)
+
+OR
+
+path(X, Y) path(X, X)
+
+X2 = X1, Y2 = Y1, Z1 = ?
+
+AND
+
+path(X, Z) edge(Z, Y)
+
+X3 = X2, Y3 = Y2
+
+OR
+
+path(X, Y) path(X, X)
+
+X4 = X3, Y4 = Y3, Z2 = ?
+
+AND
+
+path(X, Z) edge(Z, Y)
+
+. . . . . .
+
+a Prolog program and its ability to terminate. Ordering also allows the Prolog programmer to indicate that certain resolutions are preferred, and should be con- sidered before other, “fallback” options. Consider, for example, the problem of making a move in tic-tac-toe. (Tic-tac-toe is a game played on a 3 × 3 grid of squares. Two players, X and O, take turns placing markers in empty squares. A player wins if he or she places three markers in a row, horizontally, vertically, or diagonally.) Let us number the squares from 1 to 9 in row-major order. Further, let us use the Prolog fact x(n) to indicate that player X has placed a marker in square n, and o(m) to indicate that player O has placed a marker in square m. For simplicity, let us assume that the computer is player X, and that it is X’s turn to move. We should like to be able to issue a query ?- move(A) that will cause the Prolog interpreter to choose a good square A for the computer to occupy next. Clearly we need to be able to tell whether three given squares lie in a row. One way to express this is:
+
+ordered_line(1, 2, 3). ordered_line(4, 5, 6). ordered_line(7, 8, 9). ordered_line(1, 4, 7). ordered_line(2, 5, 8). ordered_line(3, 6, 9). ordered_line(1, 5, 9). ordered_line(3, 5, 7).
+
+602 Chapter 12 Logic Languages
+
+line(A, B, C) :- ordered_line(A, B, C). line(A, B, C) :- ordered_line(A, C, B). line(A, B, C) :- ordered_line(B, A, C). line(A, B, C) :- ordered_line(B, C, A). line(A, B, C) :- ordered_line(C, A, B). line(A, B, C) :- ordered_line(C, B, A).
+
+It is easy to prove that there is no winning strategy for tic-tac-toe: either player can force a draw. Let us assume, however, that our program is playing against a less-than-perfect opponent. Our task then is never to lose, and to maximize our chances of winning if our opponent makes a mistake. The following rules work well:
+
+move(A) :- good(A), empty(A).
+
+full(A) :- x(A). full(A) :- o(A). empty(A) :- \+(full(A)).
+
+% strategy: good(A) :- win(A). good(A) :- block_win(A). good(A) :- split(A). good(A) :- strong_build(A). good(A) :- weak_build(A).
+
+The initial rule indicates that we can satisfy the goal move(A) by choosing a good, empty square. The \+ is a built-in predicate that succeeds if its argument (a goal) cannot be proven; we discuss it further in Section 12.2.6. Square n is empty if we cannot prove it is full; that is, if neither x(n) nor o(n) is in the database. The key to strategy lies in the ordering of the last ﬁve rules. Our ﬁrst choice is to win:
+
+win(A) :- x(B), x(C), line(A, B, C).
+
+Our second choice is to prevent our opponent from winning:
+
+block_win(A) :- o(B), o(C), line(A, B, C).
+
+Our third choice is to create a “split”—a situation in which our opponent cannot prevent us from winning on the next move (see Figure 12.3):
+
+split(A) :- x(B), x(C), different(B, C), line(A, B, D), line(A, C, E), empty(D), empty(E). same(A, A). different(A, B) :- \+(same(A, B)).
+
+![Figure 12.3 A “split”...](images/page_636_vector_172.png)
+*Figure 12.3 A “split” in tac-tac-toe. If X takes the bottom center square (square 8), no future move by O will be able to stop X from winning the game—O cannot block both the 2–5–8 line and the 7–8–9 line.*
+
+12.2 Prolog 603
+
+2 3 O
+
+1
+
+X O
+
+4 6
+
+7 8 9
+
+X
+
+Here we have again relied on the built-in predicate \+. Our fourth choice is to build toward three in a row (i.e., to get two in a row) in such a way that the obvious blocking move won’t allow our opponent to build toward three in a row:
+
+strong_build(A) :- x(B), line(A, B, C), empty(C), \+(risky(C)). risky(C) :- o(D), line(C, D, E), empty(E).
+
+Barring that, our ﬁfth choice is to build toward three in a row in such a way that the obvious blocking move won’t give our opponent a split:
+
+weak_build(A) :- x(B), line(A, B, C), empty(C), \+(double_risky(C)). double_risky(C) :- o(D), o(E), different(D, E), line(C, D, F), line(C, E, G), empty(F), empty(G).
+
+If none of these goals can be satisﬁed, our ﬁnal, default choice is to pick an un- occupied square, giving priority to the center, the corners, and the sides in that order:
+
+good(5). good(1). good(3). good(7). good(9). good(2). good(4). good(6). good(8). ■
+
+3CHECK YOUR UNDERSTANDING 1. What mathematical formalism underlies logic programming?
+
+2. What is a Horn clause? 3. Brieﬂy describe the process of resolution in logic programming.
+
+4. What is a uniﬁcation? Why is it important in logic programming? 5. What are clauses, terms, and structures in Prolog? What are facts, rules, and queries?
+
+604 Chapter 12 Logic Languages
+
+6. Explain how Prolog differs from imperative languages in its handling of arith- metic. 7. Describe the difference between forward chaining and backward chaining. Which is used in Prolog by default? 8. Describe the Prolog search strategy. Discuss backtracking and the instantiation of variables.
+
+12.2.6 Imperative Control Flow
+
+We have seen that the ordering of clauses and of terms in Prolog is signiﬁcant, with ramiﬁcations for efﬁciency, termination, and choice among alternatives. In addition to simple ordering, Prolog provides the programmer with severalexplicit control-ﬂow features. The most important of these features is known as the cut. The cut is a zero-argument predicate written as an exclamation point: !. As a subgoal it always succeeds, but with a crucial side effect: it commits the interpreter to whatever choices have been made since unifying the parent goal with the left- hand side of the current rule, including the choice of that uniﬁcation itself. For EXAMPLE 12.20
+
+The cut example, recall our deﬁnition of list membership:
+
+member(X, [X | _]). member(X, [_ | T]) :- member(X, T).
+
+If a given atom a appears in list L n times, then the goal ?- member(a, L) can succeed n times. These “extra” successes may not always be appropriate. They can lead to wasted computation, particularly for long lists, when member is followed by a goal that may fail:
+
+prime_candidate(X) :- member(X, Candidates), prime(X).
+
+Suppose that prime(X) is expensive to compute. To determine whether a is a prime candidate, we ﬁrst check to see whether it is a member of the Candidates list, and then check to see whether it is prime. If prime(a) fails, Prolog will backtrack and attempt to satisfy member(a, Candidates) again. If a is in the Candidates list more than once, then the subgoal will succeed again, leading to reconsideration of the prime(a) subgoal, even though that subgoal is doomed to fail. We can save substantial time by cutting off all further searches for a after the ﬁrst is found:
+
+member(X, [X | _]) :- !. member(X, [_ | T]) :- member(X, T).
+
+12.2 Prolog 605
+
+The cut on the right-hand side of the ﬁrst rule says that if X is the head of L, we should not attempt to unify member(X, L) with the left-hand side of the second rule; the cut commits us to the ﬁrst rule. ■ An alternative way to ensure that member(X, L) succeeds no more than once EXAMPLE 12.21
+
+\+ and its implementation is to embed a use of \+ in the second clause:
+
+member(X, [X | _]). member(X, [H | T]) :- X \= H, member(X, T).
+
+Here X \= H means X and H will not unify; that is, \+(X = H). (In some Prolog dialects, \+ is written not. This name suggests an interpretation that may be somewhat misleading; we discuss the issue in Section 12.4.3.) Our new version of member will display the same high-level behavior as before, but will be slightly less efﬁcient: now the interpreter will actually consider the second rule, abandoning it only after (re)unifying X with H and reversing the sense of the test. It turns out that \+ is actually implemented by a combination of the cut and two other built-in predicates, call and fail:
+
+\+(P) :- call(P), !, fail. \+(P).
+
+The call predicate takes a term as argument and attempts to satisfy it as a goal (terms are ﬁrst-class values in Prolog). The fail predicate always fails. ■ In principle, it is possible to replace all uses of the cut with uses of \+ —to conﬁne the cut to the implementation of \+. Doing so often makes a program easier to read. As we have seen, however, it often makes it less efﬁcient. In some cases, explicit use of the cut may actually make a program easier to read. Consider EXAMPLE 12.22
+
+Pruning unwanted answers with the cut our tic-tac-toe example. If we type semicolons at the program, it will continue to generate a series of increasingly poor moves from the same board position, even though we only want the ﬁrst move. We can cut off consideration of the others by using the cut:
+
+move(A) :- good(A), empty(A), !.
+
+To achieve the same effect with \+ we would have to do more major surgery (Exercise 12.8). ■ In general, the cut can be used whenever we want the effect of if... then ... EXAMPLE 12.23
+
+Using the cut for selection else:
+
+statement :- condition, !, then_part. statement :- else_part. ■
+
+The fail predicate can be used in conjunction with a “generator” to implement EXAMPLE 12.24
+
+Looping with fail a loop. We have already seen (in Example 12.13) how to effect a generator by driving a set of rules “backward.” Recall our deﬁnition of append:
+
+606 Chapter 12 Logic Languages
+
+append([], A, A). append([H | T], A, [H | L]) :- append(T, A, L).
+
+If we use write append(A, B, L), where L is instantiated but A and B are not, the interpreter will ﬁnd an A and B for which the predicate is true. If backtracking forces it to return, the interpreter will look for another A and B; append will generate pairs on demand. (There is a strong analogy here to the generators of Icon, discussed in Section C 6.5.4.) Thus, to enumerate the ways in which a list can be partitioned into pairs, we can follow a use of append with fail:
+
+print_partitions(L) :- append(A, B, L), write(A), write(' '), write(B), nl, fail.
+
+The nl predicate prints a newline character. The query print_partitions([a, b, c]) produces the following output:
+
+[] [a, b, c] [a] [b, c] [a, b] [c] [a, b, c] [] false.
+
+If we don’t want the overall predicate to fail, we can add a ﬁnal rule:
+
+print_partitions(_).
+
+Assuming this rule appears last, it will succeed after the output has appeared, and the interpreter will ﬁnish with “true.” ■ In some cases, we may have a generator that produces an unbounded sequence of values. The following, for example, generates all of the natural numbers: EXAMPLE 12.25
+
+Looping with an unbounded generator natural(1). natural(N) :- natural(M), N is M+1.
+
+We can use this generator in conjunction with a “test-cut” combination to iterate over the ﬁrst n numbers:
+
+my_loop(N) :- natural(I), write(I), nl, % loop body (nl prints a newline) I = N, !.
+
+So long as I is less than N, the equality (uniﬁcation) predicate will fail and back- tracking will pursue another alternative for natural. If I = N succeeds, however, then the cut will be executed, committing us to the current (ﬁnal) choice of I, and successfully terminating the loop. ■
+
+12.2 Prolog 607
+
+This programming idiom—an unbounded generator with a test-cut termi- nator—is known as generate-and-test. Like the iterative constructs of Scheme (Section 11.3.4), it is generally used in conjunction with side effects. One such side effect, clearly, is I/O. Another is modiﬁcation of the program database. Prolog provides a variety of I/O features. In addition to write and nl, which print to the current output ﬁle, the read predicate can be used to read terms from the current input ﬁle. Individual characters are read and written with get and put. Input and output can be redirected to different ﬁles using see and tell. Finally, the built-in predicates consult and reconsult can be used to read database clauses from a ﬁle, so they don’t have to be typed into the inter- preter by hand. (Some interpreters require this, allowing only queries to be en- tered interactively.) The predicate get attempts to unify its argument with the next printable char- EXAMPLE 12.26
+
+Character input with get acter of input, skipping over ASCII characters with codes below 32.4 In effect, it behaves as if it were implemented in terms of the simpler predicates get0 and repeat:
+
+get(X) :- repeat, get0(X), X >= 32, !.
+
+The get0 predicate attempts to unify its argument with the single next character of input, regardless of value and, like get, cannot be resatisﬁed during back- tracking. The repeat predicate, by contrast, can succeed an arbitrary number of times; it behaves as if it were implemented with the following pair of rules:
+
+repeat. repeat :- repeat.
+
+Within the above deﬁnition of get, backtracking will return to repeat as often as needed to produce a printable character (one with ASCII code at least 32). In general, repeat allows us to turn any predicate with side effects into a genera- tor. ■
+
+12.2.7 Database Manipulation
+
+Clauses in Prolog are simply collections of terms, connected by the built-in pred- EXAMPLE 12.27
+
+Prolog programs as data icates :- and ,, both of which can be written in either inﬁx or preﬁx form:
+
+⎫ ⎪ ⎪ ⎬
+
+rainy(rochester). rainy(seattle). cold(rochester). snowy(X) :- rainy(X), cold(X).
+
+⎪ ⎪ ⎭ ≡’,’(rainy(rochester), ’,’(rainy(seattle), ’,’(cold(rochester), :-(snowy(X), ’,’(rainy(X), cold(X))))))
+
+4 Surprisingly, the ISO Prolog standard does not cover Unicode conformance.
+
+608 Chapter 12 Logic Languages
+
+Here the single quotes around the preﬁx commas serve to distinguish them from the commas that separate the arguments of a predicate. ■ The structural nature of clauses and database contents implies that Prolog, like Scheme, is homoiconic: it can represent itself. It can also modify itself. A EXAMPLE 12.28
+
+Modifying the Prolog database running Prolog program can add clauses to its database with the built-in predicate assert, or remove them with retract:
+
+?- rainy(X). X = seattle ; X = rochester. ?- assert(rainy(syracuse)). true. ?- rainy(X). X = seattle ; X = rochester ; X = syracuse. ?- retract(rainy(rochester)). true. ?- rainy(X). X = seattle ; X = syracuse.
+
+There is also a retractall predicate that removes all matching clauses from the database. ■ Figure 12.4 contains a complete Prolog program for tic-tac-toe. It uses assert, EXAMPLE 12.29
+
+Tic-tac-toe (full game) retractall, the cut, fail, repeat, and write to play an entire game. Moves are added to the database with assert. They are cleared with retractall at the beginning of each game. This way the user can play multiple games without restarting the interpreter. ■
+
+DESIGN & IMPLEMENTATION
+
+12.1 Homoiconic languages As we have noted, both Lisp/Scheme and Prolog are homoiconic. A few other languages, notably Snobol, Forth, and Tcl, share this property. What is its sig- niﬁcance? For most programs the answer is: not much. So long as we write the sorts of programs that we’d write in other languages, the fact that programs and data look the same is really just a curiosity. It becomes something more if we are interested in metacomputing—the creation of programs that create or manipulate other programs, or that extend themselves. Metacomputing re- quires, at the least, that we have true ﬁrst-class functions in the strict sense of the term—that is, that we be able to generate new functions whose behavior is determined dynamically. A homoiconic language can simplify metacomput- ing by eliminating the need to translate between internal (data structure) and external (syntactic) representations of programs or program extensions.
+
+![Figure 12.4 Tic-tac-toe program...](images/page_642_vector_583.png)
+*Figure 12.4 Tic-tac-toe program in Prolog.*
+
+12.2 Prolog 609
+
+ordered_line(1, 2, 3). ordered_line(4, 5, 6). ordered_line(7, 8, 9). ordered_line(1, 4, 7). ordered_line(2, 5, 8). ordered_line(3, 6, 9). ordered_line(1, 5, 9). ordered_line(3, 5, 7). line(A, B, C) :- ordered_line(A, B, C). line(A, B, C) :- ordered_line(A, C, B). line(A, B, C) :- ordered_line(B, A, C). line(A, B, C) :- ordered_line(B, C, A). line(A, B, C) :- ordered_line(C, A, B). line(A, B, C) :- ordered_line(C, B, A).
+
+full(A) :- x(A). full(A) :- o(A). empty(A) :- \+(full(A)). % NB: empty must be called with an already-instantiated A. same(A, A). different(A, B) :- \+(same(A, B)).
+
+move(A) :- good(A), empty(A), !.
+
+% strategy: good(A) :- win(A). good(A) :- block_win(A). good(A) :- split(A). good(A) :- strong_build(A). good(A) :- weak_build(A). good(5). good(1). good(3). good(7). good(9). good(2). good(4). good(6). good(8).
+
+win(A) :- x(B), x(C), line(A, B, C). block_win(A) :- o(B), o(C), line(A, B, C). split(A) :- x(B), x(C), different(B, C), line(A, B, D), line(A, C, E), empty(D), empty(E). strong_build(A) :- x(B), line(A, B, C), empty(C), \+(risky(C)). weak_build(A) :- x(B), line(A, B, C), empty(C), \+(double_risky(C)). risky(C) :- o(D), line(C, D, E), empty(E). double_risky(C) :- o(D), o(E), different(D, E), line(C, D, F), line(C, E, G), empty(F), empty(G).
+
+all_full :- full(1), full(2), full(3), full(4), full(5), full(6), full(7), full(8), full(9). done :- ordered_line(A, B, C), x(A), x(B), x(C), write('I won.'), nl. done :- all_full, write('Draw.'), nl.
+
+getmove :- repeat, write('Please enter a move: '), read(X), empty(X), assert(o(X)). makemove :- move(X), !, assert(x(X)). makemove :- all_full.
+
+printsquare(N) :- o(N), write(' o '). printsquare(N) :- x(N), write(' x '). printsquare(N) :- empty(N), write(' '). printboard :- printsquare(1), printsquare(2), printsquare(3), nl, printsquare(4), printsquare(5), printsquare(6), nl, printsquare(7), printsquare(8), printsquare(9), nl. clear :- retractall(x(_)), retractall(o(_)).
+
+% main goal: play :- clear, repeat, getmove, respond. respond :- ordered_line(A, B, C), o(A), o(B), o(C), printboard, write('You won.'), nl. % shouldn't ever happen! respond :- makemove, printboard, done.
+
+610 Chapter 12 Logic Languages
+
+Individual terms in Prolog can be created, or their contents extracted, using EXAMPLE 12.30
+
+The functor predicate the built-in predicates functor, arg, and =... The goal functor(T, F, N) succeeds if and only if T is a term with functor F and arity N:
+
+?- functor(foo(a, b, c), foo, 3). true. ?- functor(foo(a, b, c), F, N). F = foo, N = 3. ?- functor(T, foo, 3). T = foo(_G10, _G37, _G24).
+
+In the last line of output, the atoms with leading underscores are placeholders for uninstantiated variables. ■ The goal arg(N, T, A) succeeds if and only if its ﬁrst two arguments (N and EXAMPLE 12.31
+
+Creating terms at run time T) are instantiated, N is a natural number, T is a term, and A is the Nth argument of T:
+
+?- arg(3, foo(a, b, c), A). A = c.
+
+Using functor and arg together, we can create an arbitrary term:
+
+?- functor(T, foo, 3), arg(1, T, a), arg(2, T, b), arg(3, T, c). T = foo(a, b, c).
+
+Alternatively, we can use the (inﬁx) =.. predicate, which “equates” a term with a list:
+
+?- T =.. [foo, a, b, c]. T = foo(a, b, c).
+
+?- foo(a, b, c) =.. [F, A1, A2, A3]. F = foo, A1 = a, A2 = b, A3 = c.
+
+Note that
+
+?- foo(a, b, c) = F(A1, A2, A3).
+
+and
+
+?- F(A1, A2, A3) = foo(a, b, c).
+
+12.2 Prolog 611
+
+do not work: the term preceding a left parenthesis must be an atom, not a vari- able. ■ Using =.. and call, the programmer can arrange to pursue (attempt to sat- EXAMPLE 12.32
+
+Pursuing a dynamic goal isfy) a goal created at run time:
+
+param_loop(L, H, F) :- natural(I), I >= L, G =.. [F, I], call(G), I = H, !.
+
+The goal param_loop(5, 10, write) will produce the following output:
+
+5678910 true.
+
+If we want the numbers on separate lines we can write
+
+?- param_loop(5, 10, writeln).
+
+where
+
+writeln(X) :- write(X), nl. ■
+
+Taken together, the predicates described above allow a Prolog program to cre- ate and decompose clauses, and to add and subtract them from the database. So far, however, the only mechanism we have for perusing the database (i.e., to de- termine its contents) is the built-in search mechanism. To allow programs to EXAMPLE 12.33
+
+Custom database perusal
+
+DESIGN & IMPLEMENTATION
+
+12.2 Reﬂection A reﬂection mechanism allows a program to reason about itself. While no widely used language is fully reﬂective, in the sense that it can inspect every aspect of its structure and current state, signiﬁcant forms of reﬂection appear in several major languages, Prolog among them. Given the functor and arity of a starting goal, the clause predicate allows us to ﬁnd everything related to that goal in the database. Using clause, we can in fact create a metacircular interpreter (Exercise 12.13)—an implementation of Prolog in itself—much as we could for Lisp using eval and apply (Section 11.3.5). We can also write evaluators that use nonstandard search orders (e.g., breadth-ﬁrst or forward chaining; see Exercise 12.14). Other examples of rich reﬂection facilities ap- pear in Java, C#, and the major scripting languages. As we shall see in Sec- tion 16.3.1, these allow a program to inspect and reason about its complete type structure. A few languages (e.g., Python) allow a program to inspect its source code as text, but this is not as powerful as the homoiconic inspection of Prolog or Scheme, which allows a program to reason about its own code structure directly.
+
+612 Chapter 12 Logic Languages
+
+“reason” in more general ways, Prolog provides a clause predicate that attempts to match its two arguments against the head and body of some existing clause in the database:
+
+?- clause(snowy(X), B). B = rainy(X), cold(X).
+
+Here we have discovered that there is a single rule in the database whose head is a single-argument term with functor snowy. The body of that rule is the conjunc- tion B = rainy(X), cold(X). If there had been more such clauses, we would have had the opportuity to ask for them them by entering semicolons. Prolog re- quires that the ﬁrst argument to clause be sufﬁciently instantiated that its func- tor and arity can be determined. A clause with no body (a fact) matches the body true:
+
+?- clause(rainy(rochester), true). true.
+
+Note that clause is quite different from call: it does not attempt to satisfy a goal, but simply to match it against an existing clause:
+
+?- clause(snowy(rochester), true). false. ■
+
+Various other built-in predicates can also be used to “deconstruct” the contents of a clause. The var predicate takes a single argument; it succeeds as a goal if and only if its argument is an uninstantiated variable. The atom and integer predicates succeed as goals if and only if their arguments are atoms and integers, respectively. The name predicate takes two arguments. It succeeds as a goal if and only if its ﬁrst argument is an atom and its second is a list composed of the ASCII codes for the characters of that atom. 12.3 Theoretical Foundations
+
+In mathematical logic, a predicate is a function that maps constants (atoms) or variables to the values true and false. If rainy is a predicate, for example, we might EXAMPLE 12.34
+
+Predicates as mathematical objects have rainy(Seattle) = true and rainy(Tijuana) = false. Predicate calculus provides a notation and inference rules for constructing and reasoning about propositions (statements) composed of predicate applications, operators (and, or, not, etc.), and the quantiﬁers ∀and ∃. Logic programming formalizes the search for variable values that will make a given proposition true. ■
+
+12.4 Logic Programming in Perspective 613
+
+IN MORE DEPTH
+
+In conventional logical notation there are many ways to state a given proposition. Logic programming is built on clausal form, which provides a unique expression for every proposition. Many though not all clausal forms can be cast as a collec- tion of Horn clauses, and thus translated into Prolog. On the companion site we trace the steps required to translate an arbitrary proposition into clausal form. We also characterize the cases in which this form can and cannot be translated into Prolog.
+
+12.4 Logic Programming in Perspective
+
+In the abstract, logic programming is a very compelling idea: it suggests a model of computing in which we simply list the logical properties of an unknown value, and then the computer ﬁgures out how to ﬁnd it (or tells us it doesn’t exist). Unfortunately, reality falls quite a bit short of the vision, for both theoretical and practical reasons.
+
+12.4.1 Parts of Logic Not Covered
+
+As noted in Section 12.3, Horn clauses do not capture all of ﬁrst-order pred- icate calculus. In particular, they cannot be used to express statements whose clausal form includes a disjunction with more than one non-negated term. We can sometimes get around this problem in Prolog by using the \+ predicate, but the semantics are not the same (see Section 12.4.3).
+
+12.4.2 Execution Order
+
+In Section 12.2.4, we saw that one must often consider execution order to ensure that a Prolog search will terminate. Even for searches that terminate, naive code can be very inefﬁcient. Consider the problem of sorting. A natural declarative EXAMPLE 12.35
+
+Sorting incredibly slowly
+
+DESIGN & IMPLEMENTATION
+
+12.3 Implementing logic Predicate calculus is a signiﬁcantly higher-level notation than lambda calculus. It is much more abstract—much less algorithmic. It is natural, therefore, that a language like Prolog not provide the full power of predicate calculus, and that it include extensions to make it more algorithmic. We may someday reach the point where programming systems are capable of discovering good algorithms from very high-level declarative speciﬁcations, but we are not there yet.
+
+614 Chapter 12 Logic Languages
+
+way to say that L2 is the sorted version of L1 is to say that L2 is a permutation of L1 and L2 is sorted:
+
+declarative_sort(L1, L2) :- permutation(L1, L2), sorted(L2). permutation([], []). permutation(L, [H | T]) :- append(P, [H | S], L), append(P, S, W), permutation(W, T).
+
+(The append and sorted predicates are deﬁned in Section 12.2.2.) Unfortu- nately, Prolog’s default search strategy may take exponential time to sort a list based on these rules: it will generate permutations until it ﬁnds one that is sorted. ■ While logic is inherently declarative, most logic languages explore the tree of possible resolutions in deterministic order. Prolog provides a variety of predi- cates, including the cut, fail, and repeat, to control that execution order (Sec- tion 12.2.6). It also provides predicates, including assert, retract, and call, to manipulate its database explicitly during execution. To obtain a more efﬁcient sort, the Prolog programmer must adopt a less nat- EXAMPLE 12.36
+
+Quicksort in Prolog ural, “imperative” deﬁnition:
+
+quicksort([], []). quicksort([A | L1], L2) :- partition(A, L1, P1, S1), quicksort(P1, P2), quicksort(S1, S2), append(P2, [A | S2], L2). partition(A, [], [], []). partition(A, [H | T], [H | P], S) :- A >= H, partition(A, T, P, S). partition(A, [H | T], P, [H | S]) :- A =< H, partition(A, T, P, S).
+
+Even this sort is less efﬁcient than one might hope in certain cases. When given an already-sorted list, for example, it takes quadratic time, instead of O(n log n). A good heuristic for quicksort is to partition the list using the median of the ﬁrst, middle, and last elements. Unfortunately, Prolog provides no easy way to access the middle and ﬁnal elements of a list (it has no arrays). ■
+
+DESIGN & IMPLEMENTATION
+
+12.4 Alternative search strategies Some approaches to logic programming attempt to customize the run-time search strategy in a way that is likely to satisfy goals quickly. Darlington [Dar90], for example, describes a technique in which, when an intermediate goal G fails, we try to ﬁnd alternative instantiations of the variables in G that will allow it to succeed, before backing up to previous goals and seeing whether the alternative instantiations will work in them as well. This “failure-directed search” seems to work well for certain classes of problems. Unfortunately, no general technique is known that will automatically discover the best algorithm (or even just a “good” one) for any given problem.
+
+12.4 Logic Programming in Perspective 615
+
+As we saw in Chapter 10, it can be useful to distinguish between the speciﬁca- tion of a program and its implementation. The speciﬁcation says what the pro- gram is to do; the implementation says how it is to do it. Horn clauses provide an excellent notation for speciﬁcations. When augmented with search rules (as in Prolog) they allow implementations to be expressed in the same notation.
+
+12.4.3 Negation and the “Closed World” Assumption
+
+A collection of Horn clauses, such as the facts and rules of a Prolog database, constitutes a list of things assumed to be true. It does not include any things assumed to be false. This reliance on purely “positive” logic implies that Prolog’s \+ predicate is different from logical negation. Unless the database is assumed to contain everything that is true (this is the closed world assumption), the goal \+(T) can succeed simply because our current knowledge is insufﬁcient to prove T. Moreover, negation in Prolog occurs outside any implicit existential quantiﬁers EXAMPLE 12.37
+
+Negation as failure on the right-hand side of a rule. Thus
+
+?- \+(takes(X, his201)).
+
+where X is uninstantiated, means
+
+? ¬∃X[takes(X, his201)]
+
+rather than ? ∃X[¬takes(X, his201)]
+
+If our database indicates that jane_doe takes his201, then the goal takes(X, his201) can succeed, and \+(takes(X, his201)) will fail:
+
+?- \+(takes(X, his201)). false.
+
+If we had a way to put the negation inside the quantiﬁer, we might hope for an implementation that would respond
+
+?- \+(takes(X, his201)). X = ajit_chandra
+
+or even
+
+?- \+(takes(X, his201)). X != jane_doe
+
+616 Chapter 12 Logic Languages
+
+A complete characterization of the values of X for which ¬takes(X, his201) is true would require a complete exploration of the resolution tree, something that Prolog does only when all goals fail, or when repeatedly prompted with semi- colons. Mechanisms to incorporate some sort of “constructive negation” into logic programming are an active topic of research. ■ It is worth noting that the deﬁnition of \+ in terms of failure means that vari- EXAMPLE 12.38
+
+Negation and instantiation able bindings are lost whenever \+ succeeds. For example:
+
+?- takes(X, his201). X = jane_doe ?- \+(takes(X, his201)). false. ?- \+(\+(takes(X, his201))). true. % no value for X provided
+
+When takes ﬁrst succeeds, X is bound to jane_doe. When the inner \+ fails, the binding is broken. Then when the outer \+ succeeds, a new binding is created to an uninstantiated value. Prolog provides no way to pull the binding of X out through the double negation. ■
+
+3CHECK YOUR UNDERSTANDING 9. Explain the purpose of the cut (!) in Prolog. How does it relate to \+?
+
+10. Describe three ways in which Prolog programs can depart from a pure logic programming model.
+
+11. Describe the generate-and-test programming idiom. 12. Summarize Prolog’s facilities for database manipulation. Be sure to mention assert, retract, and clause. 13. What sorts of logical statements cannot be captured in Horn clauses?
+
+14. What is the closed world assumption? What problems does it cause for logic programming?
+
+12.5 Summary and Concluding Remarks
+
+In this chapter we have focused on the logic model of computing. Where an imperative program computes principally through iteration and side effects, and a functional program computes principally through substitution of parameters into functions, a logic program computes through the resolution of logical state- ments, driven by the ability to unify variables and terms. Much of our discussion was driven by an examination of the principal logic language, Prolog, which we used to illustrate clauses and terms, resolution and
+
+12.5 Summary and Concluding Remarks 617
+
+uniﬁcation, search/execution order, list manipulation, and high-order predicates for inspection and modiﬁcation of the logic database. Like imperative and functional programming, logic programming is related to constructive proofs. But where an imperative or functional program in some sense is a proof (of the ability to generate outputs from inputs), a logic program is a set of axioms from which the computer attempts to construct a proof. And where imperative and functional programming provide the full power of Turing machines and lambda calculus, respectively (ignoring hardware-imposed limits on arithmetic precision, disk and memory space, etc.), Prolog provides less than the full generality of resolution theorem proving, in the interests of time and space efﬁciency. At the same time, Prolog extends its formal counterpart with true arithmetic, I/O, imperative control ﬂow, and higher-order predicates for self- inspection and modiﬁcation. Like Lisp/Scheme, Prolog makes heavy use of lists, largely because they can easily be built incrementally, without the need to allocate and then modify state as separate operations. And like Lisp/Scheme (but unlike ML and its descendants), Prolog is homoiconic: programs look like ordinary data structures, and can be created, modiﬁed, and executed on the ﬂy. As we stressed in Chapter 1, different models of computing are appealing in different ways. Imperative programs more closely mirror the underlying hard- ware, and can more easily be “tweaked” for high performance. Purely functional programs avoid the semantic complexity of side effects, and have proved partic- ularly handy for the manipulation of symbolic (nonnumeric) data. Logic pro- grams, with their highly declarative semantics and their emphasis on uniﬁcation, are well suited to problems that emphasize relationships and search. At the same time, their de-emphasis of control ﬂow can lead to inefﬁciency. At the current state of the art, computers have surpassed people in their ability to deal with low- level details (e.g., of instruction scheduling), but people are still better at inventing good algorithms. As we also stressed in Chapter 1, the borders between language classes are often very fuzzy. The backtracking search of Prolog strongly resembles the execution of generators in Icon. Uniﬁcation in Prolog resembles (but is more powerful than) the pattern-matching capabilities of ML and Haskell. (Uniﬁcation is also used for type checking in ML and Haskell, and for template instantiation in C++, but those are compile-time activities.) There is much to be said for programming in a purely functional or logic-based style. While most Scheme and Prolog programs make some use of imperative language features, those features tend to be responsible for a disproportionate share of program bugs. At the same time, there seem to be programming tasks— interactive I/O, for example—that are almost impossible to accomplish without side effects.
+
+618 Chapter 12 Logic Languages
+
+12.6 Exercises
+
+12.1 Starting with the clauses at the beginning of Example 12.17, use resolution (as illustrated in Example 12.3) to show, in two different ways, that there is a path from a to e. 12.2 Solve Exercise 6.22 in Prolog. 12.3 Consider the Prolog gcd program in Figure 1.2. Does this program work “backward” as well as forward? (Given integers d and n, can you use it to generate a sequence of integers m such that gcd(n, m) = d?) Explain your answer. 12.4 In the spirit of Example 11.20, write a Prolog program that exploits back- tracking to simulate the execution of a nondeterministic ﬁnite automaton. 12.5 Show that resolution is commutative and associative. Speciﬁcally, if A, B, and C are Horn clauses, show that (A ⊕B) = (B ⊕A) and that ((A ⊕B) ⊕ C) = (A ⊕(B ⊕C)), where ⊕indicates resolution. Be sure to think about what happens to variables that are instantiated as a result of uniﬁcation. 12.6 In Example 12.8, the query ?- classmates(jane_doe, X) will succeed three times: twice with X = jane_doe and once with X = ajit_chandra. Show how to modify the classmates(X, Y) rule so that a student is not considered a classmate of himself or herself. 12.7 Modify Example 12.17 so that the goal path(X, Y), for arbitrary already- instantiated X and Y, will succeed no more than once, even if there are multiple paths from X to Y. 12.8 Using only \+ (no cuts), modify the tic-tac-toe example of Section 12.2.5 so it will generate only one candidate move from a given board position. How does your solution compare to the cut-based one (Example 12.22)? 12.9 Prove the claim, made in Example 12.19, that there is no winning strategy in tic-tac-toe—that either player can force a draw. 12.10 Prove that the tic-tac-toe strategy of Example 12.19 is optimal (wins against an imperfect opponent whenever possible, draws otherwise), or give a counterexample. 12.11 Starting with the tic-tac-toe program of Figure 12.4, draw a directed acyclic graph in which every clause is a node and an arc from A to B indi- cates that it is important, either for correctness or efﬁciency, that A come before B in the program. (Do not draw any other arcs.) Any topologi- cal sort of your graph should constitute an equally efﬁcient version of the program. (Is the existing program one of them?) 12.12 Write Prolog rules to deﬁne a version of the member predicate that will generate all members of a list during backtracking, but without generating duplicates. Note that the cut and\+ based versions of Example 12.20 will
+
+12.6 Exercises 619
+
+not sufﬁce; when asked to look for an uninstantiated member, they ﬁnd only the head of the list. 12.13 Use the clause predicate of Prolog to implement the call predicate (pretend that it isn’t built in). You needn’t implement all of the built-in predicates of Prolog; in particular, you may ignore the various imperative control-ﬂow mechanisms and database manipulators. Extend your code by making the database an explicit argument to call, effectively produc- ing a metacircular interpreter. 12.14 Use the clause predicate of Prolog to write a predicate call_bfs that attempts to satisfy goals breadth-ﬁrst. (Hint: You will want to keep a queue of yet-to-be-pursued subgoals, each of which is represented by a stack that captures backtracking alternatives.) 12.15 Write a (list-based) insertion sort algorithm in Prolog. Here’s what it looks like in C, using arrays:
+
+void insertion_sort(int A[], int N) { int i, j, t; for (i = 1; i < N; i++) { t = A[i]; for (j = i; j > 0; j--) { if (t >= A[j-1]) break; A[j] = A[j-1]; } A[j] = t; } }
+
+12.16 Quicksort works well for large lists, but has higher overhead than insertion sort for short lists. Write a sort algorithm in Prolog that uses quicksort initially, but switches to insertion sort (as deﬁned in the previous exercise) for sublists of 15 or fewer elements. (Hint: You can count the number of elements during the partition operation.) 12.17 Write a Prolog sorting routine that is guaranteed to take O(n log n) time in the worst case. (Hint: Try merge sort; a description can be found in almost any algorithms or data structures text.) 12.18 Consider the following interaction with a Prolog interpreter:
+
+?- Y = X, X = foo(X). Y = foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(foo( foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(foo( foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(foo( foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(foo(foo( foo(foo(foo(foo(foo(foo(...
+
+What is going on here? Why does the interpreter fall into an inﬁnite loop? Can you think of any circumstances (presumably not requiring output) in
+
+620 Chapter 12 Logic Languages
+
+which a structure like this one would be useful? If not, can you suggest how a Prolog interpreter might implement checks to forbid its creation? How expensive would those checks be? Would the cost in your opinion be justiﬁed?
+
+12.19–12.21 In More Depth. 12.7 Explorations
+
+12.22 Learn about alternative search strategies for Prolog and other logic lan- guages. How do forward chaining solvers work? What are the prospects for intelligent hybrid strategies? 12.23 Between 1982 and 1992 the Japanese government invested large sums of money in logic programming. Research the Fifth Generation project, ad- ministered by the Japanese Ministry of International Trade and Industry (MITI). What were its goals? What was achieved? What was not? How tightly were the goals and outcomes tied to Prolog? What lessons can we learn from the project today? 12.24 Read ahead to Chapter 14 and learn about XSLT, a language used to ma- nipulate data represented in XML, the extended markup language (of which XHTML, the latest standard for web pages, is an example). XSLT is generally described as declarative. Is it logic based? How does it com- pare to Prolog in expressive power, level of abstraction, and execution ef- ﬁciency? 12.25 Repeat the previous question for SQL, the database query language (for an introduction, type “SQL tutorial” into your favorite Internet search en- gine). 12.26 Spreadsheets like Microsoft Excel are sometimes characterized as declar- ative programming. Is this fair? Ignoring extensions like Visual Basic macros, does the ability to deﬁne relationships among cells provide Turing complete expressive power? Compare the execution model to that of Pro- log. How is the order of update for cells determined? Can data be pushed “both ways,” as they can in Prolog?
+
+12.27–12.30 In More Depth. 12.8 Bibliographic Notes
+
+Logic programming has its roots in automated theorem proving. Much of the the- oretical groundwork was laid by Horn in the early 1950s [Hor51], and by Robin- son in the early 1960s [Rob65]. The breakthrough for computing came in the
+
+12.8 Bibliographic Notes 621
+
+early 1970s, when Colmeraurer and Roussel at the University of Aix–Marseille in France and Kowalski and his colleagues at the University of Edinburgh in Scotland developed the initial version of Prolog. The early history of the lan- guage is recounted by Robinson [Rob83]. Theoretical foundations are covered by Lloyd [Llo87]. Prolog was originally intended for research in natural language processing, but it soon became apparent that it could serve as a general-purpose language. Several versions of Prolog have since evolved. The one described here is the widely used Edinburgh dialect. The ISO standard [Int95] is similar. Several other logic languages have been developed, though none rivaled Pro- log in popularity. OPS5 [BFKM86] used forward chaining. Gödel [HL94] in- cludes modules, strong typing, a richer variety of logical operators, and enhanced control of execution order. Parlog is a parallel Prolog dialect; we will mention it brieﬂy in Section 13.4.5. Mercury [SHC96] adopts a variety of features from ML-family functional languages, including static type inference, monad-like I/O, higher-order predicates, closures, currying, and lambda expressions. It is com- piled, rather than interpreted, and requires the programmer to specify modes (in, out) for predicate arguments. Database query languages stemming from Datalog [Ull85][UW08, Secs. 4.2– 4.4] are implemented using forward chaining. CLP (Constraint Logic Program- ming) and its variants are largely based on Prolog, but employ a more general constraint-satisfaction mechanism in place of uniﬁcation [JM94]. The Associa- tion for Logic Programming can be found on-line at www.cs.nmsu.edu/ALP/.
+
+This page intentionally left blank
+
